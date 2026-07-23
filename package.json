@@ -1,6 +1,6 @@
 {
   "name": "icon-studio-ssot",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": false,
   "license": "MIT",
   "type": "module",
@@ -16,8 +16,9 @@
     "validate": "node tools/validate-icons.mjs && node tools/verify-registry.mjs",
     "build": "npm run validate && vite build",
     "preview": "vite preview",
-    "test": "node tools/validate-icons.mjs && node tests/icon-registry.test.mjs && node tests/svg-sanitizer.test.mjs && node tests/svg-policy.test.mjs && node tests/filters.test.mjs && node tests/state.test.mjs && node tests/dom.test.mjs",
-    "typecheck": "node --check js/app.js && node --check js/core/dom.js && node --check js/core/state.js && node --check js/core/storage.js && node --check js/services/icon-repository.js && node --check js/services/svg-policy.js && node --check js/services/svg-sanitizer.js && node --check js/services/svg-renderer.js && node --check js/services/svg-exporter.js && node --check js/features/catalogue.js && node --check js/features/filters.js && node --check js/features/inspector.js && node --check js/features/importer.js && node --check js/features/shell.js && node --check js/features/theme.js && node --check js/ui/toast.js"
+    "convert-svg": "node tools/convert-svg.mjs",
+    "test": "node tools/validate-icons.mjs && node tests/icon-registry.test.mjs && node tests/svg-sanitizer.test.mjs && node tests/svg-policy.test.mjs && node tests/filters.test.mjs && node tests/state.test.mjs && node tests/dom.test.mjs && node tests/convert-svg.test.mjs",
+    "typecheck": "node --check js/app.js && node --check js/core/dom.js && node --check js/core/state.js && node --check js/core/storage.js && node --check js/services/icon-repository.js && node --check js/services/svg-policy.js && node --check js/services/svg-sanitizer.js && node --check js/services/svg-renderer.js && node --check js/services/svg-exporter.js && node --check js/features/catalogue.js && node --check js/features/filters.js && node --check js/features/inspector.js && node --check js/features/importer.js && node --check js/features/shell.js && node --check js/features/theme.js && node --check js/ui/toast.js && node --check tools/convert-svg.mjs"
   },
   "devDependencies": {
     "vite": "^8.1.5"

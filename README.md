@@ -61,6 +61,40 @@ npm test
 npm run build
 ```
 
+## Converting an arbitrary SVG
+
+Any SVG you already have — a different viewBox size, `class`/`style`/`id` cruft, a fixed
+`width`/`height`, hardcoded colours — almost certainly won't pass the sanitizer or the
+catalogue validator as-is. `tools/convert-svg.mjs` normalizes it: it rescales/centers the
+artwork into an exact `0 0 24 24` viewBox via a single wrapping `<g transform="...">`
+(the geometry itself is never rewritten), strips anything outside the allow-list, replaces
+a single hardcoded fill colour with `currentColor`, and validates the result against the
+same policy the app enforces — so it can't hand you back something the app would still
+reject.
+
+```bash
+npm run convert-svg -- path/to/source.svg icons/catalog/my-icon.svg
+```
+
+It also reports a **complexity warning** if the source has too many shapes or too much
+path data: converting will still succeed and pass validation, but a raster trace or a
+complex illustration will render as an unrecognisable blob at 24×24 no matter how correct
+the viewBox is.
+
+For exactly that case, add `--pixelate[=gridSize]` (default grid `24`): instead of scaling
+the artwork as one piece, it rasterizes every `<rect>`/axis-aligned `<path>` (the shape a
+bitmap-to-SVG tracer emits) onto a small grid by exact geometric coverage, thresholds it,
+and re-merges the filled cells into the smallest number of rectangles. This only
+understands straight-line, non-curved geometry — not arbitrary bezier artwork — but for a
+traced logo/photo it turns tens of thousands of characters of path data into a few dozen
+rectangles that are small, valid, and actually legible, at the cost of fine detail (which
+is what made the plain rescale illegible in the first place). A higher grid size
+(`--pixelate=48`) keeps more detail while the output viewBox stays exactly `0 0 24 24`.
+
+```bash
+npm run convert-svg -- source.svg icons/catalog/my-icon.svg --pixelate=48
+```
+
 ## Replace a built-in icon
 
 Replace only `icons/catalog/<icon-id>.svg`. Update the registry only when metadata changes. Existing IDs must remain stable unless a documented migration is supplied.

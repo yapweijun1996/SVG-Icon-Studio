@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.3.1 — 2026-07-23
+
+### Changed
+
+- Switched `icons/catalog/delivery-truck.svg` from `stroke-linecap="round" stroke-linejoin="round"` to `stroke-linecap="butt" stroke-linejoin="miter"` to match an approved reference image's sharp-cornered style. Same coordinates, only the corner rendering changed. Every other catalogue icon still uses round joins/caps — this is a deliberate, isolated exception, same as the invoice stroke-width change above.
+- Fixed both `delivery-truck.svg` wheels: they were positioned `cy="18"` against a chassis line at `y="17"`, a full 1-unit overlap into the truck body. At that overlap the wheel's top arc and the chassis stroke visually merged into a solid blob instead of a hollow tire. Moved both wheels to `cy="19"` so they sit tangent to the chassis line instead of cutting into it.
+
+- Replaced the canonical `icons/catalog/invoice.svg` artwork with a clearer document design: 3 header lines, a proper 2×2 table grid (column + row divider), and the currency mark repositioned to match an approved reference image.
+- Set `invoice.svg`'s `stroke-width` to `1` (down from a legacy `1.55`), by explicit choice: at this icon's detail level, `1` keeps the currency mark legible where `1.5`/`1.55` started to merge into a blob. Every other catalogue icon still uses `1.5` — this is a deliberate, isolated exception, not a new baseline.
+- Kept the invoice registry ID, metadata and SSOT architecture unchanged.
+
+### Validation
+
+- Considered and rejected a denser table (3 rows + per-cell content lines) matching the reference image more literally — at a 24×24 viewBox it rendered as a merged blob rather than a legible grid; simplified to what stays legible at icon scale instead of chasing literal fidelity.
+- Compared `stroke-width` 1 / 1.5 / 1.55 side by side before choosing 1.
+- `npm test`, `npm run typecheck`, `npm run build` all pass.
+- Verified in the running app (catalogue card render + inspector preview) at 24px, 40px, 64px and 120px.
+
 ## 0.3.0 — 2026-07-23
 
 ### Added
