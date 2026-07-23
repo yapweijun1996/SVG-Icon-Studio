@@ -1,0 +1,68 @@
+{
+  "projectId": "project_f2a74b23-33c1-4c5c-b43d-e2b5b3108428",
+  "scannedFiles": [
+    "index.html",
+    "styles.css",
+    "icon-library.js",
+    "script.js"
+  ],
+  "findingCount": 5,
+  "riskCounts": {
+    "high": 2,
+    "low": 1,
+    "medium": 2
+  },
+  "findings": [
+    {
+      "id": "mixed-content-http",
+      "category": "mixed-content",
+      "severity": "high",
+      "path": "script.js",
+      "evidence": "http://www.w3.org/2000/svg",
+      "message": "HTTP URL can cause mixed-content blocking or insecure transport.",
+      "recommendation": "Use HTTPS or bundle the asset locally."
+    },
+    {
+      "id": "mixed-content-http",
+      "category": "mixed-content",
+      "severity": "high",
+      "path": "script.js",
+      "evidence": "http://www.w3.org/2000/svg",
+      "message": "HTTP URL can cause mixed-content blocking or insecure transport.",
+      "recommendation": "Use HTTPS or bundle the asset locally."
+    },
+    {
+      "id": "browser-api-clipboard",
+      "category": "browser-api",
+      "severity": "low",
+      "path": "script.js",
+      "evidence": "(text, message) { try { await navigator.clipboard.writeText(text); } catch { const area = document.createElement('textar",
+      "message": "Clipboard access should be user-initiated and explained.",
+      "recommendation": "Review usage and add sanitization, consent, or safer browser APIs as appropriate."
+    },
+    {
+      "id": "browser-api-local-storage-sensitive",
+      "category": "browser-api",
+      "severity": "medium",
+      "path": "script.js",
+      "evidence": "fallback = null) => { try { return localStorage.getItem(key) ?? fallback; } catch { return fallback; } }; const storageSet = (key,",
+      "message": "Sensitive values should not be stored in localStorage.",
+      "recommendation": "Review usage and add sanitization, consent, or safer browser APIs as appropriate."
+    },
+    {
+      "id": "browser-api-local-storage-sensitive",
+      "category": "browser-api",
+      "severity": "medium",
+      "path": "script.js",
+      "evidence": "torageSet = (key, value) => { try { localStorage.setItem(key, value); } catch { /* Storage can be unavailable in private contexts. */ }",
+      "message": "Sensitive values should not be stored in localStorage.",
+      "recommendation": "Review usage and add sanitization, consent, or safer browser APIs as appropriate."
+    }
+  ],
+  "nextSteps": [
+    "Review critical/high findings before publish.",
+    "Vendor or pin CDN dependencies.",
+    "Rotate any real secrets found in source.",
+    "Run npm audit in the bound workspace when package-lock.json is available."
+  ]
+}

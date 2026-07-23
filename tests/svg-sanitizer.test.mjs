@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import { inspectSvgText } from '../tools/svg-policy.mjs';
+const safe = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M1 1h2"/></svg>';
+assert.equal(inspectSvgText(safe).ok, true);
+assert.equal(inspectSvgText(safe.replace('<path', '<script>alert(1)</script><path')).ok, false);
+assert.equal(inspectSvgText(safe.replace('<path', '<path onclick="alert(1)"')).ok, false);
+assert.equal(inspectSvgText(safe.replace('currentColor', 'url(https://example.com/x)')).ok, false);
+assert.equal(inspectSvgText(safe.replace('viewBox="0 0 24 24"', 'viewBox="0 0 48 48"')).ok, false);
+assert.equal(inspectSvgText(safe.replace('<path', '<image href="data:image/png;base64,x"/><path')).ok, false);
+console.log('SVG security policy tests passed.');

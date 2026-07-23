@@ -1,0 +1,11 @@
+.preview-dialog { width: min(720px, calc(100vw - 32px)); padding: 42px 32px 28px; border: 1px solid var(--line); border-radius: 18px; background: var(--panel); color: var(--text); box-shadow: var(--shadow-md); text-align: center; }
+.preview-dialog::backdrop { background: rgba(15, 23, 42, .55); backdrop-filter: blur(4px); }
+.dialog-close { position: absolute; right: 14px; top: 14px; }
+.dialog-preview { min-height: 400px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 14px; background: var(--panel-subtle); }
+.dialog-preview svg { max-width: 70%; max-height: 70%; }
+.preview-dialog h2 { margin: 18px 0 5px; }
+.preview-dialog p { margin: 0; color: var(--muted); font-size: 12px; }
+.toast-region { position: fixed; z-index: 200; right: 18px; bottom: 18px; display: grid; gap: 8px; pointer-events: none; }
+.toast { min-width: 220px; max-width: 360px; display: flex; align-items: center; gap: 9px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel-raised); color: var(--text); box-shadow: var(--shadow-md); font-size: 11px; font-weight: 700; animation: toast-in .18s ease-out; }
+.toast::before { content: '✓'; width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; color: white; background: var(--success); font-size: 12px; }
+@keyframes toast-in { from { opacity: 0; transform: translateY(8px); } }

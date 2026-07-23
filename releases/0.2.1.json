@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "projectId": "project_f2a74b23-33c1-4c5c-b43d-e2b5b3108428",
+  "updatedAt": "2026-07-23T07:29:11.775Z",
+  "releases": [
+    {
+      "version": "0.2.1",
+      "title": "Invoice SVG artwork replacement",
+      "status": "published",
+      "entryFile": "index.html",
+      "publishedUrl": "https://content.gmb01.xyz/share/project_f2a74b23-33c1-4c5c-b43d-e2b5b3108428/index.html",
+      "changes": [
+        "Replaced the canonical Invoice SVG with a compact 24x24 currentColor invoice document design based on the uploaded artwork",
+        "Preserved the folded document, text rows, item table, currency mark and totals",
+        "Kept the invoice registry ID, metadata and SSOT architecture unchanged"
+      ],
+      "checks": [
+        "npm test passed",
+        "npm run build passed",
+        "Static publish validation passed across 89 files",
+        "Desktop and mobile local QA passed with zero runtime or accessibility issues",
+        "Invoice search, selection, inspector and full preview regression passed",
+        "Invoice SVG visual quality scored 100 with mobile readability 100"
+      ],
+      "rollbackPoint": {
+        "version": "backup_f2a74b23-33c_mrx6sz4s",
+        "publishedUrl": "https://content.gmb01.xyz/share/project_f2a74b23-33c1-4c5c-b43d-e2b5b3108428/index.html",
+        "entryFile": "index.html",
+        "note": "Rollback target for 0.2.1."
+      },
+      "createdAt": "2026-07-23T07:29:11.775Z",
+      "releasedAt": "2026-07-23T07:29:11.775Z"
+    }
+  ]
+}

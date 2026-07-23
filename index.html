@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f45b0b">
+  <meta name="description" content="Browse, customise and export production-ready SVG icons.">
+  <title>Icon Studio — SVG Icon Collection</title>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/shell.css">
+  <link rel="stylesheet" href="css/catalogue.css">
+  <link rel="stylesheet" href="css/inspector.css">
+  <link rel="stylesheet" href="css/dialogs.css">
+  <link rel="stylesheet" href="css/utilities.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <a class="skip-link" href="#catalogue">Skip to icon catalogue</a>
+  <div class="app-shell" id="appShell">
+    <div class="mobile-backdrop" id="mobileBackdrop" hidden></div>
+
+    <aside class="sidebar" id="sidebar" aria-label="Primary navigation">
+      <button class="brand" id="brandToggle" type="button" aria-expanded="true" aria-controls="sidebarNav" title="Collapse sidebar">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 2c.7 4.7 3.3 7.3 8 8-4.7.7-7.3 3.3-8 8-.7-4.7-3.3-7.3-8-8 4.7-.7 7.3-3.3 8-8Z"/></svg>
+        </span>
+        <span class="brand-label">Icon Studio</span>
+      </button>
+
+      <nav class="sidebar-nav" id="sidebarNav">
+        <p class="nav-heading">Workspace</p>
+        <button class="nav-item is-active" type="button" data-view="library" aria-current="page">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/></svg>
+          <span>Icon library</span>
+        </button>
+        <button class="nav-item" type="button" data-view="collections">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h7l2 2h9v10H3z"/><path d="M5 4h6l2 2h6"/></svg>
+          <span>Collections</span><span class="nav-count">6</span>
+        </button>
+        <button class="nav-item" type="button" data-view="favorites">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9z"/></svg>
+          <span>Favorites</span><span class="nav-count" id="favoriteCount">0</span>
+        </button>
+        <button class="nav-item" type="button" data-view="recent">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l4 2"/></svg>
+          <span>Recently viewed</span><span class="nav-count" id="recentCount">0</span>
+        </button>
+        <button class="nav-item" type="button" data-view="uploaded">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3M7 8l5-5 5 5M4 21h16"/></svg>
+          <span>Uploaded icons</span><span class="nav-count" id="uploadCount">0</span>
+        </button>
+        <button class="nav-item" type="button" data-view="brand">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 7v5c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10V7z"/><path d="m9 12 2 2 4-4"/></svg>
+          <span>Brand kit</span>
+        </button>
+      </nav>
+
+      <section class="brand-card" aria-labelledby="brand-card-title">
+        <span class="brand-card-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 3 4 7v5c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10V7z"/><path d="m9 12 2 2 4-4"/></svg>
+        </span>
+        <div>
+          <h2 id="brand-card-title">Brand consistency</h2>
+          <p>Keep icon colour, stroke and sizing consistent across products.</p>
+        </div>
+        <button class="button button-secondary button-full" id="manageBrandButton" type="button">Manage brand kit</button>
+      </section>
+    </aside>
+
+    <div class="workspace">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="icon-button mobile-only" id="mobileMenuButton" type="button" aria-label="Open navigation" aria-controls="sidebar" aria-expanded="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+          <div class="breadcrumb" aria-label="Breadcrumb"><span>Components</span><span>/</span><strong>Icons</strong></div>
+        </div>
+        <div class="topbar-actions">
+          <input id="svgFileInput" type="file" accept="image/svg+xml,.svg" hidden>
+          <button class="button button-secondary" id="importButton" type="button" aria-label="Import SVG">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3M7 8l5-5 5 5M4 21h16"/></svg>
+            <span>Import SVG</span>
+          </button>
+          <span class="stats-pill"><span class="status-dot"></span><strong id="totalIconCount">0</strong> icons <span>·</span> <strong id="visibleIconCount">0</strong> visible</span>
+          <button class="icon-button" id="themeButton" type="button" aria-label="Toggle dark theme" title="Toggle dark theme">
+            <svg class="theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          </button>
+          <button class="icon-button inspector-mobile-trigger" id="mobileInspectorButton" type="button" aria-label="Open icon inspector" aria-controls="inspector" aria-expanded="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM9 4v16"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="main-content" id="catalogue">
+        <section class="hero-block">
+          <div>
+            <h1 id="pageTitle">Production-ready SVG icon collection</h1>
+            <p id="pageSubtitle">Browse, customise and export consistent SVG icons for your products and interfaces.</p>
+          </div>
+          <span class="library-badge">24 × 24 standard viewBox</span>
+        </section>
+
+        <section class="catalogue-toolbar" aria-label="Catalogue controls">
+          <div class="search-row">
+            <label class="search-field" for="searchInput">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+              <input id="searchInput" type="search" autocomplete="off" placeholder="Search icons by name, keyword or ERP term…">
+              <kbd>/</kbd>
+            </label>
+            <button class="icon-button filter-button" id="filterButton" type="button" aria-label="Show advanced filters" aria-expanded="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h18l-7 8v7l-4 2v-9z"/></svg>
+            </button>
+            <div class="density-switch" role="group" aria-label="Catalogue density">
+              <button class="is-active" type="button" data-density="grid">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6" height="6"/><rect x="14" y="4" width="6" height="6"/><rect x="4" y="14" width="6" height="6"/><rect x="14" y="14" width="6" height="6"/></svg>
+                Grid
+              </button>
+              <button type="button" data-density="compact">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+                Compact
+              </button>
+            </div>
+          </div>
+
+          <div class="advanced-filter" id="advancedFilter" hidden>
+            <label>Style
+              <select id="styleFilter"><option value="all">All styles</option><option value="outline">Outline</option><option value="filled">Filled</option><option value="custom">Custom</option></select>
+            </label>
+            <label>Sort
+              <select id="sortFilter"><option value="featured">Featured</option><option value="name">Name A–Z</option><option value="category">Category</option><option value="recent">Recently viewed</option></select>
+            </label>
+            <button class="button button-ghost" id="clearFiltersButton" type="button">Clear filters</button>
+          </div>
+
+          <div class="category-row" id="categoryChips" role="toolbar" aria-label="Icon categories"></div>
+        </section>
+
+        <section class="results-header" aria-live="polite">
+          <div><h2 id="resultsTitle">All icons</h2><span id="resultsSummary">Showing 0 icons</span></div>
+          <button class="button button-ghost" id="clearSearchButton" type="button" hidden>Clear search</button>
+        </section>
+
+        <div class="icon-grid" id="iconGrid" aria-live="polite"></div>
+        <div class="empty-state" id="emptyState" hidden>
+          <span class="empty-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4M8 11h6"/></svg></span>
+          <h2>No icons found</h2>
+          <p>Try another keyword, category or library view.</p>
+          <button class="button button-primary" id="emptyResetButton" type="button">Reset catalogue</button>
+        </div>
+        <div class="load-more-wrap"><button class="button button-secondary" id="loadMoreButton" type="button">Load more icons</button></div>
+      </main>
+    </div>
+
+    <aside class="inspector" id="inspector" aria-label="Icon inspector">
+      <header class="inspector-header">
+        <div><h2>Icon inspector</h2><span id="inspectorPinState">Pinned</span></div>
+        <div class="inspector-header-actions">
+          <button class="icon-button is-active" id="pinInspectorButton" type="button" aria-pressed="true" aria-label="Pin inspector">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 3 6 0-1 6 4 3v2H6v-2l4-3zM12 14v7"/></svg>
+          </button>
+          <button class="icon-button desktop-only" id="collapseInspectorButton" type="button" aria-label="Collapse inspector">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg>
+          </button>
+          <button class="icon-button inspector-close-button" id="closeInspectorButton" type="button" aria-label="Close inspector">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5 5 19"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="inspector-scroll">
+        <section class="selected-summary">
+          <div>
+            <span class="eyebrow">Selected icon</span>
+            <h3 id="selectedIconName">Invoice</h3>
+            <p id="selectedIconMeta">Files · Outline</p>
+          </div>
+          <button class="favorite-large" id="favoriteSelectedButton" type="button" aria-label="Add selected icon to favorites" aria-pressed="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9z"/></svg>
+          </button>
+        </section>
+
+        <section class="preview-panel">
+          <div class="icon-preview light" id="iconPreview"></div>
+          <div class="background-tabs" id="backgroundTabs" role="group" aria-label="Preview background">
+            <button class="is-active" type="button" data-background="light">Light</button>
+            <button type="button" data-background="dark">Dark</button>
+            <button type="button" data-background="brand">Brand</button>
+            <button type="button" data-background="transparent">Transparent</button>
+          </div>
+        </section>
+
+        <section class="inspector-section" aria-labelledby="appearance-title">
+          <div class="section-heading"><h3 id="appearance-title">Appearance</h3><button class="text-button" id="resetAppearanceButton" type="button">Reset</button></div>
+          <label class="control-row range-control"><span>Size</span><output id="sizeOutput" for="sizeRange">48 px</output><input id="sizeRange" type="range" min="16" max="128" step="1" value="48"></label>
+          <div class="control-grid">
+            <label><span>Stroke width</span><select id="strokeWidthSelect"><option value="1">1</option><option value="1.5" selected>1.5</option><option value="2">2</option><option value="2.5">2.5</option><option value="3">3</option></select></label>
+            <label><span>Stroke colour</span><span class="colour-field"><input id="strokeColorInput" type="color" value="#1f2937"><code id="strokeColorCode">#1F2937</code></span></label>
+          </div>
+          <div class="toggle-control"><div><strong>Fill icon</strong><span>Apply a solid fill colour.</span></div><label class="switch"><input id="fillToggle" type="checkbox" aria-label="Fill icon"><span></span></label></div>
+          <label class="colour-row" id="fillColorRow" hidden><span>Fill colour</span><span class="colour-field"><input id="fillColorInput" type="color" value="#f45b0b"><code id="fillColorCode">#F45B0B</code></span></label>
+          <label class="check-control"><input id="currentColorCheckbox" type="checkbox" checked><span><strong>Use currentColor</strong><small>Icon inherits colour from CSS.</small></span></label>
+          <label class="check-control"><input id="includeTitleCheckbox" type="checkbox" checked><span><strong>Include title</strong><small>Adds an accessible SVG title.</small></span></label>
+        </section>
+
+        <section class="inspector-section" aria-labelledby="transform-title">
+          <div class="section-heading"><h3 id="transform-title">Transform</h3><output id="rotationOutput">0°</output></div>
+          <input id="rotationRange" type="range" min="0" max="360" step="15" value="0" aria-label="Rotation">
+          <div class="segmented-control" role="group" aria-label="Flip icon">
+            <button id="flipHorizontalButton" type="button" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M9 6 4 12l5 6M15 6l5 6-5 6"/></svg>Horizontal</button>
+            <button id="flipVerticalButton" type="button" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18M6 9l6-5 6 5M6 15l6 5 6-5"/></svg>Vertical</button>
+          </div>
+        </section>
+
+        <section class="inspector-actions">
+          <button class="button button-secondary" id="fullPreviewButton" type="button">Open full preview<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 13v7H4V6h7"/></svg></button>
+          <button class="button button-primary" id="copySvgButton" type="button">Copy SVG<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button>
+        </section>
+
+        <section class="code-panel" aria-labelledby="code-title">
+          <h3 class="sr-only" id="code-title">Generated icon code</h3>
+          <div class="code-tabs" role="tablist">
+            <button class="is-active" type="button" role="tab" aria-selected="true" data-code-tab="svg">SVG</button>
+            <button type="button" role="tab" aria-selected="false" data-code-tab="jsx">JSX</button>
+            <button type="button" role="tab" aria-selected="false" data-code-tab="css">CSS</button>
+          </div>
+          <pre><code id="codeOutput"></code></pre>
+          <button class="code-copy-button" id="copyCodeButton" type="button" aria-label="Copy displayed code"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button>
+        </section>
+      </div>
+    </aside>
+  </div>
+
+  <dialog class="preview-dialog" id="previewDialog">
+    <button class="icon-button dialog-close" id="closePreviewDialog" type="button" aria-label="Close full preview"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5 5 19"/></svg></button>
+    <div class="dialog-preview" id="dialogPreview"></div>
+    <h2 id="dialogIconName">Invoice</h2>
+    <p>Resize the browser to verify SVG sharpness at any scale.</p>
+  </dialog>
+
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

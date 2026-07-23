@@ -1,0 +1,32 @@
+{
+  "title": "Icon Studio — SVG Icon Collection Admin Panel",
+  "surface": "component_library",
+  "tokens": {
+    "primary": "#f45b0b",
+    "accent": "#ff7a33",
+    "background": "#f6f8fb",
+    "text": "#111827",
+    "panel": "#ffffff",
+    "muted": "#66736f",
+    "line": "#dce3df",
+    "radius": 12,
+    "spacing": 12,
+    "controlHeight": 36
+  },
+  "components": [
+    "collapsible-sidebar",
+    "sticky-top-bar",
+    "search-and-category-filters",
+    "responsive-svg-icon-grid",
+    "icon-cards",
+    "favorites-and-recent-views",
+    "sticky-icon-inspector",
+    "live-svg-preview",
+    "customization-controls",
+    "svg-jsx-css-code-tabs",
+    "copy-toast",
+    "responsive-overlays"
+  ],
+  "wireframe": [],
+  "referenceImages": []
+}

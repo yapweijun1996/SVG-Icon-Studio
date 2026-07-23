@@ -1,0 +1,15 @@
+{
+  "method": "heuristic_design_brief_similarity",
+  "score": 0.72,
+  "confidence": "low",
+  "signals": [
+    "component-extraction",
+    "responsive-variants",
+    "style-tokens"
+  ],
+  "gaps": [
+    "No actual screenshot/image artifact was supplied, so pixel-level diff cannot be computed.",
+    "Run inspect_webpage_plus or visual regression after publishing for browser-captured evidence."
+  ],
+  "nextStep": "Compare the published page screenshot against the design reference, then patch component files and re-run validation."
+}

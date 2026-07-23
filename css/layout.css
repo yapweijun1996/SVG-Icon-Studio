@@ -1,0 +1,3 @@
+.app-shell { min-height: 100vh; display: grid; grid-template-columns: var(--sidebar-width) minmax(0, 1fr) var(--inspector-width); transition: grid-template-columns .2s ease; }
+body.sidebar-collapsed { --sidebar-width: 76px; }
+body.inspector-collapsed { --inspector-width: 68px; }

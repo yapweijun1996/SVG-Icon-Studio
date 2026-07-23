@@ -1,0 +1,688 @@
+{
+  "schemaVersion": 1,
+  "categories": [
+    {
+      "id": "Interface",
+      "label": "Interface",
+      "order": 10
+    },
+    {
+      "id": "Arrows",
+      "label": "Arrows",
+      "order": 20
+    },
+    {
+      "id": "Actions",
+      "label": "Actions",
+      "order": 30
+    },
+    {
+      "id": "Files",
+      "label": "Files",
+      "order": 40
+    },
+    {
+      "id": "Users",
+      "label": "Users",
+      "order": 50
+    },
+    {
+      "id": "Commerce",
+      "label": "Commerce",
+      "order": 60
+    },
+    {
+      "id": "Finance",
+      "label": "Finance",
+      "order": 70
+    },
+    {
+      "id": "Logistics",
+      "label": "Logistics",
+      "order": 80
+    },
+    {
+      "id": "AI",
+      "label": "AI",
+      "order": 90
+    },
+    {
+      "id": "ERP",
+      "label": "ERP",
+      "order": 100
+    }
+  ],
+  "icons": [
+    {
+      "id": "invoice",
+      "name": "Invoice",
+      "category": "Files",
+      "style": "outline",
+      "tags": [
+        "bill",
+        "sales invoice",
+        "finance",
+        "document"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": true,
+      "sortOrder": 10
+    },
+    {
+      "id": "customer",
+      "name": "Customer",
+      "category": "Users",
+      "style": "outline",
+      "tags": [
+        "person",
+        "client",
+        "party",
+        "account"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": true,
+      "sortOrder": 20
+    },
+    {
+      "id": "delivery-truck",
+      "name": "Delivery Truck",
+      "category": "Logistics",
+      "style": "outline",
+      "tags": [
+        "lorry",
+        "shipping",
+        "transport",
+        "do"
+      ],
+      "aliases": [
+        "lorry"
+      ],
+      "status": "active",
+      "featured": true,
+      "sortOrder": 30
+    },
+    {
+      "id": "search",
+      "name": "Search",
+      "category": "Interface",
+      "style": "outline",
+      "tags": [
+        "find",
+        "lookup",
+        "magnifier"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": true,
+      "sortOrder": 40
+    },
+    {
+      "id": "settings",
+      "name": "Settings",
+      "category": "Interface",
+      "style": "outline",
+      "tags": [
+        "gear",
+        "configuration",
+        "preferences"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": true,
+      "sortOrder": 50
+    },
+    {
+      "id": "cart",
+      "name": "Cart",
+      "category": "Commerce",
+      "style": "outline",
+      "tags": [
+        "shopping",
+        "order",
+        "basket"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": true,
+      "sortOrder": 60
+    },
+    {
+      "id": "payment",
+      "name": "Payment",
+      "category": "Finance",
+      "style": "outline",
+      "tags": [
+        "money",
+        "bank",
+        "cash",
+        "pay"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": true,
+      "sortOrder": 70
+    },
+    {
+      "id": "ai-spark",
+      "name": "AI Spark",
+      "category": "AI",
+      "style": "filled",
+      "tags": [
+        "artificial intelligence",
+        "magic",
+        "copilot",
+        "llm"
+      ],
+      "aliases": [
+        "ai",
+        "llm"
+      ],
+      "status": "active",
+      "featured": true,
+      "sortOrder": 80
+    },
+    {
+      "id": "user-add",
+      "name": "User Add",
+      "category": "Users",
+      "style": "outline",
+      "tags": [
+        "person",
+        "new user",
+        "create customer"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": true,
+      "sortOrder": 90
+    },
+    {
+      "id": "folder",
+      "name": "Folder",
+      "category": "Files",
+      "style": "outline",
+      "tags": [
+        "directory",
+        "documents",
+        "collection"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": true,
+      "sortOrder": 100
+    },
+    {
+      "id": "chart-bar",
+      "name": "Chart Bar",
+      "category": "Finance",
+      "style": "outline",
+      "tags": [
+        "analytics",
+        "report",
+        "statistics",
+        "sales"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": true,
+      "sortOrder": 110
+    },
+    {
+      "id": "notification",
+      "name": "Notification",
+      "category": "Interface",
+      "style": "outline",
+      "tags": [
+        "bell",
+        "alert",
+        "reminder"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": true,
+      "sortOrder": 120
+    },
+    {
+      "id": "file",
+      "name": "File",
+      "category": "Files",
+      "style": "outline",
+      "tags": [
+        "document",
+        "page",
+        "attachment"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": true,
+      "sortOrder": 130
+    },
+    {
+      "id": "download",
+      "name": "Download",
+      "category": "Actions",
+      "style": "outline",
+      "tags": [
+        "save",
+        "export",
+        "arrow"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": true,
+      "sortOrder": 140
+    },
+    {
+      "id": "upload",
+      "name": "Upload",
+      "category": "Actions",
+      "style": "outline",
+      "tags": [
+        "import",
+        "send",
+        "arrow"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": true,
+      "sortOrder": 150
+    },
+    {
+      "id": "delete",
+      "name": "Delete",
+      "category": "Actions",
+      "style": "outline",
+      "tags": [
+        "trash",
+        "remove",
+        "bin"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": true,
+      "sortOrder": 160
+    },
+    {
+      "id": "edit",
+      "name": "Edit",
+      "category": "Actions",
+      "style": "outline",
+      "tags": [
+        "pencil",
+        "modify",
+        "write"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": true,
+      "sortOrder": 170
+    },
+    {
+      "id": "share",
+      "name": "Share",
+      "category": "Actions",
+      "style": "outline",
+      "tags": [
+        "network",
+        "send",
+        "link"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": true,
+      "sortOrder": 180
+    },
+    {
+      "id": "filter",
+      "name": "Filter",
+      "category": "Actions",
+      "style": "outline",
+      "tags": [
+        "funnel",
+        "refine",
+        "search"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": true,
+      "sortOrder": 190
+    },
+    {
+      "id": "purchase-order",
+      "name": "Purchase Order",
+      "category": "ERP",
+      "style": "filled",
+      "tags": [
+        "po",
+        "vendor",
+        "procurement",
+        "order",
+        "shopping cart",
+        "approval",
+        "approved purchase"
+      ],
+      "aliases": [
+        "po"
+      ],
+      "status": "active",
+      "featured": true,
+      "sortOrder": 200
+    },
+    {
+      "id": "sales-order",
+      "name": "Sales Order",
+      "category": "Commerce",
+      "style": "outline",
+      "tags": [
+        "so",
+        "customer",
+        "confirmed order"
+      ],
+      "aliases": [
+        "so"
+      ],
+      "status": "active",
+      "featured": true,
+      "sortOrder": 210
+    },
+    {
+      "id": "delivery-order",
+      "name": "Delivery Order",
+      "category": "Logistics",
+      "style": "filled",
+      "tags": [
+        "do",
+        "shipping document",
+        "dispatch",
+        "delivery note",
+        "delivery truck"
+      ],
+      "aliases": [
+        "do"
+      ],
+      "status": "active",
+      "featured": true,
+      "sortOrder": 220
+    },
+    {
+      "id": "vendor",
+      "name": "Vendor",
+      "category": "Users",
+      "style": "outline",
+      "tags": [
+        "supplier",
+        "party",
+        "company"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": true,
+      "sortOrder": 230
+    },
+    {
+      "id": "warehouse",
+      "name": "Warehouse",
+      "category": "Logistics",
+      "style": "outline",
+      "tags": [
+        "inventory",
+        "store",
+        "stock"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": true,
+      "sortOrder": 240
+    },
+    {
+      "id": "package",
+      "name": "Package",
+      "category": "Logistics",
+      "style": "outline",
+      "tags": [
+        "box",
+        "parcel",
+        "inventory",
+        "stock"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 250
+    },
+    {
+      "id": "receipt",
+      "name": "Receipt",
+      "category": "Files",
+      "style": "outline",
+      "tags": [
+        "invoice",
+        "bill",
+        "proof",
+        "transaction"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 260
+    },
+    {
+      "id": "credit-card",
+      "name": "Credit Card",
+      "category": "Finance",
+      "style": "outline",
+      "tags": [
+        "payment",
+        "bank card",
+        "money"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 270
+    },
+    {
+      "id": "calendar",
+      "name": "Calendar",
+      "category": "Interface",
+      "style": "outline",
+      "tags": [
+        "date",
+        "schedule",
+        "event"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 280
+    },
+    {
+      "id": "clock",
+      "name": "Clock",
+      "category": "Interface",
+      "style": "outline",
+      "tags": [
+        "time",
+        "history",
+        "recent"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 290
+    },
+    {
+      "id": "home",
+      "name": "Home",
+      "category": "Interface",
+      "style": "outline",
+      "tags": [
+        "dashboard",
+        "main",
+        "house"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 300
+    },
+    {
+      "id": "menu",
+      "name": "Menu",
+      "category": "Interface",
+      "style": "outline",
+      "tags": [
+        "hamburger",
+        "navigation",
+        "sidebar"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 310
+    },
+    {
+      "id": "close",
+      "name": "Close",
+      "category": "Interface",
+      "style": "outline",
+      "tags": [
+        "x",
+        "cancel",
+        "dismiss"
+      ],
+      "aliases": [
+        "x"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 320
+    },
+    {
+      "id": "arrow-left",
+      "name": "Arrow Left",
+      "category": "Arrows",
+      "style": "outline",
+      "tags": [
+        "back",
+        "previous",
+        "direction"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 330
+    },
+    {
+      "id": "arrow-right",
+      "name": "Arrow Right",
+      "category": "Arrows",
+      "style": "outline",
+      "tags": [
+        "next",
+        "forward",
+        "direction"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 340
+    },
+    {
+      "id": "check",
+      "name": "Check",
+      "category": "Actions",
+      "style": "outline",
+      "tags": [
+        "done",
+        "success",
+        "tick",
+        "approve"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 350
+    },
+    {
+      "id": "alert",
+      "name": "Alert",
+      "category": "Actions",
+      "style": "outline",
+      "tags": [
+        "warning",
+        "error",
+        "risk"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 360
+    },
+    {
+      "id": "database",
+      "name": "Database",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "data",
+        "server",
+        "sql",
+        "storage"
+      ],
+      "aliases": [
+        "sql"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 370
+    },
+    {
+      "id": "collection",
+      "name": "Collection",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "library",
+        "group",
+        "assets"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 380
+    },
+    {
+      "id": "refresh",
+      "name": "Refresh",
+      "category": "Actions",
+      "style": "outline",
+      "tags": [
+        "reload",
+        "sync",
+        "update"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 390
+    },
+    {
+      "id": "external-link",
+      "name": "External Link",
+      "category": "Actions",
+      "style": "outline",
+      "tags": [
+        "open",
+        "new tab",
+        "link"
+      ],
+      "aliases": [],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 400
+    }
+  ]
+}
