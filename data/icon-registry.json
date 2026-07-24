@@ -683,6 +683,379 @@
       "status": "active",
       "featured": false,
       "sortOrder": 400
+    },
+    {
+      "id": "lock",
+      "name": "Lock",
+      "category": "Interface",
+      "style": "outline",
+      "tags": [
+        "security",
+        "permission",
+        "privacy",
+        "password"
+      ],
+      "aliases": [
+        "padlock",
+        "secure"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 410
+    },
+    {
+      "id": "eye",
+      "name": "Eye",
+      "category": "Interface",
+      "style": "outline",
+      "tags": [
+        "view",
+        "preview",
+        "visibility",
+        "show"
+      ],
+      "aliases": [
+        "view",
+        "visibility"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 420
+    },
+    {
+      "id": "mail",
+      "name": "Mail",
+      "category": "Interface",
+      "style": "outline",
+      "tags": [
+        "email",
+        "message",
+        "envelope",
+        "inbox"
+      ],
+      "aliases": [
+        "email",
+        "envelope"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 430
+    },
+    {
+      "id": "star",
+      "name": "Star",
+      "category": "Interface",
+      "style": "outline",
+      "tags": [
+        "favorite",
+        "rating",
+        "bookmark"
+      ],
+      "aliases": [
+        "favorite",
+        "rating"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 440
+    },
+    {
+      "id": "copy",
+      "name": "Copy",
+      "category": "Actions",
+      "style": "outline",
+      "tags": [
+        "duplicate",
+        "clone",
+        "clipboard"
+      ],
+      "aliases": [
+        "duplicate"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 450
+    },
+    {
+      "id": "print",
+      "name": "Print",
+      "category": "Actions",
+      "style": "outline",
+      "tags": [
+        "printer",
+        "document",
+        "output"
+      ],
+      "aliases": [
+        "printer"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 460
+    },
+    {
+      "id": "clipboard",
+      "name": "Clipboard",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "checklist",
+        "stock take",
+        "tasks",
+        "audit"
+      ],
+      "aliases": [
+        "checklist",
+        "task-list"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 470
+    },
+    {
+      "id": "wallet",
+      "name": "Wallet",
+      "category": "Finance",
+      "style": "outline",
+      "tags": [
+        "money",
+        "balance",
+        "cash",
+        "funds"
+      ],
+      "aliases": [
+        "balance",
+        "purse"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 480
+    },
+    {
+      "id": "calculator",
+      "name": "Calculator",
+      "category": "Finance",
+      "style": "outline",
+      "tags": [
+        "accounting",
+        "math",
+        "compute",
+        "tax"
+      ],
+      "aliases": [
+        "accounting"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 490
+    },
+    {
+      "id": "users",
+      "name": "Users",
+      "category": "Users",
+      "style": "outline",
+      "tags": [
+        "team",
+        "group",
+        "people",
+        "staff"
+      ],
+      "aliases": [
+        "team",
+        "group"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 500
+    },
+    {
+      "id": "unlock",
+      "name": "Unlock",
+      "category": "Interface",
+      "style": "outline",
+      "tags": [
+        "security",
+        "permission",
+        "open",
+        "access"
+      ],
+      "aliases": [
+        "unlocked"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 510
+    },
+    {
+      "id": "eye-off",
+      "name": "Eye Off",
+      "category": "Interface",
+      "style": "outline",
+      "tags": [
+        "hide",
+        "invisible",
+        "privacy",
+        "hidden"
+      ],
+      "aliases": [
+        "hide",
+        "eye-slash"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 520
+    },
+    {
+      "id": "globe",
+      "name": "Globe",
+      "category": "Interface",
+      "style": "outline",
+      "tags": [
+        "web",
+        "world",
+        "language",
+        "international"
+      ],
+      "aliases": [
+        "world",
+        "web"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 530
+    },
+    {
+      "id": "send",
+      "name": "Send",
+      "category": "Actions",
+      "style": "outline",
+      "tags": [
+        "submit",
+        "message",
+        "paper plane",
+        "dispatch"
+      ],
+      "aliases": [
+        "paper-plane",
+        "submit"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 540
+    },
+    {
+      "id": "link",
+      "name": "Link",
+      "category": "Actions",
+      "style": "outline",
+      "tags": [
+        "url",
+        "chain",
+        "hyperlink",
+        "connect"
+      ],
+      "aliases": [
+        "chain",
+        "url"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 550
+    },
+    {
+      "id": "tag",
+      "name": "Tag",
+      "category": "Commerce",
+      "style": "outline",
+      "tags": [
+        "price",
+        "label",
+        "sku",
+        "product"
+      ],
+      "aliases": [
+        "label",
+        "price-tag"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 560
+    },
+    {
+      "id": "percent",
+      "name": "Percent",
+      "category": "Commerce",
+      "style": "outline",
+      "tags": [
+        "discount",
+        "promotion",
+        "sale",
+        "rate"
+      ],
+      "aliases": [
+        "discount",
+        "sale"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 570
+    },
+    {
+      "id": "map-pin",
+      "name": "Map Pin",
+      "category": "Logistics",
+      "style": "outline",
+      "tags": [
+        "location",
+        "address",
+        "delivery",
+        "gps"
+      ],
+      "aliases": [
+        "location",
+        "pin"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 580
+    },
+    {
+      "id": "trending-up",
+      "name": "Trending Up",
+      "category": "Finance",
+      "style": "outline",
+      "tags": [
+        "growth",
+        "profit",
+        "chart",
+        "increase"
+      ],
+      "aliases": [
+        "growth",
+        "trend"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 590
+    },
+    {
+      "id": "archive",
+      "name": "Archive",
+      "category": "Files",
+      "style": "outline",
+      "tags": [
+        "storage",
+        "box",
+        "backup",
+        "history"
+      ],
+      "aliases": [
+        "storage",
+        "box"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 600
     }
   ]
 }

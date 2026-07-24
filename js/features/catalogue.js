@@ -93,6 +93,10 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
       }));
     });
     refs.categoryChips.replaceChildren(fragment);
+    const activeChip = refs.categoryChips.querySelector('.is-active');
+    if (activeChip && refs.categoryChips.scrollWidth > refs.categoryChips.clientWidth) {
+      activeChip.scrollIntoView({ inline: 'center', block: 'nearest' });
+    }
   }
 
   function render() {

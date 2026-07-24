@@ -52,12 +52,25 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
     closeSidebar();
   }
 
+  // Nav labels are display:none while collapsed, which would strip the buttons'
+  // accessible names — aria-label keeps them; title gives sighted users a tooltip
+  // when only the icon is visible.
+  function syncCollapsedState(collapsed) {
+    refs.brandToggle.setAttribute('aria-expanded', String(!collapsed));
+    refs.brandToggle.title = collapsed ? 'Expand sidebar' : 'Collapse sidebar';
+    $$('.nav-item').forEach(button => {
+      const label = button.querySelector('span')?.textContent || '';
+      if (!button.hasAttribute('aria-label')) button.setAttribute('aria-label', label);
+      if (collapsed) button.title = label; else button.removeAttribute('title');
+    });
+  }
+
   const sidebarCollapsed = getValue(STORAGE.sidebar, 'false') === 'true';
   const inspectorCollapsed = getValue(STORAGE.inspector, 'false') === 'true';
   const pinned = getValue(STORAGE.pinned, 'true') !== 'false';
   refs.body.classList.toggle('sidebar-collapsed', sidebarCollapsed);
   refs.body.classList.toggle('inspector-collapsed', inspectorCollapsed);
-  refs.brandToggle.setAttribute('aria-expanded', String(!sidebarCollapsed));
+  syncCollapsedState(sidebarCollapsed);
   refs.pinInspectorButton.setAttribute('aria-pressed', String(pinned));
   refs.pinInspectorButton.classList.toggle('is-active', pinned);
   refs.inspectorPinState.textContent = pinned ? 'Pinned' : 'Unpinned';
@@ -65,8 +78,7 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
   refs.brandToggle.addEventListener('click', () => {
     if (window.matchMedia('(max-width: 820px)').matches) return closeSidebar();
     const collapsed = refs.body.classList.toggle('sidebar-collapsed');
-    refs.brandToggle.setAttribute('aria-expanded', String(!collapsed));
-    refs.brandToggle.title = collapsed ? 'Expand sidebar' : 'Collapse sidebar';
+    syncCollapsedState(collapsed);
     setValue(STORAGE.sidebar, String(collapsed));
   });
   refs.mobileMenuButton.addEventListener('click', () => refs.body.classList.contains('sidebar-open') ? closeSidebar() : openSidebar());
