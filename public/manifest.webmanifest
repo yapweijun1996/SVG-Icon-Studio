@@ -1,0 +1,17 @@
+{
+  "name": "Icon Studio — SVG Icon Collection",
+  "short_name": "Icon Studio",
+  "description": "Browse, customise and export production-ready SVG icons.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f5f7fb",
+  "theme_color": "#f45b0b",
+  "icons": [
+    { "src": "icons-pwa/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons-pwa/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons-pwa/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

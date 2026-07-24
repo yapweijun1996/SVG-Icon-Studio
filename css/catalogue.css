@@ -3,7 +3,7 @@
 .hero-block h1 { margin: 0; font-size: clamp(26px, 2.4vw, 38px); line-height: 1.12; letter-spacing: -.035em; }
 .hero-block p { max-width: 700px; margin: 8px 0 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
 .library-badge { margin-top: 4px; padding: 7px 10px; color: var(--muted); background: var(--panel); border: 1px solid var(--line); border-radius: 999px; font-size: 10px; white-space: nowrap; }
-.catalogue-toolbar { position: sticky; top: var(--topbar-height); z-index: 20; padding: 12px 0 10px; background: linear-gradient(var(--bg) 82%, transparent); }
+.catalogue-toolbar { position: sticky; top: calc(var(--topbar-height) + var(--safe-top)); z-index: 20; padding: 12px 0 10px; background: linear-gradient(var(--bg) 82%, transparent); }
 .search-row { display: grid; grid-template-columns: minmax(220px, 1fr) 44px auto; gap: 10px; }
 .search-field { min-height: 44px; display: grid; grid-template-columns: 20px 1fr auto; align-items: center; gap: 10px; padding: 0 13px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); box-shadow: var(--shadow-xs); }
 .search-field:focus-within { border-color: var(--accent); box-shadow: var(--focus); }

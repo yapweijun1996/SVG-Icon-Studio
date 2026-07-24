@@ -175,6 +175,15 @@ async function start() {
   selectIcon(state.selectedId, false);
 }
 
+// PWA: register only in production builds — a caching worker in dev fights
+// Vite's module server and HMR. Relative URL keeps it working under a
+// GitHub Pages project subpath.
+if (import.meta.env?.PROD && 'serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(error => console.warn('[Icon Studio] SW registration failed:', error.message));
+  });
+}
+
 start().catch(error => {
   console.error(error);
   const refs = collectRefs();

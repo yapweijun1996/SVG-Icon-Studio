@@ -1056,6 +1056,189 @@
       "status": "active",
       "featured": false,
       "sortOrder": 600
+    },
+    {
+      "id": "arrow-up",
+      "name": "Arrow Up",
+      "category": "Arrows",
+      "style": "outline",
+      "tags": [
+        "direction",
+        "up",
+        "sort ascending"
+      ],
+      "aliases": [
+        "up"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 610
+    },
+    {
+      "id": "arrow-down",
+      "name": "Arrow Down",
+      "category": "Arrows",
+      "style": "outline",
+      "tags": [
+        "direction",
+        "down",
+        "sort descending"
+      ],
+      "aliases": [
+        "down"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 620
+    },
+    {
+      "id": "plus",
+      "name": "Plus",
+      "category": "Interface",
+      "style": "outline",
+      "tags": [
+        "add",
+        "new",
+        "create",
+        "increase"
+      ],
+      "aliases": [
+        "add",
+        "new"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 630
+    },
+    {
+      "id": "minus",
+      "name": "Minus",
+      "category": "Interface",
+      "style": "outline",
+      "tags": [
+        "remove",
+        "subtract",
+        "decrease",
+        "collapse"
+      ],
+      "aliases": [
+        "remove",
+        "subtract"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 640
+    },
+    {
+      "id": "info",
+      "name": "Info",
+      "category": "Interface",
+      "style": "outline",
+      "tags": [
+        "information",
+        "about",
+        "detail",
+        "hint"
+      ],
+      "aliases": [
+        "information"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 650
+    },
+    {
+      "id": "help-circle",
+      "name": "Help",
+      "category": "Interface",
+      "style": "outline",
+      "tags": [
+        "question",
+        "support",
+        "faq",
+        "guide"
+      ],
+      "aliases": [
+        "question",
+        "faq"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 660
+    },
+    {
+      "id": "bookmark",
+      "name": "Bookmark",
+      "category": "Interface",
+      "style": "outline",
+      "tags": [
+        "save",
+        "marker",
+        "reading"
+      ],
+      "aliases": [
+        "saved"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 670
+    },
+    {
+      "id": "barcode",
+      "name": "Barcode",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "scan",
+        "sku",
+        "product code",
+        "inventory"
+      ],
+      "aliases": [
+        "scan",
+        "sku"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 680
+    },
+    {
+      "id": "undo",
+      "name": "Undo",
+      "category": "Actions",
+      "style": "outline",
+      "tags": [
+        "revert",
+        "back",
+        "restore",
+        "rollback"
+      ],
+      "aliases": [
+        "revert",
+        "rollback"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 690
+    },
+    {
+      "id": "calendar-check",
+      "name": "Calendar Check",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "schedule",
+        "confirmed",
+        "appointment",
+        "due date"
+      ],
+      "aliases": [
+        "schedule-confirmed",
+        "due"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 700
     }
   ]
 }
