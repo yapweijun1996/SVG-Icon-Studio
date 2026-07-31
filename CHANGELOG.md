@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.6.1 — 2026-07-31
+
+### Fixed
+
+- The Inspector's fill-colour picker did nothing for `filled`-style icons, and their colour was silently controlled by the *stroke*-colour picker instead. `js/services/svg-renderer.js` `applyAppearance()` only set `fill` on the root `<svg>`, but every filled-style shape (the discovery came from `purchase-order.svg`, `delivery-order.svg`, `ai-spark.svg`, and the 6 new filled icons from 0.6.0) carries its own `fill="currentColor"` attribute, and an element's own presentation attribute always wins over an inherited value from its parent — so the root-level override was never reachable. Now `applyAppearance` also writes the resolved paint onto every descendant that carries a `fill` attribute. Fixes both the live Inspector preview and the exported SVG/JSX/CSS code, and applies to all 9 filled icons (3 pre-existing + 6 added in 0.6.0), not just the new ones.
+
+### Validation
+
+- `npm test`, `npm run typecheck` and `npm run build` all pass.
+- Verified in the running app: with "use currentColor" off, setting the fill colour to a distinctive value now renders that colour in the Inspector preview and appears literally in the exported SVG code (previously it stayed on the default ink colour, and only the *stroke* picker could move it). Changing stroke colour on a filled icon no longer affects its fill. Re-checked all 9 filled icons (`purchase-order`, `delivery-order`, `ai-spark` plus the 6 from 0.6.0) with a custom fill colour. Outline-style icons (spot-checked on `database`) are unaffected — their stroke picker behaves exactly as before.
+
 ## 0.6.0 — 2026-07-31
 
 ### Added

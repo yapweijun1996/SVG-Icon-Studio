@@ -28,8 +28,14 @@ function applyAccessibility(root, metadata, includeTitle) {
 function applyAppearance(root, metadata, appearance) {
   const color = appearance.currentColor ? 'currentColor' : appearance.strokeColor;
   if (metadata.style === 'filled') {
-    root.setAttribute('fill', appearance.currentColor ? 'currentColor' : appearance.fillColor);
+    const paint = appearance.currentColor ? 'currentColor' : appearance.fillColor;
+    root.setAttribute('fill', paint);
     root.setAttribute('stroke', 'none');
+    // Canonical filled-style icons also carry their own fill="currentColor" on
+    // the shape itself (see icons/catalog/purchase-order.svg), which as an
+    // attribute on that element wins over whatever the root resolves to -- so
+    // the chosen paint has to be pushed onto every shape, not just the root.
+    root.querySelectorAll('[fill]').forEach(node => node.setAttribute('fill', paint));
   } else {
     root.setAttribute('fill', appearance.fillEnabled ? (appearance.currentColor ? 'currentColor' : appearance.fillColor) : 'none');
     root.setAttribute('stroke', color);
