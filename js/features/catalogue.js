@@ -148,7 +148,20 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     else if (action.dataset.action === 'more') onMore(icon.id);
   });
 
-  refs.loadMoreButton.addEventListener('click', () => { state.visibleLimit += 24; render(); });
+  function loadMore() {
+    state.visibleLimit += 24;
+    render();
+  }
+  refs.loadMoreButton.addEventListener('click', loadMore);
 
-  return { render, destroy: disconnectObserver };
+  // Auto-load once the (still visible, non-hidden) load-more control nears the
+  // viewport, so scrolling to the bottom of the grid keeps extending it. The
+  // button itself stays as a manual fallback -- for keyboard use, and for the
+  // rare case IntersectionObserver isn't available.
+  const loadMoreObserver = new IntersectionObserver(entries => {
+    if (entries.some(entry => entry.isIntersecting)) loadMore();
+  }, { rootMargin: '600px 0px' });
+  loadMoreObserver.observe(refs.loadMoreButton);
+
+  return { render, destroy: () => { disconnectObserver(); loadMoreObserver.disconnect(); } };
 }

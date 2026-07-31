@@ -35,7 +35,6 @@ select { min-height: 44px; padding: 0 34px 0 10px; border: 1px solid var(--line)
 .card-select { flex: 1; min-height: 122px; display: grid; grid-template-rows: 1fr auto; gap: 6px; width: 100%; padding: 14px 12px 8px; border: 0; background: transparent; color: inherit; cursor: pointer; text-align: left; }
 .card-preview { display: grid; place-items: center; min-height: 72px; color: var(--text); }
 .card-preview svg { width: 48px; height: 48px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-.icon-card[data-style="filled"] .card-preview { color: var(--accent); }
 .card-copy { min-width: 0; }
 .card-copy strong { display: block; overflow: hidden; color: var(--text); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
 .card-copy span { display: block; margin-top: 4px; overflow: hidden; color: var(--muted); font-size: 9.5px; text-overflow: ellipsis; white-space: nowrap; }

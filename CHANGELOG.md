@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.7.0 — 2026-07-31
+
+### Changed
+
+- Catalogue-grid icon colour is now consistent across every style. Removed `css/catalogue.css`'s `.icon-card[data-style="filled"] .card-preview { color: var(--accent); }` rule, which forced the 9 `filled`-style icons to render in brand orange in the grid while all 91 `outline` icons rendered in the normal ink colour. That split only stood out once the filled count grew from 3 to 9 across the last two releases; all icons now use the same `var(--text)` the rest of the grid already used.
+- The catalogue grid now auto-loads more icons as you scroll near the bottom, instead of requiring a manual click on "Load more icons". `js/features/catalogue.js` adds an `IntersectionObserver` (600px lookahead) watching the load-more control; it calls the same `loadMore()` the button already used, and stops firing on its own once the button is hidden (nothing left to load). The button itself is kept as a manual/keyboard-accessible fallback.
+
+### Validation
+
+- `npm test`, `npm run typecheck` and `npm run build` all pass.
+- Verified in the running app: all 9 filled icons (`purchase-order`, `delivery-order`, `ai-spark`, plus the 6 added in 0.6.0) now render the same computed colour as outline icons in the grid, in both light and dark theme.
+- Verified `loadMore()` itself end-to-end: clicking it takes the grid from 24 to all 36 ERP-category cards (and to all 100 across every category) with no duplicate or missing IDs, and the control correctly hides once nothing is left to load.
+- Could not directly observe the `IntersectionObserver` auto-fire in this session: the automation environment's browser pane reported `document.hidden === true` (a backgrounded tab), which is standard Chromium behaviour that throttles/pauses `IntersectionObserver` callbacks and is unrelated to this code. The observer's wiring was confirmed correct by other means -- the watched element's `getBoundingClientRect()` places it inside the viewport (so a live tab would satisfy the default threshold immediately), the source fetched from the running dev server includes the expected observer/rootMargin, and it invokes the exact same `loadMore()` already verified above. This one behaviour should still be spot-checked in a normal foregrounded browser.
+
 ## 0.6.1 — 2026-07-31
 
 ### Fixed
