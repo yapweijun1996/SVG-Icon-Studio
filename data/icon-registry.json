@@ -1719,6 +1719,126 @@
       "status": "active",
       "featured": false,
       "sortOrder": 940
+    },
+    {
+      "id": "purchase-requisition",
+      "name": "Purchase Requisition",
+      "category": "ERP",
+      "style": "filled",
+      "tags": [
+        "pr",
+        "requisition",
+        "request",
+        "procurement",
+        "approval"
+      ],
+      "aliases": [
+        "pr",
+        "requisition"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 950
+    },
+    {
+      "id": "debit-note",
+      "name": "Debit Note",
+      "category": "ERP",
+      "style": "filled",
+      "tags": [
+        "dn",
+        "debit memo",
+        "charge",
+        "adjustment",
+        "billing"
+      ],
+      "aliases": [
+        "dn",
+        "debit-memo"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 960
+    },
+    {
+      "id": "packing-list",
+      "name": "Packing List",
+      "category": "ERP",
+      "style": "filled",
+      "tags": [
+        "packing slip",
+        "carton",
+        "shipment contents",
+        "dispatch",
+        "logistics"
+      ],
+      "aliases": [
+        "packing-slip",
+        "carton-list"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 970
+    },
+    {
+      "id": "pick-list",
+      "name": "Pick List",
+      "category": "ERP",
+      "style": "filled",
+      "tags": [
+        "picking",
+        "warehouse pick",
+        "fulfilment",
+        "checklist",
+        "order"
+      ],
+      "aliases": [
+        "picking-list",
+        "picking"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 980
+    },
+    {
+      "id": "journal-entry",
+      "name": "Journal Entry",
+      "category": "ERP",
+      "style": "filled",
+      "tags": [
+        "je",
+        "voucher",
+        "debit credit",
+        "posting",
+        "accounting"
+      ],
+      "aliases": [
+        "je",
+        "voucher"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 990
+    },
+    {
+      "id": "dashboard",
+      "name": "Dashboard",
+      "category": "ERP",
+      "style": "filled",
+      "tags": [
+        "overview",
+        "kpi",
+        "metrics",
+        "analytics panel",
+        "reporting"
+      ],
+      "aliases": [
+        "overview",
+        "kpi"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1000
     }
   ]
 }

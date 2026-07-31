@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.6.0 — 2026-07-31
+
+### Added
+
+- 6 ERP icons in the **filled glyph style** of `purchase-order.svg` rather than the outline style used by the rest of the catalogue (catalogue 94 → 100, ERP 30 → 36, filled 3 → 9): `purchase-requisition`, `debit-note`, `packing-list`, `pick-list`, `journal-entry`, `dashboard`.
+- `tools/gen-filled-icons.mjs`, the authoring-time generator these six are produced by. It is not part of the app or the build — it only emits static SVG that is committed to `icons/catalog/`. It exists because in this style every "stroke" is a filled shape with an inner and an outer contour, and hand-computing those coordinate pairs is not reliably correct.
+
+### Notes on the filled style
+
+- Stroke weight is `0.73` units, measured off `purchase-order.svg` (its document wall is `6.75 − 6.023` and its text rule is `11.742 − 11.016`).
+- Badges are a **solid disc with the glyph knocked out of it** by `fill-rule="evenodd"`, which is how `purchase-order.svg` builds its tick. Nesting circles to make a ring instead makes the fill alternate against the glyph and renders as a blob.
+- A single `evenodd` path cannot mask one shape behind another — overlapping regions cancel. Badged documents are therefore narrowed to stop just short of the badge instead of running under it, and badge-less icons use a separate, wider document box so they stay centred.
+
+### Validation
+
+- `npm test` (100 icons, zero errors, no duplicate aliases), `npm run typecheck` and `npm run build` all pass. `tools/gen-filled-icons.mjs` is covered by `typecheck`.
+- Because the browser pane in this environment cannot produce screenshots, each icon was rasterised to a canvas and read back pixel-by-pixel as ASCII to confirm it actually renders as intended. That caught three real defects that geometry checks alone would have missed: badges rendering as blobs from ring nesting, the document border slicing through a badge, and a tick glyph overflowing its checkbox.
+- `getBBox()` confirms nothing is clipped and every icon is centred to within 0.01 units. This caught the three badge-less icons sitting 2.5 units left of centre, because they had inherited the narrowed document geometry meant for badged icons.
+- Verified in the running app: all 36 ERP cards render, zero failed asset loads, zero console errors, and `fill-rule="evenodd"` survives both the sanitizer and the SVG export.
+
 ## 0.5.0 — 2026-07-31
 
 ### Added
