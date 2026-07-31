@@ -18,8 +18,14 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
   }
   function openInspector() {
     refs.body.classList.remove('inspector-collapsed');
-    refs.body.classList.add('inspector-open');
-    refs.mobileInspectorButton.setAttribute('aria-expanded', 'true');
+    // inspector-open (and the dimming backdrop it triggers) is the mobile
+    // slide-in drawer -- on desktop the inspector is already docked, so
+    // adding it there just shows a backdrop with no panel motion behind it.
+    // Mirrors the same viewport branch closeInspector() already uses.
+    if (window.matchMedia('(max-width: 1180px)').matches) {
+      refs.body.classList.add('inspector-open');
+      refs.mobileInspectorButton.setAttribute('aria-expanded', 'true');
+    }
     updateBackdrop();
   }
   function closeInspector() {

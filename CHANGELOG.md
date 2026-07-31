@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.7.1 — 2026-07-31
+
+### Fixed
+
+- "Manage brand kit" and a card's "⋮" (more export options) button showed the full-screen dimming backdrop with nothing visibly happening behind it on desktop-width screens. `js/features/shell.js`'s `openInspector()` unconditionally added the `inspector-open` class (which triggers the backdrop and the mobile slide-in drawer), but on desktop the inspector panel is already docked and doesn't slide anywhere -- so clicking either button just dimmed the screen for no visible reason. `closeInspector()` already branches on the same `(max-width: 1180px)` check for exactly this reason; `openInspector()` now mirrors it: it still always un-collapses a manually-collapsed desktop inspector, but only adds `inspector-open` (and the backdrop that follows) on narrow viewports.
+
+### Validation
+
+- `npm test`, `npm run typecheck` and `npm run build` all pass.
+- Verified in the running app at a real 1440px viewport: both buttons now leave the backdrop hidden and never set `inspector-open`, while still un-collapsing a manually-collapsed inspector panel.
+- Verified at 390px (mobile width) that "Manage brand kit" still opens the drawer: byte-for-byte identical resulting state (backdrop, body class, `aria-expanded`) to clicking the pre-existing, already-shipped mobile inspector toggle button, proving the mobile behaviour is unchanged.
+- Note on how this was tested: this session's browser pane reports `document.hidden === true` and a frozen main thread under any wait strategy (`setTimeout`, busy-wait), so the CSS slide/fade transition itself couldn't be watched playing out live here -- verification relied on comparing final DOM/class state against the known-working mobile toggle button rather than eyeballing the animation.
+
 ## 0.7.0 — 2026-07-31
 
 ### Changed
