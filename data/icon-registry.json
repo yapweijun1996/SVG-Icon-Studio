@@ -1239,6 +1239,246 @@
       "status": "active",
       "featured": false,
       "sortOrder": 700
+    },
+    {
+      "id": "quotation",
+      "name": "Quotation",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "quote",
+        "rfq",
+        "price offer",
+        "proposal",
+        "sales"
+      ],
+      "aliases": [
+        "quote",
+        "rfq"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 710
+    },
+    {
+      "id": "goods-receipt",
+      "name": "Goods Receipt",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "grn",
+        "receiving",
+        "inbound",
+        "delivery intake",
+        "procurement"
+      ],
+      "aliases": [
+        "grn",
+        "receiving"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 720
+    },
+    {
+      "id": "stock-transfer",
+      "name": "Stock Transfer",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "transfer",
+        "warehouse move",
+        "relocation",
+        "inter branch",
+        "inventory"
+      ],
+      "aliases": [
+        "transfer",
+        "stock-movement"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 730
+    },
+    {
+      "id": "bill-of-materials",
+      "name": "Bill of Materials",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "bom",
+        "components",
+        "assembly",
+        "manufacturing",
+        "structure"
+      ],
+      "aliases": [
+        "bom",
+        "hierarchy"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 740
+    },
+    {
+      "id": "work-order",
+      "name": "Work Order",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "wo",
+        "production",
+        "job order",
+        "manufacturing",
+        "maintenance"
+      ],
+      "aliases": [
+        "wo",
+        "production-order"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 750
+    },
+    {
+      "id": "inventory",
+      "name": "Inventory",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "stock",
+        "cartons",
+        "on hand",
+        "warehouse",
+        "goods"
+      ],
+      "aliases": [
+        "stock",
+        "cartons"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 760
+    },
+    {
+      "id": "ledger",
+      "name": "Ledger",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "general ledger",
+        "account book",
+        "bookkeeping",
+        "journal",
+        "finance"
+      ],
+      "aliases": [
+        "general-ledger",
+        "account-book"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 770
+    },
+    {
+      "id": "approval",
+      "name": "Approval",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "approved",
+        "stamp",
+        "authorise",
+        "sign off",
+        "verified"
+      ],
+      "aliases": [
+        "approved",
+        "stamp"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 780
+    },
+    {
+      "id": "workflow",
+      "name": "Workflow",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "process",
+        "flowchart",
+        "routing",
+        "steps",
+        "automation"
+      ],
+      "aliases": [
+        "process",
+        "flowchart"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 790
+    },
+    {
+      "id": "tax",
+      "name": "Tax",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "gst",
+        "vat",
+        "duty",
+        "tax rate",
+        "compliance"
+      ],
+      "aliases": [
+        "gst",
+        "vat"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 800
+    },
+    {
+      "id": "report",
+      "name": "Report",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "statement",
+        "summary",
+        "analytics",
+        "printout",
+        "dashboard"
+      ],
+      "aliases": [
+        "analytics-report",
+        "statement"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 810
+    },
+    {
+      "id": "reconciliation",
+      "name": "Reconciliation",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "reconcile",
+        "balance sheet",
+        "matching",
+        "audit",
+        "scales"
+      ],
+      "aliases": [
+        "reconcile",
+        "scales"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 820
     }
   ]
 }

@@ -83,6 +83,8 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
   function renderCategories() {
     const available = new Set(state.icons.map(icon => icon.category));
     const categories = ['All', ...categoryOrder.filter(category => available.has(category))];
+    // Nav badge counts real collections, so adding a category can never leave it stale.
+    refs.collectionCount.textContent = String(categories.length - 1);
     const fragment = document.createDocumentFragment();
     categories.forEach(category => {
       fragment.append(createElement('button', {

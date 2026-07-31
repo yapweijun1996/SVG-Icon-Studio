@@ -18,6 +18,7 @@ function collectRefs() {
     brandToggle: $('#brandToggle'), themeButton: $('#themeButton'), importButton: $('#importButton'),
     svgFileInput: $('#svgFileInput'), totalIconCount: $('#totalIconCount'), visibleIconCount: $('#visibleIconCount'),
     favoriteCount: $('#favoriteCount'), recentCount: $('#recentCount'), uploadCount: $('#uploadCount'),
+    collectionCount: $('#collectionCount'),
     pageTitle: $('#pageTitle'), pageSubtitle: $('#pageSubtitle'), searchInput: $('#searchInput'),
     filterButton: $('#filterButton'), advancedFilter: $('#advancedFilter'), styleFilter: $('#styleFilter'),
     sortFilter: $('#sortFilter'), clearFiltersButton: $('#clearFiltersButton'), categoryChips: $('#categoryChips'),

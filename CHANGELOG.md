@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.4.0 — 2026-07-31
+
+### Added
+
+- 12 new ERP icons (catalogue grows 70 → 82, ERP category 6 → 18): `quotation`, `goods-receipt`, `stock-transfer`, `bill-of-materials`, `work-order`, `inventory`, `ledger`, `approval`, `workflow`, `tax`, `report`, `reconciliation`. All outline style at the standard `stroke-width="1.5"` / `currentColor` / exact `0 0 24 24`, drawn to match the existing catalogue's geometry conventions.
+- Content-Security-Policy `<meta>` in `index.html` as defence in depth behind the SVG sanitizer: `default-src 'self'`, `object-src 'none'`, `frame-ancestors 'none'`, `base-uri 'self'`, `form-action 'none'`. `style-src` keeps `'unsafe-inline'` because `js/features/inspector.js` and `js/services/svg-renderer.js` assign `element.style.color` directly; `img-src` allows `data:` for the CSS-mask export. `script-src` needs no exception — the Vite production build emits no inline script.
+
+### Fixed
+
+- The sidebar "Collections" badge was hardcoded to `6` while the registry had grown to 10 categories. It is now derived from the rendered category chips in `js/features/catalogue.js`, so adding a category can never leave it stale again.
+- `README.md` still advertised release `v0.2.0` while `package.json` was already at `0.3.1`.
+
+### Validation
+
+- `npm test` (82 icons, zero errors, no duplicate aliases), `npm run typecheck` and `npm run build` all pass.
+- CSP verified in a real browser on both the Vite dev server and the production preview build: zero CSP violations, service worker still registers, catalogue/inspector/code-export all functional.
+- Every new icon measured with `getBBox()`: no artwork is clipped by the 24×24 viewBox once the 1.5 stroke is accounted for, and all are centred. This caught `goods-receipt` sitting ~2 units low, which was corrected before commit.
+- ERP category verified in the running app: 18 cards render, zero failed asset loads; alias search (`bom`) resolves; inspector preview and SVG export work on a new icon.
+
 ## 0.3.1 — 2026-07-23
 
 ### Changed
