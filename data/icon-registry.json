@@ -1479,6 +1479,246 @@
       "status": "active",
       "featured": false,
       "sortOrder": 820
+    },
+    {
+      "id": "credit-note",
+      "name": "Credit Note",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "cn",
+        "refund",
+        "return credit",
+        "adjustment",
+        "billing"
+      ],
+      "aliases": [
+        "cn",
+        "refund-note"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 830
+    },
+    {
+      "id": "goods-issue",
+      "name": "Goods Issue",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "gi",
+        "outbound",
+        "dispatch",
+        "stock out",
+        "picking"
+      ],
+      "aliases": [
+        "gi",
+        "outbound"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 840
+    },
+    {
+      "id": "contract",
+      "name": "Contract",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "agreement",
+        "signature",
+        "terms",
+        "legal",
+        "signed"
+      ],
+      "aliases": [
+        "agreement",
+        "signed-document"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 850
+    },
+    {
+      "id": "bank",
+      "name": "Bank",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "banking",
+        "bank account",
+        "treasury",
+        "institution",
+        "finance"
+      ],
+      "aliases": [
+        "banking",
+        "financial-institution"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 860
+    },
+    {
+      "id": "employee",
+      "name": "Employee",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "staff",
+        "hr",
+        "id badge",
+        "personnel",
+        "headcount"
+      ],
+      "aliases": [
+        "staff",
+        "employee-badge"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 870
+    },
+    {
+      "id": "timesheet",
+      "name": "Timesheet",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "attendance",
+        "work hours",
+        "clocking",
+        "labour",
+        "hr"
+      ],
+      "aliases": [
+        "attendance",
+        "work-hours"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 880
+    },
+    {
+      "id": "audit-trail",
+      "name": "Audit Trail",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "audit log",
+        "activity",
+        "history",
+        "traceability",
+        "compliance"
+      ],
+      "aliases": [
+        "audit-log",
+        "activity-log"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 890
+    },
+    {
+      "id": "budget",
+      "name": "Budget",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "allocation",
+        "planning",
+        "forecast split",
+        "spend",
+        "finance"
+      ],
+      "aliases": [
+        "allocation",
+        "budget-split"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 900
+    },
+    {
+      "id": "price-list",
+      "name": "Price List",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "pricing",
+        "rate card",
+        "catalogue price",
+        "tariff",
+        "sales"
+      ],
+      "aliases": [
+        "pricelist",
+        "rate-card"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 910
+    },
+    {
+      "id": "batch-lot",
+      "name": "Batch / Lot",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "lot",
+        "batch number",
+        "layers",
+        "traceability",
+        "inventory"
+      ],
+      "aliases": [
+        "lot",
+        "layers"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 920
+    },
+    {
+      "id": "bin-location",
+      "name": "Bin Location",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "rack",
+        "shelf",
+        "storage bin",
+        "warehouse slot",
+        "putaway"
+      ],
+      "aliases": [
+        "rack",
+        "shelf"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 930
+    },
+    {
+      "id": "cost-center",
+      "name": "Cost Center",
+      "category": "ERP",
+      "style": "outline",
+      "tags": [
+        "cost centre",
+        "target",
+        "department",
+        "allocation",
+        "controlling"
+      ],
+      "aliases": [
+        "costcenter",
+        "target"
+      ],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 940
     }
   ]
 }

@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.5.0 — 2026-07-31
+
+### Added
+
+- A second batch of 12 ERP icons (catalogue grows 82 → 94, ERP category 18 → 30), broadening coverage past documents into finance, HR, warehouse and controlling: `credit-note`, `goods-issue`, `contract`, `bank`, `employee`, `timesheet`, `audit-trail`, `budget`, `price-list`, `batch-lot`, `bin-location`, `cost-center`.
+- `goods-issue` is drawn as the deliberate mirror of `goods-receipt` — same carton, arrow reversed — so the inbound/outbound pair reads as a set.
+
+### Validation
+
+- `npm test` (94 icons, zero errors, no duplicate aliases), `npm run typecheck` and `npm run build` all pass.
+- Every new icon measured with `getBBox()`: nothing is clipped by the 24×24 viewBox once the 1.5 stroke is accounted for, and every icon is centred to within 0.25 units. This caught `timesheet`, `audit-trail` and `bin-location` sitting off-centre, all corrected before commit.
+- ERP category verified in the running app: 30 cards render, zero failed asset loads, zero console errors. Alias search spot-checked (`grn` → goods-receipt, `gi` → goods-issue, `rack` → bin-location); inspector preview and SVG export verified on a new icon.
+- Checked each design against the existing 82 icons for visual collision before drawing. A planned `branch` storefront icon was dropped because `vendor` already occupies that shape, and `employee` was drawn as an ID badge card rather than a person so it cannot be confused with `customer` / `users` / `user-add`.
+
 ## 0.4.0 — 2026-07-31
 
 ### Added
