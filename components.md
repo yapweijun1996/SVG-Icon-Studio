@@ -1,5 +1,7 @@
 # Icon Studio — SVG Icon Collection Admin Panel Components
 
+> **Historical document.** This is the original pre-implementation design brief, written before any code existed (it still describes "at least 36 sample icons" — the catalogue has since grown to 100 across 10 categories). It is kept for historical reference only. **For the current design system, see [`DESIGN.md`](DESIGN.md)**; for current visual tokens, see [`css/tokens.css`](css/tokens.css) (the source of truth) or [`design-system.json`](design-system.json) (a synced snapshot). Where this file and the current codebase disagree, the codebase and `DESIGN.md` win.
+
 ## Design Brief
 
 Build a polished, functional desktop-first SVG icon collection admin panel based on the approved design direction. Use vanilla HTML, CSS, and JavaScript with no CDN and no framework. The app must feel like a professional SaaS asset-management workspace rather than a landing page.

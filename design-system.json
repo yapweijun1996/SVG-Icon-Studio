@@ -1,17 +1,39 @@
 {
   "title": "Icon Studio — SVG Icon Collection Admin Panel",
   "surface": "component_library",
+  "note": "Tokens below are synced from css/tokens.css (source of truth). This file is a machine-readable snapshot for tooling; if the two ever disagree, css/tokens.css wins. Last synced against v0.7.1 / css/tokens.css.",
   "tokens": {
-    "primary": "#f45b0b",
-    "accent": "#ff7a33",
-    "background": "#f6f8fb",
-    "text": "#111827",
+    "accent": "#f45b0b",
+    "accentStrong": "#b33a00",
+    "accentSoft": "#fff0e8",
+    "accentBorder": "#ffc5a6",
+    "success": "#22c55e",
+    "background": "#f5f7fb",
     "panel": "#ffffff",
-    "muted": "#66736f",
-    "line": "#dce3df",
+    "panelSubtle": "#f8fafc",
+    "text": "#101828",
+    "textSoft": "#475467",
+    "muted": "#667085",
+    "line": "#e4e7ec",
+    "lineStrong": "#d0d5dd",
+    "radiusSm": 8,
     "radius": 12,
+    "radiusLg": 16,
+    "sidebarWidth": 224,
+    "inspectorWidth": 380,
+    "topbarHeight": 72,
     "spacing": 12,
-    "controlHeight": 36
+    "controlHeight": 44
+  },
+  "darkTheme": {
+    "background": "#0f141b",
+    "panel": "#151b24",
+    "panelSubtle": "#1b2330",
+    "text": "#f8fafc",
+    "textSoft": "#cbd5e1",
+    "muted": "#94a3b8",
+    "line": "#293345",
+    "lineStrong": "#3a4659"
   },
   "components": [
     "collapsible-sidebar",
@@ -25,7 +47,9 @@
     "customization-controls",
     "svg-jsx-css-code-tabs",
     "copy-toast",
-    "responsive-overlays"
+    "responsive-overlays",
+    "filled-glyph-badge-icons",
+    "content-security-policy-meta"
   ],
   "wireframe": [],
   "referenceImages": []

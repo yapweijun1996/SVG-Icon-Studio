@@ -3,16 +3,38 @@
 **Document:** `SPEC.md`  
 **Project:** Icon Studio — SVG Icon Collection Admin Panel  
 **Code-MCP Project ID:** `project_f2a74b23-33c1-4c5c-b43d-e2b5b3108428`  
-**Status:** Approved implementation specification  
-**Target release:** `v0.2.0`  
-**Runtime:** Dependency-free static HTML, CSS and browser-native JavaScript  
-**Primary goal:** Replace the monolithic icon and application architecture with a scalable Single Source of Truth (SSOT) structure while preserving existing behaviour and visual output.
+**Status:** Living specification — the SSOT refactor this document originally proposed shipped in `v0.2.0` (2026-07-23) and is now the permanent baseline architecture. Sections 1–3 and 16 are kept as the historical record of that refactor; everything else describes the **current, as-built system**.  
+**Current release:** `v0.7.1` (2026-07-31) — see [CHANGELOG.md](CHANGELOG.md) for the full version history and [ROADMAP.md](ROADMAP.md) / [TASK.md](TASK.md) for what's planned next.  
+**Runtime:** Dependency-free static HTML, CSS and browser-native JavaScript (Vite is a dev-only wrapper — see ADR-001)  
+**Primary goal (original, achieved):** Replace the monolithic icon and application architecture with a scalable Single Source of Truth (SSOT) structure while preserving existing behaviour and visual output.
+
+---
+
+## 0. Current status snapshot (v0.7.1, 2026-07-31)
+
+A quick-reference dashboard so this document doesn't have to be read end-to-end just to answer "what does the app actually do right now." Everything here is derived from the current codebase, not from plan.
+
+| Fact | Value |
+| --- | --- |
+| Total icons | 100 (see `data/icon-registry.json`) |
+| Categories | 10 — Interface, Arrows, Actions, Files, Users, Commerce, Finance, Logistics, AI, ERP |
+| Icon styles | `outline` (91) and `filled` (9) — see §7.3/§7.4 |
+| Runtime dependencies | 0 (unchanged since inception) |
+| Dev tooling | Vite (`npm run dev` / `npm run build` / `npm run preview`); `npm run serve` still works with zero `node_modules` |
+| Security | SVG allowlist sanitizer (§13) + Content-Security-Policy meta tag (added v0.4.0) |
+| PWA | Manifest + service worker (added alongside the 0.2.x/0.3.x line, see CHANGELOG) |
+| CI/CD | `.github/workflows/deploy.yml` — `npm ci && npm test && npm run build` → GitHub Pages on every push to `main` |
+| Test suite | `npm test` — 8 checks incl. full registry/icon validation (see §19) |
+| Known accepted deviation | `package-lock.json`'s `version` field intentionally left behind `package.json`'s — see ADR-013 |
+| Not yet built | Agent Experience (AX) layer — WebMCP tools, programmatic JS API, URL deep links — tracked in `ROADMAP.md` |
 
 ---
 
 ## 1. Purpose
 
 Icon Studio currently stores catalogue metadata and SVG geometry together inside `icon-library.js`, while most application behaviour is concentrated in `script.js` and most styling is concentrated in `styles.css`.
+
+*(§1–§3 below describe the problem and goals as they stood before the `v0.2.0` refactor. They are kept verbatim as the historical rationale for the architecture in §5 onward, which is current.)*
 
 This works for the current MVP, but it creates maintenance and scaling risks:
 
@@ -67,9 +89,11 @@ The architecture MUST support these future features without requiring another ca
 
 ---
 
-## 4. Current baseline
+## 4. Baseline
 
-The current published application includes:
+### 4.1 Pre-refactor baseline (historical, superseded by v0.2.0)
+
+The application state this refactor was originally written against:
 
 - 39 searchable SVG icons.
 - Category and keyword filtering.
@@ -84,7 +108,7 @@ The current published application includes:
 - Full preview and copy actions.
 - Desktop, tablet and mobile layouts.
 
-Known maintainability concerns include:
+Known maintainability concerns at the time included:
 
 - `icon-library.js` contains catalogue metadata and geometry.
 - `script.js` is a large mixed-responsibility module.
@@ -93,7 +117,23 @@ Known maintainability concerns include:
 - Current review notes identify remaining desktop tap-target warnings.
 - Catalogue object syntax errors can prevent every icon from loading.
 
-The refactor MUST preserve the current feature baseline.
+All of the above was resolved by the `v0.2.0` migration (§16) and no longer reflects the codebase.
+
+### 4.2 Current baseline (v0.7.1)
+
+Everything in §4.1 plus, added across `v0.3.0`–`v0.7.1` (full detail in [CHANGELOG.md](CHANGELOG.md)):
+
+- Catalogue grown from 39 → 100 icons, with a 10th category (`ERP`, 36 icons) added specifically for ERP/back-office use cases.
+- A second icon style, `filled` (§7.4), authored via a dedicated generator script (`tools/gen-filled-icons.mjs`, ADR-010) rather than by hand, because the style's "strokes" are actually filled shapes with matched inner/outer contours.
+- Vite as an optional dev-server/bundler (`npm run dev`, `npm run build`, `npm run preview`) — the runtime itself is still zero-dependency (ADR-001).
+- A Content-Security-Policy `<meta>` tag as defence in depth behind the sanitizer (ADR-009).
+- A PWA manifest and service worker (prod-only registration, to avoid fighting Vite HMR in dev).
+- GitHub Actions CI/CD (`.github/workflows/deploy.yml`): install → test → build → publish to GitHub Pages on every push to `main`.
+- Catalogue-grid colouring unified across both icon styles (ADR-011) after `filled` growing from 3 → 9 icons made a per-style accent-colour override visually inconsistent.
+- Scroll-to-load auto-pagination on top of the original manual "Load more" button (ADR-012).
+- The `js/services/svg-policy.js` allow-list module, shared byte-for-byte between the browser sanitizer and the Node build-time checker (§9.3, extracted in `v0.2.2` after the two had already drifted once).
+
+The refactor MUST preserve the feature baseline in both subsections; nothing described here has been removed since.
 
 ---
 
@@ -146,77 +186,85 @@ They MUST NOT rewrite or modify the canonical SVG file.
 
 ---
 
-## 6. Target project structure
+## 6. Current project structure
+
+This is the actual tracked file tree at `v0.7.1` (`git ls-files`), not an aspirational target. `js/ui/utility-icons.js` and `tools/migrate-icon-library.mjs`, planned in the original migration, were never needed in practice — shell/interface glyphs stayed inline in `index.html` (§9.7), and the one-time extraction script was run locally and not committed.
 
 ```text
-icon-studio/
+SVG-Icon-Studio/
 ├── index.html
 ├── README.md
 ├── CHANGELOG.md
 ├── SPEC.md
-├── design-system.json
+├── DESIGN.md
+├── EPIC.md
+├── ROADMAP.md
+├── TASK.md
+├── components.md          # historical pre-implementation design brief, see DESIGN.md
+├── design-system.json      # machine-readable token snapshot, synced from css/tokens.css
+├── LICENSE
+├── vite.config.js
+├── package.json / package-lock.json
 │
 ├── data/
-│   └── icon-registry.json
+│   └── icon-registry.json          # 100 icons, 10 categories, geometry-free
 │
-├── icons/
-│   └── catalog/
-│       ├── invoice.svg
-│       ├── customer.svg
-│       ├── delivery-truck.svg
-│       ├── purchase-order.svg
-│       ├── delivery-order.svg
-│       └── <icon-id>.svg
+├── icons/catalog/
+│   └── <icon-id>.svg                # one file per built-in icon, 100 total
 │
 ├── js/
-│   ├── app.js
-│   │
+│   ├── app.js                       # entry point, wires every controller together
 │   ├── core/
-│   │   ├── dom.js
-│   │   ├── state.js
-│   │   └── storage.js
-│   │
+│   │   ├── dom.js                   # $, $$, createElement, createSvgElement, slugify
+│   │   ├── state.js                 # createState, DEFAULT_APPEARANCE, pruneStoredIds
+│   │   └── storage.js               # localStorage helpers + IndexedDB upload store
 │   ├── services/
-│   │   ├── icon-repository.js
-│   │   ├── svg-sanitizer.js
-│   │   ├── svg-renderer.js
-│   │   └── svg-exporter.js
-│   │
+│   │   ├── icon-repository.js       # registry loading, same-origin asset fetch, caching
+│   │   ├── svg-policy.js            # SHARED allow-list (also imported by tools/svg-policy.mjs)
+│   │   ├── svg-sanitizer.js         # DOMParser-based sanitizer, browser-only
+│   │   ├── svg-renderer.js          # appearance/transform application, fallback icon
+│   │   └── svg-exporter.js          # SVG/JSX/CSS code generation
 │   ├── features/
-│   │   ├── catalogue.js
-│   │   ├── filters.js
-│   │   ├── inspector.js
-│   │   ├── importer.js
-│   │   ├── shell.js
-│   │   └── theme.js
-│   │
+│   │   ├── catalogue.js             # grid, cards, lazy previews, scroll-to-load
+│   │   ├── filters.js               # pure filter/sort logic
+│   │   ├── inspector.js             # preview, appearance controls, code tabs
+│   │   ├── importer.js              # validated browser upload
+│   │   ├── shell.js                 # sidebar/inspector drawers, overlays, responsive state
+│   │   └── theme.js                 # light/dark persistence
 │   └── ui/
-│       ├── toast.js
-│       └── utility-icons.js
+│       └── toast.js                 # toast notifications + clipboard copy helper
 │
 ├── css/
-│   ├── tokens.css
-│   ├── base.css
-│   ├── layout.css
-│   ├── shell.css
-│   ├── catalogue.css
-│   ├── inspector.css
-│   ├── dialogs.css
-│   ├── utilities.css
+│   ├── tokens.css   ├── base.css     ├── layout.css   ├── shell.css
+│   ├── catalogue.css├── inspector.css├── dialogs.css  ├── utilities.css
 │   └── responsive.css
 │
-├── tools/
-│   ├── validate-icons.mjs
-│   ├── verify-registry.mjs
-│   └── migrate-icon-library.mjs
+├── public/
+│   ├── manifest.webmanifest
+│   ├── sw.js                         # service worker, prod-only registration
+│   └── icons-pwa/*.png
+│
+├── tools/                            # Node-only, never shipped to the browser
+│   ├── validate-icons.mjs            # build-time registry + SVG contract validator
+│   ├── verify-registry.mjs           # registry stats/report (categories, styles, aliases)
+│   ├── svg-policy.mjs                # regex-based Node port of js/services/svg-policy.js
+│   ├── convert-svg.mjs               # normalizes an arbitrary SVG into the SSOT contract
+│   ├── gen-filled-icons.mjs          # authoring-time generator for the `filled` glyph style
+│   ├── finalize-ssot.mjs             # one-time legacy-file cleanup used during v0.2.0
+│   └── serve.mjs                     # zero-dependency static server (no node_modules needed)
 │
 ├── tests/
-│   ├── icon-registry.test.mjs
-│   ├── svg-sanitizer.test.mjs
-│   └── browser-test-plan.md
+│   ├── icon-registry.test.mjs  ├── svg-sanitizer.test.mjs ├── svg-policy.test.mjs
+│   ├── filters.test.mjs        ├── state.test.mjs         ├── dom.test.mjs
+│   ├── convert-svg.test.mjs    └── browser-test-plan.md   # manual QA checklist
 │
-└── review/
-    └── ...
+├── review/                            # point-in-time audit snapshots, not living docs
+│   ├── code-review(-final).{md,json}, security-scan.{md,json}
+│   ├── ssot-migration-report.md, delivery-order-svg-quality.md, invoice-svg-quality.md
+│
+├── releases/0.2.1.json
+├── visual-validation.json
+└── .github/workflows/deploy.yml       # CI: install → test → build → deploy to Pages
 ```
 
 The exact number of modules MAY be adjusted, but responsibilities MUST remain separated.
@@ -275,6 +323,11 @@ A Filled icon SHOULD use:
 ```
 
 A filled icon MAY use `fill-rule="evenodd"` and `clip-rule="evenodd"` when required.
+
+**Authoring guidance (added after `v0.6.0`):** in this style every visual "stroke" is actually a filled shape with a matched inner and outer contour at a constant weight (`0.73` units, as measured off the original `purchase-order.svg`: its document wall is `6.75 − 6.023` and its text rule is `11.742 − 11.016`). Hand-computing these coordinate pairs is not reliably correct, so new filled icons SHOULD be produced with `tools/gen-filled-icons.mjs` (ADR-010) rather than authored by hand. Two failure modes to avoid, both discovered the hard way while building the current 9 filled icons:
+
+- A badge/knockout MUST be a solid shape with the glyph cut out of it by `fill-rule="evenodd"` (as `purchase-order.svg`'s tick does), never two nested outline circles forming a ring — nesting makes the fill alternate against the glyph and renders as a blob.
+- A single `evenodd` path cannot mask one shape *behind* another; overlapping regions cancel instead of one occluding the other. A badge and a document shape must not overlap in source geometry — layout the document to stop short of the badge, not underneath it.
 
 ### 7.5 Allowed elements
 
@@ -442,14 +495,16 @@ It MUST:
 - Return a per-icon failure result instead of crashing the whole application.
 - Support bounded preloading with a maximum default concurrency of 8.
 
-### 9.3 `js/services/svg-sanitizer.js`
+### 9.3 `js/services/svg-sanitizer.js` and `js/services/svg-policy.js`
+
+The allow-list itself (allowed/forbidden elements and attributes, event/href/external-reference checks, required viewBox and size limit) lives in `js/services/svg-policy.js`, a plain-data module with no DOM dependency. `svg-sanitizer.js` imports it to do the actual browser-side parsing; `tools/svg-policy.mjs` imports the **same file** to re-implement an equivalent regex-based check for the Node build-time validator (§18.1), so the two can never drift apart again the way they did before `v0.2.2` (a `clip-path-units` vs. `clippathunits` naming bug shipped in one but not the other until the allow-list was unified).
 
 The sanitizer MUST:
 
 - Parse SVG with `DOMParser`.
 - Confirm that the root is `<svg>`.
 - Enforce the exact viewBox.
-- Enforce allowed tags and attributes.
+- Enforce allowed tags and attributes (via `svg-policy.js`).
 - Remove or reject forbidden content.
 - Return a safe DOM node or a structured error.
 - Never trust uploaded or fetched SVG text only because it is same-origin.
@@ -490,9 +545,9 @@ A feature module MUST NOT directly fetch catalogue SVG files. It MUST use `icon-
 
 ### 9.7 Utility icons
 
-Shell and interface utility icons MAY remain inline or inside `js/ui/utility-icons.js`.
+Shell and interface utility icons (nav glyphs, buttons, chrome) live inline as `<svg>` markup directly in `index.html`. A separate `js/ui/utility-icons.js` module was planned during the original migration but was never needed in practice and does not exist — inline markup has been sufficient.
 
-They MUST remain clearly separated from selectable catalogue icons.
+They MUST remain clearly separated from selectable catalogue icons (i.e. never added to `data/icon-registry.json` or `icons/catalog/`).
 
 ---
 
@@ -621,6 +676,8 @@ The final implementation MUST:
 - Keep clipboard actions user-initiated.
 - Treat metadata text as untrusted and render it with text nodes.
 - Keep runtime dependencies at zero.
+- **(Added `v0.4.0`, ADR-009)** Ship a Content-Security-Policy `<meta>` tag in `index.html` as defence in depth *behind* the sanitizer — the sanitizer remains the primary control; the CSP exists in case a future bug in it is ever found. Current policy: `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'none'`. `style-src` needs `'unsafe-inline'` because `svg-renderer.js`/`inspector.js` assign `element.style.color` directly; `script-src` needs no exception since the production build emits no inline script.
+- Any new tool-call surface exposed to external callers (browser extensions, AI agents, WebMCP tools — see `ROADMAP.md`) MUST reuse the existing sanitizer/policy pipeline; it MUST NOT introduce a second, less-audited path for untrusted SVG or file input.
 
 A security failure in one uploaded or catalogue SVG MUST not compromise other icons or the application shell.
 
@@ -647,7 +704,7 @@ Existing desktop tap-target warnings SHOULD be resolved during the modular CSS p
 
 ## 15. Performance requirements
 
-The architecture MUST remain responsive with the current 39 icons and be suitable for at least 1,000 metadata entries.
+The architecture MUST remain responsive with the current 100 icons and be suitable for at least 1,000 metadata entries.
 
 Targets:
 
@@ -668,7 +725,9 @@ Per-icon guidelines:
 
 ---
 
-## 16. Migration plan
+## 16. Migration plan (historical — completed at `v0.2.0`, 2026-07-23)
+
+**All 8 phases below shipped and are kept only as the historical record of how the SSOT refactor was executed.** `tools/finalize-ssot.mjs` (Phase 7's cleanup step) is still in the repo and still runnable, but it is not part of any current build or test script — it was a one-time migration tool. For what's currently in progress or planned, see `TASK.md` and `ROADMAP.md` instead of this section.
 
 ### Phase 0 — Recovery point and baseline
 
@@ -829,11 +888,19 @@ This tool SHOULD report:
 - Duplicate or near-duplicate metadata IDs.
 - Deprecated and hidden icons.
 
-### 18.3 Optional migration tool
+### 18.3 One-time migration tools (historical)
 
-`tools/migrate-icon-library.mjs` MAY be used for the one-time extraction.
+The original one-time extraction script (planned as `tools/migrate-icon-library.mjs`) was run locally during the `v0.2.0` migration and was never committed — there was nothing left to keep once the extraction was done. `tools/finalize-ssot.mjs`, which *is* committed, performed the equivalent one-time legacy-file cleanup (Phase 7, §16) and remains in the repo as a runnable record of that step.
 
-It MUST NOT be loaded in the browser and MUST NOT remain a production data source.
+Any future one-time migration script MUST NOT be loaded in the browser and MUST NOT remain a production data source.
+
+### 18.4 `tools/gen-filled-icons.mjs` (added `v0.6.0`)
+
+Authoring-time generator for the `filled` glyph style (§7.4, ADR-010). Not part of the app or the build — it only emits static SVG that gets committed to `icons/catalog/`. Covered by `npm run typecheck` (Node syntax check only, since it's Node-only tooling) but has no dedicated test file.
+
+### 18.5 `tools/convert-svg.mjs`
+
+Normalizes an arbitrary, non-conformant SVG (different viewBox, hardcoded colours, `class`/`style`/`id` cruft, fixed dimensions) into the SSOT contract: rescales/centres into an exact `0 0 24 24` viewBox via one wrapping `<g transform="...">`, strips anything outside the allow-list, replaces a single hardcoded fill with `currentColor`, and validates the result against the same policy the app enforces. Supports an optional `--pixelate[=gridSize]` mode for rasterizing traced/complex source art onto a small grid of rectangles when a plain rescale would be illegible at icon scale. Covered by `tests/convert-svg.test.mjs`.
 
 ---
 
@@ -895,60 +962,60 @@ The implementation MUST capture:
 
 ## 20. Acceptance criteria
 
-The SSOT refactor is accepted only when all of the following are true.
+The SSOT refactor was accepted at `v0.2.0` — every item below is satisfied and has stayed satisfied through `v0.7.1` (re-verified as part of the `v0.7.1` documentation pass). This checklist is kept as a regression contract: any future change that would un-check one of these needs a deliberate ADR, not an accident.
 
 ### Catalogue SSOT
 
-- [ ] Every built-in icon is an independent file under `icons/catalog/`.
-- [ ] No built-in catalogue geometry exists in JavaScript or JSON.
-- [ ] Every icon ID maps to exactly one SVG file.
-- [ ] Every SVG file maps to exactly one metadata entry.
-- [ ] Purchase Order and Delivery Order use their approved current artwork.
-- [ ] `icon-library.js` is no longer loaded or required.
+- [x] Every built-in icon is an independent file under `icons/catalog/` (100 files).
+- [x] No built-in catalogue geometry exists in JavaScript or JSON.
+- [x] Every icon ID maps to exactly one SVG file.
+- [x] Every SVG file maps to exactly one metadata entry.
+- [x] Purchase Order and Delivery Order use their approved current artwork.
+- [x] `icon-library.js` is no longer loaded or required (removed at `v0.2.0`).
 
 ### Metadata
 
-- [ ] `data/icon-registry.json` is the only built-in metadata registry.
-- [ ] Registry schema and category references validate.
-- [ ] Search aliases and tags are preserved.
-- [ ] Icon count remains complete.
+- [x] `data/icon-registry.json` is the only built-in metadata registry.
+- [x] Registry schema and category references validate (`npm test`).
+- [x] Search aliases and tags are preserved.
+- [x] Icon count remains complete (100/100, `npm run validate`).
 
 ### JavaScript
 
-- [ ] The app loads through `js/app.js` as an ES module.
-- [ ] Catalogue loading is owned by `icon-repository.js`.
-- [ ] SVG validation is owned by `svg-sanitizer.js`.
-- [ ] Rendering and export are separate modules.
-- [ ] No module mixes unrelated feature responsibilities.
-- [ ] No global `window.ICON_LIBRARY` remains.
-- [ ] One invalid icon cannot crash the catalogue.
+- [x] The app loads through `js/app.js` as an ES module.
+- [x] Catalogue loading is owned by `icon-repository.js`.
+- [x] SVG validation is owned by `svg-sanitizer.js` (allow-list itself now shared via `svg-policy.js`, §9.3).
+- [x] Rendering and export are separate modules.
+- [x] No module mixes unrelated feature responsibilities.
+- [x] No global `window.ICON_LIBRARY` remains.
+- [x] One invalid icon cannot crash the catalogue.
 
 ### CSS
 
-- [ ] Styles are split into responsibility-based files.
-- [ ] Repeated design values use tokens where practical.
-- [ ] Responsive behaviour matches or improves the baseline.
-- [ ] No new `!important` declarations are introduced.
-- [ ] Mobile and tablet have no horizontal overflow.
+- [x] Styles are split into responsibility-based files (9 modules).
+- [x] Repeated design values use tokens where practical.
+- [x] Responsive behaviour matches or improves the baseline.
+- [x] No new `!important` declarations were introduced by the refactor itself (3 remain from before it, down from 6 — see `review/code-review-final.md`, which predates the split and is kept as a historical snapshot).
+- [x] Mobile and tablet have no horizontal overflow.
 
 ### Behaviour
 
-- [ ] Existing search, filters, density, favorites, recent, uploads and inspector features work.
-- [ ] SVG, JSX and CSS output remains correct.
-- [ ] Runtime customization does not mutate source files.
-- [ ] User settings persist.
-- [ ] Existing uploaded icons are migrated safely.
+- [x] Existing search, filters, density, favorites, recent, uploads and inspector features work.
+- [x] SVG, JSX and CSS output remains correct.
+- [x] Runtime customization does not mutate source files.
+- [x] User settings persist.
+- [x] Existing uploaded icons are migrated safely.
 
 ### Quality
 
-- [ ] All icon validation checks pass.
-- [ ] Static project validation passes.
-- [ ] Browser QA has no blocking errors.
-- [ ] Console errors are zero.
-- [ ] Page errors are zero.
-- [ ] Security checks have no unresolved high-severity issue.
-- [ ] README and CHANGELOG are updated.
-- [ ] A verified rollback point exists.
+- [x] All icon validation checks pass.
+- [x] Static project validation passes.
+- [x] Browser QA has no blocking errors.
+- [x] Console errors are zero.
+- [x] Page errors are zero.
+- [x] Security checks have no unresolved high-severity issue.
+- [x] README and CHANGELOG are updated.
+- [x] A verified rollback point exists.
 
 ---
 
@@ -984,12 +1051,13 @@ After this refactor, the architecture should support without changing the SVG so
 - React/Vue component generation.
 - Collection CRUD.
 - Brand token presets.
-- PWA precache manifest generation.
+- PWA precache manifest generation (manifest + service worker already shipped; precaching strategy could still expand).
 - Versioned icon releases.
 - License and attribution metadata.
 - Remote catalogue synchronisation.
 - Automated optical consistency reports.
 - Multiple variants per semantic icon.
+- **Agent Experience (AX) layer** *(researched, not yet built — full detail in `ROADMAP.md`)*: a `window.IconStudio` programmatic JS API as the shared substrate; WebMCP tool registration (`document.modelContext.registerTool`, feature-detected, W3C proposal) so AI agents can call `search_icons`/`get_icon_svg`/`select_icon` directly instead of driving the DOM; read-only URL deep links (`?icon=&size=&stroke=`) for shareable/fetchable state; optionally `llms.txt`. Any of these MUST reuse the sanitizer pipeline per §13 and MUST NOT bypass it.
 
 These features MUST consume the same canonical SVG files and metadata registry.
 
@@ -1031,11 +1099,31 @@ Browser uploads use sanitized IndexedDB records and do not pretend to be reposit
 
 Preview and export settings are derived output only.
 
+### ADR-009 — CSP as defence in depth (added `v0.4.0`)
+
+Ship a Content-Security-Policy `<meta>` tag alongside the existing SVG sanitizer. The sanitizer remains the primary control (it already rejects `script`, event handlers, `foreignObject`, external/`data:` references, etc. — see §13); the CSP exists purely as a second layer in case a future sanitizer bug is ever found, not because the sanitizer is considered insufficient today.
+
+### ADR-010 — Filled-style icons are generated, not hand-authored (added `v0.6.0`)
+
+The `filled` glyph style (§7.4) requires matched inner/outer contours at a constant stroke weight, which is not reliably correct to hand-compute. New filled icons MUST be produced with `tools/gen-filled-icons.mjs` rather than authored directly as raw path data.
+
+### ADR-011 — Catalogue-grid colour is uniform across icon styles (added `v0.7.0`)
+
+Earlier releases coloured `filled`-style icons with the brand accent colour in the catalogue grid while `outline` icons used the normal ink colour. This was sustainable at 3 filled icons but became visually inconsistent once the style grew to 9 (`v0.6.0`). The grid now uses the same colour for every icon regardless of style; per-style colour differentiation, if ever wanted again, MUST be a deliberate design decision recorded here, not a CSS rule left over from an earlier icon count.
+
+### ADR-012 — Catalogue pagination auto-loads on scroll, manual button stays as fallback (added `v0.7.0`)
+
+An `IntersectionObserver` on the existing "Load more" control extends the visible set automatically as it nears the viewport, calling the same `loadMore()` the button already used. The button itself is kept (not removed) as a manual/keyboard-accessible fallback.
+
+### ADR-013 — `package-lock.json`'s version field is intentionally left behind `package.json`'s (added `v0.4.0`)
+
+Regenerating `package-lock.json` on Windows (`npm install --package-lock-only`) has been observed to drop optional platform-specific peer dependency entries (e.g. `@emnapi/core`) that Linux CI (`npm ci` on `ubuntu-latest` in `.github/workflows/deploy.yml`) may need. The version-field mismatch between `package.json` and `package-lock.json` is a known, accepted deviation, not a bug to fix reflexively — regenerate the lockfile on Linux/CI if it ever needs to move forward.
+
 ---
 
 ## 24. Definition of Done
 
-The refactor is complete when:
+The original refactor was complete when (all satisfied, `v0.2.0`, 2026-07-23):
 
 1. The final project structure follows this specification.
 2. Every built-in icon is independently manageable.
@@ -1046,19 +1134,19 @@ The refactor is complete when:
 7. Documentation explains the new maintenance workflow.
 8. The project is published as `v0.2.0` with a verified rollback point.
 
+For the current release's definition of done and what's still open, see `TASK.md` and `ROADMAP.md` — this section is kept as the historical closure record for the SSOT refactor specifically.
+
 ---
 
-## 25. Implementation instruction for Code-MCP
+## 25. Implementation instructions for future contributors (human or AI agent)
 
-When implementing this specification:
+When implementing *new* work in this repo (not the historical §16 migration):
 
-1. Read `SPEC.md`, `README.md`, `CHANGELOG.md`, current tasks and review reports.
-2. Create a recovery point before editing.
-3. Break the work into dependency-aware tasks.
-4. Migrate catalogue assets before removing legacy sources.
-5. Preserve all current icon IDs and user-facing behaviour.
-6. Validate after every migration phase.
-7. Run desktop, tablet and mobile browser QA.
-8. Fix blocking issues before publishing.
-9. Do not ask for confirmation for routine implementation decisions covered by this specification.
-10. Leave unrelated enhancements for later tasks.
+1. Read `SPEC.md` (this file, current architecture), `DESIGN.md` (visual/UX system), `TASK.md` (what's pending/blocked), `ROADMAP.md` (priority and sequencing), `README.md` and `CHANGELOG.md` before making changes.
+2. Follow the existing module boundaries (§9) and CSS layering (§12) rather than introducing new ones.
+3. Run `npm test`, `npm run typecheck` and `npm run build` before considering any change done — all three are fast and are the actual quality gate, not a formality.
+4. Preserve all current icon IDs and user-facing behaviour unless a change is explicitly scoped to replace them.
+5. Any new icon added to `icons/catalog/` MUST pass `npm run validate` and follow §7's contract (outline §7.3 or filled §7.4/ADR-010).
+6. Update `CHANGELOG.md` (with a **Validation** subsection describing what was actually checked, not just what changed) and bump `package.json`'s version for any user-visible change — this has been the project's convention since `v0.3.0` and keeps `SPEC.md §0` accurate without a separate sync step.
+7. Do not ask for confirmation on routine implementation decisions already covered by this specification; do ask before decisions that aren't (new architecture, a new external dependency, anything touching the security model in §13).
+8. Leave unrelated enhancements for a separate task — see `TASK.md` for the backlog rather than scope-creeping the current change.

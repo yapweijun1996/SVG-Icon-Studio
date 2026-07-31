@@ -10,6 +10,15 @@ An SVG catalogue, customisation and export workspace built with static HTML, mod
 - Live demo: https://yapweijun1996.github.io/SVG-Icon-Studio/ (built and deployed automatically from `main` by [.github/workflows/deploy.yml](.github/workflows/deploy.yml))
 - License: [MIT](LICENSE)
 
+## Documentation
+
+- [SPEC.md](SPEC.md) — current technical specification and architecture decision records (ADRs)
+- [DESIGN.md](DESIGN.md) — design system: tokens, layout, components, icon style contracts
+- [EPIC.md](EPIC.md) — major bodies of work and their status
+- [ROADMAP.md](ROADMAP.md) — release timeline and what's planned next
+- [TASK.md](TASK.md) — granular task tracker (done / in progress / backlog / blocked)
+- [CHANGELOG.md](CHANGELOG.md) — full per-release detail and validation evidence
+
 ## SSOT architecture
 
 Every built-in selectable icon has one authoritative source file:
@@ -60,6 +69,11 @@ npm run typecheck
 npm test
 npm run build
 ```
+
+The catalogue supports two icon styles — see [DESIGN.md](DESIGN.md#5-icon-design-system) for the full contract:
+
+- **`outline`** (most icons): `fill="none" stroke="currentColor"`, hand-authored paths.
+- **`filled`**: `fill="currentColor" stroke="none"`, every "stroke" is actually a filled shape with matched inner/outer contours. Don't hand-author these — use `tools/gen-filled-icons.mjs` as a reference for the authoring pattern (constant `0.73`-unit contour weight, solid-disc-with-knockout badges, no overlapping `evenodd` shapes).
 
 ## Converting an arbitrary SVG
 
@@ -118,6 +132,7 @@ Uploaded SVGs are a separate browser-local library. Metadata and sanitized SVG a
 - Allowlisted SVG elements and attributes only.
 - No scripts, event handlers, `foreignObject`, external URLs, data URLs, animations, embedded media or cross-origin references.
 - One failed asset receives a local fallback and does not break the catalogue.
+- A Content-Security-Policy `<meta>` tag in `index.html` provides defence in depth behind the sanitizer above (see `SPEC.md` ADR-009).
 
 ## Development
 
