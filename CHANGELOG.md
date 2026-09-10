@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.9 — 2026-09-11
+
+### Fixed
+
+- Browser SVG sanitization now rejects `DOCTYPE` declarations before `DOMParser` runs. This prevents untrusted internal entity declarations from being parsed or expanded and closes a runtime/build-time policy gap where the browser accepted DTD-bearing SVG while the Node validator rejected it.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium verification reproduces the previous behavior and confirms the fix: a canonical SVG remains accepted, while both a plain `DOCTYPE` SVG and an internal-entity `DOCTYPE` SVG return `SVG doctype is forbidden.` before XML parsing.
+
 ## 0.7.8 — 2026-09-11
 
 ### Fixed

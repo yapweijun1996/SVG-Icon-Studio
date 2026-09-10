@@ -6,6 +6,7 @@ import {
   isDisallowedElement,
   isEventAttribute,
   isHrefAttribute,
+  hasForbiddenDoctype,
   isInvalidReference,
 } from './svg-policy.js';
 
@@ -13,6 +14,8 @@ export function sanitizeSvgText(raw, { stripDimensions = false } = {}) {
   try {
     if (typeof raw !== 'string' || raw.length === 0) throw new Error('SVG text is empty.');
     if (raw.length > MAX_SVG_LENGTH) throw new Error('SVG exceeds the 64 KB safety limit.');
+    // Reject DTDs before DOMParser sees them so untrusted entity declarations are never expanded.
+    if (hasForbiddenDoctype(raw)) throw new Error('SVG doctype is forbidden.');
     const documentNode = new DOMParser().parseFromString(raw, 'image/svg+xml');
     if (documentNode.querySelector('parsererror')) throw new Error('SVG XML is invalid.');
     const root = documentNode.documentElement;

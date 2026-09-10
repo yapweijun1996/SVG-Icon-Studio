@@ -5,6 +5,7 @@ import {
   isDisallowedAttribute,
   isEventAttribute,
   isHrefAttribute,
+  hasForbiddenDoctype,
   isInvalidReference,
 } from '../js/services/svg-policy.js';
 
@@ -32,6 +33,10 @@ assert.equal(isEventAttribute('stroke'), false);
 assert.equal(isHrefAttribute('href'), true);
 assert.equal(isHrefAttribute('xlink:href'), true);
 assert.equal(isHrefAttribute('id'), false);
+
+assert.equal(hasForbiddenDoctype('<!DOCTYPE svg><svg/>'), true);
+assert.equal(hasForbiddenDoctype('<!doctype svg [<!ENTITY x \"y\">]><svg/>'), true);
+assert.equal(hasForbiddenDoctype('<svg/>'), false);
 
 assert.equal(isInvalidReference('javascript:alert(1)'), true);
 assert.equal(isInvalidReference('data:image/png;base64,x'), true);

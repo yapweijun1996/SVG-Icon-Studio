@@ -6,6 +6,7 @@ import {
   ALLOWED_ATTRIBUTES,
   isEventAttribute,
   isHrefAttribute,
+  hasForbiddenDoctype,
   isInvalidReference,
 } from '../js/services/svg-policy.js';
 
@@ -16,6 +17,7 @@ import {
 export function inspectSvgText(text) {
   const errors = [];
   if (typeof text !== 'string' || !text.trim()) return { ok: false, errors: ['SVG is empty.'] };
+  if (hasForbiddenDoctype(text)) errors.push('SVG doctype is forbidden.');
   if (!/^\s*<svg\b/i.test(text)) errors.push('SVG root is missing.');
   const rootMatch = text.match(/^\s*<svg\b([^>]*)>/i);
   if (!rootMatch) return { ok: false, errors };

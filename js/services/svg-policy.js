@@ -43,6 +43,10 @@ export function isHrefAttribute(name) {
   return normalized === 'href' || normalized === 'xlink:href';
 }
 
+export function hasForbiddenDoctype(text) {
+  return /<!doctype\b/i.test(String(text));
+}
+
 export function isInvalidReference(value) {
   const normalized = String(value).trim().toLowerCase();
   if (normalized.includes('javascript:') || normalized.includes('data:')) return true;
