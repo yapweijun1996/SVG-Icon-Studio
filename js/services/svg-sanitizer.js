@@ -1,5 +1,6 @@
 import {
   REQUIRED_VIEWBOX,
+  REQUIRED_NAMESPACE,
   MAX_SVG_LENGTH,
   ALLOWED_ATTRIBUTES,
   isDisallowedElement,
@@ -16,6 +17,7 @@ export function sanitizeSvgText(raw, { stripDimensions = false } = {}) {
     if (documentNode.querySelector('parsererror')) throw new Error('SVG XML is invalid.');
     const root = documentNode.documentElement;
     if (!root || root.tagName.toLowerCase() !== 'svg') throw new Error('SVG root is required.');
+    if (root.getAttribute('xmlns') !== REQUIRED_NAMESPACE) throw new Error('SVG namespace is required.');
     const viewBox = String(root.getAttribute('viewBox') || '').replace(/\s+/g, ' ').trim();
     if (viewBox !== REQUIRED_VIEWBOX) throw new Error('SVG viewBox must be exactly 0 0 24 24.');
     if (stripDimensions) {

@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.7.5 — 2026-09-10
+
+### Fixed
+
+- The browser upload sanitizer now requires the canonical SVG namespace (`http://www.w3.org/2000/svg`), matching the build-time validator and preventing namespace policy drift for uploaded assets.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium verification calls the browser `sanitizeSvgText()` directly: a valid canonical SVG is accepted, while both a missing `xmlns` and an incorrect namespace are rejected with `SVG namespace is required.`
+- Regression coverage now explicitly checks the build-time policy rejects both missing and incorrect namespaces, keeping both validation paths aligned.
+
 ## 0.7.4 — 2026-09-10
 
 ### Fixed

@@ -24,12 +24,13 @@
 | `v0.7.2` | 2026-09-10 | Accessible full-preview dialog semantics | 4 |
 | `v0.7.3` | 2026-09-10 | Mobile drawer keyboard focus management | 4 |
 | `v0.7.4` | 2026-09-10 | Inert background regions for mobile drawers | 4 |
+| `v0.7.5` | 2026-09-10 | Enforce SVG namespace in browser sanitizer | 4 |
 
 Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`.
 
 ---
 
-## Current state (as of `v0.7.4`)
+## Current state (as of `v0.7.5`)
 
 - 100 icons, 10 categories, 2 styles (91 outline / 9 filled).
 - Zero runtime dependencies; Vite is dev/build tooling only.
