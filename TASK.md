@@ -49,6 +49,7 @@
 - [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
 - [x] Persisted uploaded icons are revalidated before registration so assets rejected by newer security policy do not surface as broken catalogue entries
 - [x] Legacy localStorage upload migration preserves records beyond its 50-item batch and retains failed records for retry instead of deleting user data
+- [x] Persisted/legacy uploaded records cannot overwrite canonical built-in icon IDs during registration
 
 ### Epic 5 — Documentation Governance
 - [x] `SPEC.md` rewritten as current-state spec (status snapshot, current file tree, ADR-009–013, historical markers on completed sections)
@@ -63,7 +64,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.7.11` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.7.12` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 

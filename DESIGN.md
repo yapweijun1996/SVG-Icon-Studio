@@ -1,7 +1,7 @@
 # Icon Studio — Design System
 
 **Document:** `DESIGN.md`
-**Status:** Living document — reflects the design system as actually shipped in `v0.7.11`, not an aspirational brief.
+**Status:** Living document — reflects the design system as actually shipped in `v0.7.12`, not an aspirational brief.
 **Source of truth for tokens:** [`css/tokens.css`](css/tokens.css) (design-system.json is a synced machine-readable snapshot of the same values, not an independent source)
 **Relationship to `components.md`:** `components.md` is the original pre-implementation design brief written before any code existed. It is kept for historical reference only — where the two disagree, this document and the current codebase win. See the note at the top of `components.md`.
 
@@ -153,6 +153,7 @@ These aren't visual, but they constrain what any new UI feature is allowed to do
 - No feature may render untrusted SVG/HTML via raw `innerHTML`; everything goes through the sanitizer.
 - A Content-Security-Policy meta tag is live in `index.html` (`v0.4.0`); any new inline `<script>` or `<style>` would need a CSP change, not just a code change — treat that as a signal to reconsider the approach, not just widen the policy.
 - Clipboard writes must stay user-initiated (button click), never automatic.
+- Browser-local uploaded metadata must never replace a canonical built-in icon ID; the SSOT catalogue wins on ID collision.
 
 ## 8. What's next (design-relevant)
 

@@ -40,6 +40,10 @@ export async function loadRegistry({ force = false } = {}) {
 export function registerUploadedIcons(records) {
   for (const record of records || []) {
     if (!record?.id || !record?.svgText) continue;
+    const existing = metadataById.get(record.id);
+    // Uploaded/local data must never replace a canonical built-in SSOT entry. This also
+    // protects legacy records whose historical IDs predate the current `uploaded-*` prefix.
+    if (existing && !existing.uploaded) continue;
     // Persisted uploads are untrusted input too. Validate before exposing metadata so
     // assets accepted by an older policy cannot reappear as broken catalogue cards
     // after the sanitizer is tightened. Rendering still re-validates on load.

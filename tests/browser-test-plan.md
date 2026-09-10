@@ -19,6 +19,7 @@ Required viewports: desktop 1440×900, tablet 834×1112 and mobile 390×844.
 13. Unsafe, oversized or non-24×24 SVG upload is rejected without persistence.
 14. One missing catalogue asset shows fallback while other icons continue working.
 15. Zero console errors, page errors, failed assets, accessibility violations and horizontal overflow.
+16. A persisted or migrated uploaded record whose ID matches a built-in icon cannot replace the canonical built-in metadata/asset; a non-colliding uploaded peer still registers normally.
 
 ## Automated evidence
 

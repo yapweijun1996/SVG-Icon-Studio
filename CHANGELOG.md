@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.12 — 2026-09-11
+
+### Fixed
+
+- Persisted and legacy uploaded-icon records can no longer replace canonical built-in icons when their IDs collide. Runtime registration now gives built-in SSOT metadata/assets precedence before any uploaded record is cached or exposed.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium regression starts from a fresh profile containing two legacy records: one colliding with built-in `invoice` and one safe `legacy-safe` upload. The canonical Invoice remains selected as a built-in (`Files · Outline`), the safe upload is still registered/searchable, the catalogue reports 101 total icons with exactly one uploaded icon, and migration completes normally.
+
 ## 0.7.11 — 2026-09-11
 
 ### Fixed
