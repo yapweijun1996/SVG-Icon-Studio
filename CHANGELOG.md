@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.7 — 2026-09-11
+
+### Fixed
+
+- Catalogue density controls now expose their mutually-exclusive Grid/Compact selection with `aria-pressed`, and the accessibility state stays synchronized with the existing visual state and persisted density preference.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium verification confirms the active density button exposes `pressed=true` in the Accessibility Tree, the inactive button exposes `pressed=false`, clicking Compact swaps both visual and accessibility state, and a reload preserves the selected state.
+
 ## 0.7.6 — 2026-09-10
 
 ### Fixed
