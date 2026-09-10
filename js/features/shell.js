@@ -2,6 +2,25 @@ import { $$ } from '../core/dom.js';
 import { STORAGE, getValue, setValue } from '../core/storage.js';
 
 export function createShellController({ state, refs, toast, onViewChange, onBrandPreview }) {
+  const focusableSelector = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  let restoreFocusTarget = null;
+
+  function activeDrawer() {
+    if (refs.body.classList.contains('inspector-open')) return refs.inspector;
+    if (refs.body.classList.contains('sidebar-open')) return refs.sidebar;
+    return null;
+  }
+
+  function focusDrawer(drawer) {
+    const firstFocusable = drawer?.querySelector(focusableSelector);
+    if (firstFocusable) firstFocusable.focus();
+  }
+
+  function openDrawer(drawer, trigger) {
+    restoreFocusTarget = trigger;
+    focusDrawer(drawer);
+  }
+
   function updateBackdrop() {
     const active = refs.body.classList.contains('sidebar-open') || refs.body.classList.contains('inspector-open');
     refs.backdrop.hidden = !active;
@@ -10,11 +29,13 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
     refs.body.classList.add('sidebar-open');
     refs.mobileMenuButton.setAttribute('aria-expanded', 'true');
     updateBackdrop();
+    openDrawer(refs.sidebar, refs.mobileMenuButton);
   }
   function closeSidebar() {
     refs.body.classList.remove('sidebar-open');
     refs.mobileMenuButton.setAttribute('aria-expanded', 'false');
     updateBackdrop();
+    if (!refs.body.classList.contains('inspector-open')) restoreFocusTarget?.focus();
   }
   function openInspector() {
     refs.body.classList.remove('inspector-collapsed');
@@ -25,6 +46,7 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
     if (window.matchMedia('(max-width: 1180px)').matches) {
       refs.body.classList.add('inspector-open');
       refs.mobileInspectorButton.setAttribute('aria-expanded', 'true');
+      openDrawer(refs.inspector, refs.mobileInspectorButton);
     }
     updateBackdrop();
   }
@@ -37,6 +59,7 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
       setValue(STORAGE.inspector, 'true');
     }
     updateBackdrop();
+    if (!refs.body.classList.contains('sidebar-open')) restoreFocusTarget?.focus();
   }
   function setView(view) {
     state.view = view;
@@ -108,6 +131,23 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
   refs.manageBrandButton.addEventListener('click', () => { onBrandPreview(); openInspector(); toast('Brand preview enabled'); });
 
   document.addEventListener('keydown', event => {
+    const drawer = activeDrawer();
+    if (drawer && event.key === 'Tab') {
+      const focusable = [...drawer.querySelectorAll(focusableSelector)];
+      if (!focusable.length) {
+        event.preventDefault();
+      } else {
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && (document.activeElement === first || !drawer.contains(document.activeElement))) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
+    }
     const tag = document.activeElement?.tagName?.toLowerCase();
     if (event.key === '/' && !['input', 'textarea', 'select'].includes(tag)) {
       event.preventDefault();

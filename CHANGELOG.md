@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.7.3 — 2026-09-10
+
+### Fixed
+
+- Mobile navigation and inspector drawers now move focus into the opened drawer, keep Tab focus within it, and return focus to the trigger when closed.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, and `npm run build` pass.
+- Real Chromium verification passed at 390×844 for the navigation drawer: opening moved focus to `brandToggle`, Shift+Tab remained inside the sidebar focus cycle, and Escape closed the drawer and restored focus to `mobileMenuButton`.
+- Real Chromium verification passed at 834×1112 for the inspector drawer: opening moved focus to `pinInspectorButton`, Shift+Tab wrapped to `copyCodeButton`, and Escape closed the drawer and restored focus to `mobileInspectorButton`.
+
 ## 0.7.2 — 2026-09-10
 
 ### Fixed
