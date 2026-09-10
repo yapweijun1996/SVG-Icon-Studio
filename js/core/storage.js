@@ -126,7 +126,11 @@ export async function listUploadedIcons() {
     // Metadata without its SVG asset is unrecoverable and otherwise accumulates forever.
     // Remove only that non-content orphan. Asset-only records retain the user's SVG bytes
     // for possible future recovery rather than silently deleting user-authored content.
-    await deleteKeys(db, METADATA_STORE, orphans.metadataOnly);
+    try {
+      await deleteKeys(db, METADATA_STORE, orphans.metadataOnly);
+    } catch (error) {
+      console.warn(`[Icon Studio] Uploaded-icon orphan cleanup deferred: ${error?.message || 'IndexedDB write failed.'}`);
+    }
     return joined.records;
   } catch { return []; }
 }

@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.14 — 2026-09-11
+
+### Fixed
+
+- Uploaded-icon startup no longer hides valid IndexedDB uploads when best-effort metadata-orphan cleanup cannot open a write transaction. Valid metadata/asset pairs are returned after a successful read even if the cleanup write must be deferred to a later startup.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium regression first reproduces the previous failure by forcing only IndexedDB `readwrite` transactions to fail: a valid paired upload was incorrectly reduced to an empty result. Against the fix, the same simulated cleanup-write failure still returns the valid paired upload while leaving the metadata orphan in place for a future retry.
+
 ## 0.7.13 — 2026-09-11
 
 ### Fixed

@@ -51,7 +51,7 @@
 - [x] Legacy localStorage upload migration preserves records beyond its 50-item batch and retains failed records for retry instead of deleting user data
 - [x] Persisted/legacy uploaded records cannot overwrite canonical built-in icon IDs during registration
 - [x] IndexedDB startup reconciliation removes metadata-only upload orphans while preserving asset-only SVG payloads for possible recovery
-- [x] Repair metadata-only and asset-only IndexedDB upload orphans with a bounded, non-destructive counterpart check
+- [x] IndexedDB orphan cleanup is best-effort so cleanup write failures cannot hide otherwise valid uploaded icons
 
 ### Epic 5 — Documentation Governance
 - [x] `SPEC.md` rewritten as current-state spec (status snapshot, current file tree, ADR-009–013, historical markers on completed sections)
@@ -66,7 +66,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.7.13` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.7.14` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 
