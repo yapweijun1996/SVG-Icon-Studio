@@ -29,7 +29,7 @@ export function getJson(key, fallback) {
 export function setJson(key, value) { return setValue(key, JSON.stringify(value)); }
 
 const DB_NAME = 'icon-studio';
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 const LEGACY_STORE = 'uploaded-icons';
 const METADATA_STORE = 'uploaded-icon-metadata';
 const ASSET_STORE = 'uploaded-icon-assets';
@@ -45,7 +45,7 @@ function openDatabase() {
   if (databasePromise) return databasePromise;
   databasePromise = new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
-    request.onupgradeneeded = () => {
+    request.onupgradeneeded = event => {
       const db = request.result;
       const transaction = request.transaction;
       const metadataStore = db.objectStoreNames.contains(METADATA_STORE)
@@ -55,17 +55,42 @@ function openDatabase() {
         ? transaction.objectStore(ASSET_STORE)
         : db.createObjectStore(ASSET_STORE, { keyPath: 'id' });
       if (db.objectStoreNames.contains(LEGACY_STORE)) {
-        const cursorRequest = transaction.objectStore(LEGACY_STORE).openCursor();
-        cursorRequest.onsuccess = event => {
-          const cursor = event.target.result;
-          if (!cursor) return;
-          const record = cursor.value;
-          if (record?.id && record?.svgText) {
-            metadataStore.put(metadataFromRecord(record));
-            assetStore.put({ id: record.id, svgText: record.svgText });
-          }
-          cursor.continue();
-        };
+        const legacyStore = transaction.objectStore(LEGACY_STORE);
+        if (event.oldVersion < 2) {
+          // Direct v1 -> current upgrade: migrate valid legacy pairs once.
+          const cursorRequest = legacyStore.openCursor();
+          cursorRequest.onsuccess = event => {
+            const cursor = event.target.result;
+            if (!cursor) return;
+            const record = cursor.value;
+            if (record?.id && record?.svgText) {
+              metadataStore.put(metadataFromRecord(record));
+              assetStore.put({ id: record.id, svgText: record.svgText });
+            }
+            cursor.continue();
+          };
+        }
+
+        // v2 already copied the legacy rows, so never replay stale legacy values over
+        // newer metadata/assets. Drop the obsolete store only when every legacy ID has
+        // both current counterparts; otherwise preserve it rather than risk data loss.
+        if (event.oldVersion >= 2) {
+          const legacyKeysRequest = legacyStore.getAllKeys();
+          const metadataKeysRequest = metadataStore.getAllKeys();
+          const assetKeysRequest = assetStore.getAllKeys();
+          let completed = 0;
+          const maybeDropLegacyStore = () => {
+            completed += 1;
+            if (completed !== 3) return;
+            const metadataKeys = new Set(metadataKeysRequest.result || []);
+            const assetKeys = new Set(assetKeysRequest.result || []);
+            const safeToDrop = (legacyKeysRequest.result || []).every(id => metadataKeys.has(id) && assetKeys.has(id));
+            if (safeToDrop) db.deleteObjectStore(LEGACY_STORE);
+          };
+          legacyKeysRequest.onsuccess = maybeDropLegacyStore;
+          metadataKeysRequest.onsuccess = maybeDropLegacyStore;
+          assetKeysRequest.onsuccess = maybeDropLegacyStore;
+        }
       }
     };
     request.onsuccess = () => resolve(request.result);

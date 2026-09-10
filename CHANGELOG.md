@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.15 — 2026-09-11
+
+### Fixed
+
+- IndexedDB upgrades now retire the obsolete v1 `uploaded-icons` object store after confirming every legacy ID already has both current metadata and SVG-asset counterparts. The v3 cleanup never replays stale legacy values over newer v2 records, and keeps the old store if any counterpart is missing.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium v1→v2 reproduction confirms the old store previously survived alongside duplicated metadata/assets. A seeded v2 database upgraded to v3 removes the legacy store when all pairs exist, preserves newer v2 metadata/assets unchanged, and keeps the legacy store when a counterpart is missing.
+
 ## 0.7.14 — 2026-09-11
 
 ### Fixed

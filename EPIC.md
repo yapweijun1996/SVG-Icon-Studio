@@ -50,7 +50,7 @@
 ## Epic 4 — Bug Fixes & UX Consistency ✅ DONE
 
 **Goal:** fix real defects surfaced once Epic 3 changed the shape of the catalogue (3→9 filled icons, 6→36 ERP icons), and one longer-standing responsive-layout bug.
-**Releases:** `v0.6.1` → `v0.7.14` (2026-07-31 → 2026-09-11)
+**Releases:** `v0.6.1` → `v0.7.15` (2026-07-31 → 2026-09-11)
 
 - `v0.7.5` — Aligned browser-upload SVG namespace enforcement with the build-time policy; malformed/missing namespaces are rejected before uploaded assets enter local storage.
 - `v0.7.6` — Completed generated-code tab semantics with labelled tabpanel relationships, roving focus, and Arrow/Home/End keyboard navigation.
@@ -62,6 +62,7 @@
 - `v0.7.12` — Prevented persisted or legacy uploaded records from replacing canonical built-in icon IDs during registration.
 - `v0.7.13` — Reconciled metadata-only IndexedDB upload orphans while preserving asset-only SVG payloads for possible future recovery.
 - `v0.7.14` — Made orphan cleanup best-effort so a transient IndexedDB write failure cannot hide valid persisted uploads after they were read successfully.
+- `v0.7.15` — Retired the obsolete v1 IndexedDB store only after confirming every legacy ID already has both current counterparts, without replaying stale legacy values over newer v2 records.
 
 - `v0.6.1` — Fixed the Inspector fill-colour picker being inert for all 9 `filled` icons (their colour was silently controlled by the *stroke* picker instead) — a pre-existing bug in `purchase-order`/`delivery-order`/`ai-spark` that Epic 3 made easier to notice.
 - `v0.7.0` — Unified catalogue-grid icon colour across styles (removed the `filled`→accent-orange override, ADR-011); added scroll-to-load auto-pagination (ADR-012).
@@ -70,7 +71,7 @@
 - `v0.7.3` — Added keyboard focus entry, focus trapping and trigger restoration for the mobile navigation and inspector drawers, verified in real Chromium at mobile/tablet breakpoints.
 - `v0.7.4` — Made the non-active app regions inert while a mobile navigation or inspector drawer is open, restoring them on close or resize without changing desktop docked panels.
 
-**Status:** Complete for the current scope through `v0.7.14`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
+**Status:** Complete for the current scope through `v0.7.15`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
 
 ---
 
