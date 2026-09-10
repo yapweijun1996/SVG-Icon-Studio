@@ -51,6 +51,7 @@
 - [x] Legacy localStorage upload migration preserves records beyond its 50-item batch and retains failed records for retry instead of deleting user data
 - [x] Persisted/legacy uploaded records cannot overwrite canonical built-in icon IDs during registration
 - [x] Retire the obsolete v1 IndexedDB upload store only after every legacy ID has a metadata+asset counterpart, without replaying stale values
+- [x] Direct v1→v3 upgrades remove successfully migrated legacy rows while preserving incomplete rows for recovery
 - [x] IndexedDB startup reconciliation removes metadata-only upload orphans while preserving asset-only SVG payloads for possible recovery
 - [x] IndexedDB orphan cleanup is best-effort so cleanup write failures cannot hide otherwise valid uploaded icons
 
@@ -67,7 +68,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.7.15` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.7.16` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 

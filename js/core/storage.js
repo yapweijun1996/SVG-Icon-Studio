@@ -57,15 +57,25 @@ function openDatabase() {
       if (db.objectStoreNames.contains(LEGACY_STORE)) {
         const legacyStore = transaction.objectStore(LEGACY_STORE);
         if (event.oldVersion < 2) {
-          // Direct v1 -> current upgrade: migrate valid legacy pairs once.
+          // Direct v1 -> current upgrade: move complete legacy pairs into the split stores.
+          // Delete each successfully copied legacy row in the same versionchange transaction
+          // so mixed databases do not retain duplicate SVG payloads forever. Incomplete rows
+          // stay in the legacy store for possible manual recovery instead of being discarded.
+          let preservedLegacyRecord = false;
           const cursorRequest = legacyStore.openCursor();
           cursorRequest.onsuccess = event => {
             const cursor = event.target.result;
-            if (!cursor) return;
+            if (!cursor) {
+              if (!preservedLegacyRecord) db.deleteObjectStore(LEGACY_STORE);
+              return;
+            }
             const record = cursor.value;
             if (record?.id && record?.svgText) {
               metadataStore.put(metadataFromRecord(record));
               assetStore.put({ id: record.id, svgText: record.svgText });
+              cursor.delete();
+            } else {
+              preservedLegacyRecord = true;
             }
             cursor.continue();
           };

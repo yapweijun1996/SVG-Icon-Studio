@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.16 — 2026-09-11
+
+### Fixed
+
+- Direct IndexedDB v1→v3 upgrades now remove each successfully migrated legacy upload row from the obsolete `uploaded-icons` store inside the same versionchange transaction. Mixed databases therefore keep incomplete/raw rows for possible recovery without retaining duplicate copies of every valid SVG that was already migrated to the metadata/asset stores.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium first reproduces the previous mixed-upgrade state: one valid row is migrated but remains duplicated in `uploaded-icons` beside one incomplete row. Against the fix, the valid row exists only in the current metadata/asset stores, the incomplete row remains in `uploaded-icons`, and the valid upload stays visible.
+
 ## 0.7.15 — 2026-09-11
 
 ### Fixed
