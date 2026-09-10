@@ -24,6 +24,16 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
   function updateBackdrop() {
     const active = refs.body.classList.contains('sidebar-open') || refs.body.classList.contains('inspector-open');
     refs.backdrop.hidden = !active;
+    syncInertState();
+  }
+
+  function syncInertState() {
+    const inspectorDrawerOpen = window.matchMedia('(max-width: 1180px)').matches && refs.body.classList.contains('inspector-open');
+    const sidebarDrawerOpen = !inspectorDrawerOpen && window.matchMedia('(max-width: 820px)').matches && refs.body.classList.contains('sidebar-open');
+    const drawerOpen = sidebarDrawerOpen || inspectorDrawerOpen;
+    refs.workspace.inert = drawerOpen;
+    refs.sidebar.inert = inspectorDrawerOpen;
+    refs.inspector.inert = sidebarDrawerOpen;
   }
   function openSidebar() {
     refs.body.classList.add('sidebar-open');
@@ -44,9 +54,13 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
     // adding it there just shows a backdrop with no panel motion behind it.
     // Mirrors the same viewport branch closeInspector() already uses.
     if (window.matchMedia('(max-width: 1180px)').matches) {
+      refs.body.classList.remove('sidebar-open');
+      refs.mobileMenuButton.setAttribute('aria-expanded', 'false');
       refs.body.classList.add('inspector-open');
       refs.mobileInspectorButton.setAttribute('aria-expanded', 'true');
+      updateBackdrop();
       openDrawer(refs.inspector, refs.mobileInspectorButton);
+      return;
     }
     updateBackdrop();
   }

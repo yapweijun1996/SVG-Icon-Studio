@@ -13,7 +13,7 @@ import { createToastController, copyText } from './ui/toast.js';
 
 function collectRefs() {
   return {
-    body: document.body, backdrop: $('#mobileBackdrop'), sidebar: $('#sidebar'),
+    body: document.body, backdrop: $('#mobileBackdrop'), sidebar: $('#sidebar'), workspace: $('.workspace'),
     mobileMenuButton: $('#mobileMenuButton'), mobileInspectorButton: $('#mobileInspectorButton'),
     brandToggle: $('#brandToggle'), themeButton: $('#themeButton'), importButton: $('#importButton'),
     svgFileInput: $('#svgFileInput'), totalIconCount: $('#totalIconCount'), visibleIconCount: $('#visibleIconCount'),

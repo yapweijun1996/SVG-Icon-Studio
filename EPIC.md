@@ -50,15 +50,16 @@
 ## Epic 4 — Bug Fixes & UX Consistency ✅ DONE
 
 **Goal:** fix real defects surfaced once Epic 3 changed the shape of the catalogue (3→9 filled icons, 6→36 ERP icons), and one longer-standing responsive-layout bug.
-**Releases:** `v0.6.1` → `v0.7.3` (2026-07-31 → 2026-09-10)
+**Releases:** `v0.6.1` → `v0.7.4` (2026-07-31 → 2026-09-10)
 
 - `v0.6.1` — Fixed the Inspector fill-colour picker being inert for all 9 `filled` icons (their colour was silently controlled by the *stroke* picker instead) — a pre-existing bug in `purchase-order`/`delivery-order`/`ai-spark` that Epic 3 made easier to notice.
 - `v0.7.0` — Unified catalogue-grid icon colour across styles (removed the `filled`→accent-orange override, ADR-011); added scroll-to-load auto-pagination (ADR-012).
 - `v0.7.1` — Fixed "Manage brand kit" / card "⋮" showing an empty dimming backdrop on desktop widths (`openInspector()` wasn't gated by the same viewport check `closeInspector()` already used).
 - `v0.7.2` — Added explicit accessible naming and description relationships to the full-preview native dialog, verified from Chrome's computed Accessibility Tree.
 - `v0.7.3` — Added keyboard focus entry, focus trapping and trigger restoration for the mobile navigation and inspector drawers, verified in real Chromium at mobile/tablet breakpoints.
+- `v0.7.4` — Made the non-active app regions inert while a mobile navigation or inspector drawer is open, restoring them on close or resize without changing desktop docked panels.
 
-**Status:** Complete. All three fixes were verified in a real running browser, not just by code review — see each release's Validation section in `CHANGELOG.md`.
+**Status:** Complete. The v0.7.4 drawer-isolation fix was verified in real headless Chrome across mobile, tablet and desktop breakpoints; see each release's Validation section in `CHANGELOG.md`.
 
 ---
 

@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.7.4 — 2026-09-10
+
+### Fixed
+
+- Mobile navigation and inspector drawers now mark non-active app regions inert while open, removing background workspace controls from the accessibility tree without affecting desktop docked panels. Inert state is restored when drawers close or the viewport crosses a drawer breakpoint.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, and `npm run build` pass.
+- Real headless Chrome verification passed at 390×844 for the navigation drawer: the workspace and inspector became `inert`, background controls/headings disappeared from Chrome's Accessibility Tree, focus stayed in the sidebar, and closing restored all regions.
+- The 390×844 Brand kit → inspector transition also passed: the sidebar closed and became `inert` before the inspector received focus, preventing two simultaneously exposed drawers. At 834×1112 the inspector isolated both workspace and sidebar; at 1440×900 docked desktop panels remained non-inert with no backdrop regression.
+
 ## 0.7.3 — 2026-09-10
 
 ### Fixed

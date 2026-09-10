@@ -41,6 +41,7 @@
 - [x] Content-Security-Policy meta tag added as defence in depth
 - [x] Full-preview dialog exposes its visible title and description to assistive technology
 - [x] Mobile navigation and inspector drawers manage focus entry, Tab trapping and trigger restoration
+- [x] Mobile navigation and inspector drawers hide non-active app regions from the accessibility tree with native `inert`, including sidebar → inspector handoff
 
 ### Epic 5 — Documentation Governance
 - [x] `SPEC.md` rewritten as current-state spec (status snapshot, current file tree, ADR-009–013, historical markers on completed sections)
@@ -55,7 +56,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.7.3` is fully verified; local commits remain unpushed by policy.)
+*(none — current local release `v0.7.4` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 
