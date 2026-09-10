@@ -74,12 +74,44 @@ function openDatabase() {
   return databasePromise;
 }
 
+export function joinUploadedIconRecords(metadataRecords, assetRecords) {
+  const assetById = new Map((assetRecords || []).map(asset => [asset.id, asset.svgText]));
+  const metadataIds = new Set((metadataRecords || []).map(metadata => metadata.id));
+  return {
+    records: (metadataRecords || [])
+      .filter(metadata => assetById.has(metadata.id))
+      .map(metadata => ({ ...metadata, svgText: assetById.get(metadata.id), uploaded: true })),
+    metadataOrphanIds: (metadataRecords || []).filter(metadata => !assetById.has(metadata.id)).map(metadata => metadata.id),
+    assetOrphanIds: (assetRecords || []).filter(asset => !metadataIds.has(asset.id)).map(asset => asset.id)
+  };
+}
+
+function deleteKeys(db, storeName, ids) {
+  if (!ids.length) return Promise.resolve();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(storeName, 'readwrite');
+    const store = tx.objectStore(storeName);
+    ids.forEach(id => store.delete(id));
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error || new Error('Unable to reconcile IndexedDB records.'));
+  });
+}
+
 function readAll(db, storeName) {
   return new Promise((resolve, reject) => {
     const request = db.transaction(storeName, 'readonly').objectStore(storeName).getAll();
     request.onsuccess = () => resolve(request.result || []);
     request.onerror = () => reject(request.error);
   });
+}
+
+export function findOrphanIds(metadataRecords, assetRecords) {
+  const metadataIds = new Set((metadataRecords || []).map(record => record?.id).filter(Boolean));
+  const assetIds = new Set((assetRecords || []).map(record => record?.id).filter(Boolean));
+  return {
+    metadataOnly: [...metadataIds].filter(id => !assetIds.has(id)),
+    assetOnly: [...assetIds].filter(id => !metadataIds.has(id))
+  };
 }
 
 export async function listUploadedIcons() {
@@ -89,10 +121,13 @@ export async function listUploadedIcons() {
       readAll(db, METADATA_STORE),
       readAll(db, ASSET_STORE)
     ]);
-    const assetById = new Map(assetRecords.map(asset => [asset.id, asset.svgText]));
-    return metadataRecords
-      .filter(metadata => assetById.has(metadata.id))
-      .map(metadata => ({ ...metadata, svgText: assetById.get(metadata.id), uploaded: true }));
+    const orphans = findOrphanIds(metadataRecords, assetRecords);
+    const joined = joinUploadedIconRecords(metadataRecords, assetRecords);
+    // Metadata without its SVG asset is unrecoverable and otherwise accumulates forever.
+    // Remove only that non-content orphan. Asset-only records retain the user's SVG bytes
+    // for possible future recovery rather than silently deleting user-authored content.
+    await deleteKeys(db, METADATA_STORE, orphans.metadataOnly);
+    return joined.records;
   } catch { return []; }
 }
 

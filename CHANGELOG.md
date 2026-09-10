@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.13 — 2026-09-11
+
+### Fixed
+
+- IndexedDB reconciliation now removes metadata-only uploaded-icon orphans when their SVG asset is already missing, preventing invisible stale metadata from accumulating indefinitely. Asset-only orphans are deliberately preserved because they still contain user-authored SVG bytes and may be recoverable later.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium verification seeds one valid pair, one metadata-only orphan and one asset-only orphan: startup removes only the metadata orphan, keeps the asset-only SVG bytes intact, registers only the valid upload, and the normal built-in catalogue remains healthy.
+
 ## 0.7.12 — 2026-09-11
 
 ### Fixed

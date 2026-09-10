@@ -5,7 +5,7 @@
 An SVG catalogue, customisation and export workspace built with static HTML, modular CSS and browser-native ES modules. The runtime itself still has zero third-party dependencies — [Vite](https://vitejs.dev) is only a dev-server/bundler wrapper on top, used for local development and the GitHub Pages build.
 
 - Project ID: `project_f2a74b23-33c1-4c5c-b43d-e2b5b3108428`
-- Release: `v0.7.12`
+- Release: `v0.7.13`
 - Entry: `index.html`
 - Live demo: https://yapweijun1996.github.io/SVG-Icon-Studio/ (built and deployed automatically from `main` by [.github/workflows/deploy.yml](.github/workflows/deploy.yml))
 - License: [MIT](LICENSE)
@@ -122,7 +122,7 @@ icons/catalog/delivery-order.svg
 
 ## Uploaded icons
 
-Uploaded SVGs are a separate browser-local library. Metadata and sanitized SVG assets are stored in separate IndexedDB object stores. Existing legacy localStorage uploads are migrated once and removed only after successful migration. Canonical built-in icon IDs always take precedence if stale or legacy local data uses the same ID.
+Uploaded SVGs are a separate browser-local library. Metadata and sanitized SVG assets are stored in separate IndexedDB object stores. Existing legacy localStorage uploads are migrated once and removed only after successful migration. Canonical built-in icon IDs always take precedence if stale or legacy local data uses the same ID. Startup reconciliation removes metadata-only IndexedDB orphans whose SVG payload is already gone, while preserving asset-only SVG payloads to avoid deleting potentially recoverable user content.
 
 ## SVG security policy
 

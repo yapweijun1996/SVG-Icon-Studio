@@ -32,12 +32,13 @@
 | `v0.7.10` | 2026-09-11 | Skip persisted uploads that fail the current sanitizer | 4 |
 | `v0.7.11` | 2026-09-11 | Preserve deferred legacy uploads during bounded migration | 4 |
 | `v0.7.12` | 2026-09-11 | Protect built-in IDs from persisted upload collisions | 4 |
+| `v0.7.13` | 2026-09-11 | Reconcile metadata-only IndexedDB upload orphans | 4 |
 
 Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`.
 
 ---
 
-## Current state (as of `v0.7.12`)
+## Current state (as of `v0.7.13`)
 
 - 100 icons, 10 categories, 2 styles (91 outline / 9 filled).
 - Zero runtime dependencies; Vite is dev/build tooling only.

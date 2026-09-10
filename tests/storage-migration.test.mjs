@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { STORAGE, migrateLegacyUploads } from '../js/core/storage.js';
+import { STORAGE, joinUploadedIconRecords, migrateLegacyUploads } from '../js/core/storage.js';
 
 class MemoryStorage {
   #values = new Map();
@@ -56,6 +56,20 @@ const sanitizer = raw => raw.includes('<bad')
   assert.deepEqual(saved, ['legacy-1', 'legacy-3']);
   assert.deepEqual(JSON.parse(localStorage.getItem(STORAGE.legacyUploaded)).map(item => item.id), ['legacy-2']);
   assert.equal(localStorage.getItem(STORAGE.uploadMigration), null);
+}
+
+
+// IndexedDB reconciliation: metadata-only rows can be safely removed because the SVG
+// payload is already gone; asset-only rows are reported but preserved as recoverable data.
+{
+  const joined = joinUploadedIconRecords(
+    [{ id: 'valid', name: 'Valid' }, { id: 'meta-only', name: 'Lost asset' }],
+    [{ id: 'valid', svgText: '<svg/>' }, { id: 'asset-only', svgText: '<svg id=\"kept\"/>' }]
+  );
+  assert.deepEqual(joined.records.map(record => record.id), ['valid']);
+  assert.deepEqual(joined.metadataOrphanIds, ['meta-only']);
+  assert.deepEqual(joined.assetOrphanIds, ['asset-only']);
+  assert.equal(joined.records[0].svgText, '<svg/>');
 }
 
 console.log('Legacy upload migration tests passed.');
