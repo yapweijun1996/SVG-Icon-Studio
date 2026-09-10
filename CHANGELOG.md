@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.6 — 2026-09-10
+
+### Fixed
+
+- Generated SVG/JSX/CSS code tabs now follow the WAI-ARIA tab pattern: the tablist has an accessible name, tabs control a labelled tabpanel, only the active tab is in the normal Tab sequence, and Arrow Left/Right plus Home/End move focus and selection.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium verification confirms the tablist/tabpanel relationships, roving `tabindex`, ArrowRight/ArrowLeft wrapping, Home/End navigation, selected-state updates, focus movement, and generated-code content switching.
+
 ## 0.7.5 — 2026-09-10
 
 ### Fixed

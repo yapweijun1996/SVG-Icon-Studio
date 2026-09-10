@@ -231,12 +231,12 @@
 
         <section class="code-panel" aria-labelledby="code-title">
           <h3 class="sr-only" id="code-title">Generated icon code</h3>
-          <div class="code-tabs" role="tablist">
-            <button class="is-active" type="button" role="tab" aria-selected="true" data-code-tab="svg">SVG</button>
-            <button type="button" role="tab" aria-selected="false" data-code-tab="jsx">JSX</button>
-            <button type="button" role="tab" aria-selected="false" data-code-tab="css">CSS</button>
+          <div class="code-tabs" role="tablist" aria-label="Code format">
+            <button class="is-active" id="codeTabSvg" type="button" role="tab" aria-selected="true" aria-controls="codePanel" tabindex="0" data-code-tab="svg">SVG</button>
+            <button id="codeTabJsx" type="button" role="tab" aria-selected="false" aria-controls="codePanel" tabindex="-1" data-code-tab="jsx">JSX</button>
+            <button id="codeTabCss" type="button" role="tab" aria-selected="false" aria-controls="codePanel" tabindex="-1" data-code-tab="css">CSS</button>
           </div>
-          <pre><code id="codeOutput"></code></pre>
+          <pre id="codePanel" role="tabpanel" aria-labelledby="codeTabSvg" tabindex="0"><code id="codeOutput"></code></pre>
           <button class="code-copy-button" id="copyCodeButton" type="button" aria-label="Copy displayed code"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button>
         </section>
       </div>
