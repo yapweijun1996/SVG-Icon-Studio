@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.10 — 2026-09-11
+
+### Fixed
+
+- Persisted uploaded SVG records are now revalidated before their metadata is registered. Assets accepted by an older sanitizer policy but rejected by the current policy no longer reappear as broken catalogue entries after reload. Rendering continues to revalidate uploaded assets as defence in depth.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium regression verifies an invalid persisted upload containing a forbidden `<script>` is not registered as icon metadata, while a valid persisted upload is registered and loadable. The normal catalogue still starts with `Showing 24 of 100`.
+
 ## 0.7.9 — 2026-09-11
 
 ### Fixed

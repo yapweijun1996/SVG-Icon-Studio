@@ -40,9 +40,13 @@ export async function loadRegistry({ force = false } = {}) {
 export function registerUploadedIcons(records) {
   for (const record of records || []) {
     if (!record?.id || !record?.svgText) continue;
-    metadataById.set(record.id, { ...record, category: 'Uploaded', uploaded: true });
+    // Persisted uploads are untrusted input too. Validate before exposing metadata so
+    // assets accepted by an older policy cannot reappear as broken catalogue cards
+    // after the sanitizer is tightened. Rendering still re-validates on load.
     const checked = sanitizeSvgText(record.svgText, { stripDimensions: true });
-    if (checked.ok) assetCache.set(record.id, Promise.resolve({ ok: true, ...checked }));
+    if (!checked.ok) continue;
+    metadataById.set(record.id, { ...record, category: 'Uploaded', uploaded: true });
+    assetCache.set(record.id, Promise.resolve({ ok: true, ...checked }));
   }
 }
 
