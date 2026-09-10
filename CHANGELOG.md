@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.7.11 — 2026-09-11
+
+### Fixed
+
+- Legacy uploaded-icon migration no longer deletes records beyond its 50-item safety batch. Successful records are removed from the legacy payload, deferred records remain for the next startup, and failed records are retained for retry. Migration is marked complete only when no legacy records remain.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Regression coverage verifies a 51-record legacy payload migrates 50 records in the first pass, retains record 51 without setting the completion marker, then migrates the final record on the next pass. It also verifies failed records remain while successful peers are removed.
+- Real Chromium verification uses a fresh browser profile with 51 legacy uploads and confirms the first startup retains record 51 in legacy storage rather than deleting it; a second startup migrates it, removes the exhausted legacy payload, and sets the migration marker to `done`.
+
 ## 0.7.10 — 2026-09-11
 
 ### Fixed

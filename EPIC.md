@@ -50,7 +50,7 @@
 ## Epic 4 — Bug Fixes & UX Consistency ✅ DONE
 
 **Goal:** fix real defects surfaced once Epic 3 changed the shape of the catalogue (3→9 filled icons, 6→36 ERP icons), and one longer-standing responsive-layout bug.
-**Releases:** `v0.6.1` → `v0.7.10` (2026-07-31 → 2026-09-11)
+**Releases:** `v0.6.1` → `v0.7.11` (2026-07-31 → 2026-09-11)
 
 - `v0.7.5` — Aligned browser-upload SVG namespace enforcement with the build-time policy; malformed/missing namespaces are rejected before uploaded assets enter local storage.
 - `v0.7.6` — Completed generated-code tab semantics with labelled tabpanel relationships, roving focus, and Arrow/Home/End keyboard navigation.
@@ -58,6 +58,7 @@
 - `v0.7.8` — Gave the catalogue search field an explicit meaningful accessible name and hid its visual `/` shortcut hint from the accessibility tree.
 - `v0.7.9` — Rejected SVG `DOCTYPE` declarations before browser XML parsing, preventing untrusted entity declarations from reaching `DOMParser` and making the runtime policy fail closed like the build-time validator.
 - `v0.7.10` — Revalidate persisted uploaded SVGs before registering catalogue metadata, preventing assets rejected by newer sanitizer rules from resurfacing as broken cards after reload.
+- `v0.7.11` — Fixed bounded legacy-upload migration so records beyond the first 50 and failed records remain recoverable instead of being silently discarded.
 
 - `v0.6.1` — Fixed the Inspector fill-colour picker being inert for all 9 `filled` icons (their colour was silently controlled by the *stroke* picker instead) — a pre-existing bug in `purchase-order`/`delivery-order`/`ai-spark` that Epic 3 made easier to notice.
 - `v0.7.0` — Unified catalogue-grid icon colour across styles (removed the `filled`→accent-orange override, ADR-011); added scroll-to-load auto-pagination (ADR-012).

@@ -30,12 +30,13 @@
 | `v0.7.8` | 2026-09-11 | Give catalogue search a meaningful accessible name | 4 |
 | `v0.7.9` | 2026-09-11 | Reject SVG DOCTYPE before browser XML parsing | 4 |
 | `v0.7.10` | 2026-09-11 | Skip persisted uploads that fail the current sanitizer | 4 |
+| `v0.7.11` | 2026-09-11 | Preserve deferred legacy uploads during bounded migration | 4 |
 
 Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`.
 
 ---
 
-## Current state (as of `v0.7.10`)
+## Current state (as of `v0.7.11`)
 
 - 100 icons, 10 categories, 2 styles (91 outline / 9 filled).
 - Zero runtime dependencies; Vite is dev/build tooling only.

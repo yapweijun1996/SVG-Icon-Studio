@@ -107,22 +107,27 @@ export async function saveUploadedIcon(record) {
   });
 }
 
-export async function migrateLegacyUploads(sanitizeSvgText) {
-  if (getValue(STORAGE.uploadMigration) === 'done') return { migrated: 0, failed: 0 };
+const LEGACY_MIGRATION_BATCH_SIZE = 50;
+
+export async function migrateLegacyUploads(sanitizeSvgText, saveRecord = saveUploadedIcon) {
+  if (getValue(STORAGE.uploadMigration) === 'done') return { migrated: 0, failed: 0, pending: 0 };
   const legacy = getJson(STORAGE.legacyUploaded, []);
   if (!Array.isArray(legacy) || legacy.length === 0) {
     setValue(STORAGE.uploadMigration, 'done');
-    return { migrated: 0, failed: 0 };
+    return { migrated: 0, failed: 0, pending: 0 };
   }
+
+  const batch = legacy.slice(0, LEGACY_MIGRATION_BATCH_SIZE);
+  const remaining = legacy.slice(batch.length);
   let migrated = 0;
   let failed = 0;
-  for (const item of legacy.slice(0, 50)) {
+  for (const item of batch) {
     try {
       if (!item?.id || !item?.name || !item?.body) throw new Error('Invalid legacy upload.');
       const root = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
       const checked = sanitizeSvgText(`${root}${item.body}</svg>`, { stripDimensions: true });
       if (!checked.ok) throw new Error(checked.error);
-      await saveUploadedIcon({
+      await saveRecord({
         id: item.id,
         name: item.name,
         category: 'Uploaded',
@@ -132,11 +137,20 @@ export async function migrateLegacyUploads(sanitizeSvgText) {
         uploaded: true, svgText: checked.svgText
       });
       migrated += 1;
-    } catch { failed += 1; }
+    } catch {
+      failed += 1;
+      // Keep failed records for a future retry instead of silently deleting user data.
+      // Appending after deferred records also prevents one permanently bad record from
+      // blocking later valid records in subsequent bounded migration passes.
+      remaining.push(item);
+    }
   }
-  if (failed === 0) {
+
+  if (remaining.length === 0) {
     removeValue(STORAGE.legacyUploaded);
     setValue(STORAGE.uploadMigration, 'done');
+  } else {
+    setJson(STORAGE.legacyUploaded, remaining);
   }
-  return { migrated, failed };
+  return { migrated, failed, pending: remaining.length };
 }
