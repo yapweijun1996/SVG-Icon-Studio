@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.7.2 — 2026-09-10
+
+### Fixed
+
+- The full-preview modal now has explicit `aria-labelledby` and `aria-describedby` relationships to its visible icon name and resize guidance, giving assistive technology a reliable accessible name and description.
+
+### Validation
+
+- Confirmed the dialog references existing, unique `h2#dialogIconName` and `p#dialogDescription` elements in `index.html`.
+- `npm test`, `npm run typecheck`, `npm run build`, and `git diff --check` pass.
+- Verified in real headless Chromium against the running Vite app: startup rendered `Showing 24 of 100`, and Chrome's Accessibility Tree exposed the open native dialog with computed name `Invoice`, computed description `Resize the browser to verify SVG sharpness at any scale.`, and `ignored=false`.
+
 ## 0.7.1 — 2026-07-31
 
 ### Fixed

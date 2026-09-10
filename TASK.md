@@ -39,6 +39,7 @@
 - [x] Fix "Manage brand kit" / card "⋮" showing an empty backdrop on desktop widths
 - [x] Fix hardcoded "Collections: 6" badge (now derived from live category count)
 - [x] Content-Security-Policy meta tag added as defence in depth
+- [x] Full-preview dialog exposes its visible title and description to assistive technology
 
 ### Epic 5 — Documentation Governance
 - [x] `SPEC.md` rewritten as current-state spec (status snapshot, current file tree, ADR-009–013, historical markers on completed sections)

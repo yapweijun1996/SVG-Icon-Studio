@@ -21,12 +21,13 @@
 | `v0.6.1` | 2026-07-31 | Fix: filled-icon fill-colour picker inert | 4 |
 | `v0.7.0` | 2026-07-31 | Unify grid colour, scroll-to-load | 4 |
 | `v0.7.1` | 2026-07-31 | Fix: empty backdrop on desktop | 4 |
+| `v0.7.2` | 2026-09-10 | Accessible full-preview dialog semantics | 4 |
 
 Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`.
 
 ---
 
-## Current state (as of `v0.7.1`)
+## Current state (as of `v0.7.2`)
 
 - 100 icons, 10 categories, 2 styles (91 outline / 9 filled).
 - Zero runtime dependencies; Vite is dev/build tooling only.

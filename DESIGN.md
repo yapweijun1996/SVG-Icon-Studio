@@ -1,7 +1,7 @@
 # Icon Studio — Design System
 
 **Document:** `DESIGN.md`
-**Status:** Living document — reflects the design system as actually shipped in `v0.7.1`, not an aspirational brief.
+**Status:** Living document — reflects the design system as actually shipped in `v0.7.2`, not an aspirational brief.
 **Source of truth for tokens:** [`css/tokens.css`](css/tokens.css) (design-system.json is a synced machine-readable snapshot of the same values, not an independent source)
 **Relationship to `components.md`:** `components.md` is the original pre-implementation design brief written before any code existed. It is kept for historical reference only — where the two disagree, this document and the current codebase win. See the note at the top of `components.md`.
 
@@ -95,7 +95,7 @@ Three-column desktop shell (`.app-shell`, CSS grid: `sidebar-width | 1fr | inspe
 | Icon grid | `.icon-grid` | Responsive `auto-fill` grid; Grid/Compact density toggle; scroll-to-load pagination (24 per page) with a manual "Load more" fallback button |
 | Icon card | `.icon-card` | Lazy-loaded preview (`IntersectionObserver`, 240px lookahead), favourite star, Copy SVG action, "⋮" more-options action |
 | Inspector | `.inspector` | Selected icon summary, live preview (Light/Dark/Brand/Transparent background tabs), Appearance controls (size/stroke width/stroke colour/fill toggle+colour/currentColor/include-title), Transform controls (rotate/flip), code tabs (SVG/JSX/CSS) |
-| Full preview dialog | `<dialog class="preview-dialog">` | Native `<dialog>` element — free focus trap and Escape handling |
+| Full preview dialog | `<dialog class="preview-dialog">` | Native `<dialog>` element — free focus trap and Escape handling; explicit `aria-labelledby` / `aria-describedby` bind the visible icon name and resize guidance as its accessible name/description |
 | Toast | `.toast-region` | `aria-live="polite"`, auto-dismiss after 2.8s, no stacking cap yet (see `TASK.md` backlog) |
 
 ## 5. Icon design system
@@ -138,7 +138,7 @@ Before drawing a new icon, check existing geometry for visual collision (documen
 - `aria-live="polite"` regions: results summary, toast region.
 - `aria-pressed`/`aria-expanded`/`aria-current` used correctly for toggle/disclosure/nav-active state.
 - Decorative catalogue previews: `aria-hidden="true"`. Exported/semantic icon output can instead carry `<title>` + `aria-labelledby` when "Include title" is on.
-- Full preview uses the native `<dialog>` element (built-in focus trap, `Escape` close) rather than a hand-rolled modal.
+- Full preview uses the native `<dialog>` element (built-in focus trap, `Escape` close) rather than a hand-rolled modal, with explicit `aria-labelledby` and `aria-describedby` relationships to its visible heading and guidance text.
 - `prefers-reduced-motion: reduce` is respected globally.
 
 ## 7. Security-adjacent design constraints
