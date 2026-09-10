@@ -45,6 +45,7 @@
 - [x] Enforce the canonical SVG namespace in the browser upload sanitizer to keep runtime and build-time security policy aligned
 - [x] Generated-code SVG/JSX/CSS tabs use complete ARIA tab/tabpanel relationships and keyboard navigation with roving focus
 - [x] Catalogue Grid/Compact density controls expose synchronized `aria-pressed` selection state
+- [x] Catalogue search exposes a meaningful accessible name instead of announcing only the `/` keyboard shortcut hint
 
 ### Epic 5 — Documentation Governance
 - [x] `SPEC.md` rewritten as current-state spec (status snapshot, current file tree, ADR-009–013, historical markers on completed sections)
@@ -59,7 +60,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.7.7` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.7.8` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 

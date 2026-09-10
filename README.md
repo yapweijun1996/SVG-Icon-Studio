@@ -5,7 +5,7 @@
 An SVG catalogue, customisation and export workspace built with static HTML, modular CSS and browser-native ES modules. The runtime itself still has zero third-party dependencies — [Vite](https://vitejs.dev) is only a dev-server/bundler wrapper on top, used for local development and the GitHub Pages build.
 
 - Project ID: `project_f2a74b23-33c1-4c5c-b43d-e2b5b3108428`
-- Release: `v0.7.7`
+- Release: `v0.7.8`
 - Entry: `index.html`
 - Live demo: https://yapweijun1996.github.io/SVG-Icon-Studio/ (built and deployed automatically from `main` by [.github/workflows/deploy.yml](.github/workflows/deploy.yml))
 - License: [MIT](LICENSE)
@@ -162,6 +162,7 @@ Pushing to `main` runs [.github/workflows/deploy.yml](.github/workflows/deploy.y
 - JavaScript syntax checking.
 - Desktop, tablet and mobile browser regression.
 - Accessibility audit and horizontal-overflow checks.
+- Search and generated-code controls expose explicit accessible names/states rather than relying on visual-only hints.
 
 ## Recovery
 

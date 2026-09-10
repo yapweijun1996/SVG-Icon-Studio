@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.8 — 2026-09-11
+
+### Fixed
+
+- The catalogue search field now has a meaningful accessible name (`Search icons by name, keyword or ERP term`). The visible `/` keyboard shortcut hint is explicitly decorative for assistive technology instead of becoming the field's entire accessible name.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium Accessibility Tree verification reproduces the previous defect (`searchbox` name was `/`) and confirms the fix exposes `Search icons by name, keyword or ERP term`; typing `invoice` still filters the catalogue normally.
+
 ## 0.7.7 — 2026-09-11
 
 ### Fixed

@@ -1,7 +1,7 @@
 # Icon Studio — Design System
 
 **Document:** `DESIGN.md`
-**Status:** Living document — reflects the design system as actually shipped in `v0.7.7`, not an aspirational brief.
+**Status:** Living document — reflects the design system as actually shipped in `v0.7.8`, not an aspirational brief.
 **Source of truth for tokens:** [`css/tokens.css`](css/tokens.css) (design-system.json is a synced machine-readable snapshot of the same values, not an independent source)
 **Relationship to `components.md`:** `components.md` is the original pre-implementation design brief written before any code existed. It is kept for historical reference only — where the two disagree, this document and the current codebase win. See the note at the top of `components.md`.
 
@@ -136,6 +136,7 @@ Before drawing a new icon, check existing geometry for visual collision (documen
 
 - Interactive targets are ≥44px (`--control-height` equivalent throughout).
 - `aria-live="polite"` regions: results summary, toast region.
+- Catalogue search uses a visually-hidden text label for its accessible name; the visible `/` shortcut hint is `aria-hidden` so it is not mistaken for the label.
 - `aria-pressed`/`aria-expanded`/`aria-current` used correctly for toggle/disclosure/nav-active state.
 - Decorative catalogue previews: `aria-hidden="true"`. Exported/semantic icon output can instead carry `<title>` + `aria-labelledby` when "Include title" is on.
 - Full preview uses the native `<dialog>` element (built-in focus trap, `Escape` close) rather than a hand-rolled modal, with explicit `aria-labelledby` and `aria-describedby` relationships to its visible heading and guidance text.

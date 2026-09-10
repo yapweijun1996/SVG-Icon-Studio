@@ -27,12 +27,13 @@
 | `v0.7.5` | 2026-09-10 | Enforce SVG namespace in browser sanitizer | 4 |
 | `v0.7.6` | 2026-09-10 | Accessible generated-code tab semantics and keyboard navigation | 4 |
 | `v0.7.7` | 2026-09-11 | Expose catalogue density selection to assistive technology | 4 |
+| `v0.7.8` | 2026-09-11 | Give catalogue search a meaningful accessible name | 4 |
 
 Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`.
 
 ---
 
-## Current state (as of `v0.7.7`)
+## Current state (as of `v0.7.8`)
 
 - 100 icons, 10 categories, 2 styles (91 outline / 9 filled).
 - Zero runtime dependencies; Vite is dev/build tooling only.
