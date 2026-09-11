@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.22 — 2026-09-11
+
+### Fixed
+
+- The Node/build-time SVG validator now accepts complete XML comments before the root `<svg>`, including multiple comments and comments after the standard XML declaration, matching browser `DOMParser` behavior. Unterminated leading comments remain invalid.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium and Node differential checks confirm complete leading comments are accepted by both paths, while an unterminated leading comment is rejected by both.
+
 ## 0.7.21 — 2026-09-11
 
 ### Fixed

@@ -53,8 +53,12 @@ export function inspectSvgText(text) {
   if (hasForbiddenDoctype(text)) errors.push('SVG doctype is forbidden.');
   if (hasForbiddenProcessingInstruction(text)) errors.push('SVG processing instructions are forbidden.');
   const canonicalText = text.replace(/^\s*<\?xml\s+[^?]*\?>/i, '');
-  if (!/^\s*<svg\b/i.test(canonicalText)) errors.push('SVG root is missing.');
-  const rootMatch = canonicalText.match(/^\s*<svg\b([^>]*)>/i);
+  // XML permits complete comments before the document element. Strip only the
+  // leading prolog comments for root discovery; the full text is still scanned
+  // below so malformed/unclosed comments continue to fail closed.
+  const rootText = canonicalText.replace(/^(?:\s*<!--[\s\S]*?-->\s*)*/, '');
+  if (!/^<svg\b/i.test(rootText)) errors.push('SVG root is missing.');
+  const rootMatch = rootText.match(/^<svg\b([^>]*)>/i);
   if (!rootMatch) return { ok: false, errors };
   const attrs = rootMatch[1];
   const viewBox = attrs.match(/\bviewBox\s*=\s*["']([^"']+)["']/i)?.[1]?.replace(/\s+/g, ' ').trim();

@@ -7,6 +7,10 @@ assert.equal(inspectSvgText(safe.replace('http://www.w3.org/2000/svg', 'http://e
 assert.equal(inspectSvgText(`<!DOCTYPE svg>${safe}`).ok, false);
 assert.equal(inspectSvgText(`<!DOCTYPE svg [<!ENTITY x \"M1 1h2\">]>${safe}`).ok, false);
 assert.equal(inspectSvgText(`<?xml version="1.0"?>${safe}`).ok, true, 'standard XML declaration is allowed');
+assert.equal(inspectSvgText(`<!-- leading comment -->${safe}`).ok, true, 'complete XML comment before root is allowed');
+assert.equal(inspectSvgText(`  \n<!-- first --><!-- second -->\n${safe}`).ok, true, 'multiple leading comments with whitespace are allowed');
+assert.equal(inspectSvgText(`<?xml version="1.0"?><!-- leading comment -->${safe}`).ok, true, 'leading comment after XML declaration is allowed');
+assert.equal(inspectSvgText(`<!-- unclosed ${safe}`).ok, false, 'unterminated leading comment stays invalid');
 assert.equal(inspectSvgText(`<?xml-stylesheet href="https://evil.example/x.css"?>${safe}`).ok, false);
 assert.equal(inspectSvgText(safe.replace('<path', '<?evil x?><path')).ok, false);
 assert.equal(inspectSvgText(safe.replace('<path', '<g xmlns="https://evil.example/ns"><path d="M0 0h1"/></g><path')).ok, false);
