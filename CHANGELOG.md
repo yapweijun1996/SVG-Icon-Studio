@@ -1,5 +1,357 @@
 # Changelog
 
+## 0.7.33 — 2026-09-11
+
+### Fixed
+
+- The Node/build-time SVG validator now rejects a literal `<` in XML character data instead of silently skipping it during regex tag scanning. This matches Chromium XML parsing while preserving valid element markup, `&lt;`, literal `>`, comments, and CDATA.
+
+### Validation
+
+- Focused XML/SVG policy regression, `npm run typecheck`, `npm test`, `npm run validate`, `npm run build`, and `git diff --check` pass; a real Chrome `sanitizeSvgText()` differential confirms raw `<` cases reject while `&lt;`, literal `>`, comments, and CDATA controls remain accepted.
+
+## 0.7.32 — 2026-09-11
+
+### Fixed
+
+- The Node/build-time SVG validator now enforces XML comment grammar instead of treating every `<!-- ... -->` boundary as valid. Comment bodies containing the forbidden internal `--` sequence are rejected in parity with Chromium `DOMParser`, while normal comments, empty comments, and legal single-hyphen content remain accepted.
+
+### Validation
+
+- Focused comment-grammar regressions cover invalid internal/triple-hyphen comments and valid normal/empty/single-hyphen controls.
+- `npm run typecheck`, `npm test`, `npm run validate`, `npm run build`, `git diff --check`, and real Chrome parser/sanitizer differential checks pass.
+
+## 0.7.31 — 2026-09-11
+
+### Fixed
+
+- Browser and Node/build SVG validation now share strict XML declaration grammar. Only declarations with canonical lower-case pseudo-attribute names, an XML 1.x version token, an optional syntactically valid encoding name, and an optional `yes`/`no` standalone field in XML-defined order are accepted; malformed, misplaced, mis-cased, version-2.x, reversed-order, and unknown-field declarations are rejected consistently with Chromium `DOMParser`.
+
+### Validation
+
+- Focused XML declaration regressions cover malformed declarations plus canonical quoting, XML 1.x versions, encoding names, standalone values, placement, field case, and ordering; `npm run typecheck`, `npm test`, `npm run validate`, `npm run build`, and `git diff --check` pass.
+- Real Chromium differential validation covers the same declaration matrix against both `DOMParser` and the browser `sanitizeSvgText()` path.
+
+## 0.7.30 — 2026-09-11
+
+### Fixed
+
+- Browser and Node/build SVG validation now require exact canonical XML element and attribute spellings. Case variants such as `PATH`, `D`, `FILL`, `clippath`, and `clippathunits` are rejected, while case-insensitive security checks remain unchanged. `tools/convert-svg.mjs` keeps accepting normalized arbitrary-input case but now rewrites allowed names to canonical spellings (for example `CLIPPATH` → `clipPath`) so converted output still passes the stricter validator.
+
+### Validation
+
+- Focused canonical-name regressions cover valid `path`/`d`/`fill` and `clipPath`/`clipPathUnits` spellings, rejected case variants, and converter canonicalization; `npm run typecheck`, `npm test`, `npm run validate`, `npm run build`, and `git diff --check` pass.
+- Real Chrome validation calls `sanitizeSvgText()` directly: canonical `path`/`clipPath` inputs pass, `PATH`/`D`/`FILL`/`clippath`/`clippathunits` variants fail, and the existing `stripDimensions` exception still removes uppercase root dimensions safely.
+
+## 0.7.29 — 2026-09-11
+
+### Fixed
+
+- The browser SVG sanitizer now treats root `width`/`height` names case-insensitively for the canonical no-fixed-dimensions rule, so XML case variants such as `WIDTH`, `HEIGHT`, and mixed-case forms can no longer bypass runtime validation. Import flows using `stripDimensions` remove those variants by their actual XML attribute names, while child shape dimensions remain allowed.
+
+### Validation
+
+- Focused shared-policy regression, `npm run typecheck`, `npm test`, `npm run validate`, `npm run build`, `git diff --check`, and real Chrome sanitizer differential all pass.
+
+## 0.7.28 — 2026-09-11
+
+### Fixed
+
+- The Node/build-time SVG validator now treats the canonical root `viewBox` and `xmlns` attribute names as case-sensitive, matching XML/Chromium behavior instead of accepting `viewbox`, `VIEWBOX`, or `XMLNS` as equivalents.
+
+### Validation
+
+- Focused Node regression, `npm run typecheck`, `npm test`, `npm run validate`, `npm run build`, `git diff --check`, and real Chromium sanitizer differential all pass.
+
+## 0.7.27 — 2026-09-11
+
+### Fixed
+
+- The Node/build-time SVG validator now rejects raw code points outside the XML 1.0 legal character ranges, matching Chromium XML parsing in character data, quoted attributes, comments, and CDATA while preserving legal controls and ranges.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run validate`, `npm run build`, and `git diff --check` pass.
+- Real Chrome differential validation against `sanitizeSvgText()` passes for illegal and legal raw XML characters in text/attributes, plus invalid and valid comment/CDATA cases.
+
+## 0.7.26 — 2026-09-11
+
+### Fixed
+
+- The Node/build-time SVG validator now enforces exactly one top-level XML document element. Two consecutive `<svg>` roots are rejected like browser `DOMParser`, while a legitimate nested `<svg>` remains valid.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run validate`, `npm run build`, `git diff --check`, and real Chromium differential checks pass.
+
+## 0.7.25 — 2026-09-11
+
+### Fixed
+
+- The Node/build-time SVG validator now rejects malformed, unknown, unterminated, and illegal XML character references in text and quoted attributes, matching browser XML parsing while preserving literal comments and CDATA.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run validate`, `npm run build`, `git diff --check`, and real Chromium differential checks pass.
+
+## 0.7.24 — 2026-09-11
+
+### Fixed
+
+- The Node/build-time SVG validator now validates XML element nesting with an explicit tag stack. Missing, mismatched, out-of-order, and extra closing tags are rejected like browser `DOMParser`, while valid self-closing SVG elements remain accepted.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium and Node differential checks agree on valid nesting, missing/mismatched/out-of-order/extra closing tags, and self-closing child elements.
+
+## 0.7.23 — 2026-09-11
+
+### Fixed
+
+- The Node/build-time SVG validator now enforces XML attribute syntax instead of silently ignoring malformed attributes. Duplicate attributes, unquoted values, bare attributes, broken separators, and unterminated quoted values are rejected like browser `DOMParser`, while valid quoted values containing `>` remain accepted.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium and Node differential checks agree on duplicate/unquoted/bare attribute rejection and valid quoted-value acceptance.
+
+## 0.7.22 — 2026-09-11
+
+### Fixed
+
+- The Node/build-time SVG validator now accepts complete XML comments before the root `<svg>`, including multiple comments and comments after the standard XML declaration, matching browser `DOMParser` behavior. Unterminated leading comments remain invalid.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium and Node differential checks confirm complete leading comments are accepted by both paths, while an unterminated leading comment is rejected by both.
+
+## 0.7.21 — 2026-09-11
+
+### Fixed
+
+- The Node/build-time SVG validator now rejects a stray `]]>` CDATA close delimiter in normal character data, matching browser `DOMParser` XML parsing. The same sequence remains valid inside quoted attribute values and complete CDATA sections.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium and Node differential checks confirm stray character-data `]]>` is rejected by both, while quoted-attribute and complete-CDATA cases remain accepted.
+
+## 0.7.20 — 2026-09-11
+
+### Fixed
+
+- The Node/build-time SVG validator no longer treats tag-like text inside complete XML comments or CDATA sections as active SVG markup. Inert `<script>` / `<image>` text now matches browser `DOMParser` behavior, while real forbidden elements remain rejected.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Differential checks confirm Chromium accepts the inert comment/CDATA payloads and rejects real `script` / `image` elements; the Node validator now produces the same allow/deny outcomes.
+
+## 0.7.19 — 2026-09-11
+
+### Fixed
+
+- SVG validation now rejects namespace switching below the canonical root. Allowlisted names such as `g`, `path`, and nested `svg` must also belong to `http://www.w3.org/2000/svg`; foreign default namespaces can no longer pass merely by reusing an allowed local element name.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium and the Node build validator both reject foreign-namespace `g`, `path`, and nested `svg` payloads while the normal canonical SVG remains valid.
+
+## 0.7.18 — 2026-09-11
+
+### Fixed
+
+- Browser and build-time SVG validation now share the same XML processing-instruction policy. A standard `<?xml ...?>` declaration remains accepted, while `xml-stylesheet` and custom processing instructions are rejected before sanitization/build validation can diverge.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium and Node differential checks confirm XML declarations are accepted by both paths, while external stylesheet and in-document custom processing instructions are rejected by both.
+
+## 0.7.17 — 2026-09-11
+
+### Fixed
+
+- The Node/build-time SVG validator now decodes XML character references in attribute values before applying external-reference rules. Encoded dangerous protocols such as `jav&#x61;script:` and encoded external URLs can no longer bypass CI/build validation while the browser sanitizer rejects the decoded value.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium confirms `DOMParser` decodes `jav&#x61;script:` and the browser sanitizer rejects it as an external reference. Before this fix the Node checker returned `ok: true`; after the fix both browser and build-time paths reject the same payload, while encoded local fragment references remain allowed.
+
+## 0.7.16 — 2026-09-11
+
+### Fixed
+
+- Direct IndexedDB v1→v3 upgrades now remove each successfully migrated legacy upload row from the obsolete `uploaded-icons` store inside the same versionchange transaction. Mixed databases therefore keep incomplete/raw rows for possible recovery without retaining duplicate copies of every valid SVG that was already migrated to the metadata/asset stores.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium first reproduces the previous mixed-upgrade state: one valid row is migrated but remains duplicated in `uploaded-icons` beside one incomplete row. Against the fix, the valid row exists only in the current metadata/asset stores, the incomplete row remains in `uploaded-icons`, and the valid upload stays visible.
+
+## 0.7.15 — 2026-09-11
+
+### Fixed
+
+- IndexedDB upgrades now retire the obsolete v1 `uploaded-icons` object store after confirming every legacy ID already has both current metadata and SVG-asset counterparts. The v3 cleanup never replays stale legacy values over newer v2 records, and keeps the old store if any counterpart is missing.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium v1→v2 reproduction confirms the old store previously survived alongside duplicated metadata/assets. A seeded v2 database upgraded to v3 removes the legacy store when all pairs exist, preserves newer v2 metadata/assets unchanged, and keeps the legacy store when a counterpart is missing.
+
+## 0.7.14 — 2026-09-11
+
+### Fixed
+
+- Uploaded-icon startup no longer hides valid IndexedDB uploads when best-effort metadata-orphan cleanup cannot open a write transaction. Valid metadata/asset pairs are returned after a successful read even if the cleanup write must be deferred to a later startup.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium regression first reproduces the previous failure by forcing only IndexedDB `readwrite` transactions to fail: a valid paired upload was incorrectly reduced to an empty result. Against the fix, the same simulated cleanup-write failure still returns the valid paired upload while leaving the metadata orphan in place for a future retry.
+
+## 0.7.13 — 2026-09-11
+
+### Fixed
+
+- IndexedDB reconciliation now removes metadata-only uploaded-icon orphans when their SVG asset is already missing, preventing invisible stale metadata from accumulating indefinitely. Asset-only orphans are deliberately preserved because they still contain user-authored SVG bytes and may be recoverable later.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium verification seeds one valid pair, one metadata-only orphan and one asset-only orphan: startup removes only the metadata orphan, keeps the asset-only SVG bytes intact, registers only the valid upload, and the normal built-in catalogue remains healthy.
+
+## 0.7.12 — 2026-09-11
+
+### Fixed
+
+- Persisted and legacy uploaded-icon records can no longer replace canonical built-in icons when their IDs collide. Runtime registration now gives built-in SSOT metadata/assets precedence before any uploaded record is cached or exposed.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium regression starts from a fresh profile containing two legacy records: one colliding with built-in `invoice` and one safe `legacy-safe` upload. The canonical Invoice remains selected as a built-in (`Files · Outline`), the safe upload is still registered/searchable, the catalogue reports 101 total icons with exactly one uploaded icon, and migration completes normally.
+
+## 0.7.11 — 2026-09-11
+
+### Fixed
+
+- Legacy uploaded-icon migration no longer deletes records beyond its 50-item safety batch. Successful records are removed from the legacy payload, deferred records remain for the next startup, and failed records are retained for retry. Migration is marked complete only when no legacy records remain.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Regression coverage verifies a 51-record legacy payload migrates 50 records in the first pass, retains record 51 without setting the completion marker, then migrates the final record on the next pass. It also verifies failed records remain while successful peers are removed.
+- Real Chromium verification uses a fresh browser profile with 51 legacy uploads and confirms the first startup retains record 51 in legacy storage rather than deleting it; a second startup migrates it, removes the exhausted legacy payload, and sets the migration marker to `done`.
+
+## 0.7.10 — 2026-09-11
+
+### Fixed
+
+- Persisted uploaded SVG records are now revalidated before their metadata is registered. Assets accepted by an older sanitizer policy but rejected by the current policy no longer reappear as broken catalogue entries after reload. Rendering continues to revalidate uploaded assets as defence in depth.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium regression verifies an invalid persisted upload containing a forbidden `<script>` is not registered as icon metadata, while a valid persisted upload is registered and loadable. The normal catalogue still starts with `Showing 24 of 100`.
+
+## 0.7.9 — 2026-09-11
+
+### Fixed
+
+- Browser SVG sanitization now rejects `DOCTYPE` declarations before `DOMParser` runs. This prevents untrusted internal entity declarations from being parsed or expanded and closes a runtime/build-time policy gap where the browser accepted DTD-bearing SVG while the Node validator rejected it.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium verification reproduces the previous behavior and confirms the fix: a canonical SVG remains accepted, while both a plain `DOCTYPE` SVG and an internal-entity `DOCTYPE` SVG return `SVG doctype is forbidden.` before XML parsing.
+
+## 0.7.8 — 2026-09-11
+
+### Fixed
+
+- The catalogue search field now has a meaningful accessible name (`Search icons by name, keyword or ERP term`). The visible `/` keyboard shortcut hint is explicitly decorative for assistive technology instead of becoming the field's entire accessible name.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium Accessibility Tree verification reproduces the previous defect (`searchbox` name was `/`) and confirms the fix exposes `Search icons by name, keyword or ERP term`; typing `invoice` still filters the catalogue normally.
+
+## 0.7.7 — 2026-09-11
+
+### Fixed
+
+- Catalogue density controls now expose their mutually-exclusive Grid/Compact selection with `aria-pressed`, and the accessibility state stays synchronized with the existing visual state and persisted density preference.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium verification confirms the active density button exposes `pressed=true` in the Accessibility Tree, the inactive button exposes `pressed=false`, clicking Compact swaps both visual and accessibility state, and a reload preserves the selected state.
+
+## 0.7.6 — 2026-09-10
+
+### Fixed
+
+- Generated SVG/JSX/CSS code tabs now follow the WAI-ARIA tab pattern: the tablist has an accessible name, tabs control a labelled tabpanel, only the active tab is in the normal Tab sequence, and Arrow Left/Right plus Home/End move focus and selection.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium verification confirms the tablist/tabpanel relationships, roving `tabindex`, ArrowRight/ArrowLeft wrapping, Home/End navigation, selected-state updates, focus movement, and generated-code content switching.
+
+## 0.7.5 — 2026-09-10
+
+### Fixed
+
+- The browser upload sanitizer now requires the canonical SVG namespace (`http://www.w3.org/2000/svg`), matching the build-time validator and preventing namespace policy drift for uploaded assets.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium verification calls the browser `sanitizeSvgText()` directly: a valid canonical SVG is accepted, while both a missing `xmlns` and an incorrect namespace are rejected with `SVG namespace is required.`
+- Regression coverage now explicitly checks the build-time policy rejects both missing and incorrect namespaces, keeping both validation paths aligned.
+
+## 0.7.4 — 2026-09-10
+
+### Fixed
+
+- Mobile navigation and inspector drawers now mark non-active app regions inert while open, removing background workspace controls from the accessibility tree without affecting desktop docked panels. Inert state is restored when drawers close or the viewport crosses a drawer breakpoint.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, and `npm run build` pass.
+- Real headless Chrome verification passed at 390×844 for the navigation drawer: the workspace and inspector became `inert`, background controls/headings disappeared from Chrome's Accessibility Tree, focus stayed in the sidebar, and closing restored all regions.
+- The 390×844 Brand kit → inspector transition also passed: the sidebar closed and became `inert` before the inspector received focus, preventing two simultaneously exposed drawers. At 834×1112 the inspector isolated both workspace and sidebar; at 1440×900 docked desktop panels remained non-inert with no backdrop regression.
+
+## 0.7.3 — 2026-09-10
+
+### Fixed
+
+- Mobile navigation and inspector drawers now move focus into the opened drawer, keep Tab focus within it, and return focus to the trigger when closed.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, and `npm run build` pass.
+- Real Chromium verification passed at 390×844 for the navigation drawer: opening moved focus to `brandToggle`, Shift+Tab remained inside the sidebar focus cycle, and Escape closed the drawer and restored focus to `mobileMenuButton`.
+- Real Chromium verification passed at 834×1112 for the inspector drawer: opening moved focus to `pinInspectorButton`, Shift+Tab wrapped to `copyCodeButton`, and Escape closed the drawer and restored focus to `mobileInspectorButton`.
+
+## 0.7.2 — 2026-09-10
+
+### Fixed
+
+- The full-preview modal now has explicit `aria-labelledby` and `aria-describedby` relationships to its visible icon name and resize guidance, giving assistive technology a reliable accessible name and description.
+
+### Validation
+
+- Confirmed the dialog references existing, unique `h2#dialogIconName` and `p#dialogDescription` elements in `index.html`.
+- `npm test`, `npm run typecheck`, `npm run build`, and `git diff --check` pass.
+- Verified in real headless Chromium against the running Vite app: startup rendered `Showing 24 of 100`, and Chrome's Accessibility Tree exposed the open native dialog with computed name `Invoice`, computed description `Resize the browser to verify SVG sharpness at any scale.`, and `ignored=false`.
+
 ## 0.7.1 — 2026-07-31
 
 ### Fixed

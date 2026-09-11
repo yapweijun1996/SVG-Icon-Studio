@@ -13,7 +13,7 @@ import { createToastController, copyText } from './ui/toast.js';
 
 function collectRefs() {
   return {
-    body: document.body, backdrop: $('#mobileBackdrop'), sidebar: $('#sidebar'),
+    body: document.body, backdrop: $('#mobileBackdrop'), sidebar: $('#sidebar'), workspace: $('.workspace'),
     mobileMenuButton: $('#mobileMenuButton'), mobileInspectorButton: $('#mobileInspectorButton'),
     brandToggle: $('#brandToggle'), themeButton: $('#themeButton'), importButton: $('#importButton'),
     svgFileInput: $('#svgFileInput'), totalIconCount: $('#totalIconCount'), visibleIconCount: $('#visibleIconCount'),
@@ -163,13 +163,21 @@ async function start() {
   });
   refs.styleFilter.addEventListener('change', event => { state.style = event.target.value; state.visibleLimit = 24; catalogue.render(); });
   refs.sortFilter.addEventListener('change', event => { state.sort = event.target.value; state.visibleLimit = 24; catalogue.render(); });
+  function syncDensityButtons() {
+    $$('.density-switch button').forEach(button => {
+      const active = button.dataset.density === state.density;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-pressed', String(active));
+    });
+  }
+
   $$('.density-switch button').forEach(button => button.addEventListener('click', () => {
     state.density = button.dataset.density;
     setValue(STORAGE.density, state.density);
-    $$('.density-switch button').forEach(item => item.classList.toggle('is-active', item === button));
+    syncDensityButtons();
     catalogue.render();
   }));
-  $$('.density-switch button').forEach(button => button.classList.toggle('is-active', button.dataset.density === state.density));
+  syncDensityButtons();
 
   catalogue.render();
   await inspector.update();

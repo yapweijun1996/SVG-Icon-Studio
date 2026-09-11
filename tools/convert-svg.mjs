@@ -6,6 +6,8 @@ import {
   ALLOWED_ELEMENTS,
   ALLOWED_ATTRIBUTES,
   FORBIDDEN_ELEMENTS,
+  canonicalizeAllowedElementName,
+  canonicalizeAllowedAttributeName,
 } from '../js/services/svg-policy.js';
 import { inspectSvgText } from './svg-policy.mjs';
 
@@ -74,7 +76,10 @@ function cleanAttributes(attrsText) {
   let match;
   while ((match = attributeRegex.exec(attrsText))) {
     const [, name, quote, value] = match;
-    if (ALLOWED_ATTRIBUTES.has(name.toLowerCase())) kept.push(`${name}=${quote}${value}${quote}`);
+    if (ALLOWED_ATTRIBUTES.has(name.toLowerCase())) {
+      const canonicalName = canonicalizeAllowedAttributeName(name);
+      if (canonicalName) kept.push(`${canonicalName}=${quote}${value}${quote}`);
+    }
   }
   return kept.length ? ' ' + kept.join(' ') : '';
 }
@@ -82,9 +87,10 @@ function cleanAttributes(attrsText) {
 export function cleanElements(text) {
   return text.replace(/<(\/?)([a-zA-Z][\w:-]*)\b([^>]*?)(\/?)>/g, (whole, closing, tag, attrs, selfClose) => {
     const lower = tag.toLowerCase();
-    if (closing) return ALLOWED_ELEMENTS.has(lower) ? `</${lower}>` : '';
-    if (!ALLOWED_ELEMENTS.has(lower)) return '';
-    return `<${lower}${cleanAttributes(attrs)}${selfClose ? ' /' : ''}>`;
+    const canonicalTag = canonicalizeAllowedElementName(tag);
+    if (closing) return ALLOWED_ELEMENTS.has(lower) && canonicalTag ? `</${canonicalTag}>` : '';
+    if (!ALLOWED_ELEMENTS.has(lower) || !canonicalTag) return '';
+    return `<${canonicalTag}${cleanAttributes(attrs)}${selfClose ? ' /' : ''}>`;
   });
 }
 

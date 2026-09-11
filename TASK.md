@@ -39,6 +39,36 @@
 - [x] Fix "Manage brand kit" / card "⋮" showing an empty backdrop on desktop widths
 - [x] Fix hardcoded "Collections: 6" badge (now derived from live category count)
 - [x] Content-Security-Policy meta tag added as defence in depth
+- [x] Full-preview dialog exposes its visible title and description to assistive technology
+- [x] Mobile navigation and inspector drawers manage focus entry, Tab trapping and trigger restoration
+- [x] Mobile navigation and inspector drawers hide non-active app regions from the accessibility tree with native `inert`, including sidebar → inspector handoff
+- [x] Enforce the canonical SVG namespace in the browser upload sanitizer to keep runtime and build-time security policy aligned
+- [x] Generated-code SVG/JSX/CSS tabs use complete ARIA tab/tabpanel relationships and keyboard navigation with roving focus
+- [x] Catalogue Grid/Compact density controls expose synchronized `aria-pressed` selection state
+- [x] Catalogue search exposes a meaningful accessible name instead of announcing only the `/` keyboard shortcut hint
+- [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
+- [x] Browser/build SVG validation enforce strict XML declaration grammar and reject malformed declarations consistently
+- [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
+- [x] Node/build SVG validation rejects stray `]]>` in character data while preserving quoted-attribute and valid CDATA cases
+- [x] Node/build SVG validation rejects literal `<` in character data while preserving `&lt;`, literal `>`, comments, and CDATA
+- [x] Node/build SVG validation enforces XML element nesting and rejects missing, mismatched, out-of-order, or extra closing tags
+- [x] Node/build SVG validation rejects multiple top-level XML document elements while preserving valid nested SVG elements
+- [x] Node/build SVG validation rejects illegal raw XML 1.0 code points in text, attributes, comments, and CDATA while preserving legal ranges
+- [x] Node/build SVG validation treats canonical root `viewBox` and `xmlns` names as case-sensitive, matching browser XML parsing
+- [x] Browser SVG validation rejects root `width`/`height` case variants and strips them safely during import normalization without affecting child dimensions
+- [x] Browser and Node/build SVG validation require exact canonical element and attribute names while preserving normalized conversion and case-insensitive security checks
+- [x] Node/build SVG validation accepts complete XML comments before the root element while rejecting unterminated leading comments
+- [x] Node/build SVG validation rejects XML comments containing internal `--` sequences while preserving valid comments
+- [x] Node/build SVG validation rejects duplicate, unquoted, bare and malformed XML attributes while preserving valid quoted values
+- [x] Browser/build SVG validation rejects foreign child namespaces even when the local element name is allowlisted
+- [x] Build-time SVG validation ignores tag-like text inside complete XML comments/CDATA while still rejecting real forbidden elements
+- [x] Persisted uploaded icons are revalidated before registration so assets rejected by newer security policy do not surface as broken catalogue entries
+- [x] Legacy localStorage upload migration preserves records beyond its 50-item batch and retains failed records for retry instead of deleting user data
+- [x] Persisted/legacy uploaded records cannot overwrite canonical built-in icon IDs during registration
+- [x] Retire the obsolete v1 IndexedDB upload store only after every legacy ID has a metadata+asset counterpart, without replaying stale values
+- [x] Direct v1→v3 upgrades remove successfully migrated legacy rows while preserving incomplete rows for recovery
+- [x] IndexedDB startup reconciliation removes metadata-only upload orphans while preserving asset-only SVG payloads for possible recovery
+- [x] IndexedDB orphan cleanup is best-effort so cleanup write failures cannot hide otherwise valid uploaded icons
 
 ### Epic 5 — Documentation Governance
 - [x] `SPEC.md` rewritten as current-state spec (status snapshot, current file tree, ADR-009–013, historical markers on completed sections)
@@ -53,7 +83,7 @@
 
 ## In Progress
 
-*(none — everything above is shipped and pushed to `origin/main` as of `v0.7.1`)*
+*(none — current local release `v0.7.33` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 

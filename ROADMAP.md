@@ -21,12 +21,44 @@
 | `v0.6.1` | 2026-07-31 | Fix: filled-icon fill-colour picker inert | 4 |
 | `v0.7.0` | 2026-07-31 | Unify grid colour, scroll-to-load | 4 |
 | `v0.7.1` | 2026-07-31 | Fix: empty backdrop on desktop | 4 |
+| `v0.7.2` | 2026-09-10 | Accessible full-preview dialog semantics | 4 |
+| `v0.7.3` | 2026-09-10 | Mobile drawer keyboard focus management | 4 |
+| `v0.7.4` | 2026-09-10 | Inert background regions for mobile drawers | 4 |
+| `v0.7.5` | 2026-09-10 | Enforce SVG namespace in browser sanitizer | 4 |
+| `v0.7.6` | 2026-09-10 | Accessible generated-code tab semantics and keyboard navigation | 4 |
+| `v0.7.7` | 2026-09-11 | Expose catalogue density selection to assistive technology | 4 |
+| `v0.7.8` | 2026-09-11 | Give catalogue search a meaningful accessible name | 4 |
+| `v0.7.9` | 2026-09-11 | Reject SVG DOCTYPE before browser XML parsing | 4 |
+| `v0.7.10` | 2026-09-11 | Skip persisted uploads that fail the current sanitizer | 4 |
+| `v0.7.11` | 2026-09-11 | Preserve deferred legacy uploads during bounded migration | 4 |
+| `v0.7.12` | 2026-09-11 | Protect built-in IDs from persisted upload collisions | 4 |
+| `v0.7.13` | 2026-09-11 | Reconcile metadata-only IndexedDB upload orphans | 4 |
+| `v0.7.14` | 2026-09-11 | Keep valid uploads visible when orphan cleanup cannot write | 4 |
+| `v0.7.15` | 2026-09-11 | Retire verified legacy IndexedDB store | 4 |
+| `v0.7.16` | 2026-09-11 | Reconcile mixed direct v1→v3 upload upgrades | 4 |
+| `v0.7.17` | 2026-09-11 | Decode XML entities before build-time SVG reference checks | 4 |
+| `v0.7.18` | 2026-09-11 | Align SVG processing-instruction security policy | 4 |
+| `v0.7.19` | 2026-09-11 | Reject foreign child SVG namespaces | 4 |
+| `v0.7.20` | 2026-09-11 | Ignore inert XML text during build SVG tag scans | 4 |
+| `v0.7.21` | 2026-09-11 | Reject stray CDATA close delimiters in build validation | 4 |
+| `v0.7.22` | 2026-09-11 | Accept complete XML comments before the SVG root | 4 |
+| `v0.7.23` | 2026-09-11 | Enforce strict XML attribute syntax in build validation | 4 |
+| `v0.7.24` | 2026-09-11 | Enforce XML element nesting in build validation | 4 |
+| `v0.7.25` | 2026-09-11 | Validate XML character references in build validation | 4 |
+| `v0.7.26` | 2026-09-11 | Enforce a single XML document element in build validation | 4 |
+| `v0.7.27` | 2026-09-11 | Enforce XML 1.0 raw character validity in build validation | 4 |
+| `v0.7.28` | 2026-09-11 | Enforce canonical root attribute case sensitivity in build validation | 4 |
+| `v0.7.29` | 2026-09-11 | Close browser root-dimension attribute case bypass | 4 |
+| `v0.7.30` | 2026-09-11 | Enforce exact SVG element and attribute name case | 4 |
+| `v0.7.31` | 2026-09-11 | Enforce strict XML declaration grammar parity | 4 |
+| `v0.7.32` | 2026-09-11 | Enforce XML comment grammar parity | 4 |
+| `v0.7.33` | 2026-09-11 | Reject literal `<` in XML character data | 4 |
 
 Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`.
 
 ---
 
-## Current state (as of `v0.7.1`)
+## Current state (as of `v0.7.33`)
 
 - 100 icons, 10 categories, 2 styles (91 outline / 9 filled).
 - Zero runtime dependencies; Vite is dev/build tooling only.

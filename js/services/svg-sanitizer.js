@@ -1,10 +1,16 @@
 import {
   REQUIRED_VIEWBOX,
+  REQUIRED_NAMESPACE,
   MAX_SVG_LENGTH,
   ALLOWED_ATTRIBUTES,
+  isCanonicalElementName,
+  isCanonicalAttributeName,
   isDisallowedElement,
   isEventAttribute,
   isHrefAttribute,
+  isDimensionAttribute,
+  hasForbiddenDoctype,
+  hasForbiddenProcessingInstruction,
   isInvalidReference,
 } from './svg-policy.js';
 
@@ -12,28 +18,32 @@ export function sanitizeSvgText(raw, { stripDimensions = false } = {}) {
   try {
     if (typeof raw !== 'string' || raw.length === 0) throw new Error('SVG text is empty.');
     if (raw.length > MAX_SVG_LENGTH) throw new Error('SVG exceeds the 64 KB safety limit.');
+    // Reject DTDs before DOMParser sees them so untrusted entity declarations are never expanded.
+    if (hasForbiddenDoctype(raw)) throw new Error('SVG doctype is forbidden.');
+    if (hasForbiddenProcessingInstruction(raw)) throw new Error('SVG processing instructions are forbidden.');
     const documentNode = new DOMParser().parseFromString(raw, 'image/svg+xml');
     if (documentNode.querySelector('parsererror')) throw new Error('SVG XML is invalid.');
     const root = documentNode.documentElement;
-    if (!root || root.tagName.toLowerCase() !== 'svg') throw new Error('SVG root is required.');
+    if (!root || !isCanonicalElementName(root.tagName)) throw new Error('SVG root is required.');
+    if (root.getAttribute('xmlns') !== REQUIRED_NAMESPACE) throw new Error('SVG namespace is required.');
     const viewBox = String(root.getAttribute('viewBox') || '').replace(/\s+/g, ' ').trim();
     if (viewBox !== REQUIRED_VIEWBOX) throw new Error('SVG viewBox must be exactly 0 0 24 24.');
+    const rootDimensionAttributes = [...root.attributes].filter(attribute => isDimensionAttribute(attribute.name));
     if (stripDimensions) {
-      root.removeAttribute('width');
-      root.removeAttribute('height');
-    } else if (root.hasAttribute('width') || root.hasAttribute('height')) {
+      for (const attribute of rootDimensionAttributes) root.removeAttribute(attribute.name);
+    } else if (rootDimensionAttributes.length) {
       throw new Error('Canonical SVG must not contain fixed width or height.');
     }
 
     const elements = [root, ...root.querySelectorAll('*')];
     for (const element of elements) {
-      const tag = element.tagName.toLowerCase();
-      if (isDisallowedElement(tag)) throw new Error(`Forbidden SVG element: ${element.tagName}.`);
+      if (element.namespaceURI !== REQUIRED_NAMESPACE) throw new Error(`Foreign SVG namespace is forbidden: ${element.namespaceURI || 'none'}.`);
+      if (isDisallowedElement(element.tagName) || !isCanonicalElementName(element.tagName)) throw new Error(`Forbidden SVG element: ${element.tagName}.`);
       for (const attribute of [...element.attributes]) {
         const name = attribute.name.toLowerCase();
         if (isEventAttribute(name)) throw new Error(`Event attribute is forbidden: ${attribute.name}.`);
         if (isHrefAttribute(name)) throw new Error('SVG references are forbidden.');
-        if (!ALLOWED_ATTRIBUTES.has(name)) throw new Error(`Unsupported SVG attribute: ${attribute.name}.`);
+        if (!ALLOWED_ATTRIBUTES.has(name) || !isCanonicalAttributeName(attribute.name)) throw new Error(`Unsupported SVG attribute: ${attribute.name}.`);
         if (name !== 'xmlns' && isInvalidReference(attribute.value)) throw new Error(`External SVG reference is forbidden: ${attribute.name}.`);
       }
     }

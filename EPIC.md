@@ -50,13 +50,46 @@
 ## Epic 4 — Bug Fixes & UX Consistency ✅ DONE
 
 **Goal:** fix real defects surfaced once Epic 3 changed the shape of the catalogue (3→9 filled icons, 6→36 ERP icons), and one longer-standing responsive-layout bug.
-**Releases:** `v0.6.1` → `v0.7.1` (2026-07-31)
+**Releases:** `v0.6.1` → `v0.7.33` (2026-07-31 → 2026-09-11)
+
+- `v0.7.5` — Aligned browser-upload SVG namespace enforcement with the build-time policy; malformed/missing namespaces are rejected before uploaded assets enter local storage.
+- `v0.7.6` — Completed generated-code tab semantics with labelled tabpanel relationships, roving focus, and Arrow/Home/End keyboard navigation.
+- `v0.7.7` — Exposed the mutually-exclusive Grid/Compact catalogue density state to assistive technology with synchronized `aria-pressed`.
+- `v0.7.8` — Gave the catalogue search field an explicit meaningful accessible name and hid its visual `/` shortcut hint from the accessibility tree.
+- `v0.7.9` — Rejected SVG `DOCTYPE` declarations before browser XML parsing, preventing untrusted entity declarations from reaching `DOMParser` and making the runtime policy fail closed like the build-time validator.
+- `v0.7.10` — Revalidate persisted uploaded SVGs before registering catalogue metadata, preventing assets rejected by newer sanitizer rules from resurfacing as broken cards after reload.
+- `v0.7.11` — Fixed bounded legacy-upload migration so records beyond the first 50 and failed records remain recoverable instead of being silently discarded.
+- `v0.7.12` — Prevented persisted or legacy uploaded records from replacing canonical built-in icon IDs during registration.
+- `v0.7.13` — Reconciled metadata-only IndexedDB upload orphans while preserving asset-only SVG payloads for possible future recovery.
+- `v0.7.14` — Made orphan cleanup best-effort so a transient IndexedDB write failure cannot hide valid persisted uploads after they were read successfully.
+- `v0.7.15` — Retired the obsolete v1 IndexedDB store only after confirming every legacy ID already has both current counterparts, without replaying stale legacy values over newer v2 records.
+- `v0.7.16` — Direct v1→v3 upgrades now remove each successfully migrated legacy row from the old store while preserving incomplete rows for recovery, eliminating duplicated SVG payloads in mixed legacy databases without data loss.
+- `v0.7.17` — Closed a build-time SVG validation bypass by decoding XML character references before external-reference checks, matching browser `DOMParser` behavior for encoded protocols.
+- `v0.7.18` — Aligned browser and build-time processing-instruction policy: standard XML declarations remain valid, while stylesheet/custom processing instructions are rejected.
+- `v0.7.19` — Rejected child SVG namespace switching so allowlisted element names must also belong to the canonical SVG namespace in browser and build-time validation.
+- `v0.7.20` — Aligned build-time SVG tag scanning with browser XML parsing by ignoring complete comments/CDATA when looking for active forbidden elements.
+- `v0.7.21` — Matched browser XML parsing by rejecting stray `]]>` in character data while preserving the same sequence inside quoted attribute values and complete CDATA.
+- `v0.7.22` — Matched browser XML prolog parsing by allowing complete comments before the root SVG while preserving fail-closed handling for unterminated comments.
+- `v0.7.23` — Matched XML attribute parsing by rejecting duplicate, unquoted, bare, unterminated, and malformed attributes while preserving quoted values that contain `>`.
+- `v0.7.24` — Matched XML element structure parsing by enforcing opening/closing tag order and rejecting missing, mismatched, or extra closing tags while preserving valid self-closing elements.
+- `v0.7.25` — Matched XML character-reference parsing by rejecting malformed, unknown, unterminated, and illegal references in text and quoted attributes while preserving comments and CDATA.
+- `v0.7.26` — Matched XML document structure by rejecting a second top-level document element while preserving legitimate nested SVG elements.
+- `v0.7.27` — Matched XML 1.0 raw character validity by rejecting illegal code points in text, attributes, comments, and CDATA while preserving legal ranges.
+- `v0.7.28` — Matched XML attribute-name case sensitivity for canonical root `viewBox` and `xmlns`, rejecting case variants that Chromium does not treat as those attributes.
+- `v0.7.29` — Closed the browser runtime root-dimension case bypass by rejecting or stripping `width`/`height` case variants while preserving child shape dimensions.
+- `v0.7.30` — Enforced exact canonical SVG element and attribute spellings in browser and Node/build validation while preserving normalized conversion behavior and case-insensitive security checks.
+- `v0.7.31` — Enforced Chromium-compatible XML declaration grammar so malformed declarations no longer bypass Node/build validation.
+- `v0.7.32` — Matched XML comment grammar by rejecting internal `--` sequences while preserving valid empty, normal, and single-hyphen comments.
+- `v0.7.33` — Matched XML character-data parsing by rejecting literal `<` outside element markup while preserving `&lt;`, literal `>`, comments, and CDATA.
 
 - `v0.6.1` — Fixed the Inspector fill-colour picker being inert for all 9 `filled` icons (their colour was silently controlled by the *stroke* picker instead) — a pre-existing bug in `purchase-order`/`delivery-order`/`ai-spark` that Epic 3 made easier to notice.
 - `v0.7.0` — Unified catalogue-grid icon colour across styles (removed the `filled`→accent-orange override, ADR-011); added scroll-to-load auto-pagination (ADR-012).
 - `v0.7.1` — Fixed "Manage brand kit" / card "⋮" showing an empty dimming backdrop on desktop widths (`openInspector()` wasn't gated by the same viewport check `closeInspector()` already used).
+- `v0.7.2` — Added explicit accessible naming and description relationships to the full-preview native dialog, verified from Chrome's computed Accessibility Tree.
+- `v0.7.3` — Added keyboard focus entry, focus trapping and trigger restoration for the mobile navigation and inspector drawers, verified in real Chromium at mobile/tablet breakpoints.
+- `v0.7.4` — Made the non-active app regions inert while a mobile navigation or inspector drawer is open, restoring them on close or resize without changing desktop docked panels.
 
-**Status:** Complete. All three fixes were verified in a real running browser, not just by code review — see each release's Validation section in `CHANGELOG.md`.
+**Status:** Complete for the current scope through `v0.7.33`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
 
 ---
 

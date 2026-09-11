@@ -116,19 +116,20 @@
         <section class="catalogue-toolbar" aria-label="Catalogue controls">
           <div class="search-row">
             <label class="search-field" for="searchInput">
+              <span class="sr-only">Search icons by name, keyword or ERP term</span>
               <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
               <input id="searchInput" type="search" autocomplete="off" placeholder="Search icons by name, keyword or ERP term…">
-              <kbd>/</kbd>
+              <kbd aria-hidden="true">/</kbd>
             </label>
             <button class="icon-button filter-button" id="filterButton" type="button" aria-label="Show advanced filters" aria-expanded="false">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h18l-7 8v7l-4 2v-9z"/></svg>
             </button>
             <div class="density-switch" role="group" aria-label="Catalogue density">
-              <button class="is-active" type="button" data-density="grid">
+              <button class="is-active" type="button" data-density="grid" aria-pressed="true">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6" height="6"/><rect x="14" y="4" width="6" height="6"/><rect x="4" y="14" width="6" height="6"/><rect x="14" y="14" width="6" height="6"/></svg>
                 Grid
               </button>
-              <button type="button" data-density="compact">
+              <button type="button" data-density="compact" aria-pressed="false">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
                 Compact
               </button>
@@ -231,23 +232,23 @@
 
         <section class="code-panel" aria-labelledby="code-title">
           <h3 class="sr-only" id="code-title">Generated icon code</h3>
-          <div class="code-tabs" role="tablist">
-            <button class="is-active" type="button" role="tab" aria-selected="true" data-code-tab="svg">SVG</button>
-            <button type="button" role="tab" aria-selected="false" data-code-tab="jsx">JSX</button>
-            <button type="button" role="tab" aria-selected="false" data-code-tab="css">CSS</button>
+          <div class="code-tabs" role="tablist" aria-label="Code format">
+            <button class="is-active" id="codeTabSvg" type="button" role="tab" aria-selected="true" aria-controls="codePanel" tabindex="0" data-code-tab="svg">SVG</button>
+            <button id="codeTabJsx" type="button" role="tab" aria-selected="false" aria-controls="codePanel" tabindex="-1" data-code-tab="jsx">JSX</button>
+            <button id="codeTabCss" type="button" role="tab" aria-selected="false" aria-controls="codePanel" tabindex="-1" data-code-tab="css">CSS</button>
           </div>
-          <pre><code id="codeOutput"></code></pre>
+          <pre id="codePanel" role="tabpanel" aria-labelledby="codeTabSvg" tabindex="0"><code id="codeOutput"></code></pre>
           <button class="code-copy-button" id="copyCodeButton" type="button" aria-label="Copy displayed code"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button>
         </section>
       </div>
     </aside>
   </div>
 
-  <dialog class="preview-dialog" id="previewDialog">
+  <dialog class="preview-dialog" id="previewDialog" aria-labelledby="dialogIconName" aria-describedby="dialogDescription">
     <button class="icon-button dialog-close" id="closePreviewDialog" type="button" aria-label="Close full preview"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5 5 19"/></svg></button>
     <div class="dialog-preview" id="dialogPreview"></div>
     <h2 id="dialogIconName">Invoice</h2>
-    <p>Resize the browser to verify SVG sharpness at any scale.</p>
+    <p id="dialogDescription">Resize the browser to verify SVG sharpness at any scale.</p>
   </dialog>
 
   <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>

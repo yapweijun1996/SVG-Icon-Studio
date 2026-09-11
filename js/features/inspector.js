@@ -126,15 +126,41 @@ export function createInspectorController({ state, refs, toast, onFavorite, onAp
     await copyText(generateSvg(icon, asset, state.appearance), toast, `${icon.name} SVG copied`);
   });
   refs.copyCodeButton.addEventListener('click', () => copyText(refs.codeOutput.textContent, toast, `${state.codeTab.toUpperCase()} code copied`));
-  $$('.code-tabs button').forEach(button => button.addEventListener('click', () => {
-    state.codeTab = button.dataset.codeTab;
-    $$('.code-tabs button').forEach(tab => {
-      const active = tab === button;
+
+  const codeTabs = $$('.code-tabs [role="tab"]');
+  const codePanel = refs.codeOutput.closest('[role="tabpanel"]');
+
+  function syncCodeTabs(activeButton = codeTabs.find(tab => tab.dataset.codeTab === state.codeTab) || codeTabs[0]) {
+    codeTabs.forEach(tab => {
+      const active = tab === activeButton;
       tab.classList.toggle('is-active', active);
       tab.setAttribute('aria-selected', String(active));
+      tab.tabIndex = active ? 0 : -1;
     });
+    if (activeButton?.id) codePanel?.setAttribute('aria-labelledby', activeButton.id);
+  }
+
+  function activateCodeTab(button, { focus = false } = {}) {
+    if (!button) return;
+    state.codeTab = button.dataset.codeTab;
+    syncCodeTabs(button);
+    if (focus) button.focus();
     renderPreview();
-  }));
+  }
+
+  codeTabs.forEach((button, index) => {
+    button.addEventListener('click', () => activateCodeTab(button));
+    button.addEventListener('keydown', event => {
+      let nextIndex = null;
+      if (event.key === 'ArrowRight') nextIndex = (index + 1) % codeTabs.length;
+      if (event.key === 'ArrowLeft') nextIndex = (index - 1 + codeTabs.length) % codeTabs.length;
+      if (event.key === 'Home') nextIndex = 0;
+      if (event.key === 'End') nextIndex = codeTabs.length - 1;
+      if (nextIndex === null) return;
+      event.preventDefault();
+      activateCodeTab(codeTabs[nextIndex], { focus: true });
+    });
+  });
 
   refs.fullPreviewButton.addEventListener('click', async () => {
     await renderPreview();
@@ -145,5 +171,6 @@ export function createInspectorController({ state, refs, toast, onFavorite, onAp
 
   syncControls();
   updateBackgroundTabs();
+  syncCodeTabs();
   return { update, renderPreview, syncControls, updateBackgroundTabs };
 }

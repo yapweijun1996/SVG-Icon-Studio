@@ -2,9 +2,134 @@ import assert from 'node:assert/strict';
 import { inspectSvgText } from '../tools/svg-policy.mjs';
 const safe = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M1 1h2"/></svg>';
 assert.equal(inspectSvgText(safe).ok, true);
+const canonicalClip = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><clipPath clipPathUnits="userSpaceOnUse" id="clip"><path d="M0 0h1v1z"/></clipPath></defs><path d="M1 1h2" fill="none" clip-path="url(#clip)"/></svg>';
+assert.equal(inspectSvgText(canonicalClip).ok, true, 'canonical path/d/fill and clipPath/clipPathUnits spellings are accepted');
+for (const variant of [
+  safe.replace('<path', '<PATH'),
+  safe.replace('d="M1 1h2"', 'D="M1 1h2"'),
+  safe.replace('stroke="currentColor"', 'FILL="none" stroke="currentColor"'),
+  canonicalClip.replace('<clipPath', '<clippath').replace('</clipPath>', '</clippath>'),
+  canonicalClip.replace('clipPathUnits=', 'clippathunits=')
+]) {
+  assert.equal(inspectSvgText(variant).ok, false, 'non-canonical SVG name case must be rejected');
+}
+// XML attribute names are case-sensitive. DOMParser therefore does not expose
+// case variants as the canonical viewBox/xmlns attributes; build validation
+// must reject the same inputs instead of matching them case-insensitively.
+assert.equal(inspectSvgText(safe.replace('viewBox', 'viewbox')).ok, false, 'lowercase viewbox must not satisfy canonical viewBox');
+assert.equal(inspectSvgText(safe.replace('viewBox', 'VIEWBOX')).ok, false, 'uppercase VIEWBOX must not satisfy canonical viewBox');
+assert.equal(inspectSvgText(safe.replace('xmlns', 'XMLNS')).ok, false, 'uppercase XMLNS must not satisfy canonical xmlns');
+// XML 1.0 raw characters are legal only in the three whitespace controls and
+// the defined inclusive ranges. This covers text, quoted attributes,
+// comments, and CDATA just like DOMParser.
+for (const codePoint of [0x0, 0x1, 0xfffe, 0xffff]) {
+  const character = String.fromCodePoint(codePoint);
+  assert.equal(inspectSvgText(safe.replace('<path', `<title>${character}</title><path`)).ok, false, `illegal raw text code point rejected: U+${codePoint.toString(16)}`);
+  assert.equal(inspectSvgText(safe.replace('d="M1 1h2"', `d="M1 ${character} 1h2"`)).ok, false, `illegal raw attribute code point rejected: U+${codePoint.toString(16)}`);
+  assert.equal(inspectSvgText(safe.replace('<path', `<!--${character}--><path`)).ok, false, `illegal raw comment code point rejected: U+${codePoint.toString(16)}`);
+  assert.equal(inspectSvgText(safe.replace('<path', `<![CDATA[${character}]]><path`)).ok, false, `illegal raw CDATA code point rejected: U+${codePoint.toString(16)}`);
+}
+for (const codePoint of [0x9, 0xa, 0xd, 0x20, 0xe000, 0x10000]) {
+  const character = String.fromCodePoint(codePoint);
+  assert.equal(inspectSvgText(safe.replace('<path', `<title>${character}</title><path`)).ok, true, `legal raw text code point accepted: U+${codePoint.toString(16)}`);
+  assert.equal(inspectSvgText(safe.replace('d="M1 1h2"', `d="M1 ${character} 1h2"`)).ok, true, `legal raw attribute code point accepted: U+${codePoint.toString(16)}`);
+  assert.equal(inspectSvgText(safe.replace('<path', `<!--${character}--><path`)).ok, true, `legal raw comment code point accepted: U+${codePoint.toString(16)}`);
+  assert.equal(inspectSvgText(safe.replace('<path', `<![CDATA[${character}]]><path`)).ok, true, `legal raw CDATA code point accepted: U+${codePoint.toString(16)}`);
+}
+assert.equal(inspectSvgText(safe.replace(' xmlns="http://www.w3.org/2000/svg"', '')).ok, false);
+assert.equal(inspectSvgText(safe.replace('http://www.w3.org/2000/svg', 'http://example.com/not-svg')).ok, false);
+assert.equal(inspectSvgText(`<!DOCTYPE svg>${safe}`).ok, false);
+assert.equal(inspectSvgText(`<!DOCTYPE svg [<!ENTITY x \"M1 1h2\">]>${safe}`).ok, false);
+assert.equal(inspectSvgText(`<?xml version="1.0"?>${safe}`).ok, true, 'standard XML declaration is allowed');
+for (const declaration of [
+  '<?xml foo?>', '<?XML version="1.0"?>', '<?xml version="1.0" standalone="maybe"?>',
+  '<?xml version="2.0"?>', '<?xml encoding="UTF-8"?>', '<?xml version="1.0" foo="bar"?>',
+]) {
+  assert.equal(inspectSvgText(`${declaration}${safe}`).ok, false, `malformed XML declaration is rejected: ${declaration}`);
+}
+for (const declaration of [
+  "<?xml version='1.0'?>", '<?xml version = "1.0"?>', '<?xml version="1.1"?>', '<?xml version="1.00"?>',
+  '<?xml version="1.0" encoding="UTF-8"?>', '<?xml version="1.0" encoding="utf-8"?>',
+  '<?xml version="1.0" encoding="UTF-16"?>', '<?xml version="1.0" encoding="ISO-8859-1"?>',
+  '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>',
+  '<?xml version="1.0" standalone="yes"?>', '<?xml version="1.0" standalone="no"?>',
+]) {
+  assert.equal(inspectSvgText(`${declaration}${safe}`).ok, true, `canonical XML declaration remains accepted: ${declaration}`);
+}
+
+for (const declaration of [
+  ' <?xml version="1.0"?>', '\n<?xml version="1.0"?>',
+  '<?xml version="1.0" standalone="yes" encoding="UTF-8"?>',
+  '<?xml VERSION="1.0"?>', '<?xml version="1.0" ENCODING="UTF-8"?>',
+]) {
+  assert.equal(inspectSvgText(`${declaration}${safe}`).ok, false, `declaration placement/order/case is rejected: ${JSON.stringify(declaration)}`);
+}
+assert.equal(inspectSvgText(`<!-- leading comment -->${safe}`).ok, true, 'complete XML comment before root is allowed');
+assert.equal(inspectSvgText(`  \n<!-- first --><!-- second -->\n${safe}`).ok, true, 'multiple leading comments with whitespace are allowed');
+assert.equal(inspectSvgText(`<?xml version="1.0"?><!-- leading comment -->${safe}`).ok, true, 'leading comment after XML declaration is allowed');
+for (const comment of ['<!-- a--b -->', '<!-- a--->']) {
+  assert.equal(inspectSvgText(`${comment}${safe}`).ok, false, `invalid XML comment is rejected: ${comment}`);
+}
+for (const comment of ['<!-- ok -->', '<!---->', '<!-- a- -->']) {
+  assert.equal(inspectSvgText(`${comment}${safe}`).ok, true, `valid XML comment remains accepted: ${comment}`);
+}
+assert.equal(inspectSvgText(`<!-- unclosed ${safe}`).ok, false, 'unterminated leading comment stays invalid');
+assert.equal(inspectSvgText(`<?xml-stylesheet href="https://evil.example/x.css"?>${safe}`).ok, false);
+assert.equal(inspectSvgText(safe.replace('<path', '<?evil x?><path')).ok, false);
+assert.equal(inspectSvgText(safe.replace('<path', '<g xmlns="https://evil.example/ns"><path d="M0 0h1"/></g><path')).ok, false);
+assert.equal(inspectSvgText(safe.replace('<path', '<path xmlns="https://evil.example/ns" d="M0 0h1"/><path')).ok, false);
+assert.equal(inspectSvgText(safe.replace('<path', '<svg xmlns="https://evil.example/ns" viewBox="0 0 24 24"><path d="M0 0h1"/></svg><path')).ok, false);
+// XML comments and CDATA are inert. Tag-like text inside them must not be
+// mistaken for active SVG elements by the regex-based build validator.
+assert.equal(inspectSvgText(safe.replace('<path', '<!-- <script>alert(1)</script> --><path')).ok, true);
+assert.equal(inspectSvgText(safe.replace('<path', '<![CDATA[<script>alert(1)</script>]]><path')).ok, true);
+assert.equal(inspectSvgText(safe.replace('<path', '<!-- <image href="https://evil.example/x"/> --><path')).ok, true);
+assert.equal(inspectSvgText(safe.replace('<path', '<![CDATA[<image href="https://evil.example/x"/>]]><path')).ok, true);
+// XML character data cannot contain a literal '<'. Comments and CDATA are
+// handled separately, and escaped &lt; plus a literal '>' remain valid text.
+for (const text of ['a < b', 'a <! b', 'a </ b']) {
+  assert.equal(inspectSvgText(safe.replace('<path', `<title>${text}</title><path`)).ok, false, `raw < in XML character data rejected: ${text}`);
+}
+assert.equal(inspectSvgText(safe.replace('<path', '<title>a &lt; b</title><path')).ok, true, '&lt; remains the valid way to represent < in character data');
+assert.equal(inspectSvgText(safe.replace('<path', '<title>a > b</title><path')).ok, true, 'literal > remains valid in XML character data');
+assert.equal(inspectSvgText(safe.replace('<path', '<!-- a < b --><path')).ok, true, 'literal < remains valid inside a well-formed XML comment');
+assert.equal(inspectSvgText(safe.replace('<path', '<![CDATA[a < b]]><path')).ok, true, 'literal < remains valid inside CDATA');
+assert.equal(inspectSvgText(safe.replace('<path', 'text]]><path')).ok, false, 'stray ]]> in character data must match DOMParser rejection');
+assert.equal(inspectSvgText(safe.replace('d="M1 1h2"', 'd="M1 1h2]]>"')).ok, true, ']]> remains valid inside a quoted attribute value');
+assert.equal(inspectSvgText(safe.replace('<path', '<!-- unclosed <path')).ok, false);
+assert.equal(inspectSvgText(safe.replace('<path', '<![CDATA[unclosed <path')).ok, false);
 assert.equal(inspectSvgText(safe.replace('<path', '<script>alert(1)</script><path')).ok, false);
 assert.equal(inspectSvgText(safe.replace('<path', '<path onclick="alert(1)"')).ok, false);
+assert.equal(inspectSvgText(safe.replace('viewBox="0 0 24 24"', 'viewBox="0 0 24 24" viewBox="0 0 48 48"')).ok, false, 'duplicate root attributes are invalid XML');
+assert.equal(inspectSvgText(safe.replace('d="M1 1h2"', 'd="M1 1h2" d="M9 9"')).ok, false, 'duplicate child attributes are invalid XML');
+assert.equal(inspectSvgText(safe.replace('d="M1 1h2"', 'd=M1')).ok, false, 'unquoted attributes are invalid XML');
+assert.equal(inspectSvgText(safe.replace('<path', '<path onclick=alert(1)')).ok, false, 'unquoted event attributes fail closed as malformed XML');
+assert.equal(inspectSvgText(safe.replace('<path', '<path selected')).ok, false, 'bare XML attributes are invalid');
+assert.equal(inspectSvgText(safe.replace('<path', '<g><path').replace('</svg>', '</g></svg>')).ok, true, 'properly nested self-closing children remain valid');
+assert.equal(inspectSvgText(safe.replace('<path', '<g><path')).ok, false, 'missing child closing tag is invalid XML');
+assert.equal(inspectSvgText(safe.replace('<path', '<g><path').replace('</svg>', '</svg></g>')).ok, false, 'out-of-order closing tags are invalid XML');
+assert.equal(inspectSvgText(safe.replace('</svg>', '</g></svg>')).ok, false, 'extra closing tags are invalid XML');
+assert.equal(inspectSvgText(`${safe}${safe}`).ok, false, 'multiple top-level SVG document elements are invalid XML');
+const nestedSvg = safe.replace('<path', '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path').replace('</svg>', '</svg></svg>');
+assert.equal(inspectSvgText(nestedSvg).ok, true, 'a nested SVG element is not a second document element');
+assert.equal(inspectSvgText(safe.replace('<path', '<g><path').replace('</svg>', '</path></svg>')).ok, false, 'mismatched closing tags are invalid XML');
 assert.equal(inspectSvgText(safe.replace('currentColor', 'url(https://example.com/x)')).ok, false);
+// DOMParser resolves XML character references before the browser policy sees values.
+// The build-time checker must do the same so encoded dangerous protocols cannot bypass CI.
+assert.equal(inspectSvgText(safe.replace('currentColor', 'jav&#x61;script:alert(1)')).ok, false);
+assert.equal(inspectSvgText(safe.replace('currentColor', 'url(h&#x74;tps://example.com/x.svg)')).ok, false);
+const encodedLocalReference = safe
+  .replace('stroke="currentColor"', 'stroke="none" clip-path="url(&#x23;clip)"')
+  .replace('<path', '<defs><clipPath id="clip"><path d="M0 0h1v1z"/></clipPath></defs><path');
+assert.equal(inspectSvgText(encodedLocalReference).ok, true, 'encoded local fragment references remain safe');
+for (const reference of ['&bogus;', '&', '&amp', '&#xZZ;', '&#x110000;', '&#xD800;', '&#0;']) {
+  assert.equal(inspectSvgText(safe.replace('<path', `<title>${reference}</title><path`)).ok, false, `invalid text reference rejected: ${reference}`);
+  assert.equal(inspectSvgText(safe.replace('d="M1 1h2"', `d="M1 ${reference} 1h2"`)).ok, false, `invalid attribute reference rejected: ${reference}`);
+}
+for (const reference of ['&amp;', '&lt;', '&gt;', '&quot;', '&apos;', '&#65;', '&#x41;']) {
+  assert.equal(inspectSvgText(safe.replace('<path', `<title>${reference}</title><path`)).ok, true, `valid text reference accepted: ${reference}`);
+  assert.equal(inspectSvgText(safe.replace('d="M1 1h2"', `d="M1 ${reference} 1h2"`)).ok, true, `valid attribute reference accepted: ${reference}`);
+}
 assert.equal(inspectSvgText(safe.replace('viewBox="0 0 24 24"', 'viewBox="0 0 48 48"')).ok, false);
 assert.equal(inspectSvgText(safe.replace('<path', '<image href="data:image/png;base64,x"/><path')).ok, false);
 console.log('SVG security policy tests passed.');

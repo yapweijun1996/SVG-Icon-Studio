@@ -1,7 +1,7 @@
 # Icon Studio — Design System
 
 **Document:** `DESIGN.md`
-**Status:** Living document — reflects the design system as actually shipped in `v0.7.1`, not an aspirational brief.
+**Status:** Living document — reflects the design system as actually shipped in `v0.7.33`, not an aspirational brief.
 **Source of truth for tokens:** [`css/tokens.css`](css/tokens.css) (design-system.json is a synced machine-readable snapshot of the same values, not an independent source)
 **Relationship to `components.md`:** `components.md` is the original pre-implementation design brief written before any code existed. It is kept for historical reference only — where the two disagree, this document and the current codebase win. See the note at the top of `components.md`.
 
@@ -95,7 +95,7 @@ Three-column desktop shell (`.app-shell`, CSS grid: `sidebar-width | 1fr | inspe
 | Icon grid | `.icon-grid` | Responsive `auto-fill` grid; Grid/Compact density toggle; scroll-to-load pagination (24 per page) with a manual "Load more" fallback button |
 | Icon card | `.icon-card` | Lazy-loaded preview (`IntersectionObserver`, 240px lookahead), favourite star, Copy SVG action, "⋮" more-options action |
 | Inspector | `.inspector` | Selected icon summary, live preview (Light/Dark/Brand/Transparent background tabs), Appearance controls (size/stroke width/stroke colour/fill toggle+colour/currentColor/include-title), Transform controls (rotate/flip), code tabs (SVG/JSX/CSS) |
-| Full preview dialog | `<dialog class="preview-dialog">` | Native `<dialog>` element — free focus trap and Escape handling |
+| Full preview dialog | `<dialog class="preview-dialog">` | Native `<dialog>` element — free focus trap and Escape handling; explicit `aria-labelledby` / `aria-describedby` bind the visible icon name and resize guidance as its accessible name/description |
 | Toast | `.toast-region` | `aria-live="polite"`, auto-dismiss after 2.8s, no stacking cap yet (see `TASK.md` backlog) |
 
 ## 5. Icon design system
@@ -136,9 +136,14 @@ Before drawing a new icon, check existing geometry for visual collision (documen
 
 - Interactive targets are ≥44px (`--control-height` equivalent throughout).
 - `aria-live="polite"` regions: results summary, toast region.
+- Catalogue search uses a visually-hidden text label for its accessible name; the visible `/` shortcut hint is `aria-hidden` so it is not mistaken for the label.
 - `aria-pressed`/`aria-expanded`/`aria-current` used correctly for toggle/disclosure/nav-active state.
 - Decorative catalogue previews: `aria-hidden="true"`. Exported/semantic icon output can instead carry `<title>` + `aria-labelledby` when "Include title" is on.
-- Full preview uses the native `<dialog>` element (built-in focus trap, `Escape` close) rather than a hand-rolled modal.
+- Full preview uses the native `<dialog>` element (built-in focus trap, `Escape` close) rather than a hand-rolled modal, with explicit `aria-labelledby` and `aria-describedby` relationships to its visible heading and guidance text.
+- Generated-code format switching follows the ARIA tabs pattern: labelled `tablist`, `tab` → `tabpanel` relationships, one tabbable active tab, and Arrow Left/Right plus Home/End keyboard navigation.
+- Catalogue Grid/Compact density buttons use `aria-pressed` so their mutually-exclusive selected state is available to assistive technology as well as visually.
+- At drawer breakpoints, mobile navigation and inspector drawers move focus inside when opened, keep keyboard Tab navigation inside the active drawer, and return focus to the opening trigger when closed.
+- While a drawer is active, non-active shell regions use native `inert` so background controls are removed from keyboard navigation and the accessibility tree; inspector takes precedence during a sidebar → inspector handoff.
 - `prefers-reduced-motion: reduce` is respected globally.
 
 ## 7. Security-adjacent design constraints
@@ -148,6 +153,7 @@ These aren't visual, but they constrain what any new UI feature is allowed to do
 - No feature may render untrusted SVG/HTML via raw `innerHTML`; everything goes through the sanitizer.
 - A Content-Security-Policy meta tag is live in `index.html` (`v0.4.0`); any new inline `<script>` or `<style>` would need a CSP change, not just a code change — treat that as a signal to reconsider the approach, not just widen the policy.
 - Clipboard writes must stay user-initiated (button click), never automatic.
+- Browser-local uploaded metadata must never replace a canonical built-in icon ID; the SSOT catalogue wins on ID collision.
 
 ## 8. What's next (design-relevant)
 
