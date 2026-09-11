@@ -102,8 +102,9 @@
 - `v0.9.8` — Hardened service-worker navigation caching so failed, non-HTML, or unrelated navigations cannot overwrite the known-good offline app-shell fallback; bumped the cache generation to evict pre-fix entries.
 - `v0.9.9` — Made stale-while-revalidate asset refreshes lifetime-safe by extending each fetch event until the background network refresh and cache write finish.
 - `v0.9.10` — Scoped service-worker cache eviction to Icon Studio-owned cache names so activation cannot delete unrelated CacheStorage from other same-origin applications.
+- `v0.9.11` — Bounded service-worker runtime caching to canonical Icon Studio asset namespaces and query-free URLs so cache-busting/arbitrary same-origin requests cannot grow the persistent cache.
 
-**Status:** Complete for the current scope through `v0.9.10`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
+**Status:** Complete for the current scope through `v0.9.11`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
 
 ---
 

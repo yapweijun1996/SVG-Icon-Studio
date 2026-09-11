@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.11 — 2026-09-12
+
+### Fixed
+
+- Service-worker runtime caching is now limited to canonical Icon Studio asset namespaces (`assets/`, `data/`, `icons/`, `icons-pwa/`, and the manifest) with query-free URLs. Cache-busting query variants, arbitrary same-scope requests, and same-origin resources outside the application scope bypass CacheStorage instead of creating persistent entries. The cache generation is bumped to `icon-studio-v3` so broad pre-fix runtime entries are evicted on activation.
+
+### Validation
+
+- Pre-fix deterministic reproduction on `v0.9.10` showed three query variants of one asset, an arbitrary same-scope API-like URL, and an out-of-scope same-origin URL all being intercepted and written as distinct runtime cache keys. Focused service-worker boundary regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and real Chrome cache-boundary verification cover the fix.
+
 ## 0.9.10 — 2026-09-12
 
 ### Fixed

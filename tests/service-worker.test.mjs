@@ -59,7 +59,7 @@ async function navigate(harness, url) {
   return responsePromise;
 }
 
-async function fetchAsset(harness, url) {
+function dispatchAsset(harness, url) {
   let responsePromise;
   const lifetimePromises = [];
   harness.listeners.fetch({
@@ -67,21 +67,26 @@ async function fetchAsset(harness, url) {
     respondWith(promise) { responsePromise = Promise.resolve(promise); },
     waitUntil(promise) { lifetimePromises.push(Promise.resolve(promise)); }
   });
-  assert.ok(responsePromise, 'asset request should be intercepted by the service worker');
   return { responsePromise, lifetimePromises };
 }
 
-assert.match(source, /const CACHE_VERSION = 'icon-studio-v2'/, 'cache version should invalidate the pre-fix navigation cache');
+async function fetchAsset(harness, url) {
+  const result = dispatchAsset(harness, url);
+  assert.ok(result.responsePromise, 'cacheable asset request should be intercepted by the service worker');
+  return result;
+}
+
+assert.match(source, /const CACHE_VERSION = 'icon-studio-v3'/, 'cache version should invalidate pre-boundary runtime entries');
 assert.match(source, /key\.startsWith\(CACHE_PREFIX\)/, 'activation should scope cleanup to Icon Studio-owned cache names');
 
 {
   const harness = createHarness(async () => new Response('ok'), {
-    cacheNames: ['other-project-v7', 'icon-studio-v1', 'icon-studio-v2', 'public-api-cache-v3']
+    cacheNames: ['other-project-v7', 'icon-studio-v1', 'icon-studio-v2', 'icon-studio-v3', 'public-api-cache-v3']
   });
   await activate(harness);
   assert.deepEqual(
     harness.deletedCaches,
-    ['icon-studio-v1'],
+    ['icon-studio-v1', 'icon-studio-v2'],
     'activation must delete only obsolete Icon Studio caches and preserve unrelated same-origin caches'
   );
 }
@@ -125,6 +130,25 @@ assert.match(source, /key\.startsWith\(CACHE_PREFIX\)/, 'activation should scope
   assert.equal(harness.puts.length, 0, 'non-HTML responses must not become the offline document fallback');
 }
 
+
+{
+  const harness = createHarness(async () => new Response('network', {
+    status: 200,
+    headers: { 'content-type': 'text/plain' }
+  }));
+
+  for (const url of [
+    'https://example.test/app/assets/app.js?v=1',
+    'https://example.test/app/assets/app.js?v=2',
+    'https://example.test/other-project/data.json',
+    'https://example.test/app/api/search?q=invoice'
+  ]) {
+    const { responsePromise, lifetimePromises } = dispatchAsset(harness, url);
+    assert.equal(responsePromise, undefined, `${url} should bypass service-worker runtime caching`);
+    assert.equal(lifetimePromises.length, 0, `${url} should not extend the service-worker lifetime`);
+  }
+  assert.equal(harness.puts.length, 0, 'query-bearing, arbitrary, and out-of-scope requests must not grow the runtime cache');
+}
 
 {
   let resolveNetwork;

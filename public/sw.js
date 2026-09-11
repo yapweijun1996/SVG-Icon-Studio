@@ -3,8 +3,24 @@
    URL so the same file works at the domain root and under a GitHub Pages
    subpath. Bump CACHE_VERSION to invalidate every cached asset at once. */
 const CACHE_PREFIX = 'icon-studio-';
-const CACHE_VERSION = 'icon-studio-v2';
+const CACHE_VERSION = 'icon-studio-v3';
 const APP_SHELL = ['./', './index.html', './manifest.webmanifest'];
+const CACHEABLE_ASSET_PREFIXES = ['assets/', 'data/', 'icons/', 'icons-pwa/'];
+
+function getScopePath() {
+  const scopeUrl = new URL(self.registration.scope);
+  return scopeUrl.pathname.endsWith('/') ? scopeUrl.pathname : `${scopeUrl.pathname}/`;
+}
+
+function isCacheableAssetRequest(request) {
+  const requestUrl = new URL(request.url);
+  const scopePath = getScopePath();
+  if (!requestUrl.pathname.startsWith(scopePath) || requestUrl.search) return false;
+
+  const relativePath = requestUrl.pathname.slice(scopePath.length);
+  return relativePath === 'manifest.webmanifest'
+    || CACHEABLE_ASSET_PREFIXES.some(prefix => relativePath.startsWith(prefix));
+}
 
 self.addEventListener('install', event => {
   event.waitUntil(
@@ -37,8 +53,7 @@ self.addEventListener('fetch', event => {
       fetch(request)
         .then(async response => {
           const requestUrl = new URL(request.url);
-          const scopeUrl = new URL(self.registration.scope);
-          const scopePath = scopeUrl.pathname.endsWith('/') ? scopeUrl.pathname : `${scopeUrl.pathname}/`;
+          const scopePath = getScopePath();
           const isAppShell = requestUrl.pathname === scopePath || requestUrl.pathname === `${scopePath}index.html`;
           const isHtml = response.headers.get('content-type')?.includes('text/html');
 
@@ -57,6 +72,11 @@ self.addEventListener('fetch', event => {
     );
     return;
   }
+
+  // Cache only canonical app-owned assets. Query-bearing URLs and same-origin
+  // requests outside the app's resource namespaces bypass CacheStorage so
+  // arbitrary/cache-busting requests cannot grow this persistent cache forever.
+  if (!isCacheableAssetRequest(request)) return;
 
   // Assets: serve cache immediately, refresh it in the background. Keep the
   // fetch + cache write inside this FetchEvent's lifetime so Chromium cannot

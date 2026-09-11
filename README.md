@@ -5,7 +5,7 @@
 An SVG catalogue, customisation and export workspace built with static HTML, modular CSS and browser-native ES modules. The runtime itself still has zero third-party dependencies — [Vite](https://vitejs.dev) is only a dev-server/bundler wrapper on top, used for local development and the GitHub Pages build.
 
 - Project ID: `project_f2a74b23-33c1-4c5c-b43d-e2b5b3108428`
-- Release: `v0.9.10`
+- Release: `v0.9.11`
 - Entry: `index.html`
 - Live demo: https://yapweijun1996.github.io/SVG-Icon-Studio/ (built and deployed automatically from `main` by [.github/workflows/deploy.yml](.github/workflows/deploy.yml))
 - License: [MIT](LICENSE)
@@ -153,6 +153,8 @@ npm run preview   # serve the dist/ build locally to sanity-check it
 ```
 
 `vite.config.js` uses `base: './'` (relative asset paths) so the same build works unmodified from a GitHub Pages project page, a custom domain, or a local folder. `data/icon-registry.json` and `icons/catalog/*.svg` are fetched at runtime by URL rather than imported, so a small Vite plugin in `vite.config.js` copies both folders into `dist/` verbatim during build.
+
+The production service worker caches only canonical app resources under `assets/`, `data/`, `icons/`, `icons-pwa/`, plus the manifest. Requests with query strings and unrelated same-origin paths stay network-managed instead of becoming persistent CacheStorage keys, which prevents cache-busting URLs and neighboring applications from causing unbounded runtime-cache growth.
 
 Pushing to `main` runs [.github/workflows/deploy.yml](.github/workflows/deploy.yml): install → `npm test` → `npm run build` → publish `dist/` to GitHub Pages. To enable it on a fork, turn on **Settings → Pages → Source: GitHub Actions** once.
 
