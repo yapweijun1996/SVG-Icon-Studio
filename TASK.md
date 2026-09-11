@@ -50,6 +50,7 @@
 - [x] Browser/build SVG validation allows the standard XML declaration but rejects all other XML processing instructions consistently
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
 - [x] Browser/build SVG validation rejects foreign child namespaces even when the local element name is allowlisted
+- [x] Build-time SVG validation ignores tag-like text inside complete XML comments/CDATA while still rejecting real forbidden elements
 - [x] Persisted uploaded icons are revalidated before registration so assets rejected by newer security policy do not surface as broken catalogue entries
 - [x] Legacy localStorage upload migration preserves records beyond its 50-item batch and retains failed records for retry instead of deleting user data
 - [x] Persisted/legacy uploaded records cannot overwrite canonical built-in icon IDs during registration
@@ -71,7 +72,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.7.19` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.7.20` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 

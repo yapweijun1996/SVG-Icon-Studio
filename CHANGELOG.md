@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.20 — 2026-09-11
+
+### Fixed
+
+- The Node/build-time SVG validator no longer treats tag-like text inside complete XML comments or CDATA sections as active SVG markup. Inert `<script>` / `<image>` text now matches browser `DOMParser` behavior, while real forbidden elements remain rejected.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Differential checks confirm Chromium accepts the inert comment/CDATA payloads and rejects real `script` / `image` elements; the Node validator now produces the same allow/deny outcomes.
+
 ## 0.7.19 — 2026-09-11
 
 ### Fixed

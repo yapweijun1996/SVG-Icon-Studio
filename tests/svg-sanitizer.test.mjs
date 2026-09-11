@@ -12,6 +12,14 @@ assert.equal(inspectSvgText(safe.replace('<path', '<?evil x?><path')).ok, false)
 assert.equal(inspectSvgText(safe.replace('<path', '<g xmlns="https://evil.example/ns"><path d="M0 0h1"/></g><path')).ok, false);
 assert.equal(inspectSvgText(safe.replace('<path', '<path xmlns="https://evil.example/ns" d="M0 0h1"/><path')).ok, false);
 assert.equal(inspectSvgText(safe.replace('<path', '<svg xmlns="https://evil.example/ns" viewBox="0 0 24 24"><path d="M0 0h1"/></svg><path')).ok, false);
+// XML comments and CDATA are inert. Tag-like text inside them must not be
+// mistaken for active SVG elements by the regex-based build validator.
+assert.equal(inspectSvgText(safe.replace('<path', '<!-- <script>alert(1)</script> --><path')).ok, true);
+assert.equal(inspectSvgText(safe.replace('<path', '<![CDATA[<script>alert(1)</script>]]><path')).ok, true);
+assert.equal(inspectSvgText(safe.replace('<path', '<!-- <image href="https://evil.example/x"/> --><path')).ok, true);
+assert.equal(inspectSvgText(safe.replace('<path', '<![CDATA[<image href="https://evil.example/x"/>]]><path')).ok, true);
+assert.equal(inspectSvgText(safe.replace('<path', '<!-- unclosed <path')).ok, false);
+assert.equal(inspectSvgText(safe.replace('<path', '<![CDATA[unclosed <path')).ok, false);
 assert.equal(inspectSvgText(safe.replace('<path', '<script>alert(1)</script><path')).ok, false);
 assert.equal(inspectSvgText(safe.replace('<path', '<path onclick="alert(1)"')).ok, false);
 assert.equal(inspectSvgText(safe.replace('currentColor', 'url(https://example.com/x)')).ok, false);

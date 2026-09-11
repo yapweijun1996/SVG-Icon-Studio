@@ -43,9 +43,17 @@ export function inspectSvgText(text) {
   if (!new RegExp(`\\bxmlns\\s*=\\s*["']${REQUIRED_NAMESPACE.replace(/\//g, '\\/')}["']`, 'i').test(attrs)) {
     errors.push('SVG namespace is required.');
   }
+  // Comments and CDATA are inert XML text. Ignore complete sections while scanning
+  // for element/attribute policy violations so tag-like text inside them is not
+  // mistaken for executable SVG markup. If an opening delimiter remains after
+  // complete sections are removed, the XML section is unclosed and must fail closed.
+  const scanText = canonicalText
+    .replace(/<!--[\s\S]*?-->/g, '')
+    .replace(/<!\[CDATA\[[\s\S]*?\]\]>/g, '');
+  if (/<!--|<!\[CDATA\[/.test(scanText)) errors.push('Malformed XML comment or CDATA section.');
   const tagRegex = /<\/?\s*([a-zA-Z][\w:-]*)\b([^>]*)>/g;
   let tagMatch;
-  while ((tagMatch = tagRegex.exec(canonicalText))) {
+  while ((tagMatch = tagRegex.exec(scanText))) {
     const tag = tagMatch[1].toLowerCase();
     if (FORBIDDEN_ELEMENTS.has(tag) || !ALLOWED_ELEMENTS.has(tag)) errors.push(`Forbidden SVG element: ${tag}.`);
     if (tagMatch[0].startsWith('</')) continue;
@@ -61,6 +69,6 @@ export function inspectSvgText(text) {
       if (name !== 'xmlns' && isInvalidReference(value)) errors.push(`External reference is forbidden: ${name}.`);
     }
   }
-  if (!/<\/svg>\s*$/i.test(canonicalText)) errors.push('SVG closing tag is missing.');
+  if (!/<\/svg>\s*$/i.test(scanText)) errors.push('SVG closing tag is missing.');
   return { ok: errors.length === 0, errors: [...new Set(errors)] };
 }
