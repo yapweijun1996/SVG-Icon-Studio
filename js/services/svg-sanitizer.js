@@ -3,6 +3,8 @@ import {
   REQUIRED_NAMESPACE,
   MAX_SVG_LENGTH,
   ALLOWED_ATTRIBUTES,
+  isCanonicalElementName,
+  isCanonicalAttributeName,
   isDisallowedElement,
   isEventAttribute,
   isHrefAttribute,
@@ -22,7 +24,7 @@ export function sanitizeSvgText(raw, { stripDimensions = false } = {}) {
     const documentNode = new DOMParser().parseFromString(raw, 'image/svg+xml');
     if (documentNode.querySelector('parsererror')) throw new Error('SVG XML is invalid.');
     const root = documentNode.documentElement;
-    if (!root || root.tagName.toLowerCase() !== 'svg') throw new Error('SVG root is required.');
+    if (!root || !isCanonicalElementName(root.tagName)) throw new Error('SVG root is required.');
     if (root.getAttribute('xmlns') !== REQUIRED_NAMESPACE) throw new Error('SVG namespace is required.');
     const viewBox = String(root.getAttribute('viewBox') || '').replace(/\s+/g, ' ').trim();
     if (viewBox !== REQUIRED_VIEWBOX) throw new Error('SVG viewBox must be exactly 0 0 24 24.');
@@ -35,14 +37,13 @@ export function sanitizeSvgText(raw, { stripDimensions = false } = {}) {
 
     const elements = [root, ...root.querySelectorAll('*')];
     for (const element of elements) {
-      const tag = element.tagName.toLowerCase();
       if (element.namespaceURI !== REQUIRED_NAMESPACE) throw new Error(`Foreign SVG namespace is forbidden: ${element.namespaceURI || 'none'}.`);
-      if (isDisallowedElement(tag)) throw new Error(`Forbidden SVG element: ${element.tagName}.`);
+      if (isDisallowedElement(element.tagName) || !isCanonicalElementName(element.tagName)) throw new Error(`Forbidden SVG element: ${element.tagName}.`);
       for (const attribute of [...element.attributes]) {
         const name = attribute.name.toLowerCase();
         if (isEventAttribute(name)) throw new Error(`Event attribute is forbidden: ${attribute.name}.`);
         if (isHrefAttribute(name)) throw new Error('SVG references are forbidden.');
-        if (!ALLOWED_ATTRIBUTES.has(name)) throw new Error(`Unsupported SVG attribute: ${attribute.name}.`);
+        if (!ALLOWED_ATTRIBUTES.has(name) || !isCanonicalAttributeName(attribute.name)) throw new Error(`Unsupported SVG attribute: ${attribute.name}.`);
         if (name !== 'xmlns' && isInvalidReference(attribute.value)) throw new Error(`External SVG reference is forbidden: ${attribute.name}.`);
       }
     }

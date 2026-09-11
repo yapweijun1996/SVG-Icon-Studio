@@ -2,8 +2,10 @@ import {
   REQUIRED_VIEWBOX,
   REQUIRED_NAMESPACE,
   ALLOWED_ELEMENTS,
+  isCanonicalElementName,
   FORBIDDEN_ELEMENTS,
   ALLOWED_ATTRIBUTES,
+  isCanonicalAttributeName,
   isEventAttribute,
   isHrefAttribute,
   hasForbiddenDoctype,
@@ -225,14 +227,14 @@ export function inspectSvgText(text) {
   // leading prolog comments for root discovery; the full text is still scanned
   // below so malformed/unclosed comments continue to fail closed.
   const rootText = canonicalText.replace(/^(?:\s*<!--[\s\S]*?-->\s*)*/, '');
-  if (!/^<svg\b/i.test(rootText)) errors.push('SVG root is missing.');
-  const rootMatch = rootText.match(/^<svg\b([^>]*)>/i);
+  if (!/^<svg\b/.test(rootText)) errors.push('SVG root is missing.');
+  const rootMatch = rootText.match(/^<svg\b([^>]*)>/);
   if (!rootMatch) return { ok: false, errors };
   const attrs = rootMatch[1];
-  const viewBox = attrs.match(/\bviewBox\s*=\s*["']([^"']+)["']/)?.[1]?.replace(/\s+/g, ' ').trim();
+  const viewBox = attrs.match(/(?:^|\s)viewBox\s*=\s*["']([^"']+)["']/)?.[1]?.replace(/\s+/g, ' ').trim();
   if (viewBox !== REQUIRED_VIEWBOX) errors.push('viewBox must be exactly 0 0 24 24.');
   if (/(?:^|\s)(width|height)\s*=/i.test(attrs)) errors.push('Fixed root width/height is forbidden.');
-  if (!new RegExp(`\\bxmlns\\s*=\\s*["']${REQUIRED_NAMESPACE.replace(/\//g, '\\/')}["']`).test(attrs)) {
+  if (!new RegExp(`(?:^|\\s)xmlns\\s*=\\s*["']${REQUIRED_NAMESPACE.replace(/\//g, '\\/')}["']`).test(attrs)) {
     errors.push('SVG namespace is required.');
   }
   // Comments and CDATA are inert XML text. Ignore complete sections while scanning
@@ -254,8 +256,8 @@ export function inspectSvgText(text) {
   const nesting = validateXmlTagNesting(scannedTags.tags);
   if (!nesting.ok) errors.push(nesting.error);
   for (const scannedTag of scannedTags.tags) {
-    const tag = scannedTag.name.toLowerCase();
-    if (FORBIDDEN_ELEMENTS.has(tag) || !ALLOWED_ELEMENTS.has(tag)) errors.push(`Forbidden SVG element: ${tag}.`);
+    const tag = scannedTag.name;
+    if (FORBIDDEN_ELEMENTS.has(tag.toLowerCase()) || !ALLOWED_ELEMENTS.has(tag.toLowerCase()) || !isCanonicalElementName(tag)) errors.push(`Forbidden SVG element: ${tag}.`);
     if (scannedTag.closing) {
       if (scannedTag.rawAttributes.trim()) errors.push(`Malformed SVG closing tag: ${scannedTag.name}.`);
       continue;
@@ -270,11 +272,11 @@ export function inspectSvgText(text) {
       const value = decodeXmlAttributeValue(rawValue);
       if (isEventAttribute(name)) errors.push(`Event attribute is forbidden: ${name}.`);
       else if (isHrefAttribute(name)) errors.push('SVG href references are forbidden.');
-      else if (!ALLOWED_ATTRIBUTES.has(name)) errors.push(`Unsupported SVG attribute: ${name}.`);
+      else if (!ALLOWED_ATTRIBUTES.has(name) || !isCanonicalAttributeName(attributeName)) errors.push(`Unsupported SVG attribute: ${attributeName}.`);
       if (name === 'xmlns' && value !== REQUIRED_NAMESPACE) errors.push('Foreign SVG namespace is forbidden.');
       if (name !== 'xmlns' && isInvalidReference(value)) errors.push(`External reference is forbidden: ${name}.`);
     }
   }
-  if (!/<\/svg>\s*$/i.test(scanText)) errors.push('SVG closing tag is missing.');
+  if (!/<\/svg>\s*$/.test(scanText)) errors.push('SVG closing tag is missing.');
   return { ok: errors.length === 0, errors: [...new Set(errors)] };
 }

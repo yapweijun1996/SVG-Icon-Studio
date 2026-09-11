@@ -55,6 +55,7 @@
 - [x] Node/build SVG validation rejects illegal raw XML 1.0 code points in text, attributes, comments, and CDATA while preserving legal ranges
 - [x] Node/build SVG validation treats canonical root `viewBox` and `xmlns` names as case-sensitive, matching browser XML parsing
 - [x] Browser SVG validation rejects root `width`/`height` case variants and strips them safely during import normalization without affecting child dimensions
+- [x] Browser and Node/build SVG validation require exact canonical element and attribute names while preserving normalized conversion and case-insensitive security checks
 - [x] Node/build SVG validation accepts complete XML comments before the root element while rejecting unterminated leading comments
 - [x] Node/build SVG validation rejects duplicate, unquoted, bare and malformed XML attributes while preserving valid quoted values
 - [x] Browser/build SVG validation rejects foreign child namespaces even when the local element name is allowlisted
@@ -80,7 +81,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.7.29` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.7.30` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 

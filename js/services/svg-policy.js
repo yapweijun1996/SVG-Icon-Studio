@@ -11,6 +11,14 @@ export const ALLOWED_ELEMENTS = new Set([
   'title', 'desc', 'defs', 'clippath', 'mask'
 ]);
 
+// XML/SVG names are case-sensitive. Keep the normalized sets above for the
+// conversion tool's existing behavior, but use these exact spellings when
+// validating parsed or submitted SVG documents.
+export const CANONICAL_ALLOWED_ELEMENTS = new Set([
+  'svg', 'g', 'path', 'circle', 'ellipse', 'rect', 'line', 'polyline', 'polygon',
+  'title', 'desc', 'defs', 'clipPath', 'mask'
+]);
+
 export const FORBIDDEN_ELEMENTS = new Set([
   'script', 'foreignobject', 'iframe', 'object', 'embed', 'image', 'audio', 'video',
   'animate', 'animatemotion', 'animatetransform', 'set', 'style', 'a', 'use'
@@ -24,6 +32,34 @@ export const ALLOWED_ATTRIBUTES = new Set([
   'maskcontentunits', 'vector-effect', 'aria-hidden', 'role', 'aria-labelledby',
   'focusable'
 ]);
+
+export const CANONICAL_ALLOWED_ATTRIBUTES = new Set([
+  'xmlns', 'viewBox', 'd', 'cx', 'cy', 'r', 'rx', 'ry', 'x', 'y', 'x1', 'y1',
+  'x2', 'y2', 'width', 'height', 'points', 'transform', 'fill', 'stroke',
+  'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'fill-rule', 'clip-rule',
+  'opacity', 'id', 'clip-path', 'mask', 'clipPathUnits', 'maskUnits',
+  'maskContentUnits', 'vector-effect', 'aria-hidden', 'role', 'aria-labelledby',
+  'focusable'
+]);
+
+const CANONICAL_ELEMENT_NAMES = new Map([...CANONICAL_ALLOWED_ELEMENTS].map(name => [name.toLowerCase(), name]));
+const CANONICAL_ATTRIBUTE_NAMES = new Map([...CANONICAL_ALLOWED_ATTRIBUTES].map(name => [name.toLowerCase(), name]));
+
+export function canonicalizeAllowedElementName(name) {
+  return CANONICAL_ELEMENT_NAMES.get(String(name).toLowerCase()) || null;
+}
+
+export function canonicalizeAllowedAttributeName(name) {
+  return CANONICAL_ATTRIBUTE_NAMES.get(String(name).toLowerCase()) || null;
+}
+
+export function isCanonicalElementName(name) {
+  return CANONICAL_ALLOWED_ELEMENTS.has(name);
+}
+
+export function isCanonicalAttributeName(name) {
+  return CANONICAL_ALLOWED_ATTRIBUTES.has(name);
+}
 
 export function isDisallowedElement(tag) {
   const normalized = tag.toLowerCase();

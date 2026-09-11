@@ -32,6 +32,20 @@ import { convertSvgText, pixelateSvgText, rasterizeShapes, gridToRects } from '.
   assert.equal(result.check.ok, true, result.check.errors?.join('; '));
 }
 
+// Canonical XML/SVG case is restored during conversion. The converter accepts
+// arbitrary input case for allowed names, but its output must pass the strict
+// browser/build validator (not emit generic <clippath> elements or inert D/FILL attributes).
+{
+  const source = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><CLIPPATH CLIPPATHUNITS="userSpaceOnUse" id="clip"><PATH D="M0 0h1v1z"/></CLIPPATH></defs><PATH D="M1 1h2" FILL="none" clip-path="url(#clip)"/></svg>';
+  const result = convertSvgText(source);
+  assert.equal(result.check.ok, true, result.check.errors?.join('; '));
+  assert.ok(result.output.includes('<clipPath clipPathUnits="userSpaceOnUse"'));
+  assert.ok(result.output.includes('<path d="M0 0h1v1z"'));
+  assert.ok(result.output.includes('fill="none"'));
+  assert.ok(!result.output.includes('<clippath'));
+  assert.ok(!result.output.includes(' D='));
+}
+
 // Multiple distinct fill colours must NOT be collapsed into one currentColor.
 {
   const source = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="12" height="24" fill="#ff0000"/><rect x="12" width="12" height="24" fill="#00ff00"/></svg>';

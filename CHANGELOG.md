@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.30 — 2026-09-11
+
+### Fixed
+
+- Browser and Node/build SVG validation now require exact canonical XML element and attribute spellings. Case variants such as `PATH`, `D`, `FILL`, `clippath`, and `clippathunits` are rejected, while case-insensitive security checks remain unchanged. `tools/convert-svg.mjs` keeps accepting normalized arbitrary-input case but now rewrites allowed names to canonical spellings (for example `CLIPPATH` → `clipPath`) so converted output still passes the stricter validator.
+
+### Validation
+
+- Focused canonical-name regressions cover valid `path`/`d`/`fill` and `clipPath`/`clipPathUnits` spellings, rejected case variants, and converter canonicalization; `npm run typecheck`, `npm test`, `npm run validate`, `npm run build`, and `git diff --check` pass.
+- Real Chrome validation calls `sanitizeSvgText()` directly: canonical `path`/`clipPath` inputs pass, `PATH`/`D`/`FILL`/`clippath`/`clippathunits` variants fail, and the existing `stripDimensions` exception still removes uppercase root dimensions safely.
+
 ## 0.7.29 — 2026-09-11
 
 ### Fixed

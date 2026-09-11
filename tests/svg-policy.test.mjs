@@ -3,6 +3,10 @@ import {
   ALLOWED_ATTRIBUTES,
   isDisallowedElement,
   isDisallowedAttribute,
+  isCanonicalElementName,
+  isCanonicalAttributeName,
+  canonicalizeAllowedElementName,
+  canonicalizeAllowedAttributeName,
   isEventAttribute,
   isHrefAttribute,
   isDimensionAttribute,
@@ -27,6 +31,16 @@ assert.equal(isDisallowedElement('path'), false);
 assert.equal(isDisallowedElement('script'), true);
 assert.equal(isDisallowedElement('use'), true, 'use is forbidden (it can reference external content)');
 assert.equal(isDisallowedElement('marquee'), true, 'unknown elements are rejected by default (allow-list, not deny-list)');
+assert.equal(isCanonicalElementName('path'), true);
+assert.equal(isCanonicalElementName('PATH'), false, 'element names must use canonical XML case');
+assert.equal(isCanonicalElementName('clipPath'), true);
+assert.equal(isCanonicalElementName('clippath'), false, 'clipPath must use canonical XML case');
+assert.equal(isCanonicalAttributeName('d'), true);
+assert.equal(isCanonicalAttributeName('D'), false, 'attribute names must use canonical XML case');
+assert.equal(isCanonicalAttributeName('clipPathUnits'), true);
+assert.equal(isCanonicalAttributeName('clippathunits'), false, 'clipPathUnits must use canonical XML case');
+assert.equal(canonicalizeAllowedElementName('CLIPPATH'), 'clipPath', 'conversion tooling can normalize allowed element case to canonical spelling');
+assert.equal(canonicalizeAllowedAttributeName('CLIPPATHUNITS'), 'clipPathUnits', 'conversion tooling can normalize allowed attribute case to canonical spelling');
 
 assert.equal(isEventAttribute('onclick'), true);
 assert.equal(isEventAttribute('onLoad'), true);

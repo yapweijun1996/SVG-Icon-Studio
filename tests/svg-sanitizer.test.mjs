@@ -2,6 +2,17 @@ import assert from 'node:assert/strict';
 import { inspectSvgText } from '../tools/svg-policy.mjs';
 const safe = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M1 1h2"/></svg>';
 assert.equal(inspectSvgText(safe).ok, true);
+const canonicalClip = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><clipPath clipPathUnits="userSpaceOnUse" id="clip"><path d="M0 0h1v1z"/></clipPath></defs><path d="M1 1h2" fill="none" clip-path="url(#clip)"/></svg>';
+assert.equal(inspectSvgText(canonicalClip).ok, true, 'canonical path/d/fill and clipPath/clipPathUnits spellings are accepted');
+for (const variant of [
+  safe.replace('<path', '<PATH'),
+  safe.replace('d="M1 1h2"', 'D="M1 1h2"'),
+  safe.replace('stroke="currentColor"', 'FILL="none" stroke="currentColor"'),
+  canonicalClip.replace('<clipPath', '<clippath').replace('</clipPath>', '</clippath>'),
+  canonicalClip.replace('clipPathUnits=', 'clippathunits=')
+]) {
+  assert.equal(inspectSvgText(variant).ok, false, 'non-canonical SVG name case must be rejected');
+}
 // XML attribute names are case-sensitive. DOMParser therefore does not expose
 // case variants as the canonical viewBox/xmlns attributes; build validation
 // must reject the same inputs instead of matching them case-insensitively.
