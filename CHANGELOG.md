@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.21 — 2026-09-11
+
+### Fixed
+
+- The Node/build-time SVG validator now rejects a stray `]]>` CDATA close delimiter in normal character data, matching browser `DOMParser` XML parsing. The same sequence remains valid inside quoted attribute values and complete CDATA sections.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium and Node differential checks confirm stray character-data `]]>` is rejected by both, while quoted-attribute and complete-CDATA cases remain accepted.
+
 ## 0.7.20 — 2026-09-11
 
 ### Fixed

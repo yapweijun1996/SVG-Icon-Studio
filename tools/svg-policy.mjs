@@ -27,6 +27,26 @@ function decodeXmlAttributeValue(value) {
   });
 }
 
+function hasStrayCdataClose(text) {
+  let inTag = false;
+  let quote = null;
+  for (let index = 0; index < text.length; index += 1) {
+    const char = text[index];
+    if (!inTag) {
+      if (text.startsWith(']]>', index)) return true;
+      if (char === '<') inTag = true;
+      continue;
+    }
+    if (quote) {
+      if (char === quote) quote = null;
+      continue;
+    }
+    if (char === '"' || char === "'") quote = char;
+    else if (char === '>') inTag = false;
+  }
+  return false;
+}
+
 export function inspectSvgText(text) {
   const errors = [];
   if (typeof text !== 'string' || !text.trim()) return { ok: false, errors: ['SVG is empty.'] };
@@ -51,6 +71,7 @@ export function inspectSvgText(text) {
     .replace(/<!--[\s\S]*?-->/g, '')
     .replace(/<!\[CDATA\[[\s\S]*?\]\]>/g, '');
   if (/<!--|<!\[CDATA\[/.test(scanText)) errors.push('Malformed XML comment or CDATA section.');
+  if (hasStrayCdataClose(scanText)) errors.push('Stray CDATA close delimiter is forbidden.');
   const tagRegex = /<\/?\s*([a-zA-Z][\w:-]*)\b([^>]*)>/g;
   let tagMatch;
   while ((tagMatch = tagRegex.exec(scanText))) {
