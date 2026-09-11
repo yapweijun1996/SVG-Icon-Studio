@@ -156,10 +156,10 @@ function scanXmlTags(text) {
     const closing = text[openIndex + 1] === '/';
     const nameStart = openIndex + (closing ? 2 : 1);
     const nameMatch = text.slice(nameStart).match(/^([A-Za-z][\w:-]*)\b/);
-    if (!nameMatch) {
-      index = openIndex + 1;
-      continue;
-    }
+    // After comments, CDATA, and the one permitted XML declaration are handled
+    // separately, every remaining raw '<' must begin an element tag. XML does
+    // not permit a literal '<' in character data; callers must use &lt;.
+    if (!nameMatch) return { ok: false, error: 'Malformed XML markup.', tags };
     const name = nameMatch[1];
     const attributesStart = nameStart + name.length;
     let cursor = attributesStart;

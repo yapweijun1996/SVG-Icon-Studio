@@ -85,6 +85,15 @@ assert.equal(inspectSvgText(safe.replace('<path', '<!-- <script>alert(1)</script
 assert.equal(inspectSvgText(safe.replace('<path', '<![CDATA[<script>alert(1)</script>]]><path')).ok, true);
 assert.equal(inspectSvgText(safe.replace('<path', '<!-- <image href="https://evil.example/x"/> --><path')).ok, true);
 assert.equal(inspectSvgText(safe.replace('<path', '<![CDATA[<image href="https://evil.example/x"/>]]><path')).ok, true);
+// XML character data cannot contain a literal '<'. Comments and CDATA are
+// handled separately, and escaped &lt; plus a literal '>' remain valid text.
+for (const text of ['a < b', 'a <! b', 'a </ b']) {
+  assert.equal(inspectSvgText(safe.replace('<path', `<title>${text}</title><path`)).ok, false, `raw < in XML character data rejected: ${text}`);
+}
+assert.equal(inspectSvgText(safe.replace('<path', '<title>a &lt; b</title><path')).ok, true, '&lt; remains the valid way to represent < in character data');
+assert.equal(inspectSvgText(safe.replace('<path', '<title>a > b</title><path')).ok, true, 'literal > remains valid in XML character data');
+assert.equal(inspectSvgText(safe.replace('<path', '<!-- a < b --><path')).ok, true, 'literal < remains valid inside a well-formed XML comment');
+assert.equal(inspectSvgText(safe.replace('<path', '<![CDATA[a < b]]><path')).ok, true, 'literal < remains valid inside CDATA');
 assert.equal(inspectSvgText(safe.replace('<path', 'text]]><path')).ok, false, 'stray ]]> in character data must match DOMParser rejection');
 assert.equal(inspectSvgText(safe.replace('d="M1 1h2"', 'd="M1 1h2]]>"')).ok, true, ']]> remains valid inside a quoted attribute value');
 assert.equal(inspectSvgText(safe.replace('<path', '<!-- unclosed <path')).ok, false);

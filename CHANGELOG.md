@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.7.33 — 2026-09-11
+
+### Fixed
+
+- The Node/build-time SVG validator now rejects a literal `<` in XML character data instead of silently skipping it during regex tag scanning. This matches Chromium XML parsing while preserving valid element markup, `&lt;`, literal `>`, comments, and CDATA.
+
+### Validation
+
+- Focused XML/SVG policy regression, `npm run typecheck`, `npm test`, `npm run validate`, `npm run build`, and `git diff --check` pass; a real Chrome `sanitizeSvgText()` differential confirms raw `<` cases reject while `&lt;`, literal `>`, comments, and CDATA controls remain accepted.
+
 ## 0.7.32 — 2026-09-11
 
 ### Fixed
