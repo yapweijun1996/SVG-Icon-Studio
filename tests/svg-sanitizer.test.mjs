@@ -9,6 +9,14 @@ assert.equal(inspectSvgText(`<!DOCTYPE svg [<!ENTITY x \"M1 1h2\">]>${safe}`).ok
 assert.equal(inspectSvgText(safe.replace('<path', '<script>alert(1)</script><path')).ok, false);
 assert.equal(inspectSvgText(safe.replace('<path', '<path onclick="alert(1)"')).ok, false);
 assert.equal(inspectSvgText(safe.replace('currentColor', 'url(https://example.com/x)')).ok, false);
+// DOMParser resolves XML character references before the browser policy sees values.
+// The build-time checker must do the same so encoded dangerous protocols cannot bypass CI.
+assert.equal(inspectSvgText(safe.replace('currentColor', 'jav&#x61;script:alert(1)')).ok, false);
+assert.equal(inspectSvgText(safe.replace('currentColor', 'url(h&#x74;tps://example.com/x.svg)')).ok, false);
+const encodedLocalReference = safe
+  .replace('stroke="currentColor"', 'stroke="none" clip-path="url(&#x23;clip)"')
+  .replace('<path', '<defs><clipPath id="clip"><path d="M0 0h1v1z"/></clipPath></defs><path');
+assert.equal(inspectSvgText(encodedLocalReference).ok, true, 'encoded local fragment references remain safe');
 assert.equal(inspectSvgText(safe.replace('viewBox="0 0 24 24"', 'viewBox="0 0 48 48"')).ok, false);
 assert.equal(inspectSvgText(safe.replace('<path', '<image href="data:image/png;base64,x"/><path')).ok, false);
 console.log('SVG security policy tests passed.');

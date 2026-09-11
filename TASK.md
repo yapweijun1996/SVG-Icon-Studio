@@ -47,6 +47,7 @@
 - [x] Catalogue Grid/Compact density controls expose synchronized `aria-pressed` selection state
 - [x] Catalogue search exposes a meaningful accessible name instead of announcing only the `/` keyboard shortcut hint
 - [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
+- [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
 - [x] Persisted uploaded icons are revalidated before registration so assets rejected by newer security policy do not surface as broken catalogue entries
 - [x] Legacy localStorage upload migration preserves records beyond its 50-item batch and retains failed records for retry instead of deleting user data
 - [x] Persisted/legacy uploaded records cannot overwrite canonical built-in icon IDs during registration
@@ -68,7 +69,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.7.16` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.7.17` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 

@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.17 — 2026-09-11
+
+### Fixed
+
+- The Node/build-time SVG validator now decodes XML character references in attribute values before applying external-reference rules. Encoded dangerous protocols such as `jav&#x61;script:` and encoded external URLs can no longer bypass CI/build validation while the browser sanitizer rejects the decoded value.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium confirms `DOMParser` decodes `jav&#x61;script:` and the browser sanitizer rejects it as an external reference. Before this fix the Node checker returned `ok: true`; after the fix both browser and build-time paths reject the same payload, while encoded local fragment references remain allowed.
+
 ## 0.7.16 — 2026-09-11
 
 ### Fixed

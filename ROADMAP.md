@@ -36,12 +36,13 @@
 | `v0.7.14` | 2026-09-11 | Keep valid uploads visible when orphan cleanup cannot write | 4 |
 | `v0.7.15` | 2026-09-11 | Retire verified legacy IndexedDB store | 4 |
 | `v0.7.16` | 2026-09-11 | Reconcile mixed direct v1→v3 upload upgrades | 4 |
+| `v0.7.17` | 2026-09-11 | Decode XML entities before build-time SVG reference checks | 4 |
 
 Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`.
 
 ---
 
-## Current state (as of `v0.7.16`)
+## Current state (as of `v0.7.17`)
 
 - 100 icons, 10 categories, 2 styles (91 outline / 9 filled).
 - Zero runtime dependencies; Vite is dev/build tooling only.

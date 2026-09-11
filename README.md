@@ -5,7 +5,7 @@
 An SVG catalogue, customisation and export workspace built with static HTML, modular CSS and browser-native ES modules. The runtime itself still has zero third-party dependencies — [Vite](https://vitejs.dev) is only a dev-server/bundler wrapper on top, used for local development and the GitHub Pages build.
 
 - Project ID: `project_f2a74b23-33c1-4c5c-b43d-e2b5b3108428`
-- Release: `v0.7.16`
+- Release: `v0.7.17`
 - Entry: `index.html`
 - Live demo: https://yapweijun1996.github.io/SVG-Icon-Studio/ (built and deployed automatically from `main` by [.github/workflows/deploy.yml](.github/workflows/deploy.yml))
 - License: [MIT](LICENSE)
@@ -131,6 +131,7 @@ Uploaded SVGs are a separate browser-local library. Metadata and sanitized SVG a
 - Exact 24×24 viewBox.
 - Allowlisted SVG elements and attributes only.
 - No scripts, event handlers, `foreignObject`, external URLs, data URLs, animations, embedded media or cross-origin references.
+- Browser and build-time checks both resolve XML character references before external-reference policy checks, so encoded protocols cannot bypass CI validation.
 - One failed asset receives a local fallback and does not break the catalogue.
 - A Content-Security-Policy `<meta>` tag in `index.html` provides defence in depth behind the sanitizer above (see `SPEC.md` ADR-009).
 

@@ -4,13 +4,13 @@
 **Project:** Icon Studio — SVG Icon Collection Admin Panel  
 **Code-MCP Project ID:** `project_f2a74b23-33c1-4c5c-b43d-e2b5b3108428`  
 **Status:** Living specification — the SSOT refactor this document originally proposed shipped in `v0.2.0` (2026-07-23) and is now the permanent baseline architecture. Sections 1–3 and 16 are kept as the historical record of that refactor; everything else describes the **current, as-built system**.  
-**Current release:** `v0.7.16` (2026-09-11) — see [CHANGELOG.md](CHANGELOG.md) for the full version history and [ROADMAP.md](ROADMAP.md) / [TASK.md](TASK.md) for what's planned next.
+**Current release:** `v0.7.17` (2026-09-11) — see [CHANGELOG.md](CHANGELOG.md) for the full version history and [ROADMAP.md](ROADMAP.md) / [TASK.md](TASK.md) for what's planned next.
 **Runtime:** Dependency-free static HTML, CSS and browser-native JavaScript (Vite is a dev-only wrapper — see ADR-001)  
 **Primary goal (original, achieved):** Replace the monolithic icon and application architecture with a scalable Single Source of Truth (SSOT) structure while preserving existing behaviour and visual output.
 
 ---
 
-## 0. Current status snapshot (v0.7.16, 2026-09-11)
+## 0. Current status snapshot (v0.7.17, 2026-09-11)
 
 A quick-reference dashboard so this document doesn't have to be read end-to-end just to answer "what does the app actually do right now." Everything here is derived from the current codebase, not from plan.
 
@@ -498,6 +498,7 @@ It MUST:
 ### 9.3 `js/services/svg-sanitizer.js` and `js/services/svg-policy.js`
 
 The allow-list itself (allowed/forbidden elements and attributes, event/href/external-reference checks, required viewBox and size limit) lives in `js/services/svg-policy.js`, a plain-data module with no DOM dependency. `svg-sanitizer.js` imports it to do the actual browser-side parsing; `tools/svg-policy.mjs` imports the **same file** to re-implement an equivalent regex-based check for the Node build-time validator (§18.1), so the two can never drift apart again the way they did before `v0.2.2` (a `clip-path-units` vs. `clippathunits` naming bug shipped in one but not the other until the allow-list was unified).
+The Node checker MUST decode XML character references in attribute values before applying external-reference rules, matching `DOMParser` semantics and preventing encoded protocols such as `jav&#x61;script:` from bypassing build validation.
 
 The sanitizer MUST:
 

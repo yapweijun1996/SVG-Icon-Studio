@@ -12,8 +12,20 @@ import {
 
 // Node has no built-in DOMParser, so this build-time checker extracts tags/attributes
 // with regex instead of a real XML parser. The allow-list and reference rules it applies
-// come from svg-policy.js, the same module js/services/svg-sanitizer.js uses at runtime,
-// so the two can never drift apart on what is allowed.
+// come from svg-policy.js, the same module js/services/svg-sanitizer.js uses at runtime.
+// Decode XML character references before policy checks because DOMParser does this
+// automatically in the browser; otherwise encoded protocols can bypass build validation.
+function decodeXmlAttributeValue(value) {
+  const named = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'" };
+  return String(value).replace(/&(?:#(?:x[0-9a-f]+|\d+)|amp|lt|gt|quot|apos);/gi, entity => {
+    if (entity[1] !== '#') return named[entity.slice(1, -1).toLowerCase()] ?? entity;
+    const body = entity.slice(2, -1);
+    const codePoint = Number.parseInt(body.replace(/^x/i, ''), /^x/i.test(body) ? 16 : 10);
+    if (!Number.isInteger(codePoint) || codePoint < 0 || codePoint > 0x10ffff || (codePoint >= 0xd800 && codePoint <= 0xdfff)) return entity;
+    return String.fromCodePoint(codePoint);
+  });
+}
+
 export function inspectSvgText(text) {
   const errors = [];
   if (typeof text !== 'string' || !text.trim()) return { ok: false, errors: ['SVG is empty.'] };
@@ -38,7 +50,7 @@ export function inspectSvgText(text) {
     let attributeMatch;
     while ((attributeMatch = attributeRegex.exec(tagMatch[2]))) {
       const name = attributeMatch[1].toLowerCase();
-      const value = attributeMatch[3].toLowerCase();
+      const value = decodeXmlAttributeValue(attributeMatch[3]);
       if (isEventAttribute(name)) errors.push(`Event attribute is forbidden: ${name}.`);
       else if (isHrefAttribute(name)) errors.push('SVG href references are forbidden.');
       else if (!ALLOWED_ATTRIBUTES.has(name)) errors.push(`Unsupported SVG attribute: ${name}.`);
