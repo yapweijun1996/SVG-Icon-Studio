@@ -4,9 +4,10 @@ import vm from 'node:vm';
 
 const source = fs.readFileSync(new URL('../public/sw.js', import.meta.url), 'utf8');
 
-function createHarness(fetchImpl, { cachedResponse = null } = {}) {
+function createHarness(fetchImpl, { cachedResponse = null, cacheNames = [] } = {}) {
   const listeners = {};
   const puts = [];
+  const deletedCaches = [];
   const cache = {
     addAll: async () => {},
     put: async (key, response) => { puts.push({ key, response }); },
@@ -24,8 +25,8 @@ function createHarness(fetchImpl, { cachedResponse = null } = {}) {
     fetch: fetchImpl,
     caches: {
       open: async () => cache,
-      keys: async () => [],
-      delete: async () => true,
+      keys: async () => [...cacheNames],
+      delete: async name => { deletedCaches.push(name); return true; },
       match: async () => cache.match()
     },
     self: {
@@ -38,7 +39,14 @@ function createHarness(fetchImpl, { cachedResponse = null } = {}) {
   };
 
   vm.runInNewContext(source, context, { filename: 'sw.js' });
-  return { listeners, puts };
+  return { listeners, puts, deletedCaches };
+}
+
+async function activate(harness) {
+  const lifetimePromises = [];
+  harness.listeners.activate({ waitUntil(promise) { lifetimePromises.push(Promise.resolve(promise)); } });
+  assert.equal(lifetimePromises.length, 1, 'activation should extend the service-worker lifetime');
+  await Promise.all(lifetimePromises);
 }
 
 async function navigate(harness, url) {
@@ -64,6 +72,19 @@ async function fetchAsset(harness, url) {
 }
 
 assert.match(source, /const CACHE_VERSION = 'icon-studio-v2'/, 'cache version should invalidate the pre-fix navigation cache');
+assert.match(source, /key\.startsWith\(CACHE_PREFIX\)/, 'activation should scope cleanup to Icon Studio-owned cache names');
+
+{
+  const harness = createHarness(async () => new Response('ok'), {
+    cacheNames: ['other-project-v7', 'icon-studio-v1', 'icon-studio-v2', 'public-api-cache-v3']
+  });
+  await activate(harness);
+  assert.deepEqual(
+    harness.deletedCaches,
+    ['icon-studio-v1'],
+    'activation must delete only obsolete Icon Studio caches and preserve unrelated same-origin caches'
+  );
+}
 
 {
   const harness = createHarness(async () => new Response('<!doctype html><title>app</title>', {

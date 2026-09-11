@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.10 — 2026-09-12
+
+### Fixed
+
+- Service-worker activation now removes only obsolete CacheStorage names owned by Icon Studio (`icon-studio-*`). Previously activation deleted every named cache except the current Icon Studio cache, which could erase offline/runtime caches belonging to unrelated applications hosted on the same origin.
+
+### Validation
+
+- Pre-fix deterministic reproduction on `v0.9.9` showed activation deleting both an obsolete Icon Studio cache and unrelated same-origin cache names. Focused service-worker ownership regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and real Chrome cache-preservation verification cover the fix.
+
 ## 0.9.9 — 2026-09-12
 
 ### Fixed

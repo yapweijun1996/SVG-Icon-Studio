@@ -2,6 +2,7 @@
    stale-while-revalidate for same-origin assets. Registered with a relative
    URL so the same file works at the domain root and under a GitHub Pages
    subpath. Bump CACHE_VERSION to invalidate every cached asset at once. */
+const CACHE_PREFIX = 'icon-studio-';
 const CACHE_VERSION = 'icon-studio-v2';
 const APP_SHELL = ['./', './index.html', './manifest.webmanifest'];
 
@@ -16,7 +17,9 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(key => key !== CACHE_VERSION).map(key => caches.delete(key))))
+      .then(keys => Promise.all(keys
+        .filter(key => key.startsWith(CACHE_PREFIX) && key !== CACHE_VERSION)
+        .map(key => caches.delete(key))))
       .then(() => self.clients.claim())
   );
 });
