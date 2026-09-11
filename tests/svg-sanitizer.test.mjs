@@ -2,6 +2,12 @@ import assert from 'node:assert/strict';
 import { inspectSvgText } from '../tools/svg-policy.mjs';
 const safe = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M1 1h2"/></svg>';
 assert.equal(inspectSvgText(safe).ok, true);
+// XML attribute names are case-sensitive. DOMParser therefore does not expose
+// case variants as the canonical viewBox/xmlns attributes; build validation
+// must reject the same inputs instead of matching them case-insensitively.
+assert.equal(inspectSvgText(safe.replace('viewBox', 'viewbox')).ok, false, 'lowercase viewbox must not satisfy canonical viewBox');
+assert.equal(inspectSvgText(safe.replace('viewBox', 'VIEWBOX')).ok, false, 'uppercase VIEWBOX must not satisfy canonical viewBox');
+assert.equal(inspectSvgText(safe.replace('xmlns', 'XMLNS')).ok, false, 'uppercase XMLNS must not satisfy canonical xmlns');
 // XML 1.0 raw characters are legal only in the three whitespace controls and
 // the defined inclusive ranges. This covers text, quoted attributes,
 // comments, and CDATA just like DOMParser.

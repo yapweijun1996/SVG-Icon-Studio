@@ -50,7 +50,7 @@
 ## Epic 4 — Bug Fixes & UX Consistency ✅ DONE
 
 **Goal:** fix real defects surfaced once Epic 3 changed the shape of the catalogue (3→9 filled icons, 6→36 ERP icons), and one longer-standing responsive-layout bug.
-**Releases:** `v0.6.1` → `v0.7.27` (2026-07-31 → 2026-09-11)
+**Releases:** `v0.6.1` → `v0.7.28` (2026-07-31 → 2026-09-11)
 
 - `v0.7.5` — Aligned browser-upload SVG namespace enforcement with the build-time policy; malformed/missing namespaces are rejected before uploaded assets enter local storage.
 - `v0.7.6` — Completed generated-code tab semantics with labelled tabpanel relationships, roving focus, and Arrow/Home/End keyboard navigation.
@@ -75,6 +75,7 @@
 - `v0.7.25` — Matched XML character-reference parsing by rejecting malformed, unknown, unterminated, and illegal references in text and quoted attributes while preserving comments and CDATA.
 - `v0.7.26` — Matched XML document structure by rejecting a second top-level document element while preserving legitimate nested SVG elements.
 - `v0.7.27` — Matched XML 1.0 raw character validity by rejecting illegal code points in text, attributes, comments, and CDATA while preserving legal ranges.
+- `v0.7.28` — Matched XML attribute-name case sensitivity for canonical root `viewBox` and `xmlns`, rejecting case variants that Chromium does not treat as those attributes.
 
 - `v0.6.1` — Fixed the Inspector fill-colour picker being inert for all 9 `filled` icons (their colour was silently controlled by the *stroke* picker instead) — a pre-existing bug in `purchase-order`/`delivery-order`/`ai-spark` that Epic 3 made easier to notice.
 - `v0.7.0` — Unified catalogue-grid icon colour across styles (removed the `filled`→accent-orange override, ADR-011); added scroll-to-load auto-pagination (ADR-012).
@@ -83,7 +84,7 @@
 - `v0.7.3` — Added keyboard focus entry, focus trapping and trigger restoration for the mobile navigation and inspector drawers, verified in real Chromium at mobile/tablet breakpoints.
 - `v0.7.4` — Made the non-active app regions inert while a mobile navigation or inspector drawer is open, restoring them on close or resize without changing desktop docked panels.
 
-**Status:** Complete for the current scope through `v0.7.27`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
+**Status:** Complete for the current scope through `v0.7.28`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
 
 ---
 

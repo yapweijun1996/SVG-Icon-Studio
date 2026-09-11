@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.7.28 — 2026-09-11
+
+### Fixed
+
+- The Node/build-time SVG validator now treats the canonical root `viewBox` and `xmlns` attribute names as case-sensitive, matching XML/Chromium behavior instead of accepting `viewbox`, `VIEWBOX`, or `XMLNS` as equivalents.
+
+### Validation
+
+- Focused Node regression, `npm run typecheck`, `npm test`, `npm run validate`, `npm run build`, `git diff --check`, and real Chromium sanitizer differential all pass.
+
 ## 0.7.27 — 2026-09-11
 
 ### Fixed

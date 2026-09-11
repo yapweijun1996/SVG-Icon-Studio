@@ -229,10 +229,10 @@ export function inspectSvgText(text) {
   const rootMatch = rootText.match(/^<svg\b([^>]*)>/i);
   if (!rootMatch) return { ok: false, errors };
   const attrs = rootMatch[1];
-  const viewBox = attrs.match(/\bviewBox\s*=\s*["']([^"']+)["']/i)?.[1]?.replace(/\s+/g, ' ').trim();
+  const viewBox = attrs.match(/\bviewBox\s*=\s*["']([^"']+)["']/)?.[1]?.replace(/\s+/g, ' ').trim();
   if (viewBox !== REQUIRED_VIEWBOX) errors.push('viewBox must be exactly 0 0 24 24.');
   if (/(?:^|\s)(width|height)\s*=/i.test(attrs)) errors.push('Fixed root width/height is forbidden.');
-  if (!new RegExp(`\\bxmlns\\s*=\\s*["']${REQUIRED_NAMESPACE.replace(/\//g, '\\/')}["']`, 'i').test(attrs)) {
+  if (!new RegExp(`\\bxmlns\\s*=\\s*["']${REQUIRED_NAMESPACE.replace(/\//g, '\\/')}["']`).test(attrs)) {
     errors.push('SVG namespace is required.');
   }
   // Comments and CDATA are inert XML text. Ignore complete sections while scanning

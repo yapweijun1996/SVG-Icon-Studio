@@ -47,12 +47,13 @@
 | `v0.7.25` | 2026-09-11 | Validate XML character references in build validation | 4 |
 | `v0.7.26` | 2026-09-11 | Enforce a single XML document element in build validation | 4 |
 | `v0.7.27` | 2026-09-11 | Enforce XML 1.0 raw character validity in build validation | 4 |
+| `v0.7.28` | 2026-09-11 | Enforce canonical root attribute case sensitivity in build validation | 4 |
 
 Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`.
 
 ---
 
-## Current state (as of `v0.7.27`)
+## Current state (as of `v0.7.28`)
 
 - 100 icons, 10 categories, 2 styles (91 outline / 9 filled).
 - Zero runtime dependencies; Vite is dev/build tooling only.
