@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.5 — 2026-09-12
+
+### Fixed
+
+- The Icon categories toolbar now follows composite keyboard-navigation semantics instead of placing all 11 category buttons in the page Tab sequence. The active category is the toolbar's single initial tab stop; Left/Right Arrow wrap focus between categories, and Home/End move to the first/last category without changing the selected filter until the focused button is activated.
+
+### Validation
+
+- Pre-fix real headless Chrome confirmed all 11 category buttons had `tabIndex=0`, the Accessibility Tree exposed `role=toolbar`, and ArrowRight left focus on `All`. Focused regression, `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass; post-fix Chrome verification confirms one toolbar tab stop, ArrowLeft/ArrowRight/Home/End roving focus, selection remaining unchanged during navigation, and normal activation updating the selected category while retaining focus on the re-rendered active chip.
+
 ## 0.9.4 — 2026-09-11
 
 ### Fixed

@@ -16,6 +16,7 @@ assert.equal(slugify(''), '');
 const html = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const appSource = fs.readFileSync(new URL('../js/app.js', import.meta.url), 'utf8');
 const shellSource = fs.readFileSync(new URL('../js/features/shell.js', import.meta.url), 'utf8');
+const catalogueSource = fs.readFileSync(new URL('../js/features/catalogue.js', import.meta.url), 'utf8');
 const filterButtonTag = html.match(/<button\b[^>]*id="filterButton"[^>]*>/)?.[0] || '';
 const filterHandlerStart = appSource.indexOf("refs.filterButton.addEventListener('click'");
 const filterHandler = filterHandlerStart >= 0 ? appSource.slice(filterHandlerStart, filterHandlerStart + 650) : '';
@@ -34,6 +35,13 @@ assert.match(resultsSummaryTag, /role="status"/, 'result count should be the ded
 assert.match(resultsSummaryTag, /aria-live="polite"/, 'result-count status should announce updates politely');
 assert.match(resultsSummaryTag, /aria-atomic="true"/, 'result-count status should announce the complete concise message');
 assert.doesNotMatch(iconGridTag, /aria-live=/, 'interactive icon grid should not announce every card rebuild as a live region');
+
+assert.match(html, /id="categoryChips" role="toolbar" aria-label="Icon categories"/, 'category controls should expose their toolbar grouping');
+assert.match(catalogueSource, /tabindex: state\.category === category \? '0' : '-1'/, 'category toolbar should expose one initial tab stop');
+assert.match(catalogueSource, /\['ArrowLeft', 'ArrowRight', 'Home', 'End'\]/, 'category toolbar should support directional keyboard navigation');
+assert.match(catalogueSource, /chips\.forEach\(\(chip, chipIndex\) => \{ chip\.tabIndex = chipIndex === nextIndex \? 0 : -1; \}\)/, 'category toolbar should maintain roving tabindex');
+assert.match(catalogueSource, /chips\[nextIndex\]\.focus\(\)/, 'category toolbar should move focus without requiring Tab through every category');
+assert.match(catalogueSource, /replacement\?\.focus\(\)/, 'category activation should restore focus to the re-rendered selected chip');
 
 const restoreFocusHelper = shellSource.match(/function restoreDrawerFocus\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
 const closeSidebarSource = shellSource.match(/function closeSidebar\(\) \{[\s\S]*?\n  \}/)?.[0] || '';

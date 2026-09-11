@@ -53,6 +53,7 @@
 - [x] Drawer close/Escape restores focus only after a real open→closed transition, preventing stale drawer trigger focus theft, released as `v0.9.2`
 - [x] Catalogue Select/More inspector flows restore focus to the corresponding re-rendered card control on mobile/tablet, released as `v0.9.3`
 - [x] Catalogue result updates use one concise `status` live region instead of making both the results header and interactive icon grid live, released as `v0.9.4`
+- [x] Icon categories toolbar uses one roving Tab stop with Left/Right/Home/End keyboard navigation, released as `v0.9.5`
 - [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
 - [x] Browser/build SVG validation enforce strict XML declaration grammar and reject malformed declarations consistently
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
@@ -90,7 +91,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.9.4` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.9.5` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 

@@ -60,12 +60,13 @@
 | `v0.9.2` | 2026-09-11 | Prevent stale drawer focus restoration on no-op close/Escape | 4 |
 | `v0.9.3` | 2026-09-11 | Restore mobile inspector focus to originating catalogue controls | 4 |
 | `v0.9.4` | 2026-09-11 | Use one concise live status for catalogue result updates | 4 |
+| `v0.9.5` | 2026-09-12 | Add roving keyboard focus to icon-category toolbar | 4 |
 
 Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`.
 
 ---
 
-## Current state (as of `v0.9.4`)
+## Current state (as of `v0.9.5`)
 
 - 120 icons, 10 categories, 2 styles (111 outline / 9 filled).
 - Zero runtime dependencies; Vite is dev/build tooling only.

@@ -91,7 +91,11 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
       fragment.append(createElement('button', {
         className: `category-chip${state.category === category ? ' is-active' : ''}`,
         text: category,
-        attributes: { type: 'button', 'aria-pressed': state.category === category },
+        attributes: {
+          type: 'button',
+          'aria-pressed': state.category === category,
+          tabindex: state.category === category ? '0' : '-1'
+        },
         dataset: { category }
       }));
     });
@@ -135,6 +139,28 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     state.category = button.dataset.category;
     state.visibleLimit = 24;
     render();
+    const replacement = [...refs.categoryChips.querySelectorAll('[data-category]')]
+      .find(chip => chip.dataset.category === state.category);
+    replacement?.focus();
+  });
+
+  refs.categoryChips.addEventListener('keydown', event => {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    const current = event.target.closest('[data-category]');
+    if (!current || !refs.categoryChips.contains(current)) return;
+    const chips = [...refs.categoryChips.querySelectorAll('[data-category]')];
+    const index = chips.indexOf(current);
+    if (index < 0 || !chips.length) return;
+
+    let nextIndex = index;
+    if (event.key === 'ArrowRight') nextIndex = (index + 1) % chips.length;
+    if (event.key === 'ArrowLeft') nextIndex = (index - 1 + chips.length) % chips.length;
+    if (event.key === 'Home') nextIndex = 0;
+    if (event.key === 'End') nextIndex = chips.length - 1;
+
+    event.preventDefault();
+    chips.forEach((chip, chipIndex) => { chip.tabIndex = chipIndex === nextIndex ? 0 : -1; });
+    chips[nextIndex].focus();
   });
 
   refs.iconGrid.addEventListener('click', event => {
