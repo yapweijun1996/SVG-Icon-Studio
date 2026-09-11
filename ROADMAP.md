@@ -57,12 +57,13 @@
 | `v0.8.1` | 2026-09-11 | Keep catalogue functional without `IntersectionObserver` | 4 |
 | `v0.9.0` | 2026-09-11 | +10 ERP outline icons (materials, traceability, logistics, operational finance) | 3 |
 | `v0.9.1` | 2026-09-11 | Accessible advanced-filter disclosure semantics | 4 |
+| `v0.9.2` | 2026-09-11 | Prevent stale drawer focus restoration on no-op close/Escape | 4 |
 
 Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`.
 
 ---
 
-## Current state (as of `v0.9.1`)
+## Current state (as of `v0.9.2`)
 
 - 120 icons, 10 categories, 2 styles (111 outline / 9 filled).
 - Zero runtime dependencies; Vite is dev/build tooling only.

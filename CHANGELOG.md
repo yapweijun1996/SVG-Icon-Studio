@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.2 — 2026-09-11
+
+### Fixed
+
+- Drawer focus restoration now runs only when a mobile navigation or inspector drawer actually transitions from open to closed. Repeated `Escape` presses or close calls while no drawer is open no longer steal focus back to a stale trigger from an earlier drawer session. The consumed restore target is cleared after focus returns.
+
+### Validation
+
+- Reproduced the pre-fix bug in real headless Chrome at 390×844: after opening/closing navigation, focusing catalogue search, then pressing `Escape` with no drawer open moved focus from `searchInput` to `mobileMenuButton`. Focused regression, `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass; post-fix real Chrome mobile/tablet checks confirm no-drawer `Escape` preserves current focus while genuine drawer close still restores its trigger.
+
 ## 0.9.1 — 2026-09-11
 
 ### Fixed

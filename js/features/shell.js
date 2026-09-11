@@ -21,6 +21,12 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
     focusDrawer(drawer);
   }
 
+  function restoreDrawerFocus() {
+    const target = restoreFocusTarget;
+    restoreFocusTarget = null;
+    target?.focus();
+  }
+
   function updateBackdrop() {
     const active = refs.body.classList.contains('sidebar-open') || refs.body.classList.contains('inspector-open');
     refs.backdrop.hidden = !active;
@@ -42,10 +48,11 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
     openDrawer(refs.sidebar, refs.mobileMenuButton);
   }
   function closeSidebar() {
+    const wasOpen = refs.body.classList.contains('sidebar-open');
     refs.body.classList.remove('sidebar-open');
     refs.mobileMenuButton.setAttribute('aria-expanded', 'false');
     updateBackdrop();
-    if (!refs.body.classList.contains('inspector-open')) restoreFocusTarget?.focus();
+    if (wasOpen && !refs.body.classList.contains('inspector-open')) restoreDrawerFocus();
   }
   function openInspector() {
     refs.body.classList.remove('inspector-collapsed');
@@ -65,7 +72,9 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
     updateBackdrop();
   }
   function closeInspector() {
-    if (window.matchMedia('(max-width: 1180px)').matches) {
+    const drawerMode = window.matchMedia('(max-width: 1180px)').matches;
+    const wasOpen = drawerMode && refs.body.classList.contains('inspector-open');
+    if (drawerMode) {
       refs.body.classList.remove('inspector-open');
       refs.mobileInspectorButton.setAttribute('aria-expanded', 'false');
     } else {
@@ -73,7 +82,7 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
       setValue(STORAGE.inspector, 'true');
     }
     updateBackdrop();
-    if (!refs.body.classList.contains('sidebar-open')) restoreFocusTarget?.focus();
+    if (wasOpen && !refs.body.classList.contains('sidebar-open')) restoreDrawerFocus();
   }
   function setView(view) {
     state.view = view;
