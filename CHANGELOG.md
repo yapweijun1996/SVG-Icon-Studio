@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.27 — 2026-09-11
+
+### Fixed
+
+- The Node/build-time SVG validator now rejects raw code points outside the XML 1.0 legal character ranges, matching Chromium XML parsing in character data, quoted attributes, comments, and CDATA while preserving legal controls and ranges.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run validate`, `npm run build`, and `git diff --check` pass.
+- Real Chrome differential validation against `sanitizeSvgText()` passes for illegal and legal raw XML characters in text/attributes, plus invalid and valid comment/CDATA cases.
+
 ## 0.7.26 — 2026-09-11
 
 ### Fixed

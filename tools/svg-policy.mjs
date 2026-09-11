@@ -34,6 +34,13 @@ function isLegalXmlCodePoint(codePoint) {
     || (codePoint >= 0x10000 && codePoint <= 0x10ffff);
 }
 
+function hasInvalidRawXmlCharacter(text) {
+  for (const character of text) {
+    if (!isLegalXmlCodePoint(character.codePointAt(0))) return true;
+  }
+  return false;
+}
+
 function isValidXmlCharacterReference(text, index) {
   const remainder = text.slice(index);
   const named = remainder.match(/^&([A-Za-z][A-Za-z0-9]*);/);
@@ -235,6 +242,10 @@ export function inspectSvgText(text) {
   const scanText = canonicalText
     .replace(/<!--[\s\S]*?-->/g, '')
     .replace(/<!\[CDATA\[[\s\S]*?\]\]>/g, '');
+  // DOMParser rejects illegal XML 1.0 code points before exposing text or
+  // attributes. XML's Char production also applies inside inert comments and
+  // CDATA, so scan the raw source before the lexical policy checks.
+  if (hasInvalidRawXmlCharacter(canonicalText)) errors.push('Invalid raw XML character.');
   if (hasInvalidXmlCharacterReference(canonicalText)) errors.push('Invalid XML character reference.');
   if (/<!--|<!\[CDATA\[/.test(scanText)) errors.push('Malformed XML comment or CDATA section.');
   if (hasStrayCdataClose(scanText)) errors.push('Stray CDATA close delimiter is forbidden.');

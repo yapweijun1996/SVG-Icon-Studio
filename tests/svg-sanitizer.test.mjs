@@ -2,6 +2,23 @@ import assert from 'node:assert/strict';
 import { inspectSvgText } from '../tools/svg-policy.mjs';
 const safe = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M1 1h2"/></svg>';
 assert.equal(inspectSvgText(safe).ok, true);
+// XML 1.0 raw characters are legal only in the three whitespace controls and
+// the defined inclusive ranges. This covers text, quoted attributes,
+// comments, and CDATA just like DOMParser.
+for (const codePoint of [0x0, 0x1, 0xfffe, 0xffff]) {
+  const character = String.fromCodePoint(codePoint);
+  assert.equal(inspectSvgText(safe.replace('<path', `<title>${character}</title><path`)).ok, false, `illegal raw text code point rejected: U+${codePoint.toString(16)}`);
+  assert.equal(inspectSvgText(safe.replace('d="M1 1h2"', `d="M1 ${character} 1h2"`)).ok, false, `illegal raw attribute code point rejected: U+${codePoint.toString(16)}`);
+  assert.equal(inspectSvgText(safe.replace('<path', `<!--${character}--><path`)).ok, false, `illegal raw comment code point rejected: U+${codePoint.toString(16)}`);
+  assert.equal(inspectSvgText(safe.replace('<path', `<![CDATA[${character}]]><path`)).ok, false, `illegal raw CDATA code point rejected: U+${codePoint.toString(16)}`);
+}
+for (const codePoint of [0x9, 0xa, 0xd, 0x20, 0xe000, 0x10000]) {
+  const character = String.fromCodePoint(codePoint);
+  assert.equal(inspectSvgText(safe.replace('<path', `<title>${character}</title><path`)).ok, true, `legal raw text code point accepted: U+${codePoint.toString(16)}`);
+  assert.equal(inspectSvgText(safe.replace('d="M1 1h2"', `d="M1 ${character} 1h2"`)).ok, true, `legal raw attribute code point accepted: U+${codePoint.toString(16)}`);
+  assert.equal(inspectSvgText(safe.replace('<path', `<!--${character}--><path`)).ok, true, `legal raw comment code point accepted: U+${codePoint.toString(16)}`);
+  assert.equal(inspectSvgText(safe.replace('<path', `<![CDATA[${character}]]><path`)).ok, true, `legal raw CDATA code point accepted: U+${codePoint.toString(16)}`);
+}
 assert.equal(inspectSvgText(safe.replace(' xmlns="http://www.w3.org/2000/svg"', '')).ok, false);
 assert.equal(inspectSvgText(safe.replace('http://www.w3.org/2000/svg', 'http://example.com/not-svg')).ok, false);
 assert.equal(inspectSvgText(`<!DOCTYPE svg>${safe}`).ok, false);

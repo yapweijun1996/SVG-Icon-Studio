@@ -52,6 +52,7 @@
 - [x] Node/build SVG validation rejects stray `]]>` in character data while preserving quoted-attribute and valid CDATA cases
 - [x] Node/build SVG validation enforces XML element nesting and rejects missing, mismatched, out-of-order, or extra closing tags
 - [x] Node/build SVG validation rejects multiple top-level XML document elements while preserving valid nested SVG elements
+- [x] Node/build SVG validation rejects illegal raw XML 1.0 code points in text, attributes, comments, and CDATA while preserving legal ranges
 - [x] Node/build SVG validation accepts complete XML comments before the root element while rejecting unterminated leading comments
 - [x] Node/build SVG validation rejects duplicate, unquoted, bare and malformed XML attributes while preserving valid quoted values
 - [x] Browser/build SVG validation rejects foreign child namespaces even when the local element name is allowlisted
@@ -77,7 +78,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.7.26` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.7.27` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 
