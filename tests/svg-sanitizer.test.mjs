@@ -37,6 +37,9 @@ assert.equal(inspectSvgText(safe.replace('<path', '<g><path').replace('</svg>', 
 assert.equal(inspectSvgText(safe.replace('<path', '<g><path')).ok, false, 'missing child closing tag is invalid XML');
 assert.equal(inspectSvgText(safe.replace('<path', '<g><path').replace('</svg>', '</svg></g>')).ok, false, 'out-of-order closing tags are invalid XML');
 assert.equal(inspectSvgText(safe.replace('</svg>', '</g></svg>')).ok, false, 'extra closing tags are invalid XML');
+assert.equal(inspectSvgText(`${safe}${safe}`).ok, false, 'multiple top-level SVG document elements are invalid XML');
+const nestedSvg = safe.replace('<path', '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path').replace('</svg>', '</svg></svg>');
+assert.equal(inspectSvgText(nestedSvg).ok, true, 'a nested SVG element is not a second document element');
 assert.equal(inspectSvgText(safe.replace('<path', '<g><path').replace('</svg>', '</path></svg>')).ok, false, 'mismatched closing tags are invalid XML');
 assert.equal(inspectSvgText(safe.replace('currentColor', 'url(https://example.com/x)')).ok, false);
 // DOMParser resolves XML character references before the browser policy sees values.

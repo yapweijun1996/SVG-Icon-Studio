@@ -139,6 +139,7 @@ function scanXmlTags(text) {
 
 function validateXmlTagNesting(tags) {
   const stack = [];
+  let documentElementCount = 0;
   for (const tag of tags) {
     if (tag.closing) {
       const expected = stack.pop();
@@ -146,6 +147,12 @@ function validateXmlTagNesting(tags) {
         return { ok: false, error: `Mismatched SVG closing tag: ${tag.name}.` };
       }
       continue;
+    }
+    if (stack.length === 0) {
+      documentElementCount += 1;
+      if (documentElementCount > 1) {
+        return { ok: false, error: 'Multiple SVG document elements are forbidden.' };
+      }
     }
     if (!tag.rawAttributes.trimEnd().endsWith('/')) stack.push(tag.name);
   }

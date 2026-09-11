@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.7.26 — 2026-09-11
+
+### Fixed
+
+- The Node/build-time SVG validator now enforces exactly one top-level XML document element. Two consecutive `<svg>` roots are rejected like browser `DOMParser`, while a legitimate nested `<svg>` remains valid.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run validate`, `npm run build`, `git diff --check`, and real Chromium differential checks pass.
+
 ## 0.7.25 — 2026-09-11
 
 ### Fixed
