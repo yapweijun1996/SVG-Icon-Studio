@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.8.0 — 2026-09-11
+
+### Added
+
+- Added 10 high-value ERP outline icons: `supplier-invoice`, `accounts-payable`, `accounts-receivable`, `sales-return`, `purchase-return`, `cycle-count`, `stock-adjustment`, `quality-inspection`, `fixed-asset`, and `payroll`.
+- Expanded the catalogue from 100 to 110 icons and the ERP category from 36 to 46 icons. All new assets use the canonical `0 0 24 24` viewBox, `currentColor`, geometry-free registry metadata, and the standard 1.5 outline stroke.
+
+### Validation
+
+- Focused registry/SVG validation, `npm run typecheck`, `npm test`, `npm run validate`, `npm run build`, and `git diff --check` pass. Real headless Chrome against the production `dist/` build reports 110 total icons and successfully searches, selects, and renders all 10 new ERP icons via representative aliases with zero relevant console or network errors.
+
 ## 0.7.33 — 2026-09-11
 
 ### Fixed

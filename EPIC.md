@@ -36,12 +36,13 @@
 ## Epic 3 — ERP Icon Catalogue Expansion ✅ DONE
 
 **Goal:** grow the catalogue's ERP/back-office coverage and add a second icon style.
-**Releases:** `v0.4.0` → `v0.6.0` (2026-07-31)
-**Result:** ERP category 6 → 36 icons; catalogue 70 → 100 icons; icon styles 1 → 2 (`outline` + `filled`)
+**Releases:** `v0.4.0`, `v0.5.0`, `v0.6.0`, `v0.8.0` (2026-07-31 → 2026-09-11; non-contiguous, with the v0.7.x reliability line tracked under Epic 4)
+**Result:** ERP category 6 → 46 icons; catalogue 70 → 110 icons; icon styles 1 → 2 (`outline` + `filled`)
 
 - `v0.4.0` — First ERP batch (+12: quotation, goods-receipt, stock-transfer, bill-of-materials, work-order, inventory, ledger, approval, workflow, tax, report, reconciliation). Also added the CSP meta tag (pulled into this release alongside the icons) and fixed the hardcoded "Collections: 6" sidebar badge.
 - `v0.5.0` — Second ERP batch (+12: credit-note, goods-issue, contract, bank, employee, timesheet, audit-trail, budget, price-list, batch-lot, bin-location, cost-center), moving past documents into finance/HR/warehouse/controlling.
 - `v0.6.0` — Third ERP batch (+6, `filled` style: purchase-requisition, debit-note, packing-list, pick-list, journal-entry, dashboard) plus `tools/gen-filled-icons.mjs`, the generator this style requires (see `SPEC.md` ADR-010).
+- `v0.8.0` — Fourth ERP batch (+10, `outline` style: supplier-invoice, accounts-payable, accounts-receivable, sales-return, purchase-return, cycle-count, stock-adjustment, quality-inspection, fixed-asset, payroll), expanding procurement, finance, inventory, quality, assets and HR coverage.
 
 **Status:** Complete for the current scope. Adding more icons later is a normal, low-risk extension of this same pattern (see `SPEC.md` §17.1) — not a new epic unless the taxonomy itself needs to change.
 
@@ -89,7 +90,7 @@
 - `v0.7.3` — Added keyboard focus entry, focus trapping and trigger restoration for the mobile navigation and inspector drawers, verified in real Chromium at mobile/tablet breakpoints.
 - `v0.7.4` — Made the non-active app regions inert while a mobile navigation or inspector drawer is open, restoring them on close or resize without changing desktop docked panels.
 
-**Status:** Complete for the current scope through `v0.7.33`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
+**Status:** Complete for the current scope through `v0.8.0`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
 
 ---
 

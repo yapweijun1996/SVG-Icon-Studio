@@ -29,6 +29,7 @@
 - [x] +12 ERP icons batch 1 (quotation → reconciliation)
 - [x] +12 ERP icons batch 2 (credit-note → cost-center)
 - [x] +6 ERP icons, `filled` style (purchase-requisition → dashboard)
+- [x] +10 ERP icons, `outline` style (supplier-invoice → payroll), released as `v0.8.0`
 - [x] `tools/gen-filled-icons.mjs` authoring-time generator
 - [x] Collision check against existing 82 icons before drawing batch 2 (dropped a planned `branch` icon; redesigned `employee` as a badge, not a person)
 
@@ -83,7 +84,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.7.33` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.8.0` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 
