@@ -49,6 +49,7 @@
 - [x] Generated-code SVG/JSX/CSS tabs use complete ARIA tab/tabpanel relationships and keyboard navigation with roving focus
 - [x] Catalogue Grid/Compact density controls expose synchronized `aria-pressed` selection state
 - [x] Catalogue search exposes a meaningful accessible name instead of announcing only the `/` keyboard shortcut hint
+- [x] Advanced-filter disclosure exposes `aria-controls` plus synchronized expanded state and Show/Hide accessible action labels, released as `v0.9.1`
 - [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
 - [x] Browser/build SVG validation enforce strict XML declaration grammar and reject malformed declarations consistently
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
@@ -86,7 +87,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.9.0` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.9.1` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 

@@ -159,6 +159,7 @@ async function start() {
     const expanded = refs.advancedFilter.hidden;
     refs.advancedFilter.hidden = !expanded;
     refs.filterButton.setAttribute('aria-expanded', String(expanded));
+    refs.filterButton.setAttribute('aria-label', expanded ? 'Hide advanced filters' : 'Show advanced filters');
     refs.filterButton.classList.toggle('is-active', expanded);
   });
   refs.styleFilter.addEventListener('change', event => { state.style = event.target.value; state.visibleLimit = 24; catalogue.render(); });

@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.1 — 2026-09-11
+
+### Fixed
+
+- Advanced filters now follow the disclosure accessibility contract: the trigger identifies `advancedFilter` with `aria-controls`, keeps `aria-expanded` synchronized with visibility, and changes its accessible action label between “Show advanced filters” and “Hide advanced filters”.
+
+### Validation
+
+- Focused disclosure semantics regression, `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass; real headless Chrome verification confirms the live button/panel relationship and synchronized expanded state/action label across open and close interactions.
+
 ## 0.9.0 — 2026-09-11
 
 ### Added

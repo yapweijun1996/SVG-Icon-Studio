@@ -84,6 +84,7 @@
 - `v0.7.32` — Matched XML comment grammar by rejecting internal `--` sequences while preserving valid empty, normal, and single-hyphen comments.
 - `v0.7.33` — Matched XML character-data parsing by rejecting literal `<` outside element markup while preserving `&lt;`, literal `>`, comments, and CDATA.
 - `v0.8.1` — Catalogue startup now remains functional when `IntersectionObserver` is unavailable; fallback previews and manual pagination remain usable.
+- `v0.9.1` — Advanced-filter disclosure now exposes its controlled panel and synchronized expanded/action-label semantics to assistive technology.
 
 - `v0.6.1` — Fixed the Inspector fill-colour picker being inert for all 9 `filled` icons (their colour was silently controlled by the *stroke* picker instead) — a pre-existing bug in `purchase-order`/`delivery-order`/`ai-spark` that Epic 3 made easier to notice.
 - `v0.7.0` — Unified catalogue-grid icon colour across styles (removed the `filled`→accent-orange override, ADR-011); added scroll-to-load auto-pagination (ADR-012).
@@ -92,7 +93,7 @@
 - `v0.7.3` — Added keyboard focus entry, focus trapping and trigger restoration for the mobile navigation and inspector drawers, verified in real Chromium at mobile/tablet breakpoints.
 - `v0.7.4` — Made the non-active app regions inert while a mobile navigation or inspector drawer is open, restoring them on close or resize without changing desktop docked panels.
 
-**Status:** Complete for the current scope through `v0.9.0`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
+**Status:** Complete for the current scope through `v0.9.1`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
 
 ---
 
