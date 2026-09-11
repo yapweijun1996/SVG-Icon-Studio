@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.23 — 2026-09-11
+
+### Fixed
+
+- The Node/build-time SVG validator now enforces XML attribute syntax instead of silently ignoring malformed attributes. Duplicate attributes, unquoted values, bare attributes, broken separators, and unterminated quoted values are rejected like browser `DOMParser`, while valid quoted values containing `>` remain accepted.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium and Node differential checks agree on duplicate/unquoted/bare attribute rejection and valid quoted-value acceptance.
+
 ## 0.7.22 — 2026-09-11
 
 ### Fixed

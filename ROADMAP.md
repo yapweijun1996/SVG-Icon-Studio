@@ -42,12 +42,13 @@
 | `v0.7.20` | 2026-09-11 | Ignore inert XML text during build SVG tag scans | 4 |
 | `v0.7.21` | 2026-09-11 | Reject stray CDATA close delimiters in build validation | 4 |
 | `v0.7.22` | 2026-09-11 | Accept complete XML comments before the SVG root | 4 |
+| `v0.7.23` | 2026-09-11 | Enforce strict XML attribute syntax in build validation | 4 |
 
 Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`.
 
 ---
 
-## Current state (as of `v0.7.22`)
+## Current state (as of `v0.7.23`)
 
 - 100 icons, 10 categories, 2 styles (91 outline / 9 filled).
 - Zero runtime dependencies; Vite is dev/build tooling only.

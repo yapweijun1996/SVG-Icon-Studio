@@ -51,6 +51,7 @@
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
 - [x] Node/build SVG validation rejects stray `]]>` in character data while preserving quoted-attribute and valid CDATA cases
 - [x] Node/build SVG validation accepts complete XML comments before the root element while rejecting unterminated leading comments
+- [x] Node/build SVG validation rejects duplicate, unquoted, bare and malformed XML attributes while preserving valid quoted values
 - [x] Browser/build SVG validation rejects foreign child namespaces even when the local element name is allowlisted
 - [x] Build-time SVG validation ignores tag-like text inside complete XML comments/CDATA while still rejecting real forbidden elements
 - [x] Persisted uploaded icons are revalidated before registration so assets rejected by newer security policy do not surface as broken catalogue entries
@@ -74,7 +75,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.7.22` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.7.23` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 

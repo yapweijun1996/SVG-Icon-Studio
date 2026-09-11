@@ -47,6 +47,87 @@ function hasStrayCdataClose(text) {
   return false;
 }
 
+function scanXmlTags(text) {
+  const tags = [];
+  let index = 0;
+  while (index < text.length) {
+    const openIndex = text.indexOf('<', index);
+    if (openIndex < 0) break;
+    const closing = text[openIndex + 1] === '/';
+    const nameStart = openIndex + (closing ? 2 : 1);
+    const nameMatch = text.slice(nameStart).match(/^([A-Za-z][\w:-]*)\b/);
+    if (!nameMatch) {
+      index = openIndex + 1;
+      continue;
+    }
+    const name = nameMatch[1];
+    const attributesStart = nameStart + name.length;
+    let cursor = attributesStart;
+    let quote = null;
+    for (; cursor < text.length; cursor += 1) {
+      const char = text[cursor];
+      if (quote) {
+        if (char === quote) quote = null;
+        continue;
+      }
+      if (char === '"' || char === "'") quote = char;
+      else if (char === '>') break;
+    }
+    if (cursor >= text.length || quote) return { ok: false, error: 'Malformed SVG tag syntax.', tags };
+    tags.push({ closing, name, rawAttributes: text.slice(attributesStart, cursor) });
+    index = cursor + 1;
+  }
+  return { ok: true, tags };
+}
+
+function parseXmlAttributes(rawAttributes) {
+  const text = String(rawAttributes);
+  const attributes = [];
+  const seenNames = new Set();
+  let index = 0;
+
+  while (index < text.length) {
+    while (/\s/.test(text[index] || '')) index += 1;
+    if (index >= text.length) break;
+    if (text[index] === '/') {
+      index += 1;
+      while (/\s/.test(text[index] || '')) index += 1;
+      if (index !== text.length) return { ok: false, error: 'Malformed SVG attribute syntax.' };
+      break;
+    }
+
+    const nameMatch = text.slice(index).match(/^[:A-Za-z_][:A-Za-z0-9_.-]*/);
+    if (!nameMatch) return { ok: false, error: 'Malformed SVG attribute syntax.' };
+    const attributeName = nameMatch[0];
+    if (seenNames.has(attributeName)) return { ok: false, error: `Duplicate SVG attribute: ${attributeName}.` };
+    seenNames.add(attributeName);
+    index += attributeName.length;
+
+    while (/\s/.test(text[index] || '')) index += 1;
+    if (text[index] !== '=') return { ok: false, error: `Malformed SVG attribute: ${attributeName}.` };
+    index += 1;
+    while (/\s/.test(text[index] || '')) index += 1;
+
+    const quote = text[index];
+    if (quote !== '"' && quote !== "'") return { ok: false, error: `SVG attribute must be quoted: ${attributeName}.` };
+    index += 1;
+    const valueStart = index;
+    while (index < text.length && text[index] !== quote) {
+      if (text[index] === '<') return { ok: false, error: `Malformed SVG attribute: ${attributeName}.` };
+      index += 1;
+    }
+    if (index >= text.length) return { ok: false, error: `Unterminated SVG attribute: ${attributeName}.` };
+    const value = text.slice(valueStart, index);
+    index += 1;
+    if (index < text.length && !/\s|\//.test(text[index])) {
+      return { ok: false, error: `Malformed SVG attribute: ${attributeName}.` };
+    }
+    attributes.push([attributeName, value]);
+  }
+
+  return { ok: true, attributes };
+}
+
 export function inspectSvgText(text) {
   const errors = [];
   if (typeof text !== 'string' || !text.trim()) return { ok: false, errors: ['SVG is empty.'] };
@@ -76,17 +157,23 @@ export function inspectSvgText(text) {
     .replace(/<!\[CDATA\[[\s\S]*?\]\]>/g, '');
   if (/<!--|<!\[CDATA\[/.test(scanText)) errors.push('Malformed XML comment or CDATA section.');
   if (hasStrayCdataClose(scanText)) errors.push('Stray CDATA close delimiter is forbidden.');
-  const tagRegex = /<\/?\s*([a-zA-Z][\w:-]*)\b([^>]*)>/g;
-  let tagMatch;
-  while ((tagMatch = tagRegex.exec(scanText))) {
-    const tag = tagMatch[1].toLowerCase();
+  const scannedTags = scanXmlTags(scanText);
+  if (!scannedTags.ok) errors.push(scannedTags.error);
+  for (const scannedTag of scannedTags.tags) {
+    const tag = scannedTag.name.toLowerCase();
     if (FORBIDDEN_ELEMENTS.has(tag) || !ALLOWED_ELEMENTS.has(tag)) errors.push(`Forbidden SVG element: ${tag}.`);
-    if (tagMatch[0].startsWith('</')) continue;
-    const attributeRegex = /([:\w-]+)\s*=\s*(["'])(.*?)\2/g;
-    let attributeMatch;
-    while ((attributeMatch = attributeRegex.exec(tagMatch[2]))) {
-      const name = attributeMatch[1].toLowerCase();
-      const value = decodeXmlAttributeValue(attributeMatch[3]);
+    if (scannedTag.closing) {
+      if (scannedTag.rawAttributes.trim()) errors.push(`Malformed SVG closing tag: ${scannedTag.name}.`);
+      continue;
+    }
+    const parsedAttributes = parseXmlAttributes(scannedTag.rawAttributes);
+    if (!parsedAttributes.ok) {
+      errors.push(parsedAttributes.error);
+      continue;
+    }
+    for (const [attributeName, rawValue] of parsedAttributes.attributes) {
+      const name = attributeName.toLowerCase();
+      const value = decodeXmlAttributeValue(rawValue);
       if (isEventAttribute(name)) errors.push(`Event attribute is forbidden: ${name}.`);
       else if (isHrefAttribute(name)) errors.push('SVG href references are forbidden.');
       else if (!ALLOWED_ATTRIBUTES.has(name)) errors.push(`Unsupported SVG attribute: ${name}.`);

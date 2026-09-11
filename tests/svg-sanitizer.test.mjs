@@ -28,6 +28,11 @@ assert.equal(inspectSvgText(safe.replace('<path', '<!-- unclosed <path')).ok, fa
 assert.equal(inspectSvgText(safe.replace('<path', '<![CDATA[unclosed <path')).ok, false);
 assert.equal(inspectSvgText(safe.replace('<path', '<script>alert(1)</script><path')).ok, false);
 assert.equal(inspectSvgText(safe.replace('<path', '<path onclick="alert(1)"')).ok, false);
+assert.equal(inspectSvgText(safe.replace('viewBox="0 0 24 24"', 'viewBox="0 0 24 24" viewBox="0 0 48 48"')).ok, false, 'duplicate root attributes are invalid XML');
+assert.equal(inspectSvgText(safe.replace('d="M1 1h2"', 'd="M1 1h2" d="M9 9"')).ok, false, 'duplicate child attributes are invalid XML');
+assert.equal(inspectSvgText(safe.replace('d="M1 1h2"', 'd=M1')).ok, false, 'unquoted attributes are invalid XML');
+assert.equal(inspectSvgText(safe.replace('<path', '<path onclick=alert(1)')).ok, false, 'unquoted event attributes fail closed as malformed XML');
+assert.equal(inspectSvgText(safe.replace('<path', '<path selected')).ok, false, 'bare XML attributes are invalid');
 assert.equal(inspectSvgText(safe.replace('currentColor', 'url(https://example.com/x)')).ok, false);
 // DOMParser resolves XML character references before the browser policy sees values.
 // The build-time checker must do the same so encoded dangerous protocols cannot bypass CI.
