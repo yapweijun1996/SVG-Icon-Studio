@@ -13,7 +13,7 @@ Required viewports: desktop 1440×900, tablet 834×1112 and mobile 390×844.
 7. Purchase Order and Delivery Order match their approved independent SVG assets.
 8. Inspector size, stroke, fill, background, rotation and flip controls update preview without changing source files.
 9. SVG, JSX and CSS tabs generate copyable code.
-10. Full preview dialog opens and closes by button, backdrop and Escape.
+10. Full preview dialog opens and closes by button, backdrop and Escape; on mobile/tablet, the first Escape closes only the modal preview and leaves the underlying inspector drawer open until a second dismissal.
 11. Theme, sidebar and inspector settings persist.
 12. Valid 24×24 SVG upload is sanitized and stored in IndexedDB.
 13. Unsafe, oversized or non-24×24 SVG upload is rejected without persistence.

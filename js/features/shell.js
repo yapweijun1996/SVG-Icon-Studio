@@ -177,9 +177,12 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
       refs.searchInput.focus();
     }
     if (event.key === 'Escape') {
+      // The native modal dialog is the topmost interaction layer. Let its own
+      // Escape/cancel behavior close it first; an underlying mobile drawer must
+      // remain open until the user dismisses that layer separately.
+      if (refs.previewDialog.open) return;
       closeSidebar();
       if (window.matchMedia('(max-width: 1180px)').matches) closeInspector();
-      if (refs.previewDialog.open) refs.previewDialog.close();
     }
   });
   window.addEventListener('resize', () => {

@@ -59,4 +59,12 @@ assert.match(appSource, /function findRenderedCardAction\(id, action\)/, 'app sh
 assert.match(appSource, /onSelect: id => selectIcon\(id, true, 'select'\)/, 'card selection should restore focus to the replacement select control');
 assert.match(appSource, /shell\.openInspector\(findRenderedCardAction\(id, 'more'\) \|\| undefined\)/, 'card more action should restore focus to the replacement more control');
 
-console.log('DOM, live-region and focus accessibility tests passed.');
+const escapeHandler = shellSource.match(/if \(event\.key === 'Escape'\) \{[\s\S]*?\n    \}/)?.[0] || '';
+assert.match(escapeHandler, /if \(refs\.previewDialog\.open\) return;/, 'open full-preview modal should consume the first Escape layer');
+assert.ok(
+  escapeHandler.indexOf('refs.previewDialog.open') < escapeHandler.indexOf('closeSidebar()'),
+  'modal Escape guard should run before underlying drawer close logic'
+);
+assert.doesNotMatch(escapeHandler, /previewDialog\.close\(\)/, 'shell should leave native dialog Escape/cancel handling to the dialog itself');
+
+console.log('DOM, live-region, modal-layer and focus accessibility tests passed.');

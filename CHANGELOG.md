@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.6 — 2026-09-12
+
+### Fixed
+
+- Full-preview Escape handling now respects layered modal interaction on mobile/tablet. When the native preview dialog is open above the inspector drawer, the first Escape is left to the dialog's native cancel behavior and closes only that topmost modal; the underlying inspector remains open until it is dismissed separately. Previously the document-level Escape handler closed the inspector and preview in the same keypress.
+
+### Validation
+
+- Pre-fix real headless Chrome at 390×844 reproduced one Escape changing both `previewDialog.open` and `inspector-open` from true to false. Focused regression, `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass; post-fix production Chrome verifies the first Escape closes only the preview while the inspector remains open, and a second Escape then closes the inspector.
+
 ## 0.9.5 — 2026-09-12
 
 ### Fixed

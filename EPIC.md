@@ -97,7 +97,9 @@
 - `v0.9.4` — Catalogue filtering announces one concise result-count status instead of exposing both the results header and the entire interactive icon grid as polite live regions.
 - `v0.9.5` — Icon-category toolbar follows the ARIA composite keyboard model with one roving Tab stop plus Left/Right/Home/End focus movement.
 
-**Status:** Complete for the current scope through `v0.9.5`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
+- `v0.9.6` — Full-preview modal Escape handling now dismisses only the topmost dialog layer before the underlying mobile/tablet inspector drawer.
+
+**Status:** Complete for the current scope through `v0.9.6`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
 
 ---
 
