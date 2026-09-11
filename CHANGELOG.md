@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.8 — 2026-09-12
+
+### Fixed
+
+- Service-worker navigation caching no longer lets a failed, non-HTML, or unrelated navigation replace the known-good cached `index.html` offline fallback. Only a successful HTML response for the actual app-shell path may refresh that fallback. The cache generation is bumped to `icon-studio-v2` so any pre-fix entry is evicted during activation.
+
+### Validation
+
+- Pre-fix real Chrome reproduced the bug: after a controlled app loaded with cached `index.html` status 200, navigating to a same-scope 404 changed that cached fallback to status 404 containing the 404 sentinel. Focused service-worker regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix real Chrome cache/offline checks pass.
+
 ## 0.9.7 — 2026-09-12
 
 ### Security
