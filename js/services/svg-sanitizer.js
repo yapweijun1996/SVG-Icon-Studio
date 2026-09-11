@@ -35,6 +35,7 @@ export function sanitizeSvgText(raw, { stripDimensions = false } = {}) {
     const elements = [root, ...root.querySelectorAll('*')];
     for (const element of elements) {
       const tag = element.tagName.toLowerCase();
+      if (element.namespaceURI !== REQUIRED_NAMESPACE) throw new Error(`Foreign SVG namespace is forbidden: ${element.namespaceURI || 'none'}.`);
       if (isDisallowedElement(tag)) throw new Error(`Forbidden SVG element: ${element.tagName}.`);
       for (const attribute of [...element.attributes]) {
         const name = attribute.name.toLowerCase();

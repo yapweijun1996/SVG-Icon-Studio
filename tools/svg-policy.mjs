@@ -57,6 +57,7 @@ export function inspectSvgText(text) {
       if (isEventAttribute(name)) errors.push(`Event attribute is forbidden: ${name}.`);
       else if (isHrefAttribute(name)) errors.push('SVG href references are forbidden.');
       else if (!ALLOWED_ATTRIBUTES.has(name)) errors.push(`Unsupported SVG attribute: ${name}.`);
+      if (name === 'xmlns' && value !== REQUIRED_NAMESPACE) errors.push('Foreign SVG namespace is forbidden.');
       if (name !== 'xmlns' && isInvalidReference(value)) errors.push(`External reference is forbidden: ${name}.`);
     }
   }

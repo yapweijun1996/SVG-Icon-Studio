@@ -38,12 +38,13 @@
 | `v0.7.16` | 2026-09-11 | Reconcile mixed direct v1→v3 upload upgrades | 4 |
 | `v0.7.17` | 2026-09-11 | Decode XML entities before build-time SVG reference checks | 4 |
 | `v0.7.18` | 2026-09-11 | Align SVG processing-instruction security policy | 4 |
+| `v0.7.19` | 2026-09-11 | Reject foreign child SVG namespaces | 4 |
 
 Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`.
 
 ---
 
-## Current state (as of `v0.7.18`)
+## Current state (as of `v0.7.19`)
 
 - 100 icons, 10 categories, 2 styles (91 outline / 9 filled).
 - Zero runtime dependencies; Vite is dev/build tooling only.

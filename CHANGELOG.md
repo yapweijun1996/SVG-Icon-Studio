@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.19 — 2026-09-11
+
+### Fixed
+
+- SVG validation now rejects namespace switching below the canonical root. Allowlisted names such as `g`, `path`, and nested `svg` must also belong to `http://www.w3.org/2000/svg`; foreign default namespaces can no longer pass merely by reusing an allowed local element name.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium and the Node build validator both reject foreign-namespace `g`, `path`, and nested `svg` payloads while the normal canonical SVG remains valid.
+
 ## 0.7.18 — 2026-09-11
 
 ### Fixed
