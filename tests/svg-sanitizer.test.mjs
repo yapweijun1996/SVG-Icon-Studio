@@ -33,6 +33,11 @@ assert.equal(inspectSvgText(safe.replace('d="M1 1h2"', 'd="M1 1h2" d="M9 9"')).o
 assert.equal(inspectSvgText(safe.replace('d="M1 1h2"', 'd=M1')).ok, false, 'unquoted attributes are invalid XML');
 assert.equal(inspectSvgText(safe.replace('<path', '<path onclick=alert(1)')).ok, false, 'unquoted event attributes fail closed as malformed XML');
 assert.equal(inspectSvgText(safe.replace('<path', '<path selected')).ok, false, 'bare XML attributes are invalid');
+assert.equal(inspectSvgText(safe.replace('<path', '<g><path').replace('</svg>', '</g></svg>')).ok, true, 'properly nested self-closing children remain valid');
+assert.equal(inspectSvgText(safe.replace('<path', '<g><path')).ok, false, 'missing child closing tag is invalid XML');
+assert.equal(inspectSvgText(safe.replace('<path', '<g><path').replace('</svg>', '</svg></g>')).ok, false, 'out-of-order closing tags are invalid XML');
+assert.equal(inspectSvgText(safe.replace('</svg>', '</g></svg>')).ok, false, 'extra closing tags are invalid XML');
+assert.equal(inspectSvgText(safe.replace('<path', '<g><path').replace('</svg>', '</path></svg>')).ok, false, 'mismatched closing tags are invalid XML');
 assert.equal(inspectSvgText(safe.replace('currentColor', 'url(https://example.com/x)')).ok, false);
 // DOMParser resolves XML character references before the browser policy sees values.
 // The build-time checker must do the same so encoded dangerous protocols cannot bypass CI.

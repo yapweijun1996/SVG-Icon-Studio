@@ -50,6 +50,7 @@
 - [x] Browser/build SVG validation allows the standard XML declaration but rejects all other XML processing instructions consistently
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
 - [x] Node/build SVG validation rejects stray `]]>` in character data while preserving quoted-attribute and valid CDATA cases
+- [x] Node/build SVG validation enforces XML element nesting and rejects missing, mismatched, out-of-order, or extra closing tags
 - [x] Node/build SVG validation accepts complete XML comments before the root element while rejecting unterminated leading comments
 - [x] Node/build SVG validation rejects duplicate, unquoted, bare and malformed XML attributes while preserving valid quoted values
 - [x] Browser/build SVG validation rejects foreign child namespaces even when the local element name is allowlisted
@@ -75,7 +76,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.7.23` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.7.24` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 

@@ -80,6 +80,22 @@ function scanXmlTags(text) {
   return { ok: true, tags };
 }
 
+function validateXmlTagNesting(tags) {
+  const stack = [];
+  for (const tag of tags) {
+    if (tag.closing) {
+      const expected = stack.pop();
+      if (!expected || expected !== tag.name) {
+        return { ok: false, error: `Mismatched SVG closing tag: ${tag.name}.` };
+      }
+      continue;
+    }
+    if (!tag.rawAttributes.trimEnd().endsWith('/')) stack.push(tag.name);
+  }
+  if (stack.length) return { ok: false, error: `Unclosed SVG element: ${stack.at(-1)}.` };
+  return { ok: true };
+}
+
 function parseXmlAttributes(rawAttributes) {
   const text = String(rawAttributes);
   const attributes = [];
@@ -159,6 +175,8 @@ export function inspectSvgText(text) {
   if (hasStrayCdataClose(scanText)) errors.push('Stray CDATA close delimiter is forbidden.');
   const scannedTags = scanXmlTags(scanText);
   if (!scannedTags.ok) errors.push(scannedTags.error);
+  const nesting = validateXmlTagNesting(scannedTags.tags);
+  if (!nesting.ok) errors.push(nesting.error);
   for (const scannedTag of scannedTags.tags) {
     const tag = scannedTag.name.toLowerCase();
     if (FORBIDDEN_ELEMENTS.has(tag) || !ALLOWED_ELEMENTS.has(tag)) errors.push(`Forbidden SVG element: ${tag}.`);

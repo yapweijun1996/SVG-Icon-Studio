@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.24 — 2026-09-11
+
+### Fixed
+
+- The Node/build-time SVG validator now validates XML element nesting with an explicit tag stack. Missing, mismatched, out-of-order, and extra closing tags are rejected like browser `DOMParser`, while valid self-closing SVG elements remain accepted.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium and Node differential checks agree on valid nesting, missing/mismatched/out-of-order/extra closing tags, and self-closing child elements.
+
 ## 0.7.23 — 2026-09-11
 
 ### Fixed
