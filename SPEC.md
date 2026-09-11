@@ -4,13 +4,13 @@
 **Project:** Icon Studio — SVG Icon Collection Admin Panel  
 **Code-MCP Project ID:** `project_f2a74b23-33c1-4c5c-b43d-e2b5b3108428`  
 **Status:** Living specification — the SSOT refactor this document originally proposed shipped in `v0.2.0` (2026-07-23) and is now the permanent baseline architecture. Sections 1–3 and 16 are kept as the historical record of that refactor; everything else describes the **current, as-built system**.  
-**Current release:** `v0.9.6` (2026-09-12) — see [CHANGELOG.md](CHANGELOG.md) for the full version history and [ROADMAP.md](ROADMAP.md) / [TASK.md](TASK.md) for what's planned next.
+**Current release:** `v0.9.7` (2026-09-12) — see [CHANGELOG.md](CHANGELOG.md) for the full version history and [ROADMAP.md](ROADMAP.md) / [TASK.md](TASK.md) for what's planned next.
 **Runtime:** Dependency-free static HTML, CSS and browser-native JavaScript (Vite is a dev-only wrapper — see ADR-001)  
 **Primary goal (original, achieved):** Replace the monolithic icon and application architecture with a scalable Single Source of Truth (SSOT) structure while preserving existing behaviour and visual output.
 
 ---
 
-## 0. Current status snapshot (v0.9.6, 2026-09-12)
+## 0. Current status snapshot (v0.9.7, 2026-09-12)
 
 A quick-reference dashboard so this document doesn't have to be read end-to-end just to answer "what does the app actually do right now." Everything here is derived from the current codebase, not from plan.
 
@@ -682,7 +682,7 @@ The final implementation MUST:
 - Keep clipboard actions user-initiated.
 - Treat metadata text as untrusted and render it with text nodes.
 - Keep runtime dependencies at zero.
-- **(Added `v0.4.0`, ADR-009)** Ship a Content-Security-Policy `<meta>` tag in `index.html` as defence in depth *behind* the sanitizer — the sanitizer remains the primary control; the CSP exists in case a future bug in it is ever found. Current policy: `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'none'`. `style-src` needs `'unsafe-inline'` because `svg-renderer.js`/`inspector.js` assign `element.style.color` directly; `script-src` needs no exception since the production build emits no inline script.
+- **(Added `v0.4.0`, ADR-009)** Ship a Content-Security-Policy `<meta>` tag in `index.html` as defence in depth *behind* the sanitizer — the sanitizer remains the primary control; the CSP exists in case a future bug in it is ever found. Current policy: `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'`. `style-src` needs `'unsafe-inline'` because `svg-renderer.js`/`inspector.js` assign `element.style.color` directly; `script-src` needs no exception since the production build emits no inline script.
 - Any new tool-call surface exposed to external callers (browser extensions, AI agents, WebMCP tools — see `ROADMAP.md`) MUST reuse the existing sanitizer/policy pipeline; it MUST NOT introduce a second, less-audited path for untrusted SVG or file input.
 
 A security failure in one uploaded or catalogue SVG MUST not compromise other icons or the application shell.
@@ -1107,7 +1107,7 @@ Preview and export settings are derived output only.
 
 ### ADR-009 — CSP as defence in depth (added `v0.4.0`)
 
-Ship a Content-Security-Policy `<meta>` tag alongside the existing SVG sanitizer. The sanitizer remains the primary control (it already rejects `script`, event handlers, `foreignObject`, external/`data:` references, etc. — see §13); the CSP exists purely as a second layer in case a future sanitizer bug is ever found, not because the sanitizer is considered insufficient today.
+Ship a Content-Security-Policy `<meta>` tag alongside the existing SVG sanitizer. The sanitizer remains the primary control (it already rejects `script`, event handlers, `foreignObject`, external/`data:` references, etc. — see §13); the CSP exists purely as a second layer in case a future sanitizer bug is ever found, not because the sanitizer is considered insufficient today. CSP `frame-ancestors` cannot be enforced from a `<meta>` policy, so it is intentionally omitted rather than documented as active. For static hosting that cannot set response headers, `js/anti-frame.js` plus the early `antiFrameGuard` style provides a client-side anti-framing fallback. Any future host that supports response headers SHOULD add `Content-Security-Policy: frame-ancestors 'none'` (and optionally `X-Frame-Options: DENY` for legacy clients), which remains stronger than a script-based fallback.
 
 ### ADR-010 — Filled-style icons are generated, not hand-authored (added `v0.6.0`)
 

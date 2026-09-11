@@ -55,6 +55,7 @@
 - [x] Catalogue result updates use one concise `status` live region instead of making both the results header and interactive icon grid live, released as `v0.9.4`
 - [x] Icon categories toolbar uses one roving Tab stop with Left/Right/Home/End keyboard navigation, released as `v0.9.5`
 - [x] Full-preview modal Escape dismisses only the topmost dialog before an underlying mobile/tablet inspector drawer, released as `v0.9.6`
+- [x] Replace the ineffective meta `frame-ancestors` claim with a static-host anti-framing fallback and document response-header hardening, released as `v0.9.7`
 - [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
 - [x] Browser/build SVG validation enforce strict XML declaration grammar and reject malformed declarations consistently
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
@@ -92,7 +93,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.9.6` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.9.7` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 

@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.9.7 — 2026-09-12
+
+### Security
+
+- Removed `frame-ancestors 'none'` from the meta-delivered CSP because the CSP specification does not support that directive in `<meta>` policies; keeping it there created a false anti-framing guarantee.
+- Added an early static-host anti-framing fallback: the app shell starts hidden, `js/anti-frame.js` reveals it only at top level, and framed documents attempt top navigation while remaining hidden if navigation is blocked. Hosts with response-header control should still send `Content-Security-Policy: frame-ancestors 'none'` (optionally `X-Frame-Options: DENY` for legacy clients).
+
+### Validation
+
+- Focused shell-security regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and real Chrome top-level/cross-origin-frame checks pass. Live GitHub Pages response-header inspection confirms the current static host does not send CSP or X-Frame-Options headers, so the fallback closes a real gap rather than duplicating an active server control.
+
 ## 0.9.6 — 2026-09-12
 
 ### Fixed
