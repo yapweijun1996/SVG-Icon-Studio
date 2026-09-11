@@ -27,6 +27,63 @@ function decodeXmlAttributeValue(value) {
   });
 }
 
+function isLegalXmlCodePoint(codePoint) {
+  return codePoint === 0x9 || codePoint === 0xa || codePoint === 0xd
+    || (codePoint >= 0x20 && codePoint <= 0xd7ff)
+    || (codePoint >= 0xe000 && codePoint <= 0xfffd)
+    || (codePoint >= 0x10000 && codePoint <= 0x10ffff);
+}
+
+function isValidXmlCharacterReference(text, index) {
+  const remainder = text.slice(index);
+  const named = remainder.match(/^&([A-Za-z][A-Za-z0-9]*);/);
+  if (named) return ['amp', 'lt', 'gt', 'quot', 'apos'].includes(named[1]);
+  const numeric = remainder.match(/^&#(x[0-9A-Fa-f]+|[0-9]+);/);
+  if (!numeric) return false;
+  const codePoint = Number.parseInt(numeric[1].replace(/^x/, ''), numeric[1][0] === 'x' ? 16 : 10);
+  return isLegalXmlCodePoint(codePoint);
+}
+
+// Validate references in character data and quoted attribute values. Comments
+// and CDATA are handled lexically because their contents are not XML markup.
+function hasInvalidXmlCharacterReference(text) {
+  let index = 0;
+  let inTag = false;
+  let quote = null;
+  while (index < text.length) {
+    if (!inTag && text.startsWith('<!--', index)) {
+      const end = text.indexOf('-->', index + 4);
+      if (end < 0) return true;
+      index = end + 3;
+      continue;
+    }
+    if (!inTag && text.startsWith('<![CDATA[', index)) {
+      const end = text.indexOf(']]>', index + 9);
+      if (end < 0) return true;
+      index = end + 3;
+      continue;
+    }
+    const char = text[index];
+    if (char === '<' && !inTag) {
+      inTag = true;
+      index += 1;
+      continue;
+    }
+    if (char === '&' && (inTag ? quote !== null : true) && !isValidXmlCharacterReference(text, index)) return true;
+    if (inTag) {
+      if (quote) {
+        if (char === quote) quote = null;
+      } else if (char === '"' || char === "'") {
+        quote = char;
+      } else if (char === '>') {
+        inTag = false;
+      }
+    }
+    index += 1;
+  }
+  return false;
+}
+
 function hasStrayCdataClose(text) {
   let inTag = false;
   let quote = null;
@@ -171,6 +228,7 @@ export function inspectSvgText(text) {
   const scanText = canonicalText
     .replace(/<!--[\s\S]*?-->/g, '')
     .replace(/<!\[CDATA\[[\s\S]*?\]\]>/g, '');
+  if (hasInvalidXmlCharacterReference(canonicalText)) errors.push('Invalid XML character reference.');
   if (/<!--|<!\[CDATA\[/.test(scanText)) errors.push('Malformed XML comment or CDATA section.');
   if (hasStrayCdataClose(scanText)) errors.push('Stray CDATA close delimiter is forbidden.');
   const scannedTags = scanXmlTags(scanText);

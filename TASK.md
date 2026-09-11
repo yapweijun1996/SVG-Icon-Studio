@@ -76,7 +76,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.7.24` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.7.25` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 

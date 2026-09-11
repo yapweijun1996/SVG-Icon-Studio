@@ -47,6 +47,14 @@ const encodedLocalReference = safe
   .replace('stroke="currentColor"', 'stroke="none" clip-path="url(&#x23;clip)"')
   .replace('<path', '<defs><clipPath id="clip"><path d="M0 0h1v1z"/></clipPath></defs><path');
 assert.equal(inspectSvgText(encodedLocalReference).ok, true, 'encoded local fragment references remain safe');
+for (const reference of ['&bogus;', '&', '&amp', '&#xZZ;', '&#x110000;', '&#xD800;', '&#0;']) {
+  assert.equal(inspectSvgText(safe.replace('<path', `<title>${reference}</title><path`)).ok, false, `invalid text reference rejected: ${reference}`);
+  assert.equal(inspectSvgText(safe.replace('d="M1 1h2"', `d="M1 ${reference} 1h2"`)).ok, false, `invalid attribute reference rejected: ${reference}`);
+}
+for (const reference of ['&amp;', '&lt;', '&gt;', '&quot;', '&apos;', '&#65;', '&#x41;']) {
+  assert.equal(inspectSvgText(safe.replace('<path', `<title>${reference}</title><path`)).ok, true, `valid text reference accepted: ${reference}`);
+  assert.equal(inspectSvgText(safe.replace('d="M1 1h2"', `d="M1 ${reference} 1h2"`)).ok, true, `valid attribute reference accepted: ${reference}`);
+}
 assert.equal(inspectSvgText(safe.replace('viewBox="0 0 24 24"', 'viewBox="0 0 48 48"')).ok, false);
 assert.equal(inspectSvgText(safe.replace('<path', '<image href="data:image/png;base64,x"/><path')).ok, false);
 console.log('SVG security policy tests passed.');

@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.7.25 — 2026-09-11
+
+### Fixed
+
+- The Node/build-time SVG validator now rejects malformed, unknown, unterminated, and illegal XML character references in text and quoted attributes, matching browser XML parsing while preserving literal comments and CDATA.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run validate`, `npm run build`, `git diff --check`, and real Chromium differential checks pass.
+
 ## 0.7.24 — 2026-09-11
 
 ### Fixed
