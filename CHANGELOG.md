@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.4 — 2026-09-11
+
+### Fixed
+
+- Catalogue search/filter updates now use one concise result-count live region. `resultsSummary` is a `status` with polite, atomic announcements, while the surrounding results header and interactive icon grid are no longer live regions. This prevents one filter action from scheduling both the result summary and a full card-grid rebuild for assistive-technology announcement.
+
+### Validation
+
+- Pre-fix real headless Chrome confirmed both the results header and icon grid exposed `live=polite`; typing `invoice` rebuilt the grid from 24 cards to 4 while both live regions mutated. Focused regression, `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass; post-fix Chrome Accessibility Tree verification confirms only `resultsSummary` exposes `role=status`, `live=polite`, `atomic=true`, while search still renders the expected 4 invoice matches.
+
 ## 0.9.3 — 2026-09-11
 
 ### Fixed
