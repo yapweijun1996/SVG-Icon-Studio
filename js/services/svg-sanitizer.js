@@ -6,6 +6,7 @@ import {
   isDisallowedElement,
   isEventAttribute,
   isHrefAttribute,
+  isDimensionAttribute,
   hasForbiddenDoctype,
   hasForbiddenProcessingInstruction,
   isInvalidReference,
@@ -25,10 +26,10 @@ export function sanitizeSvgText(raw, { stripDimensions = false } = {}) {
     if (root.getAttribute('xmlns') !== REQUIRED_NAMESPACE) throw new Error('SVG namespace is required.');
     const viewBox = String(root.getAttribute('viewBox') || '').replace(/\s+/g, ' ').trim();
     if (viewBox !== REQUIRED_VIEWBOX) throw new Error('SVG viewBox must be exactly 0 0 24 24.');
+    const rootDimensionAttributes = [...root.attributes].filter(attribute => isDimensionAttribute(attribute.name));
     if (stripDimensions) {
-      root.removeAttribute('width');
-      root.removeAttribute('height');
-    } else if (root.hasAttribute('width') || root.hasAttribute('height')) {
+      for (const attribute of rootDimensionAttributes) root.removeAttribute(attribute.name);
+    } else if (rootDimensionAttributes.length) {
       throw new Error('Canonical SVG must not contain fixed width or height.');
     }
 

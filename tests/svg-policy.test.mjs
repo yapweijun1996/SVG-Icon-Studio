@@ -5,6 +5,7 @@ import {
   isDisallowedAttribute,
   isEventAttribute,
   isHrefAttribute,
+  isDimensionAttribute,
   hasForbiddenDoctype,
   hasForbiddenProcessingInstruction,
   isInvalidReference,
@@ -34,6 +35,11 @@ assert.equal(isEventAttribute('stroke'), false);
 assert.equal(isHrefAttribute('href'), true);
 assert.equal(isHrefAttribute('xlink:href'), true);
 assert.equal(isHrefAttribute('id'), false);
+
+assert.equal(isDimensionAttribute('width'), true);
+assert.equal(isDimensionAttribute('WIDTH'), true, 'uppercase WIDTH must be treated as a root dimension');
+assert.equal(isDimensionAttribute('Height'), true, 'mixed-case Height must be treated as a root dimension');
+assert.equal(isDimensionAttribute('viewBox'), false);
 
 assert.equal(hasForbiddenDoctype('<!DOCTYPE svg><svg/>'), true);
 assert.equal(hasForbiddenDoctype('<!doctype svg [<!ENTITY x \"y\">]><svg/>'), true);

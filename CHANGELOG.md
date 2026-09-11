@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.7.29 — 2026-09-11
+
+### Fixed
+
+- The browser SVG sanitizer now treats root `width`/`height` names case-insensitively for the canonical no-fixed-dimensions rule, so XML case variants such as `WIDTH`, `HEIGHT`, and mixed-case forms can no longer bypass runtime validation. Import flows using `stripDimensions` remove those variants by their actual XML attribute names, while child shape dimensions remain allowed.
+
+### Validation
+
+- Focused shared-policy regression, `npm run typecheck`, `npm test`, `npm run validate`, `npm run build`, `git diff --check`, and real Chrome sanitizer differential all pass.
+
 ## 0.7.28 — 2026-09-11
 
 ### Fixed

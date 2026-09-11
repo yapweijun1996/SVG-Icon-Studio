@@ -43,6 +43,11 @@ export function isHrefAttribute(name) {
   return normalized === 'href' || normalized === 'xlink:href';
 }
 
+export function isDimensionAttribute(name) {
+  const normalized = String(name).toLowerCase();
+  return normalized === 'width' || normalized === 'height';
+}
+
 export function hasForbiddenDoctype(text) {
   return /<!doctype\b/i.test(String(text));
 }
