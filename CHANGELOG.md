@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.8.1 — 2026-09-11
+
+### Fixed
+
+- Catalogue startup now remains functional in browsers without `IntersectionObserver`; previews use their existing fallback and the manual “Load more icons” control remains available.
+
+### Validation
+
+- Focused observer compatibility regression, `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+
 ## 0.8.0 — 2026-09-11
 
 ### Added

@@ -34,6 +34,7 @@
 - [x] Collision check against existing 82 icons before drawing batch 2 (dropped a planned `branch` icon; redesigned `employee` as a badge, not a person)
 
 ### Epic 4 — Bug Fixes & UX Consistency
+- [x] Keep catalogue startup and manual pagination functional when `IntersectionObserver` is unavailable, released as `v0.8.1`
 - [x] Fix filled-icon fill-colour picker (was inert on all 9 filled icons, incl. 3 pre-existing)
 - [x] Unify catalogue-grid colour across outline/filled styles
 - [x] Scroll-to-load auto-pagination (`IntersectionObserver`, manual button kept as fallback)
@@ -84,7 +85,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.8.0` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.8.1` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 

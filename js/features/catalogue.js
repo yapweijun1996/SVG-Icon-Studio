@@ -1,4 +1,5 @@
 import { createElement, createSvgElement } from '../core/dom.js';
+import { createIntersectionObserver } from '../core/observer.js';
 import { getFilteredIcons } from './filters.js';
 import { loadIconAsset } from '../services/icon-repository.js';
 import { createCanonicalPreview, createFallbackSvg } from '../services/svg-renderer.js';
@@ -28,7 +29,7 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
   }
 
   function setupObserver(version) {
-    observer = new IntersectionObserver(entries => {
+    observer = createIntersectionObserver(entries => {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
         observer.unobserve(entry.target);
@@ -76,7 +77,7 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     actions.append(createElement('button', { className: 'card-action', text: 'Copy SVG', attributes: { type: 'button', 'data-action': 'copy' } }));
     actions.append(createElement('button', { className: 'card-action', text: '⋮', attributes: { type: 'button', 'data-action': 'more', 'aria-label': `More export options for ${icon.name}` } }));
     article.append(favoriteButton, selectButton, actions);
-    observer.observe(preview);
+    observer?.observe(preview);
     return article;
   }
 
@@ -158,10 +159,10 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
   // viewport, so scrolling to the bottom of the grid keeps extending it. The
   // button itself stays as a manual fallback -- for keyboard use, and for the
   // rare case IntersectionObserver isn't available.
-  const loadMoreObserver = new IntersectionObserver(entries => {
+  const loadMoreObserver = createIntersectionObserver(entries => {
     if (entries.some(entry => entry.isIntersecting)) loadMore();
   }, { rootMargin: '600px 0px' });
-  loadMoreObserver.observe(refs.loadMoreButton);
+  loadMoreObserver?.observe(refs.loadMoreButton);
 
-  return { render, destroy: () => { disconnectObserver(); loadMoreObserver.disconnect(); } };
+  return { render, destroy: () => { disconnectObserver(); loadMoreObserver?.disconnect(); } };
 }
