@@ -57,6 +57,7 @@
 - [x] Browser SVG validation rejects root `width`/`height` case variants and strips them safely during import normalization without affecting child dimensions
 - [x] Browser and Node/build SVG validation require exact canonical element and attribute names while preserving normalized conversion and case-insensitive security checks
 - [x] Node/build SVG validation accepts complete XML comments before the root element while rejecting unterminated leading comments
+- [x] Node/build SVG validation rejects XML comments containing internal `--` sequences while preserving valid comments
 - [x] Node/build SVG validation rejects duplicate, unquoted, bare and malformed XML attributes while preserving valid quoted values
 - [x] Browser/build SVG validation rejects foreign child namespaces even when the local element name is allowlisted
 - [x] Build-time SVG validation ignores tag-like text inside complete XML comments/CDATA while still rejecting real forbidden elements
@@ -81,7 +82,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.7.31` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.7.32` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 

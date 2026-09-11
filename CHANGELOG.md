@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.32 — 2026-09-11
+
+### Fixed
+
+- The Node/build-time SVG validator now enforces XML comment grammar instead of treating every `<!-- ... -->` boundary as valid. Comment bodies containing the forbidden internal `--` sequence are rejected in parity with Chromium `DOMParser`, while normal comments, empty comments, and legal single-hyphen content remain accepted.
+
+### Validation
+
+- Focused comment-grammar regressions cover invalid internal/triple-hyphen comments and valid normal/empty/single-hyphen controls.
+- `npm run typecheck`, `npm test`, `npm run validate`, `npm run build`, `git diff --check`, and real Chrome parser/sanitizer differential checks pass.
+
 ## 0.7.31 — 2026-09-11
 
 ### Fixed

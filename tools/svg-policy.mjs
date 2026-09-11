@@ -54,19 +54,52 @@ function isValidXmlCharacterReference(text, index) {
   return isLegalXmlCodePoint(codePoint);
 }
 
-// Validate references in character data and quoted attribute values. Comments
-// and CDATA are handled lexically because their contents are not XML markup.
-function hasInvalidXmlCharacterReference(text) {
+// Strip XML comments while enforcing the XML comment production. In
+// particular, comment content may not contain "--" or end in "-" before the
+// closing delimiter. Return the stripped text so every lexical comment scan
+// uses the same grammar and fails closed on malformed comments.
+function stripXmlComments(text) {
+  let output = '';
   let index = 0;
   let inTag = false;
   let quote = null;
   while (index < text.length) {
     if (!inTag && text.startsWith('<!--', index)) {
       const end = text.indexOf('-->', index + 4);
-      if (end < 0) return true;
+      if (end < 0) return { ok: false, text: output + text.slice(index) };
+      const body = text.slice(index + 4, end);
+      if (body.includes('--') || body.endsWith('-')) return { ok: false, text: output + text.slice(index) };
       index = end + 3;
       continue;
     }
+    const char = text[index];
+    output += char;
+    if (inTag) {
+      if (quote) {
+        if (char === quote) quote = null;
+      } else if (char === '"' || char === "'") {
+        quote = char;
+      } else if (char === '>') {
+        inTag = false;
+      }
+    } else if (char === '<') {
+      inTag = true;
+    }
+    index += 1;
+  }
+  return { ok: true, text: output };
+}
+
+// Validate references in character data and quoted attribute values. Comments
+// and CDATA are handled lexically because their contents are not XML markup.
+function hasInvalidXmlCharacterReference(text) {
+  const comments = stripXmlComments(text);
+  if (!comments.ok) return false;
+  text = comments.text;
+  let index = 0;
+  let inTag = false;
+  let quote = null;
+  while (index < text.length) {
     if (!inTag && text.startsWith('<![CDATA[', index)) {
       const end = text.indexOf(']]>', index + 9);
       if (end < 0) return true;
@@ -228,6 +261,8 @@ export function inspectSvgText(text) {
   // XML permits complete comments before the document element. Strip only the
   // leading prolog comments for root discovery; the full text is still scanned
   // below so malformed/unclosed comments continue to fail closed.
+  const comments = stripXmlComments(canonicalText);
+  if (!comments.ok) errors.push('Malformed XML comment or CDATA section.');
   const rootText = canonicalText.replace(/^(?:\s*<!--[\s\S]*?-->\s*)*/, '');
   if (!/^<svg\b/.test(rootText)) errors.push('SVG root is missing.');
   const rootMatch = rootText.match(/^<svg\b([^>]*)>/);
@@ -243,15 +278,14 @@ export function inspectSvgText(text) {
   // for element/attribute policy violations so tag-like text inside them is not
   // mistaken for executable SVG markup. If an opening delimiter remains after
   // complete sections are removed, the XML section is unclosed and must fail closed.
-  const scanText = canonicalText
-    .replace(/<!--[\s\S]*?-->/g, '')
+  const scanText = comments.text
     .replace(/<!\[CDATA\[[\s\S]*?\]\]>/g, '');
   // DOMParser rejects illegal XML 1.0 code points before exposing text or
   // attributes. XML's Char production also applies inside inert comments and
   // CDATA, so scan the raw source before the lexical policy checks.
   if (hasInvalidRawXmlCharacter(canonicalText)) errors.push('Invalid raw XML character.');
   if (hasInvalidXmlCharacterReference(canonicalText)) errors.push('Invalid XML character reference.');
-  if (/<!--|<!\[CDATA\[/.test(scanText)) errors.push('Malformed XML comment or CDATA section.');
+  if (/<!\[CDATA\[/.test(scanText)) errors.push('Malformed XML comment or CDATA section.');
   if (hasStrayCdataClose(scanText)) errors.push('Stray CDATA close delimiter is forbidden.');
   const scannedTags = scanXmlTags(scanText);
   if (!scannedTags.ok) errors.push(scannedTags.error);

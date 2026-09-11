@@ -67,6 +67,12 @@ for (const declaration of [
 assert.equal(inspectSvgText(`<!-- leading comment -->${safe}`).ok, true, 'complete XML comment before root is allowed');
 assert.equal(inspectSvgText(`  \n<!-- first --><!-- second -->\n${safe}`).ok, true, 'multiple leading comments with whitespace are allowed');
 assert.equal(inspectSvgText(`<?xml version="1.0"?><!-- leading comment -->${safe}`).ok, true, 'leading comment after XML declaration is allowed');
+for (const comment of ['<!-- a--b -->', '<!-- a--->']) {
+  assert.equal(inspectSvgText(`${comment}${safe}`).ok, false, `invalid XML comment is rejected: ${comment}`);
+}
+for (const comment of ['<!-- ok -->', '<!---->', '<!-- a- -->']) {
+  assert.equal(inspectSvgText(`${comment}${safe}`).ok, true, `valid XML comment remains accepted: ${comment}`);
+}
 assert.equal(inspectSvgText(`<!-- unclosed ${safe}`).ok, false, 'unterminated leading comment stays invalid');
 assert.equal(inspectSvgText(`<?xml-stylesheet href="https://evil.example/x.css"?>${safe}`).ok, false);
 assert.equal(inspectSvgText(safe.replace('<path', '<?evil x?><path')).ok, false);

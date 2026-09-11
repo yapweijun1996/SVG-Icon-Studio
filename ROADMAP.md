@@ -51,12 +51,13 @@
 | `v0.7.29` | 2026-09-11 | Close browser root-dimension attribute case bypass | 4 |
 | `v0.7.30` | 2026-09-11 | Enforce exact SVG element and attribute name case | 4 |
 | `v0.7.31` | 2026-09-11 | Enforce strict XML declaration grammar parity | 4 |
+| `v0.7.32` | 2026-09-11 | Enforce XML comment grammar parity | 4 |
 
 Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`.
 
 ---
 
-## Current state (as of `v0.7.31`)
+## Current state (as of `v0.7.32`)
 
 - 100 icons, 10 categories, 2 styles (91 outline / 9 filled).
 - Zero runtime dependencies; Vite is dev/build tooling only.
