@@ -41,6 +41,29 @@ assert.equal(inspectSvgText(safe.replace('http://www.w3.org/2000/svg', 'http://e
 assert.equal(inspectSvgText(`<!DOCTYPE svg>${safe}`).ok, false);
 assert.equal(inspectSvgText(`<!DOCTYPE svg [<!ENTITY x \"M1 1h2\">]>${safe}`).ok, false);
 assert.equal(inspectSvgText(`<?xml version="1.0"?>${safe}`).ok, true, 'standard XML declaration is allowed');
+for (const declaration of [
+  '<?xml foo?>', '<?XML version="1.0"?>', '<?xml version="1.0" standalone="maybe"?>',
+  '<?xml version="2.0"?>', '<?xml encoding="UTF-8"?>', '<?xml version="1.0" foo="bar"?>',
+]) {
+  assert.equal(inspectSvgText(`${declaration}${safe}`).ok, false, `malformed XML declaration is rejected: ${declaration}`);
+}
+for (const declaration of [
+  "<?xml version='1.0'?>", '<?xml version = "1.0"?>', '<?xml version="1.1"?>', '<?xml version="1.00"?>',
+  '<?xml version="1.0" encoding="UTF-8"?>', '<?xml version="1.0" encoding="utf-8"?>',
+  '<?xml version="1.0" encoding="UTF-16"?>', '<?xml version="1.0" encoding="ISO-8859-1"?>',
+  '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>',
+  '<?xml version="1.0" standalone="yes"?>', '<?xml version="1.0" standalone="no"?>',
+]) {
+  assert.equal(inspectSvgText(`${declaration}${safe}`).ok, true, `canonical XML declaration remains accepted: ${declaration}`);
+}
+
+for (const declaration of [
+  ' <?xml version="1.0"?>', '\n<?xml version="1.0"?>',
+  '<?xml version="1.0" standalone="yes" encoding="UTF-8"?>',
+  '<?xml VERSION="1.0"?>', '<?xml version="1.0" ENCODING="UTF-8"?>',
+]) {
+  assert.equal(inspectSvgText(`${declaration}${safe}`).ok, false, `declaration placement/order/case is rejected: ${JSON.stringify(declaration)}`);
+}
 assert.equal(inspectSvgText(`<!-- leading comment -->${safe}`).ok, true, 'complete XML comment before root is allowed');
 assert.equal(inspectSvgText(`  \n<!-- first --><!-- second -->\n${safe}`).ok, true, 'multiple leading comments with whitespace are allowed');
 assert.equal(inspectSvgText(`<?xml version="1.0"?><!-- leading comment -->${safe}`).ok, true, 'leading comment after XML declaration is allowed');

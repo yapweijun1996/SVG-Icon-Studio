@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.31 — 2026-09-11
+
+### Fixed
+
+- Browser and Node/build SVG validation now share strict XML declaration grammar. Only declarations with canonical lower-case pseudo-attribute names, an XML 1.x version token, an optional syntactically valid encoding name, and an optional `yes`/`no` standalone field in XML-defined order are accepted; malformed, misplaced, mis-cased, version-2.x, reversed-order, and unknown-field declarations are rejected consistently with Chromium `DOMParser`.
+
+### Validation
+
+- Focused XML declaration regressions cover malformed declarations plus canonical quoting, XML 1.x versions, encoding names, standalone values, placement, field case, and ordering; `npm run typecheck`, `npm test`, `npm run validate`, `npm run build`, and `git diff --check` pass.
+- Real Chromium differential validation covers the same declaration matrix against both `DOMParser` and the browser `sanitizeSvgText()` path.
+
 ## 0.7.30 — 2026-09-11
 
 ### Fixed

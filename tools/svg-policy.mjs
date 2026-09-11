@@ -10,6 +10,7 @@ import {
   isHrefAttribute,
   hasForbiddenDoctype,
   hasForbiddenProcessingInstruction,
+  getXmlDeclaration,
   isInvalidReference,
 } from '../js/services/svg-policy.js';
 
@@ -222,7 +223,8 @@ export function inspectSvgText(text) {
   if (typeof text !== 'string' || !text.trim()) return { ok: false, errors: ['SVG is empty.'] };
   if (hasForbiddenDoctype(text)) errors.push('SVG doctype is forbidden.');
   if (hasForbiddenProcessingInstruction(text)) errors.push('SVG processing instructions are forbidden.');
-  const canonicalText = text.replace(/^\s*<\?xml\s+[^?]*\?>/i, '');
+  const xmlDeclaration = getXmlDeclaration(text);
+  const canonicalText = xmlDeclaration.valid ? text.slice(xmlDeclaration.text.length) : text;
   // XML permits complete comments before the document element. Strip only the
   // leading prolog comments for root discovery; the full text is still scanned
   // below so malformed/unclosed comments continue to fail closed.

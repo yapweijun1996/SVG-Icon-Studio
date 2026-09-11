@@ -88,8 +88,22 @@ export function hasForbiddenDoctype(text) {
   return /<!doctype\b/i.test(String(text));
 }
 
+const XML_DECLARATION_PATTERN = /^<\?xml\s+version\s*=\s*(["'])1\.[0-9]+\1(?:\s+encoding\s*=\s*(["'])[A-Za-z][A-Za-z0-9._-]*\2)?(?:\s+standalone\s*=\s*(["'])(?:yes|no)\3)?\s*\?>/;
+
+// Keep XML declaration recognition strict and shared by browser and Node paths.
+// A declaration is only the initial, lower-case `xml` processing instruction;
+// malformed declarations are rejected instead of being treated as generic PIs.
+export function getXmlDeclaration(text) {
+  const source = String(text);
+  const candidate = source.match(/^<\?xml(?=\s|\?>)[\s\S]*?\?>/);
+  if (!candidate) return { present: false, valid: false, text: '' };
+  return { present: true, valid: XML_DECLARATION_PATTERN.test(candidate[0]), text: candidate[0] };
+}
+
 export function hasForbiddenProcessingInstruction(text) {
-  const withoutXmlDeclaration = String(text).replace(/^\s*<\?xml\s+[^?]*\?>/i, '');
+  const declaration = getXmlDeclaration(text);
+  if (declaration.present && !declaration.valid) return true;
+  const withoutXmlDeclaration = declaration.valid ? String(text).slice(declaration.text.length) : String(text);
   return /<\?[a-z_][\w:.-]*(?:\s|\?)/i.test(withoutXmlDeclaration);
 }
 
