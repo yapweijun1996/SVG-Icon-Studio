@@ -6,6 +6,7 @@ import {
   isEventAttribute,
   isHrefAttribute,
   hasForbiddenDoctype,
+  hasForbiddenProcessingInstruction,
   isInvalidReference,
 } from '../js/services/svg-policy.js';
 
@@ -37,6 +38,10 @@ assert.equal(isHrefAttribute('id'), false);
 assert.equal(hasForbiddenDoctype('<!DOCTYPE svg><svg/>'), true);
 assert.equal(hasForbiddenDoctype('<!doctype svg [<!ENTITY x \"y\">]><svg/>'), true);
 assert.equal(hasForbiddenDoctype('<svg/>'), false);
+
+assert.equal(hasForbiddenProcessingInstruction('<?xml version="1.0"?><svg/>'), false, 'standard XML declaration stays allowed');
+assert.equal(hasForbiddenProcessingInstruction('<?xml-stylesheet href="https://example.com/x.css"?><svg/>'), true);
+assert.equal(hasForbiddenProcessingInstruction('<svg><?evil x?></svg>'), true);
 
 assert.equal(isInvalidReference('javascript:alert(1)'), true);
 assert.equal(isInvalidReference('data:image/png;base64,x'), true);

@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.18 — 2026-09-11
+
+### Fixed
+
+- Browser and build-time SVG validation now share the same XML processing-instruction policy. A standard `<?xml ...?>` declaration remains accepted, while `xml-stylesheet` and custom processing instructions are rejected before sanitization/build validation can diverge.
+
+### Validation
+
+- `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass.
+- Real Chromium and Node differential checks confirm XML declarations are accepted by both paths, while external stylesheet and in-document custom processing instructions are rejected by both.
+
 ## 0.7.17 — 2026-09-11
 
 ### Fixed

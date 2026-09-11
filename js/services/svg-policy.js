@@ -47,6 +47,11 @@ export function hasForbiddenDoctype(text) {
   return /<!doctype\b/i.test(String(text));
 }
 
+export function hasForbiddenProcessingInstruction(text) {
+  const withoutXmlDeclaration = String(text).replace(/^\s*<\?xml\s+[^?]*\?>/i, '');
+  return /<\?[a-z_][\w:.-]*(?:\s|\?)/i.test(withoutXmlDeclaration);
+}
+
 export function isInvalidReference(value) {
   const normalized = String(value).trim().toLowerCase();
   if (normalized.includes('javascript:') || normalized.includes('data:')) return true;

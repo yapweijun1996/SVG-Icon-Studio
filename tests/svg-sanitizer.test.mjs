@@ -6,6 +6,9 @@ assert.equal(inspectSvgText(safe.replace(' xmlns="http://www.w3.org/2000/svg"', 
 assert.equal(inspectSvgText(safe.replace('http://www.w3.org/2000/svg', 'http://example.com/not-svg')).ok, false);
 assert.equal(inspectSvgText(`<!DOCTYPE svg>${safe}`).ok, false);
 assert.equal(inspectSvgText(`<!DOCTYPE svg [<!ENTITY x \"M1 1h2\">]>${safe}`).ok, false);
+assert.equal(inspectSvgText(`<?xml version="1.0"?>${safe}`).ok, true, 'standard XML declaration is allowed');
+assert.equal(inspectSvgText(`<?xml-stylesheet href="https://evil.example/x.css"?>${safe}`).ok, false);
+assert.equal(inspectSvgText(safe.replace('<path', '<?evil x?><path')).ok, false);
 assert.equal(inspectSvgText(safe.replace('<path', '<script>alert(1)</script><path')).ok, false);
 assert.equal(inspectSvgText(safe.replace('<path', '<path onclick="alert(1)"')).ok, false);
 assert.equal(inspectSvgText(safe.replace('currentColor', 'url(https://example.com/x)')).ok, false);

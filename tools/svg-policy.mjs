@@ -7,6 +7,7 @@ import {
   isEventAttribute,
   isHrefAttribute,
   hasForbiddenDoctype,
+  hasForbiddenProcessingInstruction,
   isInvalidReference,
 } from '../js/services/svg-policy.js';
 
@@ -30,8 +31,10 @@ export function inspectSvgText(text) {
   const errors = [];
   if (typeof text !== 'string' || !text.trim()) return { ok: false, errors: ['SVG is empty.'] };
   if (hasForbiddenDoctype(text)) errors.push('SVG doctype is forbidden.');
-  if (!/^\s*<svg\b/i.test(text)) errors.push('SVG root is missing.');
-  const rootMatch = text.match(/^\s*<svg\b([^>]*)>/i);
+  if (hasForbiddenProcessingInstruction(text)) errors.push('SVG processing instructions are forbidden.');
+  const canonicalText = text.replace(/^\s*<\?xml\s+[^?]*\?>/i, '');
+  if (!/^\s*<svg\b/i.test(canonicalText)) errors.push('SVG root is missing.');
+  const rootMatch = canonicalText.match(/^\s*<svg\b([^>]*)>/i);
   if (!rootMatch) return { ok: false, errors };
   const attrs = rootMatch[1];
   const viewBox = attrs.match(/\bviewBox\s*=\s*["']([^"']+)["']/i)?.[1]?.replace(/\s+/g, ' ').trim();
@@ -42,7 +45,7 @@ export function inspectSvgText(text) {
   }
   const tagRegex = /<\/?\s*([a-zA-Z][\w:-]*)\b([^>]*)>/g;
   let tagMatch;
-  while ((tagMatch = tagRegex.exec(text))) {
+  while ((tagMatch = tagRegex.exec(canonicalText))) {
     const tag = tagMatch[1].toLowerCase();
     if (FORBIDDEN_ELEMENTS.has(tag) || !ALLOWED_ELEMENTS.has(tag)) errors.push(`Forbidden SVG element: ${tag}.`);
     if (tagMatch[0].startsWith('</')) continue;
@@ -57,6 +60,6 @@ export function inspectSvgText(text) {
       if (name !== 'xmlns' && isInvalidReference(value)) errors.push(`External reference is forbidden: ${name}.`);
     }
   }
-  if (!/<\/svg>\s*$/i.test(text)) errors.push('SVG closing tag is missing.');
+  if (!/<\/svg>\s*$/i.test(canonicalText)) errors.push('SVG closing tag is missing.');
   return { ok: errors.length === 0, errors: [...new Set(errors)] };
 }
