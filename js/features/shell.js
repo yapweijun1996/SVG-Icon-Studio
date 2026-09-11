@@ -54,7 +54,7 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
     updateBackdrop();
     if (wasOpen && !refs.body.classList.contains('inspector-open')) restoreDrawerFocus();
   }
-  function openInspector() {
+  function openInspector(trigger = refs.mobileInspectorButton) {
     refs.body.classList.remove('inspector-collapsed');
     // inspector-open (and the dimming backdrop it triggers) is the mobile
     // slide-in drawer -- on desktop the inspector is already docked, so
@@ -66,7 +66,7 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
       refs.body.classList.add('inspector-open');
       refs.mobileInspectorButton.setAttribute('aria-expanded', 'true');
       updateBackdrop();
-      openDrawer(refs.inspector, refs.mobileInspectorButton);
+      openDrawer(refs.inspector, trigger || refs.mobileInspectorButton);
       return;
     }
     updateBackdrop();

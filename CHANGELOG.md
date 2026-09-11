@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.3 — 2026-09-11
+
+### Fixed
+
+- Mobile/tablet inspector drawers opened from catalogue card controls now restore keyboard focus to the corresponding re-rendered card control when closed. Previously both card Select and “More export options” flows restored focus to the unrelated topbar inspector button because `openInspector()` always recorded that button as the trigger. Non-catalogue flows keep the existing topbar fallback when no stable visible trigger is supplied.
+
+### Validation
+
+- Reproduced the pre-fix issue in real headless Chrome at 390×844: opening Invoice via its “More export options” button and closing the inspector moved focus to `mobileInspectorButton` even though the replacement Invoice More button still existed. Focused regression, `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass; post-fix real Chrome verifies both Select and More flows return focus to their corresponding Invoice card controls.
+
 ## 0.9.2 — 2026-09-11
 
 ### Fixed

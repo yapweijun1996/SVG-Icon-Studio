@@ -93,8 +93,9 @@
 - `v0.7.3` — Added keyboard focus entry, focus trapping and trigger restoration for the mobile navigation and inspector drawers, verified in real Chromium at mobile/tablet breakpoints.
 - `v0.7.4` — Made the non-active app regions inert while a mobile navigation or inspector drawer is open, restoring them on close or resize without changing desktop docked panels.
 - `v0.9.2` — Guarded drawer focus restoration so no-op close/Escape calls cannot steal focus to a trigger remembered from an earlier drawer session.
+- `v0.9.3` — Catalogue-triggered mobile inspector drawers restore focus to the re-rendered originating card control instead of the unrelated topbar inspector button.
 
-**Status:** Complete for the current scope through `v0.9.1`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
+**Status:** Complete for the current scope through `v0.9.3`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
 
 ---
 

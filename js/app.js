@@ -74,7 +74,12 @@ async function start() {
     inspector.update();
   }
 
-  function selectIcon(id, openPanel = true) {
+  function findRenderedCardAction(id, action) {
+    const card = [...refs.iconGrid.querySelectorAll('.icon-card')].find(item => item.dataset.iconId === id);
+    return card?.querySelector(`[data-action="${action}"]`) || null;
+  }
+
+  function selectIcon(id, openPanel = true, restoreAction = null) {
     const icon = getIcon(id);
     if (!icon) return;
     state.selectedId = icon.id;
@@ -82,7 +87,9 @@ async function start() {
     setJson(STORAGE.recent, state.recent);
     catalogue.render();
     inspector.update();
-    if (openPanel && window.matchMedia('(max-width: 1180px)').matches) shell.openInspector();
+    if (openPanel && window.matchMedia('(max-width: 1180px)').matches) {
+      shell.openInspector(restoreAction ? findRenderedCardAction(icon.id, restoreAction) : undefined);
+    }
   }
 
   function toggleFavorite(id) {
@@ -108,10 +115,10 @@ async function start() {
   catalogue = createCatalogueController({
     state, refs,
     categoryOrder: registry.categories.sort((a, b) => a.order - b.order).map(category => category.id),
-    onSelect: selectIcon,
+    onSelect: id => selectIcon(id, true, 'select'),
     onFavorite: toggleFavorite,
     onCopy: copyIcon,
-    onMore: id => { selectIcon(id, false); shell.openInspector(); toast('More export formats are available in the inspector'); }
+    onMore: id => { selectIcon(id, false); shell.openInspector(findRenderedCardAction(id, 'more') || undefined); toast('More export formats are available in the inspector'); }
   });
 
   inspector = createInspectorController({
