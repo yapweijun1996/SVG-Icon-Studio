@@ -29,10 +29,13 @@
 - [x] +12 ERP icons batch 1 (quotation → reconciliation)
 - [x] +12 ERP icons batch 2 (credit-note → cost-center)
 - [x] +6 ERP icons, `filled` style (purchase-requisition → dashboard)
+- [x] +10 ERP icons, `outline` style (supplier-invoice → payroll), released as `v0.8.0`
+- [x] +10 ERP icons, `outline` style (material-request → depreciation), released as `v0.9.0`
 - [x] `tools/gen-filled-icons.mjs` authoring-time generator
 - [x] Collision check against existing 82 icons before drawing batch 2 (dropped a planned `branch` icon; redesigned `employee` as a badge, not a person)
 
 ### Epic 4 — Bug Fixes & UX Consistency
+- [x] Keep catalogue startup and manual pagination functional when `IntersectionObserver` is unavailable, released as `v0.8.1`
 - [x] Fix filled-icon fill-colour picker (was inert on all 9 filled icons, incl. 3 pre-existing)
 - [x] Unify catalogue-grid colour across outline/filled styles
 - [x] Scroll-to-load auto-pagination (`IntersectionObserver`, manual button kept as fallback)
@@ -83,7 +86,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.7.33` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.9.0` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 

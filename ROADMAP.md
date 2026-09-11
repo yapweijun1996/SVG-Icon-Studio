@@ -53,14 +53,17 @@
 | `v0.7.31` | 2026-09-11 | Enforce strict XML declaration grammar parity | 4 |
 | `v0.7.32` | 2026-09-11 | Enforce XML comment grammar parity | 4 |
 | `v0.7.33` | 2026-09-11 | Reject literal `<` in XML character data | 4 |
+| `v0.8.0` | 2026-09-11 | +10 ERP outline icons (payables, returns, inventory, quality, assets, payroll) | 3 |
+| `v0.8.1` | 2026-09-11 | Keep catalogue functional without `IntersectionObserver` | 4 |
+| `v0.9.0` | 2026-09-11 | +10 ERP outline icons (materials, traceability, logistics, operational finance) | 3 |
 
 Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`.
 
 ---
 
-## Current state (as of `v0.7.33`)
+## Current state (as of `v0.9.0`)
 
-- 100 icons, 10 categories, 2 styles (91 outline / 9 filled).
+- 120 icons, 10 categories, 2 styles (111 outline / 9 filled).
 - Zero runtime dependencies; Vite is dev/build tooling only.
 - CSP + SVG allowlist sanitizer; PWA manifest + service worker; CI/CD to GitHub Pages.
 - Full documentation set (`SPEC.md`, `DESIGN.md`, `EPIC.md`, `ROADMAP.md`, `TASK.md`) established and current.

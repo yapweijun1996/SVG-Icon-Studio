@@ -1839,6 +1839,226 @@
       "status": "active",
       "featured": false,
       "sortOrder": 1000
+    },
+    {
+      "id": "supplier-invoice",
+      "name": "Supplier Invoice",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["vendor bill", "accounts payable", "ap invoice", "procurement", "supplier"],
+      "aliases": ["vendor-invoice", "ap-invoice"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1010
+    },
+    {
+      "id": "accounts-payable",
+      "name": "Accounts Payable",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["ap", "payables", "outgoing payment", "vendor liability", "finance"],
+      "aliases": ["ap", "payables"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1020
+    },
+    {
+      "id": "accounts-receivable",
+      "name": "Accounts Receivable",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["ar", "receivables", "incoming payment", "customer balance", "finance"],
+      "aliases": ["ar", "receivables"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1030
+    },
+    {
+      "id": "sales-return",
+      "name": "Sales Return",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["customer return", "return merchandise", "rma", "credit", "sales"],
+      "aliases": ["customer-return", "rma"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1040
+    },
+    {
+      "id": "purchase-return",
+      "name": "Purchase Return",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["vendor return", "supplier return", "return to vendor", "rtn", "procurement"],
+      "aliases": ["vendor-return", "return-to-vendor"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1050
+    },
+    {
+      "id": "cycle-count",
+      "name": "Cycle Count",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["inventory count", "stocktake", "stock count", "warehouse audit", "counting"],
+      "aliases": ["stocktake", "inventory-count"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1060
+    },
+    {
+      "id": "stock-adjustment",
+      "name": "Stock Adjustment",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["inventory adjustment", "stock correction", "quantity change", "warehouse", "on hand"],
+      "aliases": ["inventory-adjustment", "stock-correction"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1070
+    },
+    {
+      "id": "quality-inspection",
+      "name": "Quality Inspection",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["qc", "quality control", "inspection", "acceptance", "compliance"],
+      "aliases": ["qc", "quality-control"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1080
+    },
+    {
+      "id": "fixed-asset",
+      "name": "Fixed Asset",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["asset register", "capital asset", "depreciation", "property plant equipment", "finance"],
+      "aliases": ["asset-register", "capital-asset"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1090
+    },
+    {
+      "id": "payroll",
+      "name": "Payroll",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["salary", "wages", "payslip", "compensation", "hr"],
+      "aliases": ["salary", "payslip"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1100
+    },
+    {
+      "id": "material-request",
+      "name": "Material Request",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["materials", "requisition", "inventory request", "procurement", "package"],
+      "aliases": ["material-requisition", "mr"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1110
+    },
+    {
+      "id": "serial-number",
+      "name": "Serial Number",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["serial", "barcode", "traceability", "tracking", "sku"],
+      "aliases": ["serial-code", "trace-id"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1120
+    },
+    {
+      "id": "item-master",
+      "name": "Item Master",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["item data", "product master", "catalogue", "database", "inventory"],
+      "aliases": ["product-master", "item-data"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1130
+    },
+    {
+      "id": "trial-balance",
+      "name": "Trial Balance",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["ledger", "debit credit", "accounting", "balance", "totals"],
+      "aliases": ["tb", "balance-sheet-check"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1140
+    },
+    {
+      "id": "shipment",
+      "name": "Shipment",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["shipping", "dispatch", "logistics", "transport", "packages"],
+      "aliases": ["consignment", "freight"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1150
+    },
+    {
+      "id": "expense-claim",
+      "name": "Expense Claim",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["expenses", "reimbursement", "receipt", "employee claim", "finance"],
+      "aliases": ["expense-report", "reimbursement-request"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1160
+    },
+    {
+      "id": "customer-payment",
+      "name": "Customer Payment",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["customer", "incoming money", "receipt", "cash collection", "settlement"],
+      "aliases": ["client-payment", "customer-receipt"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1170
+    },
+    {
+      "id": "supplier-payment",
+      "name": "Supplier Payment",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["supplier", "vendor", "outgoing money", "remittance", "settlement"],
+      "aliases": ["vendor-payment", "supplier-remittance"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1180
+    },
+    {
+      "id": "invoice-verification",
+      "name": "Invoice Verification",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["invoice", "three-way match", "verification", "audit", "approval"],
+      "aliases": ["invoice-match", "bill-check"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1190
+    },
+    {
+      "id": "depreciation",
+      "name": "Depreciation",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["fixed asset", "value reduction", "amortization", "declining value", "accounting"],
+      "aliases": ["asset-depreciation", "amortization"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1200
     }
   ]
 }
