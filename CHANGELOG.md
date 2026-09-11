@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.9.0 — 2026-09-11
+
+### Added
+
+- Added 10 ERP outline icons: `material-request`, `serial-number`, `item-master`, `trial-balance`, `shipment`, `expense-claim`, `customer-payment`, `supplier-payment`, `invoice-verification`, and `depreciation`.
+- Expanded the catalogue from 110 to 120 icons and the ERP category from 46 to 56 icons. The outline count is now 111; filled remains 9. All new assets use canonical 24px SVG roots, geometry-free registry metadata, and sequential sort orders 1110–1200.
+
+### Validation
+
+- Focused collision/metadata checks, `npm run typecheck`, `npm test`, `npm run validate`, `npm run build`, and `git diff --check` pass. Real headless Chrome against the production `dist/` build reports 120 total icons and successfully searches, selects, and renders all 10 new ERP icons via representative aliases with zero relevant console or network errors.
+
 ## 0.8.1 — 2026-09-11
 
 ### Fixed

@@ -36,13 +36,14 @@
 ## Epic 3 — ERP Icon Catalogue Expansion ✅ DONE
 
 **Goal:** grow the catalogue's ERP/back-office coverage and add a second icon style.
-**Releases:** `v0.4.0`, `v0.5.0`, `v0.6.0`, `v0.8.0` (2026-07-31 → 2026-09-11; non-contiguous, with the v0.7.x reliability line tracked under Epic 4)
-**Result:** ERP category 6 → 46 icons; catalogue 70 → 110 icons; icon styles 1 → 2 (`outline` + `filled`)
+**Releases:** `v0.4.0`, `v0.5.0`, `v0.6.0`, `v0.8.0`, `v0.9.0` (2026-07-31 → 2026-09-11; non-contiguous, with the v0.7.x reliability line tracked under Epic 4)
+**Result:** ERP category 6 → 56 icons; catalogue 70 → 120 icons; icon styles 1 → 2 (`outline` + `filled`)
 
 - `v0.4.0` — First ERP batch (+12: quotation, goods-receipt, stock-transfer, bill-of-materials, work-order, inventory, ledger, approval, workflow, tax, report, reconciliation). Also added the CSP meta tag (pulled into this release alongside the icons) and fixed the hardcoded "Collections: 6" sidebar badge.
 - `v0.5.0` — Second ERP batch (+12: credit-note, goods-issue, contract, bank, employee, timesheet, audit-trail, budget, price-list, batch-lot, bin-location, cost-center), moving past documents into finance/HR/warehouse/controlling.
 - `v0.6.0` — Third ERP batch (+6, `filled` style: purchase-requisition, debit-note, packing-list, pick-list, journal-entry, dashboard) plus `tools/gen-filled-icons.mjs`, the generator this style requires (see `SPEC.md` ADR-010).
 - `v0.8.0` — Fourth ERP batch (+10, `outline` style: supplier-invoice, accounts-payable, accounts-receivable, sales-return, purchase-return, cycle-count, stock-adjustment, quality-inspection, fixed-asset, payroll), expanding procurement, finance, inventory, quality, assets and HR coverage.
+- `v0.9.0` — Fifth ERP batch (+10, `outline` style: material-request, serial-number, item-master, trial-balance, shipment, expense-claim, customer-payment, supplier-payment, invoice-verification, depreciation), expanding materials, traceability, logistics and operational finance coverage.
 
 **Status:** Complete for the current scope. Adding more icons later is a normal, low-risk extension of this same pattern (see `SPEC.md` §17.1) — not a new epic unless the taxonomy itself needs to change.
 
@@ -51,7 +52,7 @@
 ## Epic 4 — Bug Fixes & UX Consistency ✅ DONE
 
 **Goal:** fix real defects surfaced once Epic 3 changed the shape of the catalogue (3→9 filled icons, 6→36 ERP icons), and one longer-standing responsive-layout bug.
-**Releases:** `v0.6.1` → `v0.7.33` (2026-07-31 → 2026-09-11)
+**Releases:** `v0.6.1` → `v0.8.1` (2026-07-31 → 2026-09-11)
 
 - `v0.7.5` — Aligned browser-upload SVG namespace enforcement with the build-time policy; malformed/missing namespaces are rejected before uploaded assets enter local storage.
 - `v0.7.6` — Completed generated-code tab semantics with labelled tabpanel relationships, roving focus, and Arrow/Home/End keyboard navigation.
@@ -82,6 +83,7 @@
 - `v0.7.31` — Enforced Chromium-compatible XML declaration grammar so malformed declarations no longer bypass Node/build validation.
 - `v0.7.32` — Matched XML comment grammar by rejecting internal `--` sequences while preserving valid empty, normal, and single-hyphen comments.
 - `v0.7.33` — Matched XML character-data parsing by rejecting literal `<` outside element markup while preserving `&lt;`, literal `>`, comments, and CDATA.
+- `v0.8.1` — Catalogue startup now remains functional when `IntersectionObserver` is unavailable; fallback previews and manual pagination remain usable.
 
 - `v0.6.1` — Fixed the Inspector fill-colour picker being inert for all 9 `filled` icons (their colour was silently controlled by the *stroke* picker instead) — a pre-existing bug in `purchase-order`/`delivery-order`/`ai-spark` that Epic 3 made easier to notice.
 - `v0.7.0` — Unified catalogue-grid icon colour across styles (removed the `filled`→accent-orange override, ADR-011); added scroll-to-load auto-pagination (ADR-012).
@@ -90,7 +92,7 @@
 - `v0.7.3` — Added keyboard focus entry, focus trapping and trigger restoration for the mobile navigation and inspector drawers, verified in real Chromium at mobile/tablet breakpoints.
 - `v0.7.4` — Made the non-active app regions inert while a mobile navigation or inspector drawer is open, restoring them on close or resize without changing desktop docked panels.
 
-**Status:** Complete for the current scope through `v0.8.0`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
+**Status:** Complete for the current scope through `v0.9.0`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
 
 ---
 

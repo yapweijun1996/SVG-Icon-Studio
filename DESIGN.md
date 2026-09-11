@@ -1,7 +1,7 @@
 # Icon Studio — Design System
 
 **Document:** `DESIGN.md`
-**Status:** Living document — reflects the design system as actually shipped in `v0.8.0`, not an aspirational brief.
+**Status:** Living document — reflects the design system as actually shipped in `v0.9.0`, not an aspirational brief.
 **Source of truth for tokens:** [`css/tokens.css`](css/tokens.css) (design-system.json is a synced machine-readable snapshot of the same values, not an independent source)
 **Relationship to `components.md`:** `components.md` is the original pre-implementation design brief written before any code existed. It is kept for historical reference only — where the two disagree, this document and the current codebase win. See the note at the top of `components.md`.
 
@@ -10,7 +10,7 @@
 ## 1. Product identity
 
 - **Name:** Icon Studio — SVG Icon Collection
-- **Positioning:** a browse/customise/export workspace for production-ready SVG icons, aimed at ERP/back-office and general product UI use cases (see the `ERP` category, 46 of the 110 icons).
+- **Positioning:** a browse/customise/export workspace for production-ready SVG icons, aimed at ERP/back-office and general product UI use cases (see the `ERP` category, 56 of the 120 icons).
 - **Feel:** professional SaaS asset-management workspace — compact, enterprise-friendly density, restrained shadows, not a marketing landing page.
 - **Brand mark:** a four-point sparkle/compass path (`M12 2c.7 4.7 3.3 7.3 8 8-4.7.7-7.3 3.3-8 8-.7-4.7-3.3-7.3-8-8 4.7-.7 7.3-3.3 8-8Z`), used in the sidebar brand button and the "Brand kit" nav icon.
 
@@ -102,7 +102,7 @@ Three-column desktop shell (`.app-shell`, CSS grid: `sidebar-width | 1fr | inspe
 
 Two supported styles, both on an exact `0 0 24 24` viewBox (full contract in `SPEC.md` §7):
 
-### 5.1 Outline (101 of 110 icons)
+### 5.1 Outline (111 of 120 icons)
 
 ```svg
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -112,7 +112,7 @@ Two supported styles, both on an exact `0 0 24 24` viewBox (full contract in `SP
 - Standard stroke width `1.5`. Isolated, documented exceptions exist (`invoice.svg` uses `1` because `1.5` merges its currency mark into a blob at icon scale; `delivery-truck.svg` uses `stroke-linecap="butt" stroke-linejoin="miter"` to match sharp-cornered reference art) — any new exception must be similarly justified and noted in `CHANGELOG.md`, not silently introduced.
 - `fill`/`stroke` are set **only on the root `<svg>`**; child shapes carry no colour attributes of their own so they inherit correctly.
 
-### 5.2 Filled (9 of 110 icons: `purchase-order`, `delivery-order`, `ai-spark`, `purchase-requisition`, `debit-note`, `packing-list`, `pick-list`, `journal-entry`, `dashboard`)
+### 5.2 Filled (9 of 120 icons: `purchase-order`, `delivery-order`, `ai-spark`, `purchase-requisition`, `debit-note`, `packing-list`, `pick-list`, `journal-entry`, `dashboard`)
 
 ```svg
 <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
@@ -126,7 +126,7 @@ Two supported styles, both on an exact `0 0 24 24` viewBox (full contract in `SP
 
 ### 5.3 Category taxonomy (10 categories, `order` controls display sequence)
 
-`Interface`(10) · `Arrows`(20) · `Actions`(30) · `Files`(40) · `Users`(50) · `Commerce`(60) · `Finance`(70) · `Logistics`(80) · `AI`(90) · `ERP`(100, 46 icons — the largest category, spanning procurement/inventory/finance/HR/controlling)
+`Interface`(10) · `Arrows`(20) · `Actions`(30) · `Files`(40) · `Users`(50) · `Commerce`(60) · `Finance`(70) · `Logistics`(80) · `AI`(90) · `ERP`(100, 56 icons — the largest category, spanning procurement/inventory/finance/HR/controlling)
 
 ### 5.4 Naming/collision discipline
 
@@ -160,4 +160,4 @@ These aren't visual, but they constrain what any new UI feature is allowed to do
 See `ROADMAP.md` for full detail — the two items with direct design implications:
 
 - **Command palette** (Cmd+K): would reuse the same underlying action-dispatch logic as any future WebMCP tool layer, so the two should be designed together, not separately.
-- **Search relevance/highlighting**: current search is plain substring match with no ranking or highlighted match term — noted as a design gap now that the catalogue has grown to 110 icons.
+- **Search relevance/highlighting**: current search is plain substring match with no ranking or highlighted match term — noted as a design gap now that the catalogue has grown to 120 icons.
