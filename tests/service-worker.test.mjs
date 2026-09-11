@@ -4,13 +4,13 @@ import vm from 'node:vm';
 
 const source = fs.readFileSync(new URL('../public/sw.js', import.meta.url), 'utf8');
 
-function createHarness(fetchImpl) {
+function createHarness(fetchImpl, { cachedResponse = null } = {}) {
   const listeners = {};
   const puts = [];
   const cache = {
     addAll: async () => {},
     put: async (key, response) => { puts.push({ key, response }); },
-    match: async () => new Response('<!doctype html><title>cached shell</title>', {
+    match: async () => cachedResponse || new Response('<!doctype html><title>cached shell</title>', {
       status: 200,
       headers: { 'content-type': 'text/html; charset=utf-8' }
     })
@@ -49,6 +49,18 @@ async function navigate(harness, url) {
   });
   assert.ok(responsePromise, 'navigation should be intercepted by the service worker');
   return responsePromise;
+}
+
+async function fetchAsset(harness, url) {
+  let responsePromise;
+  const lifetimePromises = [];
+  harness.listeners.fetch({
+    request: { method: 'GET', mode: 'cors', url },
+    respondWith(promise) { responsePromise = Promise.resolve(promise); },
+    waitUntil(promise) { lifetimePromises.push(Promise.resolve(promise)); }
+  });
+  assert.ok(responsePromise, 'asset request should be intercepted by the service worker');
+  return { responsePromise, lifetimePromises };
 }
 
 assert.match(source, /const CACHE_VERSION = 'icon-studio-v2'/, 'cache version should invalidate the pre-fix navigation cache');
@@ -92,4 +104,24 @@ assert.match(source, /const CACHE_VERSION = 'icon-studio-v2'/, 'cache version sh
   assert.equal(harness.puts.length, 0, 'non-HTML responses must not become the offline document fallback');
 }
 
-console.log('Service-worker navigation cache integrity tests passed.');
+
+{
+  let resolveNetwork;
+  const networkResponse = new Promise(resolve => { resolveNetwork = resolve; });
+  const harness = createHarness(() => networkResponse, {
+    cachedResponse: new Response('cached-v1', { status: 200, headers: { 'content-type': 'text/javascript' } })
+  });
+
+  const { responsePromise, lifetimePromises } = await fetchAsset(harness, 'https://example.test/app/assets/app.js');
+  const cached = await responsePromise;
+  assert.equal(await cached.text(), 'cached-v1', 'cached asset should be returned immediately');
+  assert.equal(lifetimePromises.length, 1, 'background refresh should extend the FetchEvent lifetime');
+  assert.equal(harness.puts.length, 0, 'cache refresh should still be pending while the network request is pending');
+
+  resolveNetwork(new Response('network-v2', { status: 200, headers: { 'content-type': 'text/javascript' } }));
+  await Promise.all(lifetimePromises);
+  assert.equal(harness.puts.length, 1, 'background refresh should finish its cache write before the lifetime promise settles');
+  assert.equal(await harness.puts[0].response.text(), 'network-v2');
+}
+
+console.log('Service-worker navigation integrity and asset refresh lifetime tests passed.');

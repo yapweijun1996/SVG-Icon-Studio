@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.9 — 2026-09-12
+
+### Fixed
+
+- Service-worker stale-while-revalidate asset refreshes now extend the active `FetchEvent` with `waitUntil()` until both the network fetch and cache write settle. Cached assets still return immediately, but browsers can no longer terminate an idle worker before the background cache update finishes. Cache-write failures remain best-effort and never replace a successful network response.
+
+### Validation
+
+- Pre-fix deterministic service-worker reproduction returned a cached asset while the refresh network request was still pending and recorded **0** `waitUntil()` lifetime promises. Focused lifecycle regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and real Chrome stale-while-revalidate verification pass.
+
 ## 0.9.8 — 2026-09-12
 
 ### Fixed

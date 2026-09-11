@@ -100,8 +100,9 @@
 - `v0.9.6` — Full-preview modal Escape handling now dismisses only the topmost dialog layer before the underlying mobile/tablet inspector drawer.
 - `v0.9.7` — Removed the non-functional `frame-ancestors` directive from meta CSP and added a static-host anti-framing guard, while documenting HTTP response headers as the preferred production control.
 - `v0.9.8` — Hardened service-worker navigation caching so failed, non-HTML, or unrelated navigations cannot overwrite the known-good offline app-shell fallback; bumped the cache generation to evict pre-fix entries.
+- `v0.9.9` — Made stale-while-revalidate asset refreshes lifetime-safe by extending each fetch event until the background network refresh and cache write finish.
 
-**Status:** Complete for the current scope through `v0.9.8`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
+**Status:** Complete for the current scope through `v0.9.9`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
 
 ---
 

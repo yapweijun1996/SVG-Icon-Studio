@@ -55,19 +55,24 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Assets: serve cache immediately, refresh it in the background.
+  // Assets: serve cache immediately, refresh it in the background. Keep the
+  // fetch + cache write inside this FetchEvent's lifetime so Chromium cannot
+  // terminate an idle worker before stale-while-revalidate finishes.
+  const refresh = fetch(request)
+    .then(async response => {
+      if (response.ok) {
+        try {
+          const cache = await caches.open(CACHE_VERSION);
+          await cache.put(request, response.clone());
+        } catch {
+          // Cache writes are best-effort; the network response still wins on a miss.
+        }
+      }
+      return response;
+    });
+
+  event.waitUntil(refresh.then(() => undefined, () => undefined));
   event.respondWith(
-    caches.match(request).then(cached => {
-      const refresh = fetch(request)
-        .then(response => {
-          if (response.ok) {
-            const copy = response.clone();
-            caches.open(CACHE_VERSION).then(cache => cache.put(request, copy));
-          }
-          return response;
-        })
-        .catch(() => cached);
-      return cached || refresh;
-    })
+    caches.match(request).then(cached => cached || refresh)
   );
 });

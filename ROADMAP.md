@@ -64,12 +64,13 @@
 | `v0.9.6` | 2026-09-12 | Keep modal Escape dismissal scoped to the topmost preview layer | 4 |
 | `v0.9.7` | 2026-09-12 | Add static-host anti-framing protection and correct CSP framing claims | 4 |
 | `v0.9.8` | 2026-09-12 | Protect offline app-shell cache from failed/unrelated navigations | 4 |
+| `v0.9.9` | 2026-09-12 | Keep background asset revalidation alive through cache update | 4 |
 
 Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`.
 
 ---
 
-## Current state (as of `v0.9.8`)
+## Current state (as of `v0.9.9`)
 
 - 120 icons, 10 categories, 2 styles (111 outline / 9 filled).
 - Zero runtime dependencies; Vite is dev/build tooling only.
