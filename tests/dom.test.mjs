@@ -16,6 +16,7 @@ assert.equal(slugify(''), '');
 const html = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const appSource = fs.readFileSync(new URL('../js/app.js', import.meta.url), 'utf8');
 const shellSource = fs.readFileSync(new URL('../js/features/shell.js', import.meta.url), 'utf8');
+const themeSource = fs.readFileSync(new URL('../js/features/theme.js', import.meta.url), 'utf8');
 const catalogueSource = fs.readFileSync(new URL('../js/features/catalogue.js', import.meta.url), 'utf8');
 const filterButtonTag = html.match(/<button\b[^>]*id="filterButton"[^>]*>/)?.[0] || '';
 const filterHandlerStart = appSource.indexOf("refs.filterButton.addEventListener('click'");
@@ -54,6 +55,14 @@ assert.match(inspectorCollapseSync, /setAttribute\('aria-label', actionLabel\)/,
 assert.match(inspectorCollapseSync, /title = actionLabel/, 'desktop inspector toggle should synchronize its tooltip action label');
 assert.match(inspectorCollapseClick, /syncInspectorCollapsedState\(collapsed\)/, 'desktop inspector toggle click should refresh its action label');
 
+const themeButtonTag = html.match(/<button\b[^>]*id="themeButton"[^>]*>/)?.[0] || '';
+const themeSync = themeSource.match(/function sync\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
+assert.match(themeButtonTag, /aria-label="Switch to dark theme"/, 'theme toggle should expose a concrete initial action');
+assert.match(themeButtonTag, /title="Switch to dark theme"/, 'theme toggle initial tooltip should match its action');
+assert.match(themeSync, /const actionLabel = `Switch to \${body\.dataset\.theme === 'dark' \? 'light' : 'dark'} theme`/, 'theme toggle action should derive from the active theme');
+assert.match(themeSync, /setAttribute\('aria-label', actionLabel\)/, 'theme toggle should synchronize its accessible action name');
+assert.match(themeSync, /title = actionLabel/, 'theme toggle should synchronize its visible tooltip action');
+
 const restoreFocusHelper = shellSource.match(/function restoreDrawerFocus\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
 const closeSidebarSource = shellSource.match(/function closeSidebar\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
 const closeInspectorSource = shellSource.match(/function closeInspector\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
@@ -78,4 +87,4 @@ assert.ok(
 );
 assert.doesNotMatch(escapeHandler, /previewDialog\.close\(\)/, 'shell should leave native dialog Escape/cancel handling to the dialog itself');
 
-console.log('DOM, live-region, inspector-toggle, modal-layer and focus accessibility tests passed.');
+console.log('DOM, live-region, theme/inspector-toggle, modal-layer and focus accessibility tests passed.');

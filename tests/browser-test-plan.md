@@ -16,6 +16,7 @@ Required viewports: desktop 1440×900, tablet 834×1112 and mobile 390×844.
 10. Full preview dialog opens and closes by button, backdrop and Escape; on mobile/tablet, the first Escape closes only the modal preview and leaves the underlying inspector drawer open until a second dismissal.
 11. Theme, sidebar and inspector settings persist.
 11a. On desktop, collapsing the inspector changes the icon-only toggle action from “Collapse inspector” to “Expand inspector”, and expanding it changes the action back.
+11b. Toggling light/dark theme keeps the icon-only button accessible action and visible tooltip synchronized (for example, dark theme exposes “Switch to light theme”).
 12. Valid 24×24 SVG upload is sanitized and stored in IndexedDB.
 13. Unsafe, oversized or non-24×24 SVG upload is rejected without persistence.
 14. One missing catalogue asset shows fallback while other icons continue working.

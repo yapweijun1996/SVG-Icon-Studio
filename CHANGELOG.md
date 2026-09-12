@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.14 — 2026-09-12
+
+### Fixed
+
+- The theme icon button now keeps its accessible action name and visible tooltip synchronized with the theme it will switch to. In light mode both say “Switch to dark theme”; after switching to dark mode both say “Switch to light theme”. Previously `aria-label` updated correctly but the `title` tooltip remained the stale generic “Toggle dark theme”.
+
+### Validation
+
+- Pre-fix real Chromium reproduced the mismatch: light mode exposed `aria-label="Switch to dark theme"` with `title="Toggle dark theme"`, and after activation dark mode exposed `aria-label="Switch to light theme"` while the title still remained unchanged. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix real Chromium action/tooltip verification cover the fix.
+
 ## 0.9.13 — 2026-09-12
 
 ### Fixed
