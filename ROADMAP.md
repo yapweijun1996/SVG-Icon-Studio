@@ -68,12 +68,13 @@
 | `v0.9.10` | 2026-09-12 | Preserve unrelated same-origin caches during service-worker activation | 4 |
 | `v0.9.11` | 2026-09-12 | Bound runtime caching to canonical app assets and query-free URLs | 4 |
 | `v0.9.12` | 2026-09-12 | Cap runtime CacheStorage and evict oldest obsolete app assets | 4 |
+| `v0.9.13` | 2026-09-12 | Synchronize desktop inspector collapse/expand action labels | 4 |
 
 Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`.
 
 ---
 
-## Current state (as of `v0.9.12`)
+## Current state (as of `v0.9.13`)
 
 - 120 icons, 10 categories, 2 styles (111 outline / 9 filled).
 - Zero runtime dependencies; Vite is dev/build tooling only.

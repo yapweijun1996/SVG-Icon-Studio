@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.13 — 2026-09-12
+
+### Fixed
+
+- The desktop inspector collapse/expand icon button now keeps its accessible name and tooltip synchronized with the action it will perform. After collapsing the inspector it announces “Expand inspector”; after expanding it returns to “Collapse inspector”. Previously the visual chevron reversed but the button continued to announce “Collapse inspector” in both states.
+
+### Validation
+
+- Pre-fix real Chrome at 1440×900 confirmed the desktop toggle stayed visible and retained `aria-label="Collapse inspector"` after the inspector entered `inspector-collapsed`. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix real Chrome action-label verification cover the fix.
+
 ## 0.9.12 — 2026-09-12
 
 ### Fixed

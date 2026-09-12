@@ -104,8 +104,9 @@
 - `v0.9.10` — Scoped service-worker cache eviction to Icon Studio-owned cache names so activation cannot delete unrelated CacheStorage from other same-origin applications.
 - `v0.9.11` — Bounded service-worker runtime caching to canonical Icon Studio asset namespaces and query-free URLs so cache-busting/arbitrary same-origin requests cannot grow the persistent cache.
 - `v0.9.12` — Added a 256-entry cap for runtime app assets so obsolete hashed bundles from repeated deployments are evicted oldest-first without removing the offline shell or manifest.
+- `v0.9.13` — Kept the desktop inspector collapse/expand control's accessible name and tooltip synchronized with the action it will perform.
 
-**Status:** Complete for the current scope through `v0.9.12`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
+**Status:** Complete for the current scope through `v0.9.13`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
 
 ---
 

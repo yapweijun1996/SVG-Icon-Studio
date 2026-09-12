@@ -33,6 +33,12 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
     syncInertState();
   }
 
+  function syncInspectorCollapsedState(collapsed) {
+    const actionLabel = collapsed ? 'Expand inspector' : 'Collapse inspector';
+    refs.collapseInspectorButton.setAttribute('aria-label', actionLabel);
+    refs.collapseInspectorButton.title = actionLabel;
+  }
+
   function syncInertState() {
     const inspectorDrawerOpen = window.matchMedia('(max-width: 1180px)').matches && refs.body.classList.contains('inspector-open');
     const sidebarDrawerOpen = !inspectorDrawerOpen && window.matchMedia('(max-width: 820px)').matches && refs.body.classList.contains('sidebar-open');
@@ -56,6 +62,7 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
   }
   function openInspector(trigger = refs.mobileInspectorButton) {
     refs.body.classList.remove('inspector-collapsed');
+    syncInspectorCollapsedState(false);
     // inspector-open (and the dimming backdrop it triggers) is the mobile
     // slide-in drawer -- on desktop the inspector is already docked, so
     // adding it there just shows a backdrop with no panel motion behind it.
@@ -79,6 +86,7 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
       refs.mobileInspectorButton.setAttribute('aria-expanded', 'false');
     } else {
       refs.body.classList.add('inspector-collapsed');
+      syncInspectorCollapsedState(true);
       setValue(STORAGE.inspector, 'true');
     }
     updateBackdrop();
@@ -123,6 +131,7 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
   refs.body.classList.toggle('sidebar-collapsed', sidebarCollapsed);
   refs.body.classList.toggle('inspector-collapsed', inspectorCollapsed);
   syncCollapsedState(sidebarCollapsed);
+  syncInspectorCollapsedState(inspectorCollapsed);
   refs.pinInspectorButton.setAttribute('aria-pressed', String(pinned));
   refs.pinInspectorButton.classList.toggle('is-active', pinned);
   refs.inspectorPinState.textContent = pinned ? 'Pinned' : 'Unpinned';
@@ -148,6 +157,7 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
   });
   refs.collapseInspectorButton.addEventListener('click', () => {
     const collapsed = refs.body.classList.toggle('inspector-collapsed');
+    syncInspectorCollapsedState(collapsed);
     setValue(STORAGE.inspector, String(collapsed));
   });
   refs.closeInspectorButton.addEventListener('click', closeInspector);

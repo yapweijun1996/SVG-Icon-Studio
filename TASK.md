@@ -61,6 +61,7 @@
 - [x] Scope service-worker cache eviction to `icon-studio-*` names so activation preserves unrelated same-origin application caches, released as `v0.9.10`
 - [x] Bound service-worker runtime caching to canonical app-owned asset namespaces and query-free URLs so cache-busting/arbitrary same-origin requests cannot grow persistent CacheStorage, released as `v0.9.11`
 - [x] Cap runtime CacheStorage at 256 app-asset entries and evict oldest overflow without touching the offline shell/manifest, preventing obsolete hashed deployment assets from accumulating indefinitely, released as `v0.9.12`
+- [x] Keep the desktop inspector collapse/expand button accessible name and tooltip synchronized with its current action, released as `v0.9.13`
 - [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
 - [x] Browser/build SVG validation enforce strict XML declaration grammar and reject malformed declarations consistently
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
@@ -98,7 +99,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.9.12` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.9.13` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 

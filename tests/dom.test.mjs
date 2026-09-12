@@ -43,6 +43,17 @@ assert.match(catalogueSource, /chips\.forEach\(\(chip, chipIndex\) => \{ chip\.t
 assert.match(catalogueSource, /chips\[nextIndex\]\.focus\(\)/, 'category toolbar should move focus without requiring Tab through every category');
 assert.match(catalogueSource, /replacement\?\.focus\(\)/, 'category activation should restore focus to the re-rendered selected chip');
 
+
+const collapseInspectorButtonTag = html.match(/<button\b[^>]*id="collapseInspectorButton"[^>]*>/)?.[0] || '';
+const inspectorCollapseSync = shellSource.match(/function syncInspectorCollapsedState\(collapsed\) \{[\s\S]*?\n  \}/)?.[0] || '';
+const inspectorCollapseClick = shellSource.match(/refs\.collapseInspectorButton\.addEventListener\('click'[\s\S]*?\n  \}\);/)?.[0] || '';
+assert.match(collapseInspectorButtonTag, /aria-label="Collapse inspector"/, 'desktop inspector toggle should expose its initial action');
+assert.match(collapseInspectorButtonTag, /title="Collapse inspector"/, 'desktop inspector toggle should expose the same initial tooltip action');
+assert.match(inspectorCollapseSync, /collapsed \? 'Expand inspector' : 'Collapse inspector'/, 'desktop inspector toggle action label should reflect collapsed state');
+assert.match(inspectorCollapseSync, /setAttribute\('aria-label', actionLabel\)/, 'desktop inspector toggle should synchronize its accessible action label');
+assert.match(inspectorCollapseSync, /title = actionLabel/, 'desktop inspector toggle should synchronize its tooltip action label');
+assert.match(inspectorCollapseClick, /syncInspectorCollapsedState\(collapsed\)/, 'desktop inspector toggle click should refresh its action label');
+
 const restoreFocusHelper = shellSource.match(/function restoreDrawerFocus\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
 const closeSidebarSource = shellSource.match(/function closeSidebar\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
 const closeInspectorSource = shellSource.match(/function closeInspector\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
@@ -67,4 +78,4 @@ assert.ok(
 );
 assert.doesNotMatch(escapeHandler, /previewDialog\.close\(\)/, 'shell should leave native dialog Escape/cancel handling to the dialog itself');
 
-console.log('DOM, live-region, modal-layer and focus accessibility tests passed.');
+console.log('DOM, live-region, inspector-toggle, modal-layer and focus accessibility tests passed.');
