@@ -7,7 +7,6 @@ export const STORAGE = Object.freeze({
   density: 'iconStudioDensity',
   sidebar: 'iconStudioSidebarCollapsed',
   inspector: 'iconStudioInspectorCollapsed',
-  pinned: 'iconStudioInspectorPinned',
   appearance: 'iconStudioAppearance'
 });
 

@@ -12,7 +12,9 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
   }
 
   function focusDrawer(drawer) {
-    const firstFocusable = drawer?.querySelector(focusableSelector);
+    const firstFocusable = [...(drawer?.querySelectorAll(focusableSelector) || [])].find(element =>
+      element.getClientRects().length > 0 && getComputedStyle(element).visibility !== 'hidden'
+    );
     if (firstFocusable) firstFocusable.focus();
   }
 
@@ -137,14 +139,10 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
 
   const sidebarCollapsed = getValue(STORAGE.sidebar, 'false') === 'true';
   const inspectorCollapsed = getValue(STORAGE.inspector, 'false') === 'true';
-  const pinned = getValue(STORAGE.pinned, 'true') !== 'false';
   refs.body.classList.toggle('sidebar-collapsed', sidebarCollapsed);
   refs.body.classList.toggle('inspector-collapsed', inspectorCollapsed);
   syncCollapsedState(sidebarCollapsed);
   syncInspectorCollapsedState(inspectorCollapsed);
-  refs.pinInspectorButton.setAttribute('aria-pressed', String(pinned));
-  refs.pinInspectorButton.classList.toggle('is-active', pinned);
-  refs.inspectorPinState.textContent = pinned ? 'Pinned' : 'Unpinned';
 
   refs.brandToggle.addEventListener('click', () => {
     if (window.matchMedia('(max-width: 820px)').matches) return closeSidebar();
@@ -157,14 +155,6 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
   refs.backdrop.addEventListener('click', () => { closeSidebar(); closeInspector(); });
   $$('.nav-item').forEach(button => button.addEventListener('click', () => setView(button.dataset.view)));
 
-  refs.pinInspectorButton.addEventListener('click', () => {
-    const next = refs.pinInspectorButton.getAttribute('aria-pressed') !== 'true';
-    refs.pinInspectorButton.setAttribute('aria-pressed', String(next));
-    refs.pinInspectorButton.classList.toggle('is-active', next);
-    refs.inspectorPinState.textContent = next ? 'Pinned' : 'Unpinned';
-    setValue(STORAGE.pinned, String(next));
-    toast(next ? 'Inspector pinned' : 'Inspector unpinned');
-  });
   refs.collapseInspectorButton.addEventListener('click', () => {
     const collapsed = refs.body.classList.toggle('inspector-collapsed');
     syncInspectorCollapsedState(collapsed);

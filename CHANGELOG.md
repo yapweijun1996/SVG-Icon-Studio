@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.9.19 — 2026-09-12
+
+### Fixed
+
+- Removed the Inspector “Pin” control and its persisted `iconStudioInspectorPinned` state because the control never affected Inspector docking, opening, collapsing, or any other product behavior; it only changed its own pressed state, status text, storage value, and toast.
+- Drawer focus entry now skips hidden controls, so after removing the no-op Pin button the mobile/tablet Inspector focuses the first actually visible control instead of the desktop-only collapse button.
+
+### Validation
+
+- Focused dead-control regression, `npm run typecheck`, full `npm test`, `npm run build`, and `git diff --check` pass. Real Chrome verifies the dead Pin UI/state are absent, desktop collapse still works, mobile Inspector focus lands on the visible Close inspector button, and Horizontal/Vertical flip toggles retain their existing `aria-pressed` behavior and preview transform.
+
 ## 0.9.18 — 2026-09-12
 
 ### Fixed

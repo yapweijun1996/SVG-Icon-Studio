@@ -112,6 +112,14 @@ assert.match(appSource, /function findRenderedCardAction\(id, action\)/, 'app sh
 assert.match(appSource, /onSelect: id => selectIcon\(id, true, 'select'\)/, 'card selection should restore focus to the replacement select control');
 assert.match(appSource, /shell\.openInspector\(findRenderedCardAction\(id, 'more'\) \|\| undefined\)/, 'card more action should restore focus to the replacement more control');
 
+const storageSource = fs.readFileSync(new URL('../js/core/storage.js', import.meta.url), 'utf8');
+assert.doesNotMatch(html, /pinInspectorButton|inspectorPinState|Pin inspector/, 'inspector should not expose a non-functional Pin control or status');
+assert.doesNotMatch(appSource, /pinInspectorButton|inspectorPinState/, 'app refs should not retain removed Pin controls');
+assert.doesNotMatch(shellSource, /pinInspectorButton|inspectorPinState|STORAGE\.pinned/, 'shell should not retain dead Pin behavior/state');
+assert.doesNotMatch(storageSource, /iconStudioInspectorPinned|\bpinned:/, 'storage contract should not retain the dead Pin preference');
+assert.match(shellSource, /getClientRects\(\)\.length > 0/, 'drawer focus entry should skip controls that are not rendered');
+assert.match(shellSource, /getComputedStyle\(element\)\.visibility !== 'hidden'/, 'drawer focus entry should skip visibility-hidden controls');
+
 const escapeHandler = shellSource.match(/if \(event\.key === 'Escape'\) \{[\s\S]*?\n    \}/)?.[0] || '';
 assert.match(escapeHandler, /if \(refs\.previewDialog\.open\) return;/, 'open full-preview modal should consume the first Escape layer');
 assert.ok(
@@ -120,4 +128,4 @@ assert.ok(
 );
 assert.doesNotMatch(escapeHandler, /previewDialog\.close\(\)/, 'shell should leave native dialog Escape/cancel handling to the dialog itself');
 
-console.log('DOM, live-region, favorite/theme/inspector-toggle, modal-layer and focus accessibility tests passed.');
+console.log('DOM, live-region, favorite/theme/inspector-toggle, dead-control, modal-layer and focus accessibility tests passed.');

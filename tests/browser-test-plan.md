@@ -15,12 +15,13 @@ Required viewports: desktop 1440×900, tablet 834×1112 and mobile 390×844.
 8. Inspector size, stroke, fill, background, rotation and flip controls update preview without changing source files.
 9. SVG, JSX and CSS tabs generate copyable code.
 10. Full preview dialog opens and closes by button, backdrop and Escape; on mobile/tablet, the first Escape closes only the modal preview and leaves the underlying inspector drawer open until a second dismissal.
-11. Theme, sidebar and inspector settings persist.
+11. Theme, sidebar and inspector-collapse settings persist.
 11a. On desktop, collapsing the inspector changes the icon-only toggle action from “Collapse inspector” to “Expand inspector”, and expanding it changes the action back.
 11b. On mobile, the navigation trigger changes from “Open navigation” / `aria-expanded=false` to “Close navigation” / `aria-expanded=true` while the drawer is open, then returns to the open action when dismissed.
 11c. On mobile/tablet, the inspector trigger changes from “Open icon inspector” / `aria-expanded=false` to “Close icon inspector” / `aria-expanded=true` while the drawer is open, then returns to the open action when dismissed.
 11d. Toggling light/dark theme keeps the icon-only button accessible action and visible tooltip synchronized (for example, dark theme exposes “Switch to light theme”).
 11e. On desktop, collapsing the sidebar keeps the brand icon-only toggle named “Expand sidebar”; expanding it restores “Collapse sidebar”.
+11f. The Inspector exposes no non-functional Pin control/state; on mobile/tablet, opening the drawer moves focus to the first visible header control.
 12. Valid 24×24 SVG upload is sanitized and stored in IndexedDB.
 13. Unsafe, oversized or non-24×24 SVG upload is rejected without persistence.
 14. One missing catalogue asset shows fallback while other icons continue working.
