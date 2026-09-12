@@ -79,8 +79,15 @@ assert.match(themeSync, /title = actionLabel/, 'theme toggle should synchronize 
 
 const restoreFocusHelper = shellSource.match(/function restoreDrawerFocus\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
 const sidebarCollapseSync = shellSource.match(/function syncCollapsedState\(collapsed\) \{[\s\S]*?\n  \}/)?.[0] || '';
+const mobileMenuButtonTag = html.match(/<button\b[^>]*id="mobileMenuButton"[^>]*>/)?.[0] || '';
+const mobileMenuSync = shellSource.match(/function syncMobileMenuState\(open\) \{[\s\S]*?\n  \}/)?.[0] || '';
 const closeSidebarSource = shellSource.match(/function closeSidebar\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
 const closeInspectorSource = shellSource.match(/function closeInspector\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
+assert.match(mobileMenuButtonTag, /aria-label="Open navigation"/, 'mobile navigation trigger should expose its initial open action');
+assert.match(mobileMenuButtonTag, /aria-expanded="false"/, 'mobile navigation trigger should expose its initial collapsed state');
+assert.match(mobileMenuSync, /setAttribute\('aria-expanded', String\(open\)\)/, 'mobile navigation trigger should synchronize expanded state');
+assert.match(mobileMenuSync, /open \? 'Close navigation' : 'Open navigation'/, 'mobile navigation trigger name should describe its current action');
+assert.match(closeSidebarSource, /syncMobileMenuState\(false\)/, 'closing mobile navigation should restore the open action name');
 assert.match(restoreFocusHelper, /restoreFocusTarget = null/, 'drawer focus target should be consumed after restoration');
 assert.match(closeSidebarSource, /const wasOpen = .*sidebar-open/, 'sidebar close should record whether it was actually open');
 assert.match(closeSidebarSource, /if \(wasOpen &&/, 'sidebar close should restore focus only after a real close transition');

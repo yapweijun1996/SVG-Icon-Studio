@@ -108,8 +108,9 @@
 - `v0.9.14` — Kept the theme icon button's accessible action name and visible tooltip synchronized with the theme it will switch to.
 - `v0.9.15` — Kept the desktop sidebar brand toggle's accessible action name and tooltip synchronized across expanded/collapsed states.
 - `v0.9.16` — Kept catalogue and inspector favorite toggle names stable while `aria-pressed` communicates the favorite state.
+- `v0.9.17` — Kept the mobile navigation trigger's accessible action name synchronized with its open/closed drawer state.
 
-**Status:** Complete for the current scope through `v0.9.16`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
+**Status:** Complete for the current scope through `v0.9.17`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
 
 ---
 

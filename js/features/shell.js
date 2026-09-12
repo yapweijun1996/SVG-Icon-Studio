@@ -47,16 +47,20 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
     refs.sidebar.inert = inspectorDrawerOpen;
     refs.inspector.inert = sidebarDrawerOpen;
   }
+  function syncMobileMenuState(open) {
+    refs.mobileMenuButton.setAttribute('aria-expanded', String(open));
+    refs.mobileMenuButton.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+  }
   function openSidebar() {
     refs.body.classList.add('sidebar-open');
-    refs.mobileMenuButton.setAttribute('aria-expanded', 'true');
+    syncMobileMenuState(true);
     updateBackdrop();
     openDrawer(refs.sidebar, refs.mobileMenuButton);
   }
   function closeSidebar() {
     const wasOpen = refs.body.classList.contains('sidebar-open');
     refs.body.classList.remove('sidebar-open');
-    refs.mobileMenuButton.setAttribute('aria-expanded', 'false');
+    syncMobileMenuState(false);
     updateBackdrop();
     if (wasOpen && !refs.body.classList.contains('inspector-open')) restoreDrawerFocus();
   }
@@ -69,7 +73,7 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
     // Mirrors the same viewport branch closeInspector() already uses.
     if (window.matchMedia('(max-width: 1180px)').matches) {
       refs.body.classList.remove('sidebar-open');
-      refs.mobileMenuButton.setAttribute('aria-expanded', 'false');
+      syncMobileMenuState(false);
       refs.body.classList.add('inspector-open');
       refs.mobileInspectorButton.setAttribute('aria-expanded', 'true');
       updateBackdrop();
