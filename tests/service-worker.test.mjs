@@ -4,13 +4,31 @@ import vm from 'node:vm';
 
 const source = fs.readFileSync(new URL('../public/sw.js', import.meta.url), 'utf8');
 
-function createHarness(fetchImpl, { cachedResponse = null, cacheNames = [] } = {}) {
+function createHarness(fetchImpl, { cachedResponse = null, cacheNames = [], initialCacheUrls = [] } = {}) {
   const listeners = {};
   const puts = [];
   const deletedCaches = [];
+  const deletedEntries = [];
+  const cacheUrls = [...initialCacheUrls];
+  const toUrl = key => typeof key === 'string' ? new URL(key, 'https://example.test/app/').href : key.url;
   const cache = {
     addAll: async () => {},
-    put: async (key, response) => { puts.push({ key, response }); },
+    put: async (key, response) => {
+      const url = toUrl(key);
+      puts.push({ key, response });
+      const existing = cacheUrls.indexOf(url);
+      if (existing !== -1) cacheUrls.splice(existing, 1);
+      cacheUrls.push(url);
+    },
+    keys: async () => cacheUrls.map(url => new Request(url)),
+    delete: async key => {
+      const url = toUrl(key);
+      const index = cacheUrls.indexOf(url);
+      if (index === -1) return false;
+      cacheUrls.splice(index, 1);
+      deletedEntries.push(url);
+      return true;
+    },
     match: async () => cachedResponse || new Response('<!doctype html><title>cached shell</title>', {
       status: 200,
       headers: { 'content-type': 'text/html; charset=utf-8' }
@@ -39,7 +57,7 @@ function createHarness(fetchImpl, { cachedResponse = null, cacheNames = [] } = {
   };
 
   vm.runInNewContext(source, context, { filename: 'sw.js' });
-  return { listeners, puts, deletedCaches };
+  return { listeners, puts, deletedCaches, deletedEntries, cacheUrls };
 }
 
 async function activate(harness) {
@@ -89,6 +107,29 @@ assert.match(source, /key\.startsWith\(CACHE_PREFIX\)/, 'activation should scope
     ['icon-studio-v1', 'icon-studio-v2'],
     'activation must delete only obsolete Icon Studio caches and preserve unrelated same-origin caches'
   );
+}
+
+
+{
+  const runtimeUrls = Array.from({ length: 260 }, (_, index) =>
+    `https://example.test/app/assets/index-${String(index + 1).padStart(8, '0')}.js`);
+  const harness = createHarness(async () => new Response('ok'), {
+    cacheNames: ['icon-studio-v3'],
+    initialCacheUrls: [
+      'https://example.test/app/',
+      'https://example.test/app/index.html',
+      'https://example.test/app/manifest.webmanifest',
+      ...runtimeUrls
+    ]
+  });
+  await activate(harness);
+  assert.equal(harness.cacheUrls.length, 259, 'activation should preserve 3 app-shell entries plus 256 runtime entries');
+  assert.equal(harness.deletedEntries.length, 4, 'activation should trim only the runtime overflow');
+  assert.deepEqual(harness.deletedEntries, runtimeUrls.slice(0, 4), 'oldest runtime entries should be evicted first');
+  assert.ok(harness.cacheUrls.includes('https://example.test/app/'), 'offline root shell must never be trimmed');
+  assert.ok(harness.cacheUrls.includes('https://example.test/app/index.html'), 'offline index shell must never be trimmed');
+  assert.ok(harness.cacheUrls.includes('https://example.test/app/manifest.webmanifest'), 'manifest precache must never be trimmed');
+  assert.ok(harness.cacheUrls.includes(runtimeUrls.at(-1)), 'newest runtime entry should remain cached');
 }
 
 {
@@ -169,4 +210,20 @@ assert.match(source, /key\.startsWith\(CACHE_PREFIX\)/, 'activation should scope
   assert.equal(await harness.puts[0].response.text(), 'network-v2');
 }
 
-console.log('Service-worker navigation integrity and asset refresh lifetime tests passed.');
+
+{
+  const runtimeUrls = Array.from({ length: 256 }, (_, index) =>
+    `https://example.test/app/icons/catalog/icon-${String(index + 1).padStart(3, '0')}.svg`);
+  const harness = createHarness(async () => new Response('fresh', { status: 200 }), {
+    initialCacheUrls: runtimeUrls
+  });
+  const newestUrl = 'https://example.test/app/assets/index-newdeploy.js';
+  const { responsePromise, lifetimePromises } = await fetchAsset(harness, newestUrl);
+  await responsePromise;
+  await Promise.all(lifetimePromises);
+  assert.equal(harness.cacheUrls.length, 256, 'runtime cache should stay bounded after a new asset is stored');
+  assert.equal(harness.deletedEntries[0], runtimeUrls[0], 'oldest runtime asset should make room for the new entry');
+  assert.ok(harness.cacheUrls.includes(newestUrl), 'new runtime asset should remain cached after trimming');
+}
+
+console.log('Service-worker navigation integrity, bounded runtime cache, and asset refresh lifetime tests passed.');

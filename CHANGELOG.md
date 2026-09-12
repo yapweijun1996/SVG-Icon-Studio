@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.12 — 2026-09-12
+
+### Fixed
+
+- Runtime CacheStorage now keeps at most 256 app-asset entries. The service worker trims oldest insertion-ordered runtime assets during activation and after successful cache refreshes, preventing obsolete hashed JS/CSS bundles from accumulating across repeated deployments. The fixed offline root/index shell and manifest are excluded from the eviction set.
+
+### Validation
+
+- Pre-fix deterministic reproduction on `v0.9.11` simulated 140 hashed JS/CSS deployments and retained all **280** runtime entries, including the very first bundle. Focused service-worker regression verifies activation and post-refresh trimming preserve only the newest 256 runtime entries while keeping shell/manifest entries; `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and real Chrome CacheStorage overflow verification cover the fix.
+
 ## 0.9.11 — 2026-09-12
 
 ### Fixed

@@ -23,6 +23,7 @@ Required viewports: desktop 1440×900, tablet 834×1112 and mobile 390×844.
 17. If metadata-orphan cleanup cannot obtain an IndexedDB write transaction, already-read valid uploaded metadata/asset pairs remain available for the session and cleanup is deferred.
 18. Direct IndexedDB v1→v3 upgrade migrates valid legacy uploads without leaving duplicate legacy rows, while preserving incomplete legacy rows for recovery.
 19. Service-worker navigation caching keeps the offline app-shell fallback intact after failed or unrelated same-scope navigations; offline root navigation still returns the cached valid shell.
+20. Service-worker runtime CacheStorage stays at or below 256 app-asset entries after overflow; the oldest runtime assets are evicted while root/index/manifest shell entries remain intact.
 
 ## Automated evidence
 

@@ -6,20 +6,41 @@ const CACHE_PREFIX = 'icon-studio-';
 const CACHE_VERSION = 'icon-studio-v3';
 const APP_SHELL = ['./', './index.html', './manifest.webmanifest'];
 const CACHEABLE_ASSET_PREFIXES = ['assets/', 'data/', 'icons/', 'icons-pwa/'];
+const MAX_RUNTIME_ENTRIES = 256;
 
 function getScopePath() {
   const scopeUrl = new URL(self.registration.scope);
   return scopeUrl.pathname.endsWith('/') ? scopeUrl.pathname : `${scopeUrl.pathname}/`;
 }
 
-function isCacheableAssetRequest(request) {
+function getScopedRelativePath(request) {
   const requestUrl = new URL(request.url);
   const scopePath = getScopePath();
-  if (!requestUrl.pathname.startsWith(scopePath) || requestUrl.search) return false;
+  if (requestUrl.origin !== self.location.origin
+      || !requestUrl.pathname.startsWith(scopePath)
+      || requestUrl.search) return null;
+  return requestUrl.pathname.slice(scopePath.length);
+}
 
-  const relativePath = requestUrl.pathname.slice(scopePath.length);
-  return relativePath === 'manifest.webmanifest'
-    || CACHEABLE_ASSET_PREFIXES.some(prefix => relativePath.startsWith(prefix));
+function isRuntimeAssetRequest(request) {
+  const relativePath = getScopedRelativePath(request);
+  return relativePath !== null
+    && CACHEABLE_ASSET_PREFIXES.some(prefix => relativePath.startsWith(prefix));
+}
+
+function isCacheableAssetRequest(request) {
+  const relativePath = getScopedRelativePath(request);
+  return relativePath === 'manifest.webmanifest' || isRuntimeAssetRequest(request);
+}
+
+async function trimRuntimeCache(cache) {
+  const runtimeEntries = (await cache.keys()).filter(isRuntimeAssetRequest);
+  const overflow = runtimeEntries.length - MAX_RUNTIME_ENTRIES;
+  if (overflow <= 0) return;
+
+  // Cache.keys() is insertion ordered. Keep the newest bounded working set and
+  // evict the oldest runtime assets; fixed app-shell entries are never candidates.
+  await Promise.all(runtimeEntries.slice(0, overflow).map(request => cache.delete(request)));
 }
 
 self.addEventListener('install', event => {
@@ -32,11 +53,13 @@ self.addEventListener('install', event => {
 
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys()
-      .then(keys => Promise.all(keys
-        .filter(key => key.startsWith(CACHE_PREFIX) && key !== CACHE_VERSION)
-        .map(key => caches.delete(key))))
-      .then(() => self.clients.claim())
+    Promise.all([
+      caches.keys()
+        .then(keys => Promise.all(keys
+          .filter(key => key.startsWith(CACHE_PREFIX) && key !== CACHE_VERSION)
+          .map(key => caches.delete(key)))),
+      caches.open(CACHE_VERSION).then(trimRuntimeCache)
+    ]).then(() => self.clients.claim())
   );
 });
 
@@ -87,6 +110,7 @@ self.addEventListener('fetch', event => {
         try {
           const cache = await caches.open(CACHE_VERSION);
           await cache.put(request, response.clone());
+          await trimRuntimeCache(cache);
         } catch {
           // Cache writes are best-effort; the network response still wins on a miss.
         }
