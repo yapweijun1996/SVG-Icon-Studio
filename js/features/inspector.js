@@ -34,7 +34,7 @@ export function createInspectorController({ state, refs, toast, onFavorite, onAp
     refs.selectedIconMeta.textContent = `${icon.category} · ${icon.style[0].toUpperCase()}${icon.style.slice(1)}`;
     const favorite = state.favorites.has(icon.id);
     refs.favoriteSelectedButton.setAttribute('aria-pressed', String(favorite));
-    refs.favoriteSelectedButton.setAttribute('aria-label', favorite ? `Remove ${icon.name} from favorites` : `Add ${icon.name} to favorites`);
+    refs.favoriteSelectedButton.setAttribute('aria-label', `Favorite ${icon.name}`);
     await renderPreview();
   }
 

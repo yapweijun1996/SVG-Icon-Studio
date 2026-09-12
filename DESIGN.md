@@ -138,6 +138,7 @@ Before drawing a new icon, check existing geometry for visual collision (documen
 - `aria-live="polite"` regions: results summary, toast region.
 - Catalogue search uses a visually-hidden text label for its accessible name; the visible `/` shortcut hint is `aria-hidden` so it is not mistaken for the label.
 - `aria-pressed`/`aria-expanded`/`aria-current` used correctly for toggle/disclosure/nav-active state.
+- Toggle buttons that expose aria-pressed keep a stable accessible name across on/off states; the pressed state communicates the change. Action-changing labels are reserved for buttons that do not use aria-pressed.
 - Decorative catalogue previews: `aria-hidden="true"`. Exported/semantic icon output can instead carry `<title>` + `aria-labelledby` when "Include title" is on.
 - Full preview uses the native `<dialog>` element (built-in focus trap, `Escape` close) rather than a hand-rolled modal, with explicit `aria-labelledby` and `aria-describedby` relationships to its visible heading and guidance text.
 - Generated-code format switching follows the ARIA tabs pattern: labelled `tablist`, `tab` → `tabpanel` relationships, one tabbable active tab, and Arrow Left/Right plus Home/End keyboard navigation.

@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.16 — 2026-09-12
+
+### Fixed
+
+- Catalogue-card and selected-icon favorite controls now keep a stable accessible name (for example, “Favorite Invoice”) while `aria-pressed` alone communicates whether the icon is currently saved. Previously the same toggle changed its name from “Add Invoice to favorites” to “Remove Invoice from favorites” while also changing `aria-pressed`, which breaks the WAI-ARIA toggle-button convention that a pressed toggle keeps the same label across states.
+
+### Validation
+
+- Pre-fix Google Chrome 153 at 1440×900 exposed both favorite controls as `name="Add Invoice to favorites"`, `pressed=false`, then changed both to `name="Remove Invoice from favorites"`, `pressed=true` after activation. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix Chrome Accessibility Tree verification cover the stable-name/pressed-state contract.
+
 ## 0.9.15 — 2026-09-12
 
 ### Fixed

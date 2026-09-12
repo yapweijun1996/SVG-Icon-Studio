@@ -57,7 +57,7 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
       className: 'favorite-button',
       attributes: {
         type: 'button', 'data-action': 'favorite', 'aria-pressed': favorite,
-        'aria-label': `${favorite ? 'Remove' : 'Add'} ${icon.name} ${favorite ? 'from' : 'to'} favorites`
+        'aria-label': `Favorite ${icon.name}`
       }
     });
     favoriteButton.append(starIcon());

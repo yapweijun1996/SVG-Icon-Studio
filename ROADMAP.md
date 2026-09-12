@@ -70,12 +70,14 @@
 | `v0.9.12` | 2026-09-12 | Cap runtime CacheStorage and evict oldest obsolete app assets | 4 |
 | `v0.9.13` | 2026-09-12 | Synchronize desktop inspector collapse/expand action labels | 4 |
 | `v0.9.14` | 2026-09-12 | Synchronize theme-switch accessible name and tooltip action | 4 |
+| `v0.9.15` | 2026-09-12 | Synchronize desktop sidebar collapse/expand action semantics | 4 |
+| `v0.9.16` | 2026-09-12 | Keep favorite toggle names stable with aria-pressed state | 4 |
 
 Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`.
 
 ---
 
-## Current state (as of `v0.9.14`)
+## Current state (as of `v0.9.16`)
 
 - 120 icons, 10 categories, 2 styles (111 outline / 9 filled).
 - Zero runtime dependencies; Vite is dev/build tooling only.

@@ -64,6 +64,7 @@
 - [x] Keep the desktop inspector collapse/expand button accessible name and tooltip synchronized with its current action, released as `v0.9.13`
 - [x] Keep the theme icon button accessible action name and visible tooltip synchronized with the theme it will switch to, released as `v0.9.14`
 - [x] Keep the desktop sidebar brand toggle's accessible action name and tooltip synchronized across expanded/collapsed states, released as `v0.9.15`
+- [x] Keep favorite toggle accessible names stable while `aria-pressed` alone communicates saved/unsaved state, released as `v0.9.16`
 - [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
 - [x] Browser/build SVG validation enforce strict XML declaration grammar and reject malformed declarations consistently
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
@@ -101,7 +102,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.9.15` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.9.16` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 

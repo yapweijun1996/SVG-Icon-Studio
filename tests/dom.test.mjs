@@ -18,6 +18,7 @@ const appSource = fs.readFileSync(new URL('../js/app.js', import.meta.url), 'utf
 const shellSource = fs.readFileSync(new URL('../js/features/shell.js', import.meta.url), 'utf8');
 const themeSource = fs.readFileSync(new URL('../js/features/theme.js', import.meta.url), 'utf8');
 const catalogueSource = fs.readFileSync(new URL('../js/features/catalogue.js', import.meta.url), 'utf8');
+const inspectorSource = fs.readFileSync(new URL('../js/features/inspector.js', import.meta.url), 'utf8');
 const filterButtonTag = html.match(/<button\b[^>]*id="filterButton"[^>]*>/)?.[0] || '';
 const filterHandlerStart = appSource.indexOf("refs.filterButton.addEventListener('click'");
 const filterHandler = filterHandlerStart >= 0 ? appSource.slice(filterHandlerStart, filterHandlerStart + 650) : '';
@@ -43,6 +44,19 @@ assert.match(catalogueSource, /\['ArrowLeft', 'ArrowRight', 'Home', 'End'\]/, 'c
 assert.match(catalogueSource, /chips\.forEach\(\(chip, chipIndex\) => \{ chip\.tabIndex = chipIndex === nextIndex \? 0 : -1; \}\)/, 'category toolbar should maintain roving tabindex');
 assert.match(catalogueSource, /chips\[nextIndex\]\.focus\(\)/, 'category toolbar should move focus without requiring Tab through every category');
 assert.match(catalogueSource, /replacement\?\.focus\(\)/, 'category activation should restore focus to the re-rendered selected chip');
+
+
+const favoriteSelectedButtonTag = html.match(/<button\b[^>]*id="favoriteSelectedButton"[^>]*>/)?.[0] || '';
+const favoriteCardAttributes = catalogueSource.match(/type: 'button', 'data-action': 'favorite',[\s\S]*?\n      \}/)?.[0] || '';
+const favoriteInspectorUpdate = inspectorSource.match(/refs\.favoriteSelectedButton\.setAttribute\('aria-pressed'[\s\S]*?setAttribute\('aria-label'[\s\S]*?\n/)?.[0] || '';
+assert.match(favoriteSelectedButtonTag, /aria-label="Favorite selected icon"/, 'selected-icon favorite toggle should have a stable initial name');
+assert.match(favoriteSelectedButtonTag, /aria-pressed="false"/, 'selected-icon favorite toggle should expose its initial pressed state');
+assert.match(favoriteCardAttributes, /'aria-pressed': favorite/, 'catalogue favorite toggle should expose pressed state separately from its name');
+assert.match(favoriteCardAttributes, /'aria-label': `Favorite \$\{icon\.name\}`/, 'catalogue favorite toggle name should remain stable across pressed states');
+assert.doesNotMatch(favoriteCardAttributes, /Remove|Add/, 'catalogue favorite toggle name should not change with pressed state');
+assert.match(favoriteInspectorUpdate, /setAttribute\('aria-pressed', String\(favorite\)\)/, 'selected-icon favorite toggle should synchronize pressed state');
+assert.match(favoriteInspectorUpdate, /setAttribute\('aria-label', `Favorite \$\{icon\.name\}`\)/, 'selected-icon favorite toggle name should remain stable across pressed states');
+assert.doesNotMatch(favoriteInspectorUpdate, /Remove|Add/, 'selected-icon favorite toggle name should not change with pressed state');
 
 
 const collapseInspectorButtonTag = html.match(/<button\b[^>]*id="collapseInspectorButton"[^>]*>/)?.[0] || '';
@@ -91,4 +105,4 @@ assert.ok(
 );
 assert.doesNotMatch(escapeHandler, /previewDialog\.close\(\)/, 'shell should leave native dialog Escape/cancel handling to the dialog itself');
 
-console.log('DOM, live-region, theme/inspector-toggle, modal-layer and focus accessibility tests passed.');
+console.log('DOM, live-region, favorite/theme/inspector-toggle, modal-layer and focus accessibility tests passed.');
