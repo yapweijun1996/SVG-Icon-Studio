@@ -62,6 +62,10 @@ assert.match(strokeColorTag, /aria-labelledby="strokeColorLabel"/, 'stroke colou
 assert.match(html, /id="fillColorLabel">Fill colour<\/span>/, 'fill colour should keep a visible label target');
 assert.match(fillColorTag, /aria-labelledby="fillColorLabel"/, 'fill colour accessible name should come only from its stable visible label');
 
+const rotationRangeTag = html.match(/<input\b[^>]*id="rotationRange"[^>]*>/)?.[0] || '';
+assert.match(rotationRangeTag, /aria-label="Rotation \(degrees\)"/, 'rotation slider name should include its degree unit so native numeric values are understandable');
+assert.doesNotMatch(rotationRangeTag, /aria-valuetext=/, 'rotation should not rely on aria-valuetext that Chrome ignores on the native range control');
+
 const favoriteSelectedButtonTag = html.match(/<button\b[^>]*id="favoriteSelectedButton"[^>]*>/)?.[0] || '';
 const favoriteCardAttributes = catalogueSource.match(/type: 'button', 'data-action': 'favorite',[\s\S]*?\n      \}/)?.[0] || '';
 const favoriteInspectorUpdate = inspectorSource.match(/refs\.favoriteSelectedButton\.setAttribute\('aria-pressed'[\s\S]*?setAttribute\('aria-label'[\s\S]*?\n/)?.[0] || '';

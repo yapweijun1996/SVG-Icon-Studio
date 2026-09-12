@@ -114,8 +114,9 @@
 - `v0.9.20` — Hid the drawer-only Close inspector control on docked desktop so it no longer duplicates the Collapse inspector action.
 - `v0.9.21` — Restored the Inspector Size range's programmatic accessible name with an explicit native label association.
 - `v0.9.22` — Kept Inspector Stroke/Fill colour accessible names stable while their hex values change.
+- `v0.9.23` — Added degree-unit context to the Inspector Rotation slider's stable accessible name while preserving its native numeric range behavior.
 
-**Status:** Complete for the current scope through `v0.9.22`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
+**Status:** Complete for the current scope through `v0.9.23`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
 
 ---
 

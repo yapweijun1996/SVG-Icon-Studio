@@ -71,6 +71,7 @@
 - [x] Keep the drawer-only Close inspector control hidden on docked desktop so it does not duplicate the Collapse inspector action, released as `v0.9.20`
 - [x] Give the Inspector Size range an explicit native label so its browser accessibility name is non-empty, released as `v0.9.21`
 - [x] Keep Inspector Stroke/Fill colour accessible names stable while their native values and visible hex readouts change, released as `v0.9.22`
+- [x] Include the degree unit in the Inspector Rotation slider accessible name so Chrome’s native numeric range value is understandable, released as `v0.9.23`
 - [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
 - [x] Browser/build SVG validation enforce strict XML declaration grammar and reject malformed declarations consistently
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
@@ -108,7 +109,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.9.22` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.9.23` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 

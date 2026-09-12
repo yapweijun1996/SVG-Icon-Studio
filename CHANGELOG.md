@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.23 — 2026-09-12
+
+### Fixed
+
+- Made the Inspector **Rotation** slider's native numeric value understandable with its unit in assistive technology. Real Chrome exposed the control as `Rotation`, value/value-text `0` / `45`, while the visible output showed `0°` / `45°`. Chrome did not reflect an authored `aria-valuetext` on this native range control, so the robust fix is a stable accessible name of `Rotation (degrees)` while preserving the browser-native numeric slider value and visible compact degree output.
+
+### Validation
+
+- Pre-fix real Chrome at 1440×900 confirmed `name=Rotation`, numeric `value=0→45`, and accessible `valuetext=0→45` with no unit. A diagnostic Chrome run also confirmed authored `aria-valuetext` did not change that native AX value text, while `Rotation (degrees)` was reflected reliably as the control name. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix Chrome Accessibility Tree verification cover the unit context without changing slider/preview behavior.
+
 ## 0.9.22 — 2026-09-12
 
 ### Fixed
