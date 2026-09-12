@@ -13,6 +13,7 @@ Required viewports: desktop 1440×900, tablet 834×1112 and mobile 390×844.
 6. Recently Viewed order updates after selection.
 7. Purchase Order and Delivery Order match their approved independent SVG assets.
 8. Inspector size, stroke, fill, background, rotation and flip controls update preview without changing source files.
+8a. Stroke/Fill colour inputs keep stable accessible names (`Stroke colour` / `Fill colour`) while their native values and visible hex readouts change.
 9. SVG, JSX and CSS tabs generate copyable code.
 10. Full preview dialog opens and closes by button, backdrop and Escape; on mobile/tablet, the first Escape closes only the modal preview and leaves the underlying inspector drawer open until a second dismissal.
 11. Theme, sidebar and inspector-collapse settings persist.

@@ -54,6 +54,14 @@ assert.match(sizeRangeControl, /<label for="sizeRange">Size<\/label>/, 'size sli
 assert.match(sizeRangeControl, /<output id="sizeOutput" for="sizeRange">/, 'size output should remain associated with the size slider');
 assert.match(sizeRangeTag, /type="range"/, 'size control should remain a native range input');
 
+
+const strokeColorTag = html.match(/<input\b[^>]*id="strokeColorInput"[^>]*>/)?.[0] || '';
+const fillColorTag = html.match(/<input\b[^>]*id="fillColorInput"[^>]*>/)?.[0] || '';
+assert.match(html, /id="strokeColorLabel">Stroke colour<\/span>/, 'stroke colour should keep a visible label target');
+assert.match(strokeColorTag, /aria-labelledby="strokeColorLabel"/, 'stroke colour accessible name should come only from its stable visible label');
+assert.match(html, /id="fillColorLabel">Fill colour<\/span>/, 'fill colour should keep a visible label target');
+assert.match(fillColorTag, /aria-labelledby="fillColorLabel"/, 'fill colour accessible name should come only from its stable visible label');
+
 const favoriteSelectedButtonTag = html.match(/<button\b[^>]*id="favoriteSelectedButton"[^>]*>/)?.[0] || '';
 const favoriteCardAttributes = catalogueSource.match(/type: 'button', 'data-action': 'favorite',[\s\S]*?\n      \}/)?.[0] || '';
 const favoriteInspectorUpdate = inspectorSource.match(/refs\.favoriteSelectedButton\.setAttribute\('aria-pressed'[\s\S]*?setAttribute\('aria-label'[\s\S]*?\n/)?.[0] || '';
@@ -141,4 +149,4 @@ assert.ok(
 );
 assert.doesNotMatch(escapeHandler, /previewDialog\.close\(\)/, 'shell should leave native dialog Escape/cancel handling to the dialog itself');
 
-console.log('DOM, live-region, favorite/theme/inspector-toggle, dead-control, modal-layer and focus accessibility tests passed.');
+console.log('DOM, form-label, live-region, favorite/theme/inspector-toggle, dead-control, modal-layer and focus accessibility tests passed.');

@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.22 — 2026-09-12
+
+### Fixed
+
+- Stabilized the Inspector **Stroke colour** and **Fill colour** accessible names. The nested label previously included each live hex-code readout, so real Chrome changed the control names from `Stroke colour #1F2937` / `Fill colour #F45B0B` as values changed. Each native colour input now uses `aria-labelledby` to reference only its visible text label, while the native colour value and visible hex readout remain separate and continue updating normally.
+
+### Validation
+
+- Pre-fix real Chrome at 1440×900 exposed `ColorWell` names that changed with their hex values. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix Chrome Accessibility Tree verification cover stable names while colour values and preview/readouts continue updating.
+
 ## 0.9.21 — 2026-09-12
 
 ### Fixed
