@@ -81,6 +81,8 @@ const restoreFocusHelper = shellSource.match(/function restoreDrawerFocus\(\) \{
 const sidebarCollapseSync = shellSource.match(/function syncCollapsedState\(collapsed\) \{[\s\S]*?\n  \}/)?.[0] || '';
 const mobileMenuButtonTag = html.match(/<button\b[^>]*id="mobileMenuButton"[^>]*>/)?.[0] || '';
 const mobileMenuSync = shellSource.match(/function syncMobileMenuState\(open\) \{[\s\S]*?\n  \}/)?.[0] || '';
+const mobileInspectorButtonTag = html.match(/<button\b[^>]*id="mobileInspectorButton"[^>]*>/)?.[0] || '';
+const mobileInspectorSync = shellSource.match(/function syncMobileInspectorState\(open\) \{[\s\S]*?\n  \}/)?.[0] || '';
 const closeSidebarSource = shellSource.match(/function closeSidebar\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
 const closeInspectorSource = shellSource.match(/function closeInspector\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
 assert.match(mobileMenuButtonTag, /aria-label="Open navigation"/, 'mobile navigation trigger should expose its initial open action');
@@ -88,6 +90,10 @@ assert.match(mobileMenuButtonTag, /aria-expanded="false"/, 'mobile navigation tr
 assert.match(mobileMenuSync, /setAttribute\('aria-expanded', String\(open\)\)/, 'mobile navigation trigger should synchronize expanded state');
 assert.match(mobileMenuSync, /open \? 'Close navigation' : 'Open navigation'/, 'mobile navigation trigger name should describe its current action');
 assert.match(closeSidebarSource, /syncMobileMenuState\(false\)/, 'closing mobile navigation should restore the open action name');
+assert.match(mobileInspectorButtonTag, /aria-label="Open icon inspector"/, 'mobile inspector trigger should expose its initial open action');
+assert.match(mobileInspectorButtonTag, /aria-expanded="false"/, 'mobile inspector trigger should expose its initial collapsed state');
+assert.match(mobileInspectorSync, /setAttribute\('aria-expanded', String\(open\)\)/, 'mobile inspector trigger should synchronize expanded state');
+assert.match(mobileInspectorSync, /open \? 'Close icon inspector' : 'Open icon inspector'/, 'mobile inspector trigger name should describe its current action');
 assert.match(restoreFocusHelper, /restoreFocusTarget = null/, 'drawer focus target should be consumed after restoration');
 assert.match(closeSidebarSource, /const wasOpen = .*sidebar-open/, 'sidebar close should record whether it was actually open');
 assert.match(closeSidebarSource, /if \(wasOpen &&/, 'sidebar close should restore focus only after a real close transition');
@@ -99,6 +105,8 @@ assert.match(sidebarCollapseSync, /title = actionLabel/, 'collapsed sidebar togg
 
 const openInspectorSource = shellSource.match(/function openInspector\([^)]*\) \{[\s\S]*?\n  \}/)?.[0] || '';
 assert.match(openInspectorSource, /trigger = refs\.mobileInspectorButton/, 'inspector should default focus restoration to the topbar trigger');
+assert.match(openInspectorSource, /syncMobileInspectorState\(true\)/, 'opening the mobile inspector should expose its close action');
+assert.match(closeInspectorSource, /syncMobileInspectorState\(false\)/, 'closing the mobile inspector should restore its open action');
 assert.match(openInspectorSource, /openDrawer\(refs\.inspector, trigger \|\| refs\.mobileInspectorButton\)/, 'inspector should preserve a caller-provided visible trigger for focus restoration');
 assert.match(appSource, /function findRenderedCardAction\(id, action\)/, 'app should resolve the replacement catalogue control after card re-render');
 assert.match(appSource, /onSelect: id => selectIcon\(id, true, 'select'\)/, 'card selection should restore focus to the replacement select control');

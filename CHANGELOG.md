@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.18 — 2026-09-12
+
+### Fixed
+
+- The mobile/tablet inspector icon button now keeps its accessible action name synchronized with the drawer state: “Open icon inspector” while closed and “Close icon inspector” while open. Previously `aria-expanded` changed to `true` but the button continued to announce the contradictory “Open icon inspector” action.
+
+### Validation
+
+- Pre-fix Google Chrome at 390×844 reproduced `aria-label="Open icon inspector"`, `aria-expanded=false` before activation and the stale `aria-label="Open icon inspector"`, `aria-expanded=true` after the drawer opened. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix real Chrome mobile verification cover the synchronized action/state contract.
+
 ## 0.9.17 — 2026-09-12
 
 ### Fixed

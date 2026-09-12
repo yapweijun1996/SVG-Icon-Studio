@@ -51,6 +51,10 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
     refs.mobileMenuButton.setAttribute('aria-expanded', String(open));
     refs.mobileMenuButton.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
   }
+  function syncMobileInspectorState(open) {
+    refs.mobileInspectorButton.setAttribute('aria-expanded', String(open));
+    refs.mobileInspectorButton.setAttribute('aria-label', open ? 'Close icon inspector' : 'Open icon inspector');
+  }
   function openSidebar() {
     refs.body.classList.add('sidebar-open');
     syncMobileMenuState(true);
@@ -75,7 +79,7 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
       refs.body.classList.remove('sidebar-open');
       syncMobileMenuState(false);
       refs.body.classList.add('inspector-open');
-      refs.mobileInspectorButton.setAttribute('aria-expanded', 'true');
+      syncMobileInspectorState(true);
       updateBackdrop();
       openDrawer(refs.inspector, trigger || refs.mobileInspectorButton);
       return;
@@ -87,7 +91,7 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
     const wasOpen = drawerMode && refs.body.classList.contains('inspector-open');
     if (drawerMode) {
       refs.body.classList.remove('inspector-open');
-      refs.mobileInspectorButton.setAttribute('aria-expanded', 'false');
+      syncMobileInspectorState(false);
     } else {
       refs.body.classList.add('inspector-collapsed');
       syncInspectorCollapsedState(true);
@@ -205,7 +209,7 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
     if (!window.matchMedia('(max-width: 820px)').matches) closeSidebar();
     if (!window.matchMedia('(max-width: 1180px)').matches) {
       refs.body.classList.remove('inspector-open');
-      refs.mobileInspectorButton.setAttribute('aria-expanded', 'false');
+      syncMobileInspectorState(false);
     }
     updateBackdrop();
   });

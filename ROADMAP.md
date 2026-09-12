@@ -73,12 +73,13 @@
 | `v0.9.15` | 2026-09-12 | Synchronize desktop sidebar collapse/expand action semantics | 4 |
 | `v0.9.16` | 2026-09-12 | Keep favorite toggle names stable with aria-pressed state | 4 |
 | `v0.9.17` | 2026-09-12 | Synchronize mobile navigation open/close action semantics | 4 |
+| `v0.9.18` | 2026-09-12 | Synchronize mobile inspector open/close action semantics | 4 |
 
 Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`.
 
 ---
 
-## Current state (as of `v0.9.17`)
+## Current state (as of `v0.9.18`)
 
 - 120 icons, 10 categories, 2 styles (111 outline / 9 filled).
 - Zero runtime dependencies; Vite is dev/build tooling only.
