@@ -75,12 +75,13 @@
 | `v0.9.17` | 2026-09-12 | Synchronize mobile navigation open/close action semantics | 4 |
 | `v0.9.18` | 2026-09-12 | Synchronize mobile inspector open/close action semantics | 4 |
 | `v0.9.19` | 2026-09-12 | Remove non-functional Inspector Pin control and dead state | 4 |
+| `v0.9.20` | 2026-09-12 | Remove redundant desktop Inspector Close action | 4 |
 
 Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`.
 
 ---
 
-## Current state (as of `v0.9.19`)
+## Current state (as of `v0.9.20`)
 
 - 120 icons, 10 categories, 2 styles (111 outline / 9 filled).
 - Zero runtime dependencies; Vite is dev/build tooling only.

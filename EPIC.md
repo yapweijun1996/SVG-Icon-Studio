@@ -111,8 +111,9 @@
 - `v0.9.17` — Kept the mobile navigation trigger's accessible action name synchronized with its open/closed drawer state.
 - `v0.9.18` — Kept the mobile inspector trigger's accessible action name synchronized with its open/closed drawer state.
 - `v0.9.19` — Removed the non-functional Inspector Pin control/dead storage state and kept mobile/tablet drawer focus on visible controls.
+- `v0.9.20` — Hid the drawer-only Close inspector control on docked desktop so it no longer duplicates the Collapse inspector action.
 
-**Status:** Complete for the current scope through `v0.9.19`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
+**Status:** Complete for the current scope through `v0.9.20`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
 
 ---
 

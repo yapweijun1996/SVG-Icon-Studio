@@ -78,7 +78,7 @@ Three-column desktop shell (`.app-shell`, CSS grid: `sidebar-width | 1fr | inspe
 | Breakpoint | Behaviour |
 | --- | --- |
 | `≤1450px` | Icon grid column width narrows (`minmax(145px,1fr)`), content padding reduces |
-| `≤1180px` | Inspector becomes a fixed slide-in drawer (`transform: translateX(101%)` closed / `translateX(0)` open) with a dimming backdrop; sidebar narrows to `208px` |
+| `≤1180px` | Inspector becomes a fixed slide-in drawer (`transform: translateX(101%)` closed / `translateX(0)` open) with a dimming backdrop; its drawer-only Close control appears while the desktop Collapse control hides; sidebar narrows to `208px` |
 | `≤820px` | Sidebar becomes a fixed slide-in drawer too; topbar/toolbar padding shrinks; category chips become a single horizontally-scrollable row |
 | `≤560px` | Icon grid drops to 2 columns; brand card and hero subtitle hide; topbar action labels hide (icon-only) |
 | `prefers-reduced-motion: reduce` | All transitions/animations collapse to `.01ms` |
@@ -89,7 +89,7 @@ Three-column desktop shell (`.app-shell`, CSS grid: `sidebar-width | 1fr | inspe
 
 | Component | Where | Notes |
 | --- | --- | --- |
-| Collapsible sidebar | `.sidebar` | Nav items: Icon library, Collections, Favorites, Recently viewed, Uploaded icons, Brand kit. Collapse state and pin state persist to `localStorage`. |
+| Collapsible sidebar | `.sidebar` | Nav items: Icon library, Collections, Favorites, Recently viewed, Uploaded icons, Brand kit. Collapse state persists to `localStorage`. |
 | Sticky topbar | `.topbar` | Import SVG, live icon-count pill, theme toggle, mobile inspector trigger |
 | Search + filters | `.catalogue-toolbar` | Free-text search (`/` keyboard shortcut focuses it), style filter, sort filter, category chips (10, derived live from the registry — never hardcode a count, see ADR-011-adjacent history in `CHANGELOG.md` 0.4.0) |
 | Icon grid | `.icon-grid` | Responsive `auto-fill` grid; Grid/Compact density toggle; scroll-to-load pagination (24 per page) with a manual "Load more" fallback button |

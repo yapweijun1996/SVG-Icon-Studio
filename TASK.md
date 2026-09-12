@@ -68,6 +68,7 @@
 - [x] Keep the mobile navigation trigger accessible name synchronized with its current open/close action, released as `v0.9.17`
 - [x] Keep the mobile inspector trigger accessible name synchronized with its current open/close action, released as `v0.9.18`
 - [x] Remove the non-functional Inspector Pin control/dead persisted state and keep drawer focus entry on visible controls, released as `v0.9.19`
+- [x] Keep the drawer-only Close inspector control hidden on docked desktop so it does not duplicate the Collapse inspector action, released as `v0.9.20`
 - [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
 - [x] Browser/build SVG validation enforce strict XML declaration grammar and reject malformed declarations consistently
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
@@ -105,7 +106,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.9.19` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.9.20` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 

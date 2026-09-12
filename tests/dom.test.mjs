@@ -19,6 +19,8 @@ const shellSource = fs.readFileSync(new URL('../js/features/shell.js', import.me
 const themeSource = fs.readFileSync(new URL('../js/features/theme.js', import.meta.url), 'utf8');
 const catalogueSource = fs.readFileSync(new URL('../js/features/catalogue.js', import.meta.url), 'utf8');
 const inspectorSource = fs.readFileSync(new URL('../js/features/inspector.js', import.meta.url), 'utf8');
+const utilitiesSource = fs.readFileSync(new URL('../css/utilities.css', import.meta.url), 'utf8');
+const responsiveSource = fs.readFileSync(new URL('../css/responsive.css', import.meta.url), 'utf8');
 const filterButtonTag = html.match(/<button\b[^>]*id="filterButton"[^>]*>/)?.[0] || '';
 const filterHandlerStart = appSource.indexOf("refs.filterButton.addEventListener('click'");
 const filterHandler = filterHandlerStart >= 0 ? appSource.slice(filterHandlerStart, filterHandlerStart + 650) : '';
@@ -68,6 +70,11 @@ assert.match(inspectorCollapseSync, /collapsed \? 'Expand inspector' : 'Collapse
 assert.match(inspectorCollapseSync, /setAttribute\('aria-label', actionLabel\)/, 'desktop inspector toggle should synchronize its accessible action label');
 assert.match(inspectorCollapseSync, /title = actionLabel/, 'desktop inspector toggle should synchronize its tooltip action label');
 assert.match(inspectorCollapseClick, /syncInspectorCollapsedState\(collapsed\)/, 'desktop inspector toggle click should refresh its action label');
+
+const closeInspectorButtonTag = html.match(/<button\b[^>]*id="closeInspectorButton"[^>]*>/)?.[0] || '';
+assert.match(closeInspectorButtonTag, /class="[^"]*inspector-close-button[^"]*"/, 'inspector drawer close control should keep its responsive hook');
+assert.match(utilitiesSource, /\.inspector-close-button\s*\{\s*display:\s*none;/, 'drawer Close inspector control should be hidden on docked desktop');
+assert.match(responsiveSource, /@media \(max-width:\s*1180px\)[\s\S]*?\.inspector-close-button\s*\{\s*display:\s*inline-grid;/, 'drawer Close inspector control should become visible at inspector-drawer breakpoints');
 
 const themeButtonTag = html.match(/<button\b[^>]*id="themeButton"[^>]*>/)?.[0] || '';
 const themeSync = themeSource.match(/function sync\(\) \{[\s\S]*?\n  \}/)?.[0] || '';

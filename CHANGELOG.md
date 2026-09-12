@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.20 — 2026-09-12
+
+### Fixed
+
+- Removed a redundant desktop Inspector action by making the `Close inspector` button drawer-only. At desktop widths the docked Inspector now exposes only its existing Collapse/Expand control; at `≤1180px`, the desktop collapse control stays hidden and the drawer-specific Close control is visible.
+
+### Validation
+
+- Pre-fix real Chrome at 1440×900 confirmed both `Collapse inspector` and `Close inspector` were simultaneously visible and both placed the docked Inspector into the same `inspector-collapsed` state. Focused responsive-control regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix Chrome verification cover the breakpoint-specific control contract.
+
 ## 0.9.19 — 2026-09-12
 
 ### Fixed
