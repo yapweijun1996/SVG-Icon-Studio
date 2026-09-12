@@ -48,6 +48,12 @@ assert.match(catalogueSource, /chips\[nextIndex\]\.focus\(\)/, 'category toolbar
 assert.match(catalogueSource, /replacement\?\.focus\(\)/, 'category activation should restore focus to the re-rendered selected chip');
 
 
+const sizeRangeControl = html.match(/<div\b[^>]*class="control-row range-control"[^>]*>[\s\S]*?<\/div>/)?.[0] || '';
+const sizeRangeTag = html.match(/<input\b[^>]*id="sizeRange"[^>]*>/)?.[0] || '';
+assert.match(sizeRangeControl, /<label for="sizeRange">Size<\/label>/, 'size slider should have an explicit visible label association');
+assert.match(sizeRangeControl, /<output id="sizeOutput" for="sizeRange">/, 'size output should remain associated with the size slider');
+assert.match(sizeRangeTag, /type="range"/, 'size control should remain a native range input');
+
 const favoriteSelectedButtonTag = html.match(/<button\b[^>]*id="favoriteSelectedButton"[^>]*>/)?.[0] || '';
 const favoriteCardAttributes = catalogueSource.match(/type: 'button', 'data-action': 'favorite',[\s\S]*?\n      \}/)?.[0] || '';
 const favoriteInspectorUpdate = inspectorSource.match(/refs\.favoriteSelectedButton\.setAttribute\('aria-pressed'[\s\S]*?setAttribute\('aria-label'[\s\S]*?\n/)?.[0] || '';

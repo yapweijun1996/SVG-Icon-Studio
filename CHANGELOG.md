@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.21 — 2026-09-12
+
+### Fixed
+
+- Restored a programmatic accessible name for the Inspector **Size** slider. The previous nested-label/output structure rendered the visible `Size` text but real Chrome exposed the range control as an unnamed `slider`; the control now uses an explicit native `<label for="sizeRange">Size</label>` association while preserving the existing live `48 px` output and range behavior.
+
+### Validation
+
+- Pre-fix real Chrome at 1440×900 exposed `sizeRange` as `role=slider`, `name=""`, `value=48`. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix Chrome Accessibility Tree verification cover the explicit `Size` name while preserving native slider value updates.
+
 ## 0.9.20 — 2026-09-12
 
 ### Fixed
