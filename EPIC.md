@@ -106,8 +106,9 @@
 - `v0.9.12` — Added a 256-entry cap for runtime app assets so obsolete hashed bundles from repeated deployments are evicted oldest-first without removing the offline shell or manifest.
 - `v0.9.13` — Kept the desktop inspector collapse/expand control's accessible name and tooltip synchronized with the action it will perform.
 - `v0.9.14` — Kept the theme icon button's accessible action name and visible tooltip synchronized with the theme it will switch to.
+- `v0.9.15` — Kept the desktop sidebar brand toggle's accessible action name and tooltip synchronized across expanded/collapsed states.
 
-**Status:** Complete for the current scope through `v0.9.14`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
+**Status:** Complete for the current scope through `v0.9.15`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
 
 ---
 

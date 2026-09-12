@@ -64,6 +64,7 @@ assert.match(themeSync, /setAttribute\('aria-label', actionLabel\)/, 'theme togg
 assert.match(themeSync, /title = actionLabel/, 'theme toggle should synchronize its visible tooltip action');
 
 const restoreFocusHelper = shellSource.match(/function restoreDrawerFocus\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
+const sidebarCollapseSync = shellSource.match(/function syncCollapsedState\(collapsed\) \{[\s\S]*?\n  \}/)?.[0] || '';
 const closeSidebarSource = shellSource.match(/function closeSidebar\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
 const closeInspectorSource = shellSource.match(/function closeInspector\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
 assert.match(restoreFocusHelper, /restoreFocusTarget = null/, 'drawer focus target should be consumed after restoration');
@@ -71,6 +72,9 @@ assert.match(closeSidebarSource, /const wasOpen = .*sidebar-open/, 'sidebar clos
 assert.match(closeSidebarSource, /if \(wasOpen &&/, 'sidebar close should restore focus only after a real close transition');
 assert.match(closeInspectorSource, /const wasOpen = .*inspector-open/, 'inspector close should record whether its drawer was actually open');
 assert.match(closeInspectorSource, /if \(wasOpen &&/, 'inspector close should restore focus only after a real close transition');
+assert.match(sidebarCollapseSync, /const actionLabel = collapsed \? 'Expand sidebar' : 'Collapse sidebar'/, 'sidebar toggle action should derive from collapsed state');
+assert.match(sidebarCollapseSync, /setAttribute\('aria-label', actionLabel\)/, 'collapsed sidebar toggle should retain an accessible action name');
+assert.match(sidebarCollapseSync, /title = actionLabel/, 'collapsed sidebar toggle tooltip should match its action');
 
 const openInspectorSource = shellSource.match(/function openInspector\([^)]*\) \{[\s\S]*?\n  \}/)?.[0] || '';
 assert.match(openInspectorSource, /trigger = refs\.mobileInspectorButton/, 'inspector should default focus restoration to the topbar trigger');

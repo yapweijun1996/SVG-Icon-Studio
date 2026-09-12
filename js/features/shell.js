@@ -116,8 +116,10 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
   // accessible names — aria-label keeps them; title gives sighted users a tooltip
   // when only the icon is visible.
   function syncCollapsedState(collapsed) {
+    const actionLabel = collapsed ? 'Expand sidebar' : 'Collapse sidebar';
     refs.brandToggle.setAttribute('aria-expanded', String(!collapsed));
-    refs.brandToggle.title = collapsed ? 'Expand sidebar' : 'Collapse sidebar';
+    refs.brandToggle.setAttribute('aria-label', actionLabel);
+    refs.brandToggle.title = actionLabel;
     $$('.nav-item').forEach(button => {
       const label = button.querySelector('span')?.textContent || '';
       if (!button.hasAttribute('aria-label')) button.setAttribute('aria-label', label);

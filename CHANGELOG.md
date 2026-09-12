@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.15 — 2026-09-12
+
+### Fixed
+
+- The desktop sidebar brand toggle now keeps its accessible action name and visible tooltip synchronized with the action it will perform: “Collapse sidebar” while expanded and “Expand sidebar” while collapsed. Previously Chrome exposed the visible brand text “Icon Studio” as the expanded control’s accessible name, then fell back to the `title` only after collapse, so the announced purpose changed inconsistently across states.
+
+### Validation
+
+- Pre-fix Google Chrome 153 at 1440×900 exposed the expanded toggle as `name="Icon Studio"`, `expanded=true`, with no `aria-label`; after collapse it became `name="Expand sidebar"` only through the `title` fallback. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, and `git diff --check` pass. Post-fix Chrome verifies `Collapse sidebar` → `Expand sidebar` → `Collapse sidebar` in the Accessibility Tree with matching `aria-expanded`/tooltip state and zero runtime exceptions.
+
 ## 0.9.14 — 2026-09-12
 
 ### Fixed
