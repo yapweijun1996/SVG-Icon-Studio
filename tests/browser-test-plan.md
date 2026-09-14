@@ -15,6 +15,7 @@ Required viewports: desktop 1440×900, tablet 834×1112 and mobile 390×844.
 8. Inspector size, stroke, fill, background, rotation and flip controls update preview without changing source files.
 8a. Rotation exposes the stable accessible name `Rotation (degrees)` so Chrome’s native numeric slider values have explicit unit context while the visible output remains compact (`0°`, `45°`).
 8b. Stroke/Fill colour inputs keep stable accessible names (`Stroke colour` / `Fill colour`) while their native values and visible hex readouts change.
+8c. The Fill icon checkbox exposes `Fill icon` as its concise accessible name and `Apply a solid fill colour.` as a separate accessible description while checked state remains native.
 9. SVG, JSX and CSS tabs generate copyable code.
 10. Full preview dialog opens and closes by button, backdrop and Escape; on mobile/tablet, the first Escape closes only the modal preview and leaves the underlying inspector drawer open until a second dismissal.
 11. Theme, sidebar and inspector-collapse settings persist.

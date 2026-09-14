@@ -66,6 +66,11 @@ const rotationRangeTag = html.match(/<input\b[^>]*id="rotationRange"[^>]*>/)?.[0
 assert.match(rotationRangeTag, /aria-label="Rotation \(degrees\)"/, 'rotation slider name should include its degree unit so native numeric values are understandable');
 assert.doesNotMatch(rotationRangeTag, /aria-valuetext=/, 'rotation should not rely on aria-valuetext that Chrome ignores on the native range control');
 
+const fillToggleTag = html.match(/<input\b[^>]*id="fillToggle"[^>]*>/)?.[0] || '';
+assert.match(fillToggleTag, /aria-label="Fill icon"/, 'fill toggle should keep its concise accessible name');
+assert.match(fillToggleTag, /aria-describedby="fillToggleDescription"/, 'fill toggle should expose its visible helper text as an accessible description');
+assert.match(html, /id="fillToggleDescription">Apply a solid fill colour\.<\/span>/, 'fill toggle description target should preserve the visible helper text');
+
 const favoriteSelectedButtonTag = html.match(/<button\b[^>]*id="favoriteSelectedButton"[^>]*>/)?.[0] || '';
 const favoriteCardAttributes = catalogueSource.match(/type: 'button', 'data-action': 'favorite',[\s\S]*?\n      \}/)?.[0] || '';
 const favoriteInspectorUpdate = inspectorSource.match(/refs\.favoriteSelectedButton\.setAttribute\('aria-pressed'[\s\S]*?setAttribute\('aria-label'[\s\S]*?\n/)?.[0] || '';

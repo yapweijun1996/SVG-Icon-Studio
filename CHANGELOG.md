@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.24 — 2026-09-14
+
+### Fixed
+
+- Exposed the Inspector **Fill icon** helper text to assistive technology without bloating the control name. Real Chrome showed the checkbox as `name=Fill icon`, `checked=false`, but with an empty accessible description even though the visible UI says `Apply a solid fill colour.`. The checkbox now references that same visible helper with `aria-describedby=fillToggleDescription`, keeping the concise name and native checked state unchanged.
+
+### Validation
+
+- Pre-fix real Chrome at 1440×900 confirmed the visible helper text was absent from the checkbox accessibility description while Stroke width and checkbox states otherwise behaved correctly. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix Chrome Accessibility Tree verification cover `name=Fill icon`, `description=Apply a solid fill colour.`, native checked-state transitions, and unchanged preview behavior.
+
 ## 0.9.23 — 2026-09-12
 
 ### Fixed
