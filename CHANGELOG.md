@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.27 — 2026-09-22
+
+### Fixed
+
+- Reworked the Inspector **Preview background** selector as a true single-choice radio group instead of four independently tabbable toggle buttons. The container now exposes `role=radiogroup`; each Light/Dark/Brand/Transparent choice exposes `role=radio` with synchronized `aria-checked`, and only the selected choice remains in the Tab sequence. Arrow Left/Right/Up/Down moves selection and focus with wraparound while click/tap behavior and preview rendering stay unchanged.
+
+### Validation
+
+- Pre-fix inspection confirmed all four background choices were independent Tab stops (`tabIndex=0`) and Arrow keys did not switch the selected preview background. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and real Chrome committed-head interaction verify radio semantics, one roving Tab stop, Arrow-key state/preview updates, click behavior, and zero runtime exceptions.
+
 ## 0.9.26 — 2026-09-22
 
 ### Fixed

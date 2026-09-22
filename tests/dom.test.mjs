@@ -47,6 +47,23 @@ assert.match(catalogueSource, /chips\.forEach\(\(chip, chipIndex\) => \{ chip\.t
 assert.match(catalogueSource, /chips\[nextIndex\]\.focus\(\)/, 'category toolbar should move focus without requiring Tab through every category');
 assert.match(catalogueSource, /replacement\?\.focus\(\)/, 'category activation should restore focus to the re-rendered selected chip');
 
+const backgroundGroupTag = html.match(/<div\b[^>]*id="backgroundTabs"[^>]*>/)?.[0] || '';
+const backgroundRadioTags = [...html.matchAll(/<button\b[^>]*role="radio"[^>]*data-background="(light|dark|brand|transparent)"[^>]*>/g)].map(match => match[0]);
+assert.match(backgroundGroupTag, /role="radiogroup"/, 'preview background choices should expose one mutually-exclusive radio group');
+assert.match(backgroundGroupTag, /aria-label="Preview background"/, 'preview background radio group should keep its accessible label');
+assert.equal(backgroundRadioTags.length, 4, 'preview background group should expose all four choices as radios');
+assert.match(backgroundRadioTags[0], /aria-checked="true"/, 'initial Light background radio should be checked');
+assert.match(backgroundRadioTags[0], /tabindex="0"/, 'initial selected background radio should be the sole Tab stop');
+backgroundRadioTags.slice(1).forEach(tag => {
+  assert.match(tag, /aria-checked="false"/, 'inactive background radios should be unchecked');
+  assert.match(tag, /tabindex="-1"/, 'inactive background radios should be removed from the Tab sequence');
+});
+assert.match(inspectorSource, /button\.setAttribute\('aria-checked', String\(active\)\)/, 'background radio checked state should synchronize with preview state');
+assert.match(inspectorSource, /button\.tabIndex = active \? 0 : -1/, 'background radios should maintain a roving Tab stop');
+assert.match(inspectorSource, /\['ArrowRight', 'ArrowDown'\]\.includes\(event\.key\)/, 'background radios should support forward Arrow navigation');
+assert.match(inspectorSource, /\['ArrowLeft', 'ArrowUp'\]\.includes\(event\.key\)/, 'background radios should support reverse Arrow navigation');
+assert.match(inspectorSource, /activateBackground\(backgroundButtons\[nextIndex\], \{ focus: true \}\)/, 'Arrow navigation should update selection and move focus together');
+
 
 const sizeRangeControl = html.match(/<div\b[^>]*class="control-row range-control"[^>]*>[\s\S]*?<\/div>/)?.[0] || '';
 const sizeRangeTag = html.match(/<input\b[^>]*id="sizeRange"[^>]*>/)?.[0] || '';

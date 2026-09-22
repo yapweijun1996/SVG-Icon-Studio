@@ -197,11 +197,11 @@
 
         <section class="preview-panel">
           <div class="icon-preview light" id="iconPreview"></div>
-          <div class="background-tabs" id="backgroundTabs" role="group" aria-label="Preview background">
-            <button class="is-active" type="button" data-background="light">Light</button>
-            <button type="button" data-background="dark">Dark</button>
-            <button type="button" data-background="brand">Brand</button>
-            <button type="button" data-background="transparent">Transparent</button>
+          <div class="background-tabs" id="backgroundTabs" role="radiogroup" aria-label="Preview background">
+            <button class="is-active" type="button" role="radio" aria-checked="true" tabindex="0" data-background="light">Light</button>
+            <button type="button" role="radio" aria-checked="false" tabindex="-1" data-background="dark">Dark</button>
+            <button type="button" role="radio" aria-checked="false" tabindex="-1" data-background="brand">Brand</button>
+            <button type="button" role="radio" aria-checked="false" tabindex="-1" data-background="transparent">Transparent</button>
           </div>
         </section>
 

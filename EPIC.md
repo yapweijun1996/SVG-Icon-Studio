@@ -118,8 +118,9 @@
 - `v0.9.24` — Associated the visible Fill icon helper copy with its checkbox as a separate accessible description while preserving its concise name and native checked state.
 - `v0.9.25` — Separated the Use currentColor checkbox visible label from its helper description while preserving native checked state and preview behavior.
 - `v0.9.26` — Separated the Include title checkbox visible label from its helper description while preserving native checked state and SVG title generation behavior.
+- `v0.9.27` — Converted Preview background from four independent toggle buttons to a single-choice radio group with one Tab stop and Arrow-key selection/focus.
 
-**Status:** Complete for the current scope through `v0.9.26`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
+**Status:** Complete for the current scope through `v0.9.27`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
 
 ---
 

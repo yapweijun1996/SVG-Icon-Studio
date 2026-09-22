@@ -82,12 +82,13 @@
 | `v0.9.24` | 2026-09-14 | Expose Fill icon helper text as an accessible description | 4 |
 | `v0.9.25` | 2026-09-22 | Separate currentColor checkbox name from helper description | 4 |
 | `v0.9.26` | 2026-09-22 | Separate Include title checkbox name from helper description | 4 |
+| `v0.9.27` | 2026-09-22 | Give preview-background choices radio semantics and roving arrow-key focus | 4 |
 
 Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`.
 
 ---
 
-## Current state (as of `v0.9.26`)
+## Current state (as of `v0.9.27`)
 
 - 120 icons, 10 categories, 2 styles (111 outline / 9 filled).
 - Zero runtime dependencies; Vite is dev/build tooling only.
