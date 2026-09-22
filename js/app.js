@@ -5,6 +5,7 @@ import { sanitizeSvgText } from './services/svg-sanitizer.js';
 import { loadRegistry, registerUploadedIcons, getAllIconMetadata, loadIconAsset } from './services/icon-repository.js';
 import { generateSvg } from './services/svg-exporter.js';
 import { createCatalogueController } from './features/catalogue.js';
+import { hasIconsInView } from './features/filters.js';
 import { createInspectorController } from './features/inspector.js';
 import { createImporterController } from './features/importer.js';
 import { createShellController } from './features/shell.js';
@@ -158,9 +159,16 @@ async function start() {
     renderAll();
   }
 
+  function recoverEmptyCatalogue() {
+    const returnToLibrary = !hasIconsInView(state);
+    resetFilters();
+    if (returnToLibrary) shell.setView('library');
+    refs.resultsTitle.focus();
+  }
+
   refs.searchInput.addEventListener('input', event => { state.query = event.target.value; state.visibleLimit = 24; catalogue.render(); });
   refs.clearSearchButton.addEventListener('click', resetFilters);
-  refs.emptyResetButton.addEventListener('click', resetFilters);
+  refs.emptyResetButton.addEventListener('click', recoverEmptyCatalogue);
   refs.clearFiltersButton.addEventListener('click', resetFilters);
   refs.filterButton.addEventListener('click', () => {
     const expanded = refs.advancedFilter.hidden;

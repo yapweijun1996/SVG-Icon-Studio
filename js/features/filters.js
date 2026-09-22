@@ -1,4 +1,4 @@
-export function getFilteredIcons(state) {
+export function getViewIcons(state) {
   let icons = [...state.icons];
   if (state.view === 'favorites') {
     icons = icons.filter(icon => state.favorites.has(icon.id));
@@ -8,6 +8,15 @@ export function getFilteredIcons(state) {
   } else if (state.view === 'uploaded') {
     icons = icons.filter(icon => icon.uploaded);
   }
+  return icons;
+}
+
+export function hasIconsInView(state) {
+  return getViewIcons(state).length > 0;
+}
+
+export function getFilteredIcons(state) {
+  let icons = getViewIcons(state);
 
   const query = state.query.trim().toLowerCase();
   if (query) {

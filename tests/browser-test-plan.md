@@ -14,6 +14,7 @@ Required viewports: desktop 1440×900, tablet 834×1112 and mobile 390×844.
 5c. Keyboard activation of a catalogue Favorite action retains focus on that same icon's re-rendered Favorite button while `aria-pressed` toggles false ↔ true.
 5d. On desktop, keyboard activation of catalogue Select and More actions retains focus on the same icon's equivalent re-rendered action; on mobile/tablet, Select/More still move focus into the inspector drawer and restore to the replacement trigger when dismissed.
 5e. In Favorites view, keyboard-unfavoriting the focused card moves focus to the nearest remaining Favorite action; removing the final favorite focuses the visible `No icons found` heading instead of `body`.
+5f. Empty-state recovery is context-aware: a filtered-empty view offers `Reset filters` and stays in that view, while an intrinsically empty Favorites/Recent/Uploaded view offers `Browse all icons`, returns to Library, and focuses the visible results heading.
 6. Recently Viewed order updates after selection.
 7. Purchase Order and Delivery Order match their approved independent SVG assets.
 8. Inspector size, stroke, fill, background, rotation and flip controls update preview without changing source files.

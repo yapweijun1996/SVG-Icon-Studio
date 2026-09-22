@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.32 — 2026-09-22
+
+### Fixed
+
+- Made the catalogue empty-state primary action actually recover from the state it describes. Real Chrome showed that `Reset catalogue` worked when search/filter criteria hid Library results, but did nothing useful in an intrinsically empty **Favorites**, **Recently viewed**, or **Uploaded** view because it cleared filters without leaving that scoped view. The empty state now says `Reset filters` when the current view contains items that filters are hiding, and `Browse all icons` when the scoped view itself has no items. The latter resets filters and returns to Library. After either recovery, focus moves to the visible results heading instead of falling back to `body` when the empty-state button disappears.
+
+### Validation
+
+- Pre-fix real Chrome at 1440×900 confirmed the filtered-Library reset path restored all 120 icons, while empty Favorites remained empty after `Reset catalogue`; a focused reset also dropped focus to `body`. Focused filter/DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact committed-head Chrome verification cover filtered-empty recovery staying in its view, intrinsically empty scoped recovery returning to Library, visible action labels, results-heading focus, 120 icons, and zero runtime exceptions.
+
 ## 0.9.31 — 2026-09-22
 
 ### Fixed

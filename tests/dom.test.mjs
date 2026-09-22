@@ -40,6 +40,15 @@ assert.match(resultsSummaryTag, /aria-live="polite"/, 'result-count status shoul
 assert.match(resultsSummaryTag, /aria-atomic="true"/, 'result-count status should announce the complete concise message');
 assert.doesNotMatch(iconGridTag, /aria-live=/, 'interactive icon grid should not announce every card rebuild as a live region');
 
+const resultsTitleTag = html.match(/<h2\b[^>]*id="resultsTitle"[^>]*>/)?.[0] || '';
+const emptyRecoveryHandler = appSource.match(/function recoverEmptyCatalogue\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
+assert.match(resultsTitleTag, /tabindex="-1"/, 'results heading should accept programmatic focus after an empty-state recovery without adding a Tab stop');
+assert.match(catalogueSource, /refs\.emptyResetButton\.textContent = hasIconsInView\(state\) \? 'Reset filters' : 'Browse all icons'/, 'empty-state recovery label should distinguish hidden results from an intrinsically empty scoped view');
+assert.match(emptyRecoveryHandler, /const returnToLibrary = !hasIconsInView\(state\)/, 'empty-state recovery should detect when the current scoped view contains no items at all');
+assert.match(emptyRecoveryHandler, /if \(returnToLibrary\) shell\.setView\('library'\)/, 'intrinsically empty scoped views should recover to the full library');
+assert.match(emptyRecoveryHandler, /refs\.resultsTitle\.focus\(\)/, 'empty-state recovery should move focus to the now-visible results heading');
+assert.match(appSource, /refs\.emptyResetButton\.addEventListener\('click', recoverEmptyCatalogue\)/, 'empty-state primary action should use the context-aware recovery handler');
+
 assert.match(html, /id="categoryChips" role="toolbar" aria-label="Icon categories"/, 'category controls should expose their toolbar grouping');
 assert.match(catalogueSource, /tabindex: state\.category === category \? '0' : '-1'/, 'category toolbar should expose one initial tab stop');
 assert.match(catalogueSource, /\['ArrowLeft', 'ArrowRight', 'Home', 'End'\]/, 'category toolbar should support directional keyboard navigation');
