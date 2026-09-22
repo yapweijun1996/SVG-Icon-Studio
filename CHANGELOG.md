@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.35 — 2026-09-22
+
+### Fixed
+
+- Kept mobile/tablet Inspector and sidebar drawer Tab traps inside their actual rendered tabbable controls. Hidden controls and inactive roving controls with effective `tabindex=-1` are now excluded from both drawer focus entry and first/last wrap boundaries.
+
+### Validation
+
+- Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and real Chrome/CDP verification at 390×844, 834×1112, and 1440×900 cover Inspector Shift+Tab/Tab wrapping, sidebar containment, desktop docking, and zero runtime exceptions.
+
 ## 0.9.34 — 2026-09-22
 
 ### Fixed

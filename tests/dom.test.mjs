@@ -163,6 +163,14 @@ assert.match(inspectorCollapseClick, /syncInspectorCollapsedState\(collapsed\)/,
 
 const closeInspectorButtonTag = html.match(/<button\b[^>]*id="closeInspectorButton"[^>]*>/)?.[0] || '';
 assert.match(closeInspectorButtonTag, /class="[^"]*inspector-close-button[^"]*"/, 'inspector drawer close control should keep its responsive hook');
+const drawerTabbableHelper = shellSource.match(/function getDrawerTabbables\(drawer\) \{[\s\S]*?\n  \}/)?.[0] || '';
+const drawerTabTrap = shellSource.match(/if \(drawer && event\.key === 'Tab'\) \{[\s\S]*?\n    \}/)?.[0] || '';
+assert.match(drawerTabbableHelper, /getClientRects\(\)\.length > 0/, 'drawer tabbable filtering should exclude rendered-zero controls');
+assert.match(drawerTabbableHelper, /getComputedStyle\(element\)\.visibility !== 'hidden'/, 'drawer tabbable filtering should exclude CSS-hidden controls');
+assert.match(drawerTabbableHelper, /element\.tabIndex >= 0/, 'drawer tabbable filtering should exclude effective tabindex=-1 controls');
+assert.match(drawerTabTrap, /getDrawerTabbables\(drawer\)/, 'drawer Tab trapping should use the filtered rendered tabbable list');
+assert.match(drawerTabTrap, /const first = focusable\[0\]/, 'drawer Tab trapping should use the filtered first control');
+assert.match(drawerTabTrap, /const last = focusable\[focusable\.length - 1\]/, 'drawer Tab trapping should use the filtered last control');
 assert.match(utilitiesSource, /\.inspector-close-button\s*\{\s*display:\s*none;/, 'drawer Close inspector control should be hidden on docked desktop');
 assert.match(responsiveSource, /@media \(max-width:\s*1180px\)[\s\S]*?\.inspector-close-button\s*\{\s*display:\s*inline-grid;/, 'drawer Close inspector control should become visible at inspector-drawer breakpoints');
 

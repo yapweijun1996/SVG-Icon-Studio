@@ -2,7 +2,7 @@ import { $$ } from '../core/dom.js';
 import { STORAGE, getValue, setValue } from '../core/storage.js';
 
 export function createShellController({ state, refs, toast, onViewChange, onBrandPreview }) {
-  const focusableSelector = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  const focusableSelector = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]';
   let restoreFocusTarget = null;
 
   function activeDrawer() {
@@ -11,10 +11,16 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
     return null;
   }
 
-  function focusDrawer(drawer) {
-    const firstFocusable = [...(drawer?.querySelectorAll(focusableSelector) || [])].find(element =>
-      element.getClientRects().length > 0 && getComputedStyle(element).visibility !== 'hidden'
+  function getDrawerTabbables(drawer) {
+    return [...(drawer?.querySelectorAll(focusableSelector) || [])].filter(element =>
+      element.getClientRects().length > 0 &&
+      getComputedStyle(element).visibility !== 'hidden' &&
+      element.tabIndex >= 0
     );
+  }
+
+  function focusDrawer(drawer) {
+    const firstFocusable = getDrawerTabbables(drawer)[0];
     if (firstFocusable) firstFocusable.focus();
   }
 
@@ -166,7 +172,7 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
   document.addEventListener('keydown', event => {
     const drawer = activeDrawer();
     if (drawer && event.key === 'Tab') {
-      const focusable = [...drawer.querySelectorAll(focusableSelector)];
+      const focusable = getDrawerTabbables(drawer);
       if (!focusable.length) {
         event.preventDefault();
       } else {

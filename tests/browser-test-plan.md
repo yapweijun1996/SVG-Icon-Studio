@@ -37,6 +37,7 @@ Required viewports: desktop 1440×900, tablet 834×1112 and mobile 390×844.
 11f. The Inspector exposes no non-functional Pin control/state; on mobile/tablet, opening the drawer moves focus to the first visible header control.
 11g. The Inspector exposes only the Collapse/Expand action while docked on desktop; the separate Close inspector control is hidden there and becomes visible only at the ≤1180px drawer breakpoint, where the desktop collapse control is hidden.
 11h. The Inspector Size range exposes the accessible name “Size” in the browser Accessibility Tree while retaining its native numeric slider value and visible px output.
+11i. At 390×844 and 834×1112, opening the Inspector focuses the first visible control; Shift+Tab from `#closeInspectorButton` wraps to the actual last visible tabbable Inspector control, and Tab from that control wraps back to Close. Hidden controls and inactive roving controls (`tabindex=-1`) are not trap boundaries; the mobile sidebar drawer also keeps Tab focus inside.
 12. Valid 24×24 SVG upload is sanitized and stored in IndexedDB.
 13. Unsafe, oversized or non-24×24 SVG upload is rejected without persistence.
 14. One missing catalogue asset shows fallback while other icons continue working.
