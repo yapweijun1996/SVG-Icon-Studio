@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.40 — 2026-09-23
+
+### Fixed
+
+- Fixed view-sort state leaking out of **Collections**. Entering Collections intentionally switches the catalogue to category grouping, but that automatic default previously remained active after navigating back to Library or another workspace view. The shell now snapshots the current non-Collections sort before entering Collections, applies the category default only inside that view, restores the previous sort when leaving, and keeps the visible Sort control synchronized.
+
+### Validation
+
+- Pre-fix Chrome 153 at 1440×900 reproduced `featured → category → category` across Library → Collections → Library, with the first Library cards changing from Invoice/Customer/Delivery Truck to alphabetical category-grouped results. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact-head Chrome verification cover restoring both the default Featured sort and a user-selected Name A–Z sort after leaving Collections, synchronized Sort UI, stable navigation focus, responsive viewports, and zero runtime/console errors.
+
 ## 0.9.39 — 2026-09-23
 
 ### Fixed

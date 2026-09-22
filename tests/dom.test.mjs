@@ -59,6 +59,17 @@ assert.match(appSource, /\['ArrowRight', 'ArrowDown'\]\.includes\(event\.key\)/,
 assert.match(appSource, /\['ArrowLeft', 'ArrowUp'\]\.includes\(event\.key\)/, 'density radios should support reverse Arrow navigation');
 assert.match(appSource, /activateDensity\(densityButtons\[nextIndex\], \{ focus: true \}\)/, 'density Arrow navigation should update selection and focus together');
 
+const setViewHandler = shellSource.match(/function setView\(view\) \{[\s\S]*?\n  \}/)?.[0] || '';
+assert.match(shellSource, /let lastNonCollectionSort = state\.sort/, 'shell should remember the non-Collections sort before applying the Collections default');
+assert.match(setViewHandler, /const previousView = state\.view/, 'view changes should distinguish entering from leaving Collections');
+assert.match(setViewHandler, /previousView !== 'collections'\) lastNonCollectionSort = state\.sort/, 'entering Collections should snapshot the current non-Collections sort');
+assert.match(setViewHandler, /state\.sort = 'category'/, 'Collections should keep its category-grouped default');
+assert.match(setViewHandler, /else if \(previousView === 'collections'\)[\s\S]*?state\.sort = lastNonCollectionSort/, 'leaving Collections should restore the prior non-Collections sort instead of leaking category sorting');
+assert.match(setViewHandler, /refs\.sortFilter\.value = state\.sort/, 'the visible sort select should stay synchronized with the restored sort state');
+const importCompletionHandler = appSource.match(/onImported: record => \{[\s\S]*?\n    \}/)?.[0] || '';
+assert.doesNotMatch(importCompletionHandler, /state\.view\s*=/, 'import completion should not pre-mutate view state before the shell can restore view-scoped sort state');
+assert.match(importCompletionHandler, /shell\.setView\('uploaded'\)/, 'import completion should route the Uploaded view transition through the shell controller');
+
 const resultsHeaderTag = html.match(/<section\b[^>]*class="results-header"[^>]*>/)?.[0] || '';
 const resultsSummaryTag = html.match(/<span\b[^>]*id="resultsSummary"[^>]*>/)?.[0] || '';
 const iconGridTag = html.match(/<div\b[^>]*id="iconGrid"[^>]*>/)?.[0] || '';

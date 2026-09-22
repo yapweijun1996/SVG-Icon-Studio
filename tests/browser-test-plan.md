@@ -19,6 +19,7 @@ Required viewports: desktop 1440×900, tablet 834×1112 and mobile 390×844.
 5f. Empty-state recovery is context-aware: a filtered-empty view offers `Reset filters` and stays in that view, while an intrinsically empty Favorites/Recent/Uploaded view offers `Browse all icons`, returns to Library, and focuses the visible results heading.
 5g. When the manual `Load more icons` fallback owns focus, intermediate loads keep focus on that button; after the final batch hides it, focus moves to the first newly revealed icon Select action instead of `body`.
 6. Recently Viewed order updates after selection.
+6a. Entering Collections applies the category-grouped default, and leaving Collections restores the prior non-Collections sort (including a user-selected sort such as Name A–Z) with the visible Sort control synchronized; the Collections default must not leak into Library, Favorites, Recent, Uploaded or Brand views.
 7. Purchase Order and Delivery Order match their approved independent SVG assets.
 8. Inspector size, stroke, fill, background, rotation and flip controls update preview without changing source files.
 8a. Preview background is a labelled radio group with one checked/tabbable choice; Arrow Left/Right/Up/Down moves focus and selection with wraparound and updates the preview background.

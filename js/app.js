@@ -137,7 +137,6 @@ async function start() {
   createImporterController({
     state, refs, toast,
     onImported: record => {
-      state.view = 'uploaded';
       state.category = 'All';
       state.selectedId = record.id;
       state.recent = [record.id, ...state.recent.filter(id => id !== record.id)].slice(0, 20);

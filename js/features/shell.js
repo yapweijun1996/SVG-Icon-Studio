@@ -4,6 +4,7 @@ import { STORAGE, getValue, setValue } from '../core/storage.js';
 export function createShellController({ state, refs, toast, onViewChange, onBrandPreview }) {
   const focusableSelector = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]';
   let restoreFocusTarget = null;
+  let lastNonCollectionSort = state.sort;
 
   function activeDrawer() {
     if (refs.body.classList.contains('inspector-open')) return refs.inspector;
@@ -109,15 +110,19 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
     if (wasOpen && !refs.body.classList.contains('sidebar-open')) restoreDrawerFocus();
   }
   function setView(view) {
+    const previousView = state.view;
+    if (view === 'collections') {
+      if (previousView !== 'collections') lastNonCollectionSort = state.sort;
+      state.sort = 'category';
+    } else if (previousView === 'collections') {
+      state.sort = lastNonCollectionSort;
+    }
     state.view = view;
     state.visibleLimit = 24;
     state.category = 'All';
     state.query = '';
     refs.searchInput.value = '';
-    if (view === 'collections') {
-      state.sort = 'category';
-      refs.sortFilter.value = 'category';
-    }
+    refs.sortFilter.value = state.sort;
     if (view === 'brand') onBrandPreview();
     $$('.nav-item').forEach(button => {
       const active = button.dataset.view === view;
