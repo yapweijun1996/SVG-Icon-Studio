@@ -168,19 +168,28 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     card?.querySelector(`[data-action="${actionName}"]`)?.focus();
   }
 
+  function runCardActionWithFocusFallback(iconId, actionName, action, callback) {
+    const restoreFocus = document.activeElement === action;
+    callback();
+    if (restoreFocus && document.activeElement === document.body) focusRenderedCardAction(iconId, actionName);
+  }
+
   refs.iconGrid.addEventListener('click', event => {
     const card = event.target.closest('.icon-card');
     const action = event.target.closest('[data-action]');
     if (!card || !action) return;
     const icon = state.icons.find(item => item.id === card.dataset.iconId);
     if (!icon) return;
-    if (action.dataset.action === 'select') onSelect(icon.id);
-    else if (action.dataset.action === 'favorite') {
+    if (action.dataset.action === 'select') {
+      runCardActionWithFocusFallback(icon.id, 'select', action, () => onSelect(icon.id));
+    } else if (action.dataset.action === 'favorite') {
       const restoreFocus = document.activeElement === action;
       onFavorite(icon.id);
       if (restoreFocus) focusRenderedCardAction(icon.id, 'favorite');
     } else if (action.dataset.action === 'copy') onCopy(icon);
-    else if (action.dataset.action === 'more') onMore(icon.id);
+    else if (action.dataset.action === 'more') {
+      runCardActionWithFocusFallback(icon.id, 'more', action, () => onMore(icon.id));
+    }
   });
 
   function loadMore() {

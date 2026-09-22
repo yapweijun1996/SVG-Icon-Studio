@@ -12,6 +12,7 @@ Required viewports: desktop 1440×900, tablet 834×1112 and mobile 390×844.
 5a. Catalogue and inspector favorite toggles keep the same accessible name before/after activation while `aria-pressed` changes false ↔ true.
 5b. Every catalogue `Copy SVG` action keeps the compact visible text but exposes an icon-specific accessible name (for example `Copy Invoice SVG`) so repeated card actions are distinguishable.
 5c. Keyboard activation of a catalogue Favorite action retains focus on that same icon's re-rendered Favorite button while `aria-pressed` toggles false ↔ true.
+5d. On desktop, keyboard activation of catalogue Select and More actions retains focus on the same icon's equivalent re-rendered action; on mobile/tablet, Select/More still move focus into the inspector drawer and restore to the replacement trigger when dismissed.
 6. Recently Viewed order updates after selection.
 7. Purchase Order and Delivery Order match their approved independent SVG assets.
 8. Inspector size, stroke, fill, background, rotation and flip controls update preview without changing source files.

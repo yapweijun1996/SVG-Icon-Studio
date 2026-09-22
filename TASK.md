@@ -78,6 +78,7 @@
 - [x] Expose Preview background as one mutually-exclusive radio group with roving Arrow-key focus, released as `v0.9.27`
 - [x] Give every catalogue Copy SVG action an icon-specific accessible name while retaining the compact visible label, released as `v0.9.28`
 - [x] Preserve keyboard focus on the re-rendered catalogue Favorite action after toggling, released as `v0.9.29`
+- [x] Preserve keyboard focus on re-rendered catalogue Select and More actions on desktop without disrupting mobile/tablet inspector focus transfer, released as `v0.9.30`
 - [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
 - [x] Browser/build SVG validation enforce strict XML declaration grammar and reject malformed declarations consistently
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
@@ -115,7 +116,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.9.29` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.9.30` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 

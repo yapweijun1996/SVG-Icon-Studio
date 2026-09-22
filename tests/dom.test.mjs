@@ -112,6 +112,13 @@ assert.doesNotMatch(favoriteCardAttributes, /Remove|Add/, 'catalogue favorite to
 assert.match(catalogueSource, /const restoreFocus = document\.activeElement === action/, 'catalogue favorite activation should detect whether the replaced action owned focus');
 assert.match(catalogueSource, /if \(restoreFocus\) focusRenderedCardAction\(icon\.id, 'favorite'\)/, 'catalogue favorite activation should restore focus to the same re-rendered action');
 assert.match(catalogueSource, /function focusRenderedCardAction\(iconId, actionName\)[\s\S]*?\.focus\(\)/, 'catalogue focus restoration should target the matching rendered card action');
+const cardActionFocusFallback = catalogueSource.match(/function runCardActionWithFocusFallback\(iconId, actionName, action, callback\) \{[\s\S]*?\n  \}/)?.[0] || '';
+assert.match(cardActionFocusFallback, /const restoreFocus = document\.activeElement === action/, 'catalogue selection actions should detect whether the activated control owned focus');
+assert.match(cardActionFocusFallback, /callback\(\)/, 'catalogue focus fallback should run the state-changing action before evaluating replacement focus');
+assert.match(cardActionFocusFallback, /restoreFocus && document\.activeElement === document\.body/, 'catalogue focus fallback should only restore when the action rebuild actually loses focus');
+assert.match(cardActionFocusFallback, /focusRenderedCardAction\(iconId, actionName\)/, 'catalogue focus fallback should target the equivalent newly rendered action');
+assert.match(catalogueSource, /runCardActionWithFocusFallback\(icon\.id, 'select', action, \(\) => onSelect\(icon\.id\)\)/, 'catalogue Select activation should preserve desktop focus across the rebuild');
+assert.match(catalogueSource, /runCardActionWithFocusFallback\(icon\.id, 'more', action, \(\) => onMore\(icon\.id\)\)/, 'catalogue More activation should preserve desktop focus across the rebuild');
 assert.match(favoriteInspectorUpdate, /setAttribute\('aria-pressed', String\(favorite\)\)/, 'selected-icon favorite toggle should synchronize pressed state');
 assert.match(favoriteInspectorUpdate, /setAttribute\('aria-label', `Favorite \$\{icon\.name\}`\)/, 'selected-icon favorite toggle name should remain stable across pressed states');
 assert.doesNotMatch(favoriteInspectorUpdate, /Remove|Add/, 'selected-icon favorite toggle name should not change with pressed state');

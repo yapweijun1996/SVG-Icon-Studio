@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.30 — 2026-09-22
+
+### Fixed
+
+- Preserved keyboard focus when catalogue **Select** and **More export options** actions rebuild the card grid on docked desktop. Real Chrome previously executed both actions correctly but removed the focused button during the catalogue re-render, leaving focus on `body`. A focused action now falls back to the equivalent newly rendered card control only when the rebuild actually loses focus. Mobile/tablet behavior is intentionally unchanged: opening the inspector drawer still moves focus to its first visible control and closing it restores focus to the replacement card trigger.
+
+### Validation
+
+- Pre-fix real Chrome at 1440×900 reproduced `Select Customer icon` and `More export options for Delivery Truck` both moving focus to `body` after successful keyboard activation, while 390×844 correctly transferred Select focus into the inspector drawer. Focused DOM/source regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact committed-head Chrome verification cover desktop Select/More focus retention, unchanged mobile drawer focus transfer/restore, 120 loaded icons, and zero runtime exceptions.
+
 ## 0.9.29 — 2026-09-22
 
 ### Fixed
