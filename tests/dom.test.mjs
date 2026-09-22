@@ -78,6 +78,7 @@ assert.match(resultsSummaryTag, /role="status"/, 'result count should be the ded
 assert.match(resultsSummaryTag, /aria-live="polite"/, 'result-count status should announce updates politely');
 assert.match(resultsSummaryTag, /aria-atomic="true"/, 'result-count status should announce the complete concise message');
 assert.doesNotMatch(iconGridTag, /aria-live=/, 'interactive icon grid should not announce every card rebuild as a live region');
+assert.match(catalogueSource, /refs\.resultsSummary\.textContent = formatResultsSummary\(state, visible\.length, filtered\.length\)/, 'result live region should receive the contextual summary formatter output');
 
 const pageTitleTag = html.match(/<h1\b[^>]*id="pageTitle"[^>]*>/)?.[0] || '';
 assert.match(pageTitleTag, /tabindex="-1"/, 'workspace page title should accept programmatic focus after SPA view changes without adding a Tab stop');

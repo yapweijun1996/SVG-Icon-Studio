@@ -15,6 +15,27 @@ export function hasIconsInView(state) {
   return getViewIcons(state).length > 0;
 }
 
+const SCOPED_VIEW_CONTEXT = {
+  favorites: 'Favorites view',
+  recent: 'Recently viewed',
+  uploaded: 'Uploaded icons'
+};
+
+export function formatResultsSummary(state, visibleCount, filteredCount) {
+  const iconNoun = filteredCount === 1 ? 'icon' : 'icons';
+  const countSummary = visibleCount === filteredCount
+    ? `Showing ${filteredCount} ${iconNoun}`
+    : `Showing ${visibleCount} of ${filteredCount} ${iconNoun}`;
+  const context = [];
+  const scopedView = SCOPED_VIEW_CONTEXT[state.view];
+  if (scopedView) context.push(scopedView);
+  const query = state.query.trim();
+  if (query) context.push(`search “${query}”`);
+  if (state.category !== 'All') context.push(`${state.category} category`);
+  if (state.style !== 'all') context.push(`${state.style} style`);
+  return context.length ? `${countSummary} — ${context.join(', ')}` : countSummary;
+}
+
 export function getFilteredIcons(state) {
   let icons = getViewIcons(state);
 

@@ -1,6 +1,6 @@
 import { createElement, createSvgElement } from '../core/dom.js';
 import { createIntersectionObserver } from '../core/observer.js';
-import { getFilteredIcons, hasIconsInView } from './filters.js';
+import { getFilteredIcons, hasIconsInView, formatResultsSummary } from './filters.js';
 import { loadIconAsset } from '../services/icon-repository.js';
 import { createCanonicalPreview, createFallbackSvg } from '../services/svg-renderer.js';
 
@@ -120,7 +120,7 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     refs.iconGrid.hidden = filtered.length === 0;
     refs.emptyResetButton.textContent = hasIconsInView(state) ? 'Reset filters' : 'Browse all icons';
     refs.loadMoreButton.parentElement.hidden = filtered.length === 0 || visible.length >= filtered.length;
-    refs.resultsSummary.textContent = filtered.length === visible.length ? `Showing ${filtered.length} icon${filtered.length === 1 ? '' : 's'}` : `Showing ${visible.length} of ${filtered.length}`;
+    refs.resultsSummary.textContent = formatResultsSummary(state, visible.length, filtered.length);
     refs.visibleIconCount.textContent = String(filtered.length);
     refs.totalIconCount.textContent = String(state.icons.length);
     refs.favoriteCount.textContent = String(state.favorites.size);

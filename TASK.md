@@ -90,6 +90,7 @@
 - [x] Keep the zero-dependency `npm run serve` path aligned with Vite by serving `public/` assets from the app root with correct manifest/PNG MIME types, released as `v0.9.39`
 - [x] Keep the Collections view's category-grouped default sort scoped to Collections and restore the previous non-Collections sort when navigating away, released as `v0.9.40`
 - [x] Announce SPA workspace navigation by focusing the updated page heading and synchronizing the browser document title with the active view, released as `v0.9.41`
+- [x] Add active search/category/style/scoped-view context to the catalogue result status so screen-reader users hear what a dynamic result count refers to, released as `v0.9.42`
 - [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
 - [x] Browser/build SVG validation enforce strict XML declaration grammar and reject malformed declarations consistently
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
@@ -127,7 +128,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.9.41` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.9.42` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 

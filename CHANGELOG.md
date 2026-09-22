@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.42 — 2026-09-23
+
+### Fixed
+
+- Improved the catalogue's dedicated polite result-status announcement. Dynamic searches and filters previously announced only counts such as `Showing 2 icons` or `Showing 0 icons`, even when the visible result heading/filter controls carried the query or filter context elsewhere. The status now stays concise for the default library (`Showing 24 of 120 icons`) and adds only relevant active context for search text, category, style, and result-scoping Favorites/Recent/Uploaded views. The interactive grid remains outside any live region, avoiding noisy card-by-card announcements.
+
+### Validation
+
+- Pre-fix Chrome 153 reproduced `search=truck` as `Showing 2 icons`, `search=truck + ERP` as `Showing 0 icons`, and Outline + search `order` as `Showing 3 icons`, none of which identified the active criteria in the status text. Focused result-summary tests, DOM integration regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact-head responsive Chrome verification cover contextual query/category/style/scoped-view messages, zero-result context, concise default pagination, the single polite atomic status region, runtime/network health, and horizontal overflow.
+
 ## 0.9.41 — 2026-09-23
 
 ### Fixed
