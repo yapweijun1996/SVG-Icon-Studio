@@ -163,6 +163,11 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     chips[nextIndex].focus();
   });
 
+  function focusRenderedCardAction(iconId, actionName) {
+    const card = [...refs.iconGrid.querySelectorAll('.icon-card')].find(item => item.dataset.iconId === iconId);
+    card?.querySelector(`[data-action="${actionName}"]`)?.focus();
+  }
+
   refs.iconGrid.addEventListener('click', event => {
     const card = event.target.closest('.icon-card');
     const action = event.target.closest('[data-action]');
@@ -170,8 +175,11 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     const icon = state.icons.find(item => item.id === card.dataset.iconId);
     if (!icon) return;
     if (action.dataset.action === 'select') onSelect(icon.id);
-    else if (action.dataset.action === 'favorite') onFavorite(icon.id);
-    else if (action.dataset.action === 'copy') onCopy(icon);
+    else if (action.dataset.action === 'favorite') {
+      const restoreFocus = document.activeElement === action;
+      onFavorite(icon.id);
+      if (restoreFocus) focusRenderedCardAction(icon.id, 'favorite');
+    } else if (action.dataset.action === 'copy') onCopy(icon);
     else if (action.dataset.action === 'more') onMore(icon.id);
   });
 

@@ -120,8 +120,9 @@
 - `v0.9.26` — Separated the Include title checkbox visible label from its helper description while preserving native checked state and SVG title generation behavior.
 - `v0.9.27` — Converted Preview background from four independent toggle buttons to a single-choice radio group with one Tab stop and Arrow-key selection/focus.
 - `v0.9.28` — Scoped each catalogue Copy SVG action to its icon in the accessibility tree while preserving the compact visible button text and existing copy behavior.
+- `v0.9.29` — Preserved keyboard focus on the same catalogue Favorite action after its state-changing re-render, while retaining stable names and `aria-pressed` semantics.
 
-**Status:** Complete for the current scope through `v0.9.28`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
+**Status:** Complete for the current scope through `v0.9.29`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
 
 ---
 

@@ -109,6 +109,9 @@ assert.match(favoriteSelectedButtonTag, /aria-pressed="false"/, 'selected-icon f
 assert.match(favoriteCardAttributes, /'aria-pressed': favorite/, 'catalogue favorite toggle should expose pressed state separately from its name');
 assert.match(favoriteCardAttributes, /'aria-label': `Favorite \$\{icon\.name\}`/, 'catalogue favorite toggle name should remain stable across pressed states');
 assert.doesNotMatch(favoriteCardAttributes, /Remove|Add/, 'catalogue favorite toggle name should not change with pressed state');
+assert.match(catalogueSource, /const restoreFocus = document\.activeElement === action/, 'catalogue favorite activation should detect whether the replaced action owned focus');
+assert.match(catalogueSource, /if \(restoreFocus\) focusRenderedCardAction\(icon\.id, 'favorite'\)/, 'catalogue favorite activation should restore focus to the same re-rendered action');
+assert.match(catalogueSource, /function focusRenderedCardAction\(iconId, actionName\)[\s\S]*?\.focus\(\)/, 'catalogue focus restoration should target the matching rendered card action');
 assert.match(favoriteInspectorUpdate, /setAttribute\('aria-pressed', String\(favorite\)\)/, 'selected-icon favorite toggle should synchronize pressed state');
 assert.match(favoriteInspectorUpdate, /setAttribute\('aria-label', `Favorite \$\{icon\.name\}`\)/, 'selected-icon favorite toggle name should remain stable across pressed states');
 assert.doesNotMatch(favoriteInspectorUpdate, /Remove|Add/, 'selected-icon favorite toggle name should not change with pressed state');

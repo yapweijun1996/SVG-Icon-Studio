@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.29 — 2026-09-22
+
+### Fixed
+
+- Preserved keyboard focus when toggling a catalogue **Favorite** button. Favorite changes rebuild the catalogue so counts, card state and Favorites view stay synchronized; previously that rebuild removed the focused button and real Chrome moved focus to `body`. The delegated handler now detects when the activated Favorite action owns focus and restores focus to the same icon's newly rendered Favorite button after the state update. Stable icon-specific names and native `aria-pressed` state remain unchanged.
+
+### Validation
+
+- Pre-fix real Chrome focused `Favorite Invoice`, activated it with Space, confirmed `aria-pressed=false→true`, and observed focus fall back to `body`. Focused DOM/source regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact committed-head real Chrome verification cover focus retention across both favorite/unfavorite transitions, unchanged accessible name/state, and zero runtime exceptions.
+
 ## 0.9.28 — 2026-09-22
 
 ### Fixed
