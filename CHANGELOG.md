@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.28 — 2026-09-22
+
+### Fixed
+
+- Scoped every catalogue **Copy SVG** button to its card icon in the accessibility tree. The visible label remains the intentionally compact `Copy SVG`, but each control now exposes an icon-specific accessible name such as `Copy Invoice SVG` or `Copy Customer SVG`, avoiding a long sequence of indistinguishable `Copy SVG` controls for screen-reader users. The delegated copy handler and generated SVG are unchanged.
+
+### Validation
+
+- Pre-fix real Chrome reproduced three consecutive catalogue copy controls named only `Copy SVG` for Invoice, Customer and Delivery Truck. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact committed-head real Chrome verification cover icon-specific names while retaining the visible `Copy SVG` text and existing delegated copy action.
+
 ## 0.9.27 — 2026-09-22
 
 ### Fixed

@@ -74,7 +74,7 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     selectButton.append(preview, copy);
 
     const actions = createElement('div', { className: 'card-actions' });
-    actions.append(createElement('button', { className: 'card-action', text: 'Copy SVG', attributes: { type: 'button', 'data-action': 'copy' } }));
+    actions.append(createElement('button', { className: 'card-action', text: 'Copy SVG', attributes: { type: 'button', 'data-action': 'copy', 'aria-label': `Copy ${icon.name} SVG` } }));
     actions.append(createElement('button', { className: 'card-action', text: '⋮', attributes: { type: 'button', 'data-action': 'more', 'aria-label': `More export options for ${icon.name}` } }));
     article.append(favoriteButton, selectButton, actions);
     observer?.observe(preview);

@@ -10,6 +10,7 @@ Required viewports: desktop 1440×900, tablet 834×1112 and mobile 390×844.
 4. Grid and Compact modes update layout and persist.
 5. Favorite toggling updates card, inspector, navigation count and Favorites view.
 5a. Catalogue and inspector favorite toggles keep the same accessible name before/after activation while `aria-pressed` changes false ↔ true.
+5b. Every catalogue `Copy SVG` action keeps the compact visible text but exposes an icon-specific accessible name (for example `Copy Invoice SVG`) so repeated card actions are distinguishable.
 6. Recently Viewed order updates after selection.
 7. Purchase Order and Delivery Order match their approved independent SVG assets.
 8. Inspector size, stroke, fill, background, rotation and flip controls update preview without changing source files.
