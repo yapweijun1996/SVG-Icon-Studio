@@ -79,6 +79,11 @@ assert.match(resultsSummaryTag, /aria-live="polite"/, 'result-count status shoul
 assert.match(resultsSummaryTag, /aria-atomic="true"/, 'result-count status should announce the complete concise message');
 assert.doesNotMatch(iconGridTag, /aria-live=/, 'interactive icon grid should not announce every card rebuild as a live region');
 
+const pageTitleTag = html.match(/<h1\b[^>]*id="pageTitle"[^>]*>/)?.[0] || '';
+assert.match(pageTitleTag, /tabindex="-1"/, 'workspace page title should accept programmatic focus after SPA view changes without adding a Tab stop');
+assert.match(setViewHandler, /onViewChange\(\);[\s\S]*?closeSidebar\(\);[\s\S]*?if \(view !== previousView\) refs\.pageTitle\.focus\(\)/, 'changed workspace views should move focus to the newly rendered page heading after closing navigation');
+assert.match(catalogueSource, /document\.title = `\$\{title\} — Icon Studio`/, 'catalogue rendering should keep the browser document title synchronized with the active workspace view');
+
 const resultsTitleTag = html.match(/<h2\b[^>]*id="resultsTitle"[^>]*>/)?.[0] || '';
 const emptyRecoveryHandler = appSource.match(/function recoverEmptyCatalogue\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
 const clearSearchHandler = appSource.match(/function clearSearch\(\) \{[\s\S]*?\n  \}/)?.[0] || '';

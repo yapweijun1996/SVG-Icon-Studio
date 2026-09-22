@@ -131,6 +131,7 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
     });
     onViewChange();
     closeSidebar();
+    if (view !== previousView) refs.pageTitle.focus();
   }
 
   // Nav labels are display:none while collapsed, which would strip the buttons'

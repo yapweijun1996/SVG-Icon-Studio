@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.41 — 2026-09-23
+
+### Fixed
+
+- Improved SPA workspace navigation for screen-reader and keyboard users. Library/Favorites/Recent/Uploaded/Collections/Brand changes already replaced the visible `<h1>`, but the new heading was not focused or announced, the result live region only announced icon counts, and the browser document title remained the generic app title. Changed workspace views now move programmatic focus to the updated page heading after any mobile navigation drawer closes, and the document title is synchronized to the active workspace view. The heading is focusable only programmatically (`tabindex="-1"`), so it does not add a normal Tab stop.
+
+### Validation
+
+- Pre-fix Chrome 153 reproduced Favorites navigation with the visible/AX heading updated to `Favorite icons` while focus fell to `body`, the only polite status exposed just the icon count, and `document.title` remained `Icon Studio — SVG Icon Collection`. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact-head Chrome verification cover heading focus after changed desktop/mobile workspace navigation, unchanged focus when re-activating the already-current view, synchronized document titles, current-page semantics, responsive layouts, and zero runtime/console errors.
+
 ## 0.9.40 — 2026-09-23
 
 ### Fixed

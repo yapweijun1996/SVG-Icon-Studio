@@ -130,6 +130,7 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     const [title, subtitle, resultTitle] = VIEW_COPY[state.view] || VIEW_COPY.library;
     refs.pageTitle.textContent = title;
     refs.pageSubtitle.textContent = subtitle;
+    document.title = `${title} — Icon Studio`;
     refs.resultsTitle.textContent = state.query ? `Results for “${state.query}”` : (state.category !== 'All' ? state.category : resultTitle);
     renderCategories();
   }
