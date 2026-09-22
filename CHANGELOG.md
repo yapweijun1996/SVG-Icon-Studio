@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.9.39 — 2026-09-23
+
+### Fixed
+
+- Fixed the zero-dependency `npm run serve` path so it serves Vite-style `public/` assets from the application root. Before the fix, the app shell and catalogue assets returned 200, but `/manifest.webmanifest`, `/sw.js`, and `/icons-pwa/*` returned 404 even though those are the canonical URLs used by `index.html` and the production build. The server now falls back from repository-root files to `public/` while preserving root asset behavior, and returns `application/manifest+json` for web manifests plus `image/png` for PWA icons.
+- Added an integration regression using an ephemeral loopback port so root assets, catalogue assets, manifest, service worker, PWA icons, MIME types, and unknown-path 404 behavior are exercised without external dependencies.
+
+### Validation
+
+- Focused zero-dependency server regression, `npm run typecheck`, full `npm test`, `npm run build`, and `git diff --check` all passed. Direct `node tools/serve.mjs` verification returned HTTP 200 for the app shell, manifest, service worker, PWA PNG, and catalogue SVG with the expected MIME types. Fresh headless Chrome 153 at 1440×900 rendered 24 initial cards with `Showing 24 of 120`, fetched `/manifest.webmanifest`, `/sw.js`, and `/icons-pwa/icon-192.png` as HTTP 200 with the expected content types, and reported zero runtime, console, HTTP, or network failures through the DevTools Protocol.
+
 ## 0.9.38 — 2026-09-23
 
 ### Fixed
