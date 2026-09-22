@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.25 — 2026-09-22
+
+### Fixed
+
+- Kept the Inspector **Use currentColor** checkbox accessible name concise while exposing its visible helper copy separately. Real Chrome previously announced the whole nested label as `Use currentColor Icon inherits colour from CSS.` with an empty accessible description. The checkbox now uses `aria-labelledby=currentColorLabel` and `aria-describedby=currentColorDescription`, so its name is `Use currentColor`, its description is `Icon inherits colour from CSS.`, and native checked-state behavior remains unchanged.
+
+### Validation
+
+- Pre-fix real Chrome at 1440×900 confirmed the helper text was merged into the checkbox name and the description was empty. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix Chrome Accessibility Tree verification cover the concise name, separate description, checked-state transition, and unchanged preview behavior.
+
 ## 0.9.24 — 2026-09-14
 
 ### Fixed

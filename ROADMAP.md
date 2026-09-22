@@ -80,12 +80,13 @@
 | `v0.9.22` | 2026-09-12 | Stabilize Inspector colour-control accessible names | 4 |
 | `v0.9.23` | 2026-09-12 | Give Rotation slider numeric values explicit degree context | 4 |
 | `v0.9.24` | 2026-09-14 | Expose Fill icon helper text as an accessible description | 4 |
+| `v0.9.25` | 2026-09-22 | Separate currentColor checkbox name from helper description | 4 |
 
 Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`.
 
 ---
 
-## Current state (as of `v0.9.24`)
+## Current state (as of `v0.9.25`)
 
 - 120 icons, 10 categories, 2 styles (111 outline / 9 filled).
 - Zero runtime dependencies; Vite is dev/build tooling only.

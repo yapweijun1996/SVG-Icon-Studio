@@ -116,8 +116,9 @@
 - `v0.9.22` — Kept Inspector Stroke/Fill colour accessible names stable while their hex values change.
 - `v0.9.23` — Added degree-unit context to the Inspector Rotation slider's stable accessible name while preserving its native numeric range behavior.
 - `v0.9.24` — Associated the visible Fill icon helper copy with its checkbox as a separate accessible description while preserving its concise name and native checked state.
+- `v0.9.25` — Separated the Use currentColor checkbox visible label from its helper description while preserving native checked state and preview behavior.
 
-**Status:** Complete for the current scope through `v0.9.24`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
+**Status:** Complete for the current scope through `v0.9.25`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
 
 ---
 
