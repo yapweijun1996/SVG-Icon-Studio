@@ -125,8 +125,9 @@
 - `v0.9.31` — Preserved keyboard focus when an unfavorite action removes its focused Favorites-view card by moving to the nearest remaining Favorite action, or to the visible empty-state heading when the list becomes empty.
 - `v0.9.32` — Made empty-state recovery context-aware: filtered-empty views reset their filters, intrinsically empty scoped views return to the full library, and focus moves to the visible results heading.
 - `v0.9.33` — Kept Clear search keyboard activation focus-safe by returning focus to the search field after the focused action hides itself.
+- `v0.9.34` — Preserved focus after the final manual Load more batch hides its control by moving keyboard users into the first newly revealed card.
 
-**Status:** Complete for the current scope through `v0.9.33`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
+**Status:** Complete for the current scope through `v0.9.34`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
 
 ---
 

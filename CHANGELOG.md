@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.34 — 2026-09-22
+
+### Fixed
+
+- Preserved keyboard focus when the manual **Load more icons** fallback reaches the final catalogue page and hides itself. Real Chrome with `IntersectionObserver` unavailable previously kept focus on the button through 24 → 48 → 72 → 96 visible icons, then moved focus to `body` when the final 120-icon render hid the focused control. The handler now remembers whether the button owned focus before loading; when that final render hides it, focus moves to the first newly revealed icon's Select action. Intermediate manual loads keep focus on the Load more button, and IntersectionObserver-driven auto-loading remains unchanged because it never triggers the focus-restoration branch.
+
+### Validation
+
+- Pre-fix real Chrome at 1440×900 reproduced the manual-fallback focus loss with 120 icons and zero runtime exceptions. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact committed-head Chrome verification cover 24-item pagination increments, retained focus on intermediate loads, final focus transfer to the first newly revealed Select action, hidden terminal control, and unchanged auto-load behavior.
+
 ## 0.9.33 — 2026-09-22
 
 ### Fixed

@@ -207,8 +207,14 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
   });
 
   function loadMore() {
+    const restoreFocus = document.activeElement === refs.loadMoreButton;
+    const previousVisibleCount = refs.iconGrid.querySelectorAll('.icon-card').length;
     state.visibleLimit += 24;
     render();
+    if (restoreFocus && refs.loadMoreButton.parentElement.hidden) {
+      const firstNewCard = refs.iconGrid.querySelectorAll('.icon-card')[previousVisibleCount];
+      firstNewCard?.querySelector('[data-action="select"]')?.focus();
+    }
   }
   refs.loadMoreButton.addEventListener('click', loadMore);
 
