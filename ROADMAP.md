@@ -88,12 +88,13 @@
 | `v0.9.30` | 2026-09-22 | Preserve catalogue Select/More focus across desktop re-render | 4 |
 | `v0.9.31` | 2026-09-22 | Preserve focus when unfavoriting removes a Favorites-view card | 4 |
 | `v0.9.32` | 2026-09-22 | Make empty-state recovery effective and focus-safe across scoped views | 4 |
+| `v0.9.33` | 2026-09-22 | Preserve keyboard focus when Clear search hides itself | 4 |
 
 Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`.
 
 ---
 
-## Current state (as of `v0.9.32`)
+## Current state (as of `v0.9.33`)
 
 - 120 icons, 10 categories, 2 styles (111 outline / 9 filled).
 - Zero runtime dependencies; Vite is dev/build tooling only.

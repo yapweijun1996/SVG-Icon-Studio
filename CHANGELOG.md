@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.33 — 2026-09-22
+
+### Fixed
+
+- Preserved keyboard focus when the catalogue **Clear search** action hides itself. Real Chrome previously moved focus to `body` after Space activation reset the filters and hid the focused button. The action now detects when it owns focus, performs the existing reset, then moves focus to the persistent search field so keyboard users stay in the search workflow.
+
+### Validation
+
+- Pre-fix real Chrome at 1440×900 reproduced `clearSearchButton → body` after Space while the query cleared and the full 120-icon catalogue returned. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix Chrome verification cover query reset, hidden-button state, focus transfer to `searchInput`, and zero runtime exceptions.
+
 ## 0.9.32 — 2026-09-22
 
 ### Fixed

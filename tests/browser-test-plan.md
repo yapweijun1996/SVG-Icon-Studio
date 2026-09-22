@@ -24,6 +24,7 @@ Required viewports: desktop 1440×900, tablet 834×1112 and mobile 390×844.
 8c. The Fill icon checkbox exposes `Fill icon` as its concise accessible name and `Apply a solid fill colour.` as a separate accessible description while checked state remains native.
 8d. The Use currentColor checkbox exposes `Use currentColor` as its concise accessible name and `Icon inherits colour from CSS.` as a separate accessible description while checked state remains native.
 8e. The Include title checkbox exposes `Include title` as its concise accessible name and `Adds an accessible SVG title.` as a separate accessible description while checked state and SVG title generation remain native.
+8f. Keyboard activation of Clear search clears the active filters, hides that action, and returns focus to the persistent search field instead of dropping focus to the document body.
 9. SVG, JSX and CSS tabs generate copyable code.
 10. Full preview dialog opens and closes by button, backdrop and Escape; on mobile/tablet, the first Escape closes only the modal preview and leaves the underlying inspector drawer open until a second dismissal.
 11. Theme, sidebar and inspector-collapse settings persist.

@@ -166,8 +166,14 @@ async function start() {
     refs.resultsTitle.focus();
   }
 
+  function clearSearch() {
+    const restoreFocus = document.activeElement === refs.clearSearchButton;
+    resetFilters();
+    if (restoreFocus) refs.searchInput.focus();
+  }
+
   refs.searchInput.addEventListener('input', event => { state.query = event.target.value; state.visibleLimit = 24; catalogue.render(); });
-  refs.clearSearchButton.addEventListener('click', resetFilters);
+  refs.clearSearchButton.addEventListener('click', clearSearch);
   refs.emptyResetButton.addEventListener('click', recoverEmptyCatalogue);
   refs.clearFiltersButton.addEventListener('click', resetFilters);
   refs.filterButton.addEventListener('click', () => {

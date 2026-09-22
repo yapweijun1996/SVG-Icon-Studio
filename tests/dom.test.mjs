@@ -42,6 +42,11 @@ assert.doesNotMatch(iconGridTag, /aria-live=/, 'interactive icon grid should not
 
 const resultsTitleTag = html.match(/<h2\b[^>]*id="resultsTitle"[^>]*>/)?.[0] || '';
 const emptyRecoveryHandler = appSource.match(/function recoverEmptyCatalogue\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
+const clearSearchHandler = appSource.match(/function clearSearch\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
+assert.match(clearSearchHandler, /const restoreFocus = document\.activeElement === refs\.clearSearchButton/, 'Clear search should detect when the disappearing action currently owns focus');
+assert.match(clearSearchHandler, /resetFilters\(\)/, 'Clear search should preserve the existing filter reset behavior');
+assert.match(clearSearchHandler, /if \(restoreFocus\) refs\.searchInput\.focus\(\)/, 'Clear search should return focus to the persistent search field when its button hides');
+assert.match(appSource, /refs\.clearSearchButton\.addEventListener\('click', clearSearch\)/, 'Clear search should use the focus-safe clear handler');
 assert.match(resultsTitleTag, /tabindex="-1"/, 'results heading should accept programmatic focus after an empty-state recovery without adding a Tab stop');
 assert.match(catalogueSource, /refs\.emptyResetButton\.textContent = hasIconsInView\(state\) \? 'Reset filters' : 'Browse all icons'/, 'empty-state recovery label should distinguish hidden results from an intrinsically empty scoped view');
 assert.match(emptyRecoveryHandler, /const returnToLibrary = !hasIconsInView\(state\)/, 'empty-state recovery should detect when the current scoped view contains no items at all');
