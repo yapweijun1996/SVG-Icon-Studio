@@ -165,7 +165,19 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
 
   function focusRenderedCardAction(iconId, actionName) {
     const card = [...refs.iconGrid.querySelectorAll('.icon-card')].find(item => item.dataset.iconId === iconId);
-    card?.querySelector(`[data-action="${actionName}"]`)?.focus();
+    const renderedAction = card?.querySelector(`[data-action="${actionName}"]`);
+    renderedAction?.focus();
+    return renderedAction;
+  }
+
+  function focusFavoriteRemovalFallback(cardIndex) {
+    const cards = [...refs.iconGrid.querySelectorAll('.icon-card')];
+    if (cards.length) {
+      const fallbackIndex = Math.max(0, Math.min(cardIndex, cards.length - 1));
+      cards[fallbackIndex].querySelector('[data-action="favorite"]')?.focus();
+      return;
+    }
+    refs.emptyState.querySelector('h2')?.focus();
   }
 
   function runCardActionWithFocusFallback(iconId, actionName, action, callback) {
@@ -184,8 +196,9 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
       runCardActionWithFocusFallback(icon.id, 'select', action, () => onSelect(icon.id));
     } else if (action.dataset.action === 'favorite') {
       const restoreFocus = document.activeElement === action;
+      const cardIndex = [...refs.iconGrid.querySelectorAll('.icon-card')].indexOf(card);
       onFavorite(icon.id);
-      if (restoreFocus) focusRenderedCardAction(icon.id, 'favorite');
+      if (restoreFocus && !focusRenderedCardAction(icon.id, 'favorite')) focusFavoriteRemovalFallback(cardIndex);
     } else if (action.dataset.action === 'copy') onCopy(icon);
     else if (action.dataset.action === 'more') {
       runCardActionWithFocusFallback(icon.id, 'more', action, () => onMore(icon.id));

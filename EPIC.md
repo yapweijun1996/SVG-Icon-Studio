@@ -122,8 +122,9 @@
 - `v0.9.28` — Scoped each catalogue Copy SVG action to its icon in the accessibility tree while preserving the compact visible button text and existing copy behavior.
 - `v0.9.29` — Preserved keyboard focus on the same catalogue Favorite action after its state-changing re-render, while retaining stable names and `aria-pressed` semantics.
 - `v0.9.30` — Preserved keyboard focus on re-rendering catalogue Select and More actions on desktop while keeping mobile/tablet inspector-drawer focus transfer intact.
+- `v0.9.31` — Preserved keyboard focus when an unfavorite action removes its focused Favorites-view card by moving to the nearest remaining Favorite action, or to the visible empty-state heading when the list becomes empty.
 
-**Status:** Complete for the current scope through `v0.9.30`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
+**Status:** Complete for the current scope through `v0.9.31`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
 
 ---
 

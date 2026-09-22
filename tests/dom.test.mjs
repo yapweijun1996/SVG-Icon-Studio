@@ -110,8 +110,15 @@ assert.match(favoriteCardAttributes, /'aria-pressed': favorite/, 'catalogue favo
 assert.match(favoriteCardAttributes, /'aria-label': `Favorite \$\{icon\.name\}`/, 'catalogue favorite toggle name should remain stable across pressed states');
 assert.doesNotMatch(favoriteCardAttributes, /Remove|Add/, 'catalogue favorite toggle name should not change with pressed state');
 assert.match(catalogueSource, /const restoreFocus = document\.activeElement === action/, 'catalogue favorite activation should detect whether the replaced action owned focus');
-assert.match(catalogueSource, /if \(restoreFocus\) focusRenderedCardAction\(icon\.id, 'favorite'\)/, 'catalogue favorite activation should restore focus to the same re-rendered action');
-assert.match(catalogueSource, /function focusRenderedCardAction\(iconId, actionName\)[\s\S]*?\.focus\(\)/, 'catalogue focus restoration should target the matching rendered card action');
+assert.match(catalogueSource, /const cardIndex = \[\.\.\.refs\.iconGrid\.querySelectorAll\('\.icon-card'\)\]\.indexOf\(card\)/, 'catalogue favorite activation should remember the removed card position before the rebuild');
+assert.match(catalogueSource, /restoreFocus && !focusRenderedCardAction\(icon\.id, 'favorite'\)/, 'catalogue favorite activation should prefer the same rendered action when it still exists');
+assert.match(catalogueSource, /focusFavoriteRemovalFallback\(cardIndex\)/, 'catalogue favorite activation should use a positional fallback when Favorites filtering removes the focused card');
+assert.match(catalogueSource, /function focusRenderedCardAction\(iconId, actionName\)[\s\S]*?return renderedAction/, 'catalogue focus restoration should report whether the matching rendered card action still exists');
+const favoriteRemovalFallback = catalogueSource.match(/function focusFavoriteRemovalFallback\(cardIndex\) \{[\s\S]*?\n  \}/)?.[0] || '';
+assert.match(favoriteRemovalFallback, /Math\.max\(0, Math\.min\(cardIndex, cards\.length - 1\)\)/, 'favorite removal fallback should keep the same list position or move to the previous item when the removed card was last');
+assert.match(favoriteRemovalFallback, /querySelector\('\[data-action=\"favorite\"\]'\)\?\.focus\(\)/, 'favorite removal fallback should target a remaining Favorite action');
+assert.match(favoriteRemovalFallback, /refs\.emptyState\.querySelector\('h2'\)\?\.focus\(\)/, 'favorite removal fallback should focus the visible empty-state heading after the final favorite is removed');
+assert.match(html, /<h2 tabindex=\"-1\">No icons found<\/h2>/, 'empty-state heading should support programmatic focus without adding another Tab stop');
 const cardActionFocusFallback = catalogueSource.match(/function runCardActionWithFocusFallback\(iconId, actionName, action, callback\) \{[\s\S]*?\n  \}/)?.[0] || '';
 assert.match(cardActionFocusFallback, /const restoreFocus = document\.activeElement === action/, 'catalogue selection actions should detect whether the activated control owned focus');
 assert.match(cardActionFocusFallback, /callback\(\)/, 'catalogue focus fallback should run the state-changing action before evaluating replacement focus');

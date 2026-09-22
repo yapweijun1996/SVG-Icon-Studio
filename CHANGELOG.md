@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.31 — 2026-09-22
+
+### Fixed
+
+- Preserved keyboard focus when unfavoriting removes the focused card from the **Favorites** view. Real Chrome previously removed the card correctly but left focus on `body`. The catalogue now first restores the same icon's Favorite control when it still exists; if the card disappeared because it was filtered out of Favorites, focus moves to the nearest remaining Favorite action at the same list position (or the previous item when the removed card was last). If the final favorite is removed, focus moves to the now-visible `No icons found` heading, which is programmatically focusable but remains outside the normal Tab order.
+
+### Validation
+
+- Pre-fix real Chrome at 1440×900 reproduced a focused Favorite action removing its card from a two-item Favorites view and dropping focus to `body`. Focused DOM/source regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact committed-head Chrome verification cover nearest-item fallback, final-item empty-state focus, unchanged normal-library Favorite focus restoration, 120 loaded icons, and zero runtime exceptions.
+
 ## 0.9.30 — 2026-09-22
 
 ### Fixed

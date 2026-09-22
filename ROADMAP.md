@@ -86,12 +86,13 @@
 | `v0.9.28` | 2026-09-22 | Scope catalogue Copy SVG accessible names to each icon | 4 |
 | `v0.9.29` | 2026-09-22 | Preserve catalogue favorite focus across re-render | 4 |
 | `v0.9.30` | 2026-09-22 | Preserve catalogue Select/More focus across desktop re-render | 4 |
+| `v0.9.31` | 2026-09-22 | Preserve focus when unfavoriting removes a Favorites-view card | 4 |
 
 Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`.
 
 ---
 
-## Current state (as of `v0.9.30`)
+## Current state (as of `v0.9.31`)
 
 - 120 icons, 10 categories, 2 styles (111 outline / 9 filled).
 - Zero runtime dependencies; Vite is dev/build tooling only.
