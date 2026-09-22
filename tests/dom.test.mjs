@@ -30,6 +30,8 @@ assert.match(filterButtonTag, /aria-controls="advancedFilter"/, 'advanced-filter
 assert.match(html, /id="advancedFilter"/, 'advanced-filter aria-controls target should exist');
 assert.match(filterHandler, /setAttribute\('aria-expanded', String\(expanded\)\)/, 'advanced-filter expanded state should stay synchronized');
 assert.match(filterHandler, /setAttribute\('aria-label', expanded \? 'Hide advanced filters' : 'Show advanced filters'\)/, 'advanced-filter accessible action label should stay synchronized');
+assert.match(filterHandler, /expanded && event\.detail === 0/, 'advanced-filter disclosure should distinguish keyboard activation from pointer activation');
+assert.match(filterHandler, /refs\.styleFilter\.focus\(\)/, 'keyboard expansion should move focus directly to the first disclosed filter control');
 
 const densityGroupTag = html.match(/<div\b[^>]*class="density-switch"[^>]*>/)?.[0] || '';
 const densityRadioTags = [...html.matchAll(/<button\b[^>]*role="radio"[^>]*data-density="(grid|compact)"[^>]*>/g)].map(match => match[0]);

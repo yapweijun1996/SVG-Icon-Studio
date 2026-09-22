@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.37 — 2026-09-22
+
+### Fixed
+
+- Improved the **Advanced filters** disclosure keyboard flow. The filter trigger sits before the density selector while the disclosed Style/Sort controls render on the following row, so keyboard activation previously left focus on the trigger and the next Tab stopped on the unrelated density radio group before reaching the filters just opened. Keyboard-origin activation now moves focus directly to the first disclosed Style control, while pointer activation keeps normal button focus behavior.
+
+### Validation
+
+- Pre-fix Chrome 153 confirmed the disclosure trigger retained focus and the next Tab stop was the Grid/Compact density control rather than Style. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact-head Chrome verification cover keyboard-origin focus transfer, pointer behavior, synchronized disclosure state, responsive layouts, and zero runtime exceptions.
+
 ## 0.9.36 — 2026-09-22
 
 ### Fixed

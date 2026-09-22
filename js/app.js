@@ -176,12 +176,15 @@ async function start() {
   refs.clearSearchButton.addEventListener('click', clearSearch);
   refs.emptyResetButton.addEventListener('click', recoverEmptyCatalogue);
   refs.clearFiltersButton.addEventListener('click', resetFilters);
-  refs.filterButton.addEventListener('click', () => {
+  refs.filterButton.addEventListener('click', event => {
     const expanded = refs.advancedFilter.hidden;
     refs.advancedFilter.hidden = !expanded;
     refs.filterButton.setAttribute('aria-expanded', String(expanded));
     refs.filterButton.setAttribute('aria-label', expanded ? 'Hide advanced filters' : 'Show advanced filters');
     refs.filterButton.classList.toggle('is-active', expanded);
+    // Keyboard activation emits click detail=0. Move directly into the newly
+    // disclosed controls so the density radio group cannot interrupt that flow.
+    if (expanded && event.detail === 0) refs.styleFilter.focus();
   });
   refs.styleFilter.addEventListener('change', event => { state.style = event.target.value; state.visibleLimit = 24; catalogue.render(); });
   refs.sortFilter.addEventListener('change', event => { state.sort = event.target.value; state.visibleLimit = 24; catalogue.render(); });
