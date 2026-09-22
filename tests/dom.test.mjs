@@ -77,6 +77,12 @@ assert.match(currentColorTag, /aria-describedby="currentColorDescription"/, 'cur
 assert.match(html, /id="currentColorLabel">Use currentColor<\/strong>/, 'currentColor label target should preserve the visible control label');
 assert.match(html, /id="currentColorDescription">Icon inherits colour from CSS\.<\/small>/, 'currentColor description target should preserve the visible helper text');
 
+const includeTitleTag = html.match(/<input\b[^>]*id="includeTitleCheckbox"[^>]*>/)?.[0] || '';
+assert.match(includeTitleTag, /aria-labelledby="includeTitleLabel"/, 'Include title checkbox should use only its concise visible label as the accessible name');
+assert.match(includeTitleTag, /aria-describedby="includeTitleDescription"/, 'Include title checkbox should expose its helper as a separate accessible description');
+assert.match(html, /id="includeTitleLabel">Include title<\/strong>/, 'Include title label target should preserve the visible control label');
+assert.match(html, /id="includeTitleDescription">Adds an accessible SVG title\.<\/small>/, 'Include title description target should preserve the visible helper text');
+
 const favoriteSelectedButtonTag = html.match(/<button\b[^>]*id="favoriteSelectedButton"[^>]*>/)?.[0] || '';
 const favoriteCardAttributes = catalogueSource.match(/type: 'button', 'data-action': 'favorite',[\s\S]*?\n      \}/)?.[0] || '';
 const favoriteInspectorUpdate = inspectorSource.match(/refs\.favoriteSelectedButton\.setAttribute\('aria-pressed'[\s\S]*?setAttribute\('aria-label'[\s\S]*?\n/)?.[0] || '';

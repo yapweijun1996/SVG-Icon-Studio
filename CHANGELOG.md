@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.26 — 2026-09-22
+
+### Fixed
+
+- Kept the Inspector **Include title** checkbox accessible name concise while exposing its visible helper separately. Real Chrome previously announced the whole nested label as `Include title Adds an accessible SVG title.` with an empty description. The checkbox now uses `aria-labelledby=includeTitleLabel` and `aria-describedby=includeTitleDescription`, producing name `Include title` and description `Adds an accessible SVG title.` while preserving native checked state and SVG title generation/removal behavior.
+
+### Validation
+
+- Pre-fix real Chrome at 1440×900 confirmed the helper text was merged into the checkbox name and the description was empty, while toggling still correctly removed/restored the preview SVG `<title>`. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix Chrome Accessibility Tree verification cover the concise name, separate description, checked-state transitions, and unchanged SVG title behavior.
+
 ## 0.9.25 — 2026-09-22
 
 ### Fixed

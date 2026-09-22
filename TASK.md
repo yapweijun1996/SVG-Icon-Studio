@@ -74,6 +74,7 @@
 - [x] Include the degree unit in the Inspector Rotation slider accessible name so Chrome’s native numeric range value is understandable, released as `v0.9.23`
 - [x] Associate the visible Fill icon helper text with its checkbox as an accessible description, released as `v0.9.24`
 - [x] Keep the Use currentColor checkbox name concise and expose its visible helper as a separate accessible description, released as `v0.9.25`
+- [x] Keep the Include title checkbox name concise and expose its visible helper as a separate accessible description, released as `v0.9.26`
 - [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
 - [x] Browser/build SVG validation enforce strict XML declaration grammar and reject malformed declarations consistently
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
@@ -111,7 +112,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.9.25` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.9.26` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 
