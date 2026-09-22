@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.45 — 2026-09-23
+
+### Fixed
+
+- Made native search clearing immediately synchronize the catalogue result status. Chrome’s `type="search"` Escape/cancel behavior already cleared the input and re-rendered the grid while preserving focus, but the result status still showed the previous query for the 300 ms typing debounce. Empty-query input/composition commits now bypass that debounce, while non-empty rapid typing and IME partial text keep the existing coalesced/suppressed announcement behavior.
+
+### Validation
+
+- Pre-fix Chrome 153 reproduced the mismatch at both 1440×900 and 390×844: 60 ms after Escape the search value was empty and the unfiltered grid was visible, but the status still said `Showing 2 icons — search “truck”`; it corrected only after the debounce window. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact-head Chrome verification cover immediate clear-to-empty status synchronization, retained search focus, preserved non-empty typing debounce, responsive layouts, and runtime/network health.
+
 ## 0.9.44 — 2026-09-23
 
 ### Fixed

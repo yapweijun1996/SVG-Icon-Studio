@@ -185,7 +185,7 @@ async function start() {
     catalogue.setResultStatusSuppressed(isComposing);
     // Keep visual filtering immediate, but coalesce the advisory live-region
     // message until typing pauses. IME partial text stays silent until committed.
-    catalogue.render({ deferResultStatus: true });
+    catalogue.render({ deferResultStatus: Boolean(state.query) });
   });
   refs.searchInput.addEventListener('compositionend', event => {
     searchIsComposing = false;
@@ -194,7 +194,7 @@ async function start() {
     // event after compositionend, so commit the final value here as well.
     state.query = event.target.value;
     state.visibleLimit = 24;
-    catalogue.render({ deferResultStatus: true });
+    catalogue.render({ deferResultStatus: Boolean(state.query) });
   });
   refs.clearSearchButton.addEventListener('click', clearSearch);
   refs.emptyResetButton.addEventListener('click', recoverEmptyCatalogue);
