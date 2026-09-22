@@ -171,7 +171,13 @@ async function start() {
     if (restoreFocus) refs.searchInput.focus();
   }
 
-  refs.searchInput.addEventListener('input', event => { state.query = event.target.value; state.visibleLimit = 24; catalogue.render(); });
+  refs.searchInput.addEventListener('input', event => {
+    state.query = event.target.value;
+    state.visibleLimit = 24;
+    // Keep visual filtering immediate, but coalesce the advisory live-region
+    // message until typing pauses so rapid input does not queue every partial query.
+    catalogue.render({ deferResultStatus: true });
+  });
   refs.clearSearchButton.addEventListener('click', clearSearch);
   refs.emptyResetButton.addEventListener('click', recoverEmptyCatalogue);
   refs.clearFiltersButton.addEventListener('click', resetFilters);

@@ -78,7 +78,8 @@ assert.match(resultsSummaryTag, /role="status"/, 'result count should be the ded
 assert.match(resultsSummaryTag, /aria-live="polite"/, 'result-count status should announce updates politely');
 assert.match(resultsSummaryTag, /aria-atomic="true"/, 'result-count status should announce the complete concise message');
 assert.doesNotMatch(iconGridTag, /aria-live=/, 'interactive icon grid should not announce every card rebuild as a live region');
-assert.match(catalogueSource, /refs\.resultsSummary\.textContent = formatResultsSummary\(state, visible\.length, filtered\.length\)/, 'result live region should receive the contextual summary formatter output');
+assert.match(catalogueSource, /resultStatusUpdater\.update\([\s\S]*?formatResultsSummary\(state, visible\.length, filtered\.length\)/, 'result live region should receive the contextual summary formatter output through the status updater');
+assert.match(appSource, /catalogue\.render\(\{ deferResultStatus: true \}\)/, 'rapid search input should defer only the advisory result-status announcement');
 
 const pageTitleTag = html.match(/<h1\b[^>]*id="pageTitle"[^>]*>/)?.[0] || '';
 assert.match(pageTitleTag, /tabindex="-1"/, 'workspace page title should accept programmatic focus after SPA view changes without adding a Tab stop');
@@ -109,6 +110,7 @@ assert.match(catalogueSource, /replacement\?\.focus\(\)/, 'category activation s
 const loadMoreHandler = catalogueSource.match(/function loadMore\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
 assert.match(loadMoreHandler, /document\.activeElement === refs\.loadMoreButton/, 'Load more should detect when the manual pagination control owns focus');
 assert.match(loadMoreHandler, /previousVisibleCount = refs\.iconGrid\.querySelectorAll\('\.icon-card'\)\.length/, 'Load more should remember the first newly revealed card position before re-rendering');
+assert.match(loadMoreHandler, /render\(\{ deferResultStatus: document\.activeElement === refs\.searchInput \}\)/, 'automatic pagination during active search typing should preserve live-status coalescing');
 assert.match(loadMoreHandler, /restoreFocus && refs\.loadMoreButton\.parentElement\.hidden/, 'Load more should restore focus only when the focused manual control disappears');
 assert.match(loadMoreHandler, /firstNewCard\?\.querySelector\('\[data-action=\"select\"\]'\)\?\.focus\(\)/, 'Final Load more should move focus to the first newly revealed Select action');
 assert.match(catalogueSource, /'data-action': 'copy', 'aria-label': `Copy \${icon\.name} SVG`/, 'catalogue copy actions should include the icon name in their accessible label');

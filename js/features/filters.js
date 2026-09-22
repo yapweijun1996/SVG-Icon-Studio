@@ -1,3 +1,27 @@
+export function createResultStatusUpdater(node, delayMs = 300) {
+  let timer;
+
+  function update(message, { defer = false } = {}) {
+    clearTimeout(timer);
+    timer = undefined;
+    if (!defer) {
+      node.textContent = message;
+      return;
+    }
+    timer = setTimeout(() => {
+      node.textContent = message;
+      timer = undefined;
+    }, delayMs);
+  }
+
+  function destroy() {
+    clearTimeout(timer);
+    timer = undefined;
+  }
+
+  return { update, destroy };
+}
+
 export function getViewIcons(state) {
   let icons = [...state.icons];
   if (state.view === 'favorites') {

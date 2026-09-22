@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.43 — 2026-09-23
+
+### Fixed
+
+- Reduced screen-reader noise during live catalogue search. The visual grid still filters immediately on every input event, but the dedicated polite result-status region now waits 300 ms for typing to pause and coalesces rapid intermediate queries into the latest summary. Any non-search render cancels a pending search announcement and updates the status immediately, preventing stale delayed text from overwriting a newer category, style, view, pagination, or reset result.
+
+### Validation
+
+- Pre-fix Chrome 153 reproduced five live-region mutations within 255 ms while entering `truck` (`t` → `tr` → `tru` → `truc` → `truck`). Focused status-updater regression, DOM contract checks, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact-head Chrome verification cover immediate visual filtering, one final delayed live-region mutation for rapid input, stale-timer cancellation by immediate renders, responsive layouts, and runtime/network health.
+
 ## 0.9.42 — 2026-09-23
 
 ### Fixed

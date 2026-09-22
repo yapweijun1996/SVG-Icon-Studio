@@ -1,6 +1,6 @@
 import { createElement, createSvgElement } from '../core/dom.js';
 import { createIntersectionObserver } from '../core/observer.js';
-import { getFilteredIcons, hasIconsInView, formatResultsSummary } from './filters.js';
+import { getFilteredIcons, hasIconsInView, formatResultsSummary, createResultStatusUpdater } from './filters.js';
 import { loadIconAsset } from '../services/icon-repository.js';
 import { createCanonicalPreview, createFallbackSvg } from '../services/svg-renderer.js';
 
@@ -22,6 +22,7 @@ function starIcon() {
 export function createCatalogueController({ state, refs, categoryOrder, onSelect, onFavorite, onCopy, onMore }) {
   let renderVersion = 0;
   let observer;
+  const resultStatusUpdater = createResultStatusUpdater(refs.resultsSummary);
 
   function disconnectObserver() {
     observer?.disconnect();
@@ -106,7 +107,7 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     }
   }
 
-  function render() {
+  function render({ deferResultStatus = false } = {}) {
     renderVersion += 1;
     disconnectObserver();
     setupObserver(renderVersion);
@@ -120,7 +121,10 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     refs.iconGrid.hidden = filtered.length === 0;
     refs.emptyResetButton.textContent = hasIconsInView(state) ? 'Reset filters' : 'Browse all icons';
     refs.loadMoreButton.parentElement.hidden = filtered.length === 0 || visible.length >= filtered.length;
-    refs.resultsSummary.textContent = formatResultsSummary(state, visible.length, filtered.length);
+    resultStatusUpdater.update(
+      formatResultsSummary(state, visible.length, filtered.length),
+      { defer: deferResultStatus }
+    );
     refs.visibleIconCount.textContent = String(filtered.length);
     refs.totalIconCount.textContent = String(state.icons.length);
     refs.favoriteCount.textContent = String(state.favorites.size);
@@ -211,7 +215,7 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     const restoreFocus = document.activeElement === refs.loadMoreButton;
     const previousVisibleCount = refs.iconGrid.querySelectorAll('.icon-card').length;
     state.visibleLimit += 24;
-    render();
+    render({ deferResultStatus: document.activeElement === refs.searchInput });
     if (restoreFocus && refs.loadMoreButton.parentElement.hidden) {
       const firstNewCard = refs.iconGrid.querySelectorAll('.icon-card')[previousVisibleCount];
       firstNewCard?.querySelector('[data-action="select"]')?.focus();
@@ -228,5 +232,12 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
   }, { rootMargin: '600px 0px' });
   loadMoreObserver?.observe(refs.loadMoreButton);
 
-  return { render, destroy: () => { disconnectObserver(); loadMoreObserver?.disconnect(); } };
+  return {
+    render,
+    destroy: () => {
+      disconnectObserver();
+      loadMoreObserver?.disconnect();
+      resultStatusUpdater.destroy();
+    }
+  };
 }

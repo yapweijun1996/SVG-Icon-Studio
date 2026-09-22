@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createIntersectionObserver } from '../js/core/observer.js';
-import { formatResultsSummary } from '../js/features/filters.js';
+import { formatResultsSummary, createResultStatusUpdater } from '../js/features/filters.js';
 
 const originalObserver = globalThis.IntersectionObserver;
 try {
@@ -22,6 +22,19 @@ try {
   if (originalObserver === undefined) delete globalThis.IntersectionObserver;
   else globalThis.IntersectionObserver = originalObserver;
 }
+
+const fakeStatus = { textContent: 'Initial status' };
+const statusUpdater = createResultStatusUpdater(fakeStatus, 15);
+statusUpdater.update('Showing partial results', { defer: true });
+statusUpdater.update('Showing final search results', { defer: true });
+assert.equal(fakeStatus.textContent, 'Initial status', 'deferred result status should not announce intermediate rapid-search updates');
+await new Promise(resolve => setTimeout(resolve, 25));
+assert.equal(fakeStatus.textContent, 'Showing final search results', 'deferred result status should announce the latest search result after typing pauses');
+statusUpdater.update('Stale delayed search', { defer: true });
+statusUpdater.update('Immediate filter result');
+await new Promise(resolve => setTimeout(resolve, 25));
+assert.equal(fakeStatus.textContent, 'Immediate filter result', 'an immediate status update should cancel any stale delayed search announcement');
+statusUpdater.destroy();
 
 const baseSummaryState = { view: 'library', query: '', category: 'All', style: 'all' };
 assert.equal(
