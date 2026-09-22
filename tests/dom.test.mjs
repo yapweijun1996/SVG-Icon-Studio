@@ -31,6 +31,21 @@ assert.match(html, /id="advancedFilter"/, 'advanced-filter aria-controls target 
 assert.match(filterHandler, /setAttribute\('aria-expanded', String\(expanded\)\)/, 'advanced-filter expanded state should stay synchronized');
 assert.match(filterHandler, /setAttribute\('aria-label', expanded \? 'Hide advanced filters' : 'Show advanced filters'\)/, 'advanced-filter accessible action label should stay synchronized');
 
+const densityGroupTag = html.match(/<div\b[^>]*class="density-switch"[^>]*>/)?.[0] || '';
+const densityRadioTags = [...html.matchAll(/<button\b[^>]*role="radio"[^>]*data-density="(grid|compact)"[^>]*>/g)].map(match => match[0]);
+assert.match(densityGroupTag, /role="radiogroup"/, 'catalogue density choices should expose one mutually-exclusive radio group');
+assert.match(densityGroupTag, /aria-label="Catalogue density"/, 'catalogue density radio group should keep its accessible label');
+assert.equal(densityRadioTags.length, 2, 'catalogue density group should expose Grid and Compact as radios');
+assert.match(densityRadioTags[0], /aria-checked="true"/, 'initial Grid density radio should be checked');
+assert.match(densityRadioTags[0], /tabindex="0"/, 'initial selected density radio should be the sole Tab stop');
+assert.match(densityRadioTags[1], /aria-checked="false"/, 'initial Compact density radio should be unchecked');
+assert.match(densityRadioTags[1], /tabindex="-1"/, 'initial inactive density radio should be removed from the Tab sequence');
+assert.match(appSource, /button\.setAttribute\('aria-checked', String\(active\)\)/, 'density radio checked state should synchronize with persisted density');
+assert.match(appSource, /button\.tabIndex = active \? 0 : -1/, 'density radios should maintain one roving Tab stop');
+assert.match(appSource, /\['ArrowRight', 'ArrowDown'\]\.includes\(event\.key\)/, 'density radios should support forward Arrow navigation');
+assert.match(appSource, /\['ArrowLeft', 'ArrowUp'\]\.includes\(event\.key\)/, 'density radios should support reverse Arrow navigation');
+assert.match(appSource, /activateDensity\(densityButtons\[nextIndex\], \{ focus: true \}\)/, 'density Arrow navigation should update selection and focus together');
+
 const resultsHeaderTag = html.match(/<section\b[^>]*class="results-header"[^>]*>/)?.[0] || '';
 const resultsSummaryTag = html.match(/<span\b[^>]*id="resultsSummary"[^>]*>/)?.[0] || '';
 const iconGridTag = html.match(/<div\b[^>]*id="iconGrid"[^>]*>/)?.[0] || '';

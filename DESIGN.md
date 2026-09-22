@@ -143,7 +143,7 @@ Before drawing a new icon, check existing geometry for visual collision (documen
 - Decorative catalogue previews: `aria-hidden="true"`. Exported/semantic icon output can instead carry `<title>` + `aria-labelledby` when "Include title" is on.
 - Full preview uses the native `<dialog>` element (built-in focus trap, `Escape` close) rather than a hand-rolled modal, with explicit `aria-labelledby` and `aria-describedby` relationships to its visible heading and guidance text.
 - Generated-code format switching follows the ARIA tabs pattern: labelled `tablist`, `tab` → `tabpanel` relationships, one tabbable active tab, and Arrow Left/Right plus Home/End keyboard navigation.
-- Catalogue Grid/Compact density buttons use `aria-pressed` so their mutually-exclusive selected state is available to assistive technology as well as visually.
+- Catalogue Grid/Compact density is a single-choice `radiogroup`: one `radio` is checked/tabbable at a time, and Arrow Left/Right/Up/Down moves focus and selection with wraparound.
 - At drawer breakpoints, mobile navigation and inspector drawers move focus inside when opened, keep keyboard Tab navigation inside the active drawer, and return focus to the opening trigger when closed.
 - While a drawer is active, non-active shell regions use native `inert` so background controls are removed from keyboard navigation and the accessibility tree; inspector takes precedence during a sidebar → inspector handoff.
 - `prefers-reduced-motion: reduce` is respected globally.

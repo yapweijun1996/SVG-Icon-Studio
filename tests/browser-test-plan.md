@@ -7,7 +7,7 @@ Required viewports: desktop 1440×900, tablet 834×1112 and mobile 390×844.
 1. Startup loads registry metadata and default Invoice inspector preview.
 2. Exact-name and alias search: `Purchase Order`, `po`, `Delivery Order`, `do`.
 3. Category and style filters return correct cards.
-4. Grid and Compact modes update layout and persist.
+4. Grid and Compact density choices form one labelled radio group with a single Tab stop; Arrow Left/Right/Up/Down moves focus and selection with wraparound, updates layout, and persists.
 5. Favorite toggling updates card, inspector, navigation count and Favorites view.
 5a. Catalogue and inspector favorite toggles keep the same accessible name before/after activation while `aria-pressed` changes false ↔ true.
 5b. Every catalogue `Copy SVG` action keeps the compact visible text but exposes an icon-specific accessible name (for example `Copy Invoice SVG`) so repeated card actions are distinguishable.

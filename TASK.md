@@ -84,6 +84,7 @@
 - [x] Preserve keyboard focus when Clear search hides itself by returning focus to the search field, released as `v0.9.33`
 - [x] Preserve focus when final Load more activation hides the manual pagination control by moving to the first newly revealed icon action, released as `v0.9.34`
 - [x] Keep mobile/tablet drawer Tab traps limited to rendered controls with non-negative effective tabindex, released as `v0.9.35`
+- [x] Expose Catalogue Grid/Compact density as a single-choice radio group with one Tab stop and Arrow-key selection/focus, released as `v0.9.36`
 - [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
 - [x] Browser/build SVG validation enforce strict XML declaration grammar and reject malformed declarations consistently
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
@@ -121,7 +122,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.9.35` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.9.36` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 

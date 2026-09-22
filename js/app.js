@@ -185,20 +185,37 @@ async function start() {
   });
   refs.styleFilter.addEventListener('change', event => { state.style = event.target.value; state.visibleLimit = 24; catalogue.render(); });
   refs.sortFilter.addEventListener('change', event => { state.sort = event.target.value; state.visibleLimit = 24; catalogue.render(); });
+  const densityButtons = $$('.density-switch button');
+
   function syncDensityButtons() {
-    $$('.density-switch button').forEach(button => {
+    densityButtons.forEach(button => {
       const active = button.dataset.density === state.density;
       button.classList.toggle('is-active', active);
-      button.setAttribute('aria-pressed', String(active));
+      button.setAttribute('aria-checked', String(active));
+      button.tabIndex = active ? 0 : -1;
     });
   }
 
-  $$('.density-switch button').forEach(button => button.addEventListener('click', () => {
+  function activateDensity(button, { focus = false } = {}) {
+    if (!button) return;
     state.density = button.dataset.density;
     setValue(STORAGE.density, state.density);
     syncDensityButtons();
     catalogue.render();
-  }));
+    if (focus) button.focus();
+  }
+
+  densityButtons.forEach((button, index) => {
+    button.addEventListener('click', () => activateDensity(button));
+    button.addEventListener('keydown', event => {
+      let nextIndex = null;
+      if (['ArrowRight', 'ArrowDown'].includes(event.key)) nextIndex = (index + 1) % densityButtons.length;
+      if (['ArrowLeft', 'ArrowUp'].includes(event.key)) nextIndex = (index - 1 + densityButtons.length) % densityButtons.length;
+      if (nextIndex === null) return;
+      event.preventDefault();
+      activateDensity(densityButtons[nextIndex], { focus: true });
+    });
+  });
   syncDensityButtons();
 
   catalogue.render();

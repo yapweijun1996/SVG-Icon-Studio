@@ -129,12 +129,12 @@
             <button class="icon-button filter-button" id="filterButton" type="button" aria-label="Show advanced filters" aria-expanded="false" aria-controls="advancedFilter">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h18l-7 8v7l-4 2v-9z"/></svg>
             </button>
-            <div class="density-switch" role="group" aria-label="Catalogue density">
-              <button class="is-active" type="button" data-density="grid" aria-pressed="true">
+            <div class="density-switch" role="radiogroup" aria-label="Catalogue density">
+              <button class="is-active" type="button" role="radio" aria-checked="true" tabindex="0" data-density="grid">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6" height="6"/><rect x="14" y="4" width="6" height="6"/><rect x="4" y="14" width="6" height="6"/><rect x="14" y="14" width="6" height="6"/></svg>
                 Grid
               </button>
-              <button type="button" data-density="compact" aria-pressed="false">
+              <button type="button" role="radio" aria-checked="false" tabindex="-1" data-density="compact">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
                 Compact
               </button>

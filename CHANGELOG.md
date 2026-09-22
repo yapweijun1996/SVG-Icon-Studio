@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.36 — 2026-09-22
+
+### Fixed
+
+- Reworked the mutually-exclusive **Grid / Compact** catalogue density selector as a true radio group. Real Chrome previously exposed two independently tabbable toggle buttons (`role=button`, `aria-pressed`) even though only one density can be active, and Arrow keys did not move or select within the group. The selector now exposes a labelled `radiogroup` with `radio` children, synchronized `aria-checked`, one roving Tab stop, and Arrow Left/Right/Up/Down selection with wraparound while preserving click/tap behavior, persisted density, and catalogue rendering.
+
+### Validation
+
+- Pre-fix Chrome 153 at 1440×900 exposed `Catalogue density` as `role=group`, Grid/Compact as two `button` controls with `tabIndex=0`, and ArrowRight left both focus and density unchanged. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact committed-head Chrome verification cover radio semantics, one roving Tab stop, Arrow-key selection/focus, persisted density, unchanged click behavior, and zero runtime exceptions.
+
 ## 0.9.35 — 2026-09-22
 
 ### Fixed
