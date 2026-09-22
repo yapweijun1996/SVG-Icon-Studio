@@ -80,6 +80,10 @@ assert.match(resultsSummaryTag, /aria-atomic="true"/, 'result-count status shoul
 assert.doesNotMatch(iconGridTag, /aria-live=/, 'interactive icon grid should not announce every card rebuild as a live region');
 assert.match(catalogueSource, /resultStatusUpdater\.update\([\s\S]*?formatResultsSummary\(state, visible\.length, filtered\.length\)/, 'result live region should receive the contextual summary formatter output through the status updater');
 assert.match(appSource, /catalogue\.render\(\{ deferResultStatus: true \}\)/, 'rapid search input should defer only the advisory result-status announcement');
+assert.match(appSource, /addEventListener\('compositionstart',[\s\S]*?catalogue\.setResultStatusSuppressed\(true\)/, 'IME composition should suppress result-status announcements as soon as composition starts');
+assert.match(appSource, /const isComposing = searchIsComposing \|\| event\.isComposing;[\s\S]*?catalogue\.setResultStatusSuppressed\(isComposing\)/, 'search input should also honor InputEvent.isComposing while filtering visually');
+assert.match(appSource, /addEventListener\('compositionend',[\s\S]*?catalogue\.setResultStatusSuppressed\(false\)[\s\S]*?state\.query = event\.target\.value[\s\S]*?catalogue\.render\(\{ deferResultStatus: true \}\)/, 'IME composition end should commit the final query and resume one deferred status update');
+assert.match(catalogueSource, /if \(resultStatusSuppressed\) resultStatusUpdater\.cancel\(\)/, 'catalogue renders during IME composition should cancel rather than announce partial result status');
 
 const pageTitleTag = html.match(/<h1\b[^>]*id="pageTitle"[^>]*>/)?.[0] || '';
 assert.match(pageTitleTag, /tabindex="-1"/, 'workspace page title should accept programmatic focus after SPA view changes without adding a Tab stop');

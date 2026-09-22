@@ -171,11 +171,29 @@ async function start() {
     if (restoreFocus) refs.searchInput.focus();
   }
 
+  let searchIsComposing = false;
+  refs.searchInput.addEventListener('compositionstart', () => {
+    searchIsComposing = true;
+    // An IME composition can pause longer than the normal search debounce.
+    // Cancel/suppress advisory announcements until the composition is committed.
+    catalogue.setResultStatusSuppressed(true);
+  });
   refs.searchInput.addEventListener('input', event => {
     state.query = event.target.value;
     state.visibleLimit = 24;
+    const isComposing = searchIsComposing || event.isComposing;
+    catalogue.setResultStatusSuppressed(isComposing);
     // Keep visual filtering immediate, but coalesce the advisory live-region
-    // message until typing pauses so rapid input does not queue every partial query.
+    // message until typing pauses. IME partial text stays silent until committed.
+    catalogue.render({ deferResultStatus: true });
+  });
+  refs.searchInput.addEventListener('compositionend', event => {
+    searchIsComposing = false;
+    catalogue.setResultStatusSuppressed(false);
+    // Some browser/IME combinations do not provide a distinct trailing input
+    // event after compositionend, so commit the final value here as well.
+    state.query = event.target.value;
+    state.visibleLimit = 24;
     catalogue.render({ deferResultStatus: true });
   });
   refs.clearSearchButton.addEventListener('click', clearSearch);

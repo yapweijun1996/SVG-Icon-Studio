@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.44 — 2026-09-23
+
+### Fixed
+
+- Made catalogue search announcements safe for Chinese/Japanese IME composition. Visual filtering still follows each composition input immediately, but the polite result status is now suppressed and any pending debounce is cancelled while composition is active, so a long candidate-selection pause cannot announce unfinished text. `compositionend` commits the input's final value and resumes one deferred announcement, with `InputEvent.isComposing` used as an additional guard for browser event-order differences.
+
+### Validation
+
+- Pre-fix real Chrome 153 reproduced a composed `input` event with `isComposing=true` updating the live region after the 300 ms debounce to `Showing 24 of 120 icons — search “t”` before composition ended. Focused status-updater and DOM regressions, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact-head Chrome verification cover immediate visual filtering during composition, zero partial-query status mutations even after the debounce window, one final committed-query announcement, responsive layouts, and runtime/network health.
+
 ## 0.9.43 — 2026-09-23
 
 ### Fixed

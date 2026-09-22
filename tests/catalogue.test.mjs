@@ -34,6 +34,10 @@ statusUpdater.update('Stale delayed search', { defer: true });
 statusUpdater.update('Immediate filter result');
 await new Promise(resolve => setTimeout(resolve, 25));
 assert.equal(fakeStatus.textContent, 'Immediate filter result', 'an immediate status update should cancel any stale delayed search announcement');
+statusUpdater.update('IME partial query', { defer: true });
+statusUpdater.cancel();
+await new Promise(resolve => setTimeout(resolve, 25));
+assert.equal(fakeStatus.textContent, 'Immediate filter result', 'cancelling a pending result status should keep IME partial text out of the live region');
 statusUpdater.destroy();
 
 const baseSummaryState = { view: 'library', query: '', category: 'All', style: 'all' };

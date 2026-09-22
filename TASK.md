@@ -92,6 +92,7 @@
 - [x] Announce SPA workspace navigation by focusing the updated page heading and synchronizing the browser document title with the active view, released as `v0.9.41`
 - [x] Add active search/category/style/scoped-view context to the catalogue result status so screen-reader users hear what a dynamic result count refers to, released as `v0.9.42`
 - [x] Coalesce rapid search typing into one delayed result-status announcement while keeping visual filtering immediate, preventing partial queries from flooding the polite live region, released as `v0.9.43`
+- [x] Keep Chinese/Japanese IME composition visually responsive while suppressing partial-query live announcements until composition commits, released as `v0.9.44`
 - [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
 - [x] Browser/build SVG validation enforce strict XML declaration grammar and reject malformed declarations consistently
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
@@ -129,7 +130,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.9.43` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.9.44` is fully verified; local commits remain unpushed by policy.)*
 
 ---
 

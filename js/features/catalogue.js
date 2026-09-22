@@ -22,6 +22,7 @@ function starIcon() {
 export function createCatalogueController({ state, refs, categoryOrder, onSelect, onFavorite, onCopy, onMore }) {
   let renderVersion = 0;
   let observer;
+  let resultStatusSuppressed = false;
   const resultStatusUpdater = createResultStatusUpdater(refs.resultsSummary);
 
   function disconnectObserver() {
@@ -121,10 +122,13 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     refs.iconGrid.hidden = filtered.length === 0;
     refs.emptyResetButton.textContent = hasIconsInView(state) ? 'Reset filters' : 'Browse all icons';
     refs.loadMoreButton.parentElement.hidden = filtered.length === 0 || visible.length >= filtered.length;
-    resultStatusUpdater.update(
-      formatResultsSummary(state, visible.length, filtered.length),
-      { defer: deferResultStatus }
-    );
+    if (resultStatusSuppressed) resultStatusUpdater.cancel();
+    else {
+      resultStatusUpdater.update(
+        formatResultsSummary(state, visible.length, filtered.length),
+        { defer: deferResultStatus }
+      );
+    }
     refs.visibleIconCount.textContent = String(filtered.length);
     refs.totalIconCount.textContent = String(state.icons.length);
     refs.favoriteCount.textContent = String(state.favorites.size);
@@ -234,6 +238,10 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
 
   return {
     render,
+    setResultStatusSuppressed: suppressed => {
+      resultStatusSuppressed = Boolean(suppressed);
+      if (resultStatusSuppressed) resultStatusUpdater.cancel();
+    },
     destroy: () => {
       disconnectObserver();
       loadMoreObserver?.disconnect();

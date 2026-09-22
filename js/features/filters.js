@@ -1,9 +1,13 @@
 export function createResultStatusUpdater(node, delayMs = 300) {
   let timer;
 
-  function update(message, { defer = false } = {}) {
+  function cancel() {
     clearTimeout(timer);
     timer = undefined;
+  }
+
+  function update(message, { defer = false } = {}) {
+    cancel();
     if (!defer) {
       node.textContent = message;
       return;
@@ -15,11 +19,10 @@ export function createResultStatusUpdater(node, delayMs = 300) {
   }
 
   function destroy() {
-    clearTimeout(timer);
-    timer = undefined;
+    cancel();
   }
 
-  return { update, destroy };
+  return { update, cancel, destroy };
 }
 
 export function getViewIcons(state) {
