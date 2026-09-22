@@ -28,10 +28,21 @@ const filterHandler = filterHandlerStart >= 0 ? appSource.slice(filterHandlerSta
 assert.match(filterButtonTag, /aria-expanded="false"/, 'advanced-filter button should expose collapsed state initially');
 assert.match(filterButtonTag, /aria-controls="advancedFilter"/, 'advanced-filter button should identify its controlled panel');
 assert.match(html, /id="advancedFilter"/, 'advanced-filter aria-controls target should exist');
-assert.match(filterHandler, /setAttribute\('aria-expanded', String\(expanded\)\)/, 'advanced-filter expanded state should stay synchronized');
-assert.match(filterHandler, /setAttribute\('aria-label', expanded \? 'Hide advanced filters' : 'Show advanced filters'\)/, 'advanced-filter accessible action label should stay synchronized');
+const advancedFilterStateHelper = appSource.match(/function setAdvancedFiltersExpanded\(expanded\) \{[\s\S]*?\n  \}/)?.[0] || '';
+assert.match(advancedFilterStateHelper, /refs\.advancedFilter\.hidden = !expanded/, 'advanced-filter visibility should stay synchronized');
+assert.match(advancedFilterStateHelper, /setAttribute\('aria-expanded', String\(expanded\)\)/, 'advanced-filter expanded state should stay synchronized');
+assert.match(advancedFilterStateHelper, /setAttribute\('aria-label', expanded \? 'Hide advanced filters' : 'Show advanced filters'\)/, 'advanced-filter accessible action label should stay synchronized');
+assert.match(advancedFilterStateHelper, /classList\.toggle\('is-active', expanded\)/, 'advanced-filter active styling should stay synchronized');
 assert.match(filterHandler, /expanded && event\.detail === 0/, 'advanced-filter disclosure should distinguish keyboard activation from pointer activation');
 assert.match(filterHandler, /refs\.styleFilter\.focus\(\)/, 'keyboard expansion should move focus directly to the first disclosed filter control');
+assert.match(appSource, /refs\.advancedFilter\.addEventListener\('keydown'/, 'advanced-filter controls should handle Escape internally');
+const advancedFilterEscapeHandler = appSource.match(/refs\.advancedFilter\.addEventListener\('keydown',[\s\S]*?\n  \}\);/)?.[0] || '';
+assert.match(advancedFilterEscapeHandler, /event\.key !== 'Escape'/, 'advanced-filter Escape handling should be limited to Escape');
+assert.match(advancedFilterEscapeHandler, /refs\.advancedFilter\.contains\(document\.activeElement\)/, 'advanced-filter Escape handling should require focus inside the disclosure');
+assert.match(advancedFilterEscapeHandler, /event\.preventDefault\(\)/, 'advanced-filter Escape should prevent the browser default');
+assert.match(advancedFilterEscapeHandler, /event\.stopPropagation\(\)/, 'advanced-filter Escape should not reach the outer shell handler');
+assert.match(advancedFilterEscapeHandler, /setAdvancedFiltersExpanded\(false\)/, 'advanced-filter Escape should collapse the disclosure and synchronize its state');
+assert.match(advancedFilterEscapeHandler, /refs\.filterButton\.focus\(\)/, 'advanced-filter Escape should restore focus to its trigger');
 
 const densityGroupTag = html.match(/<div\b[^>]*class="density-switch"[^>]*>/)?.[0] || '';
 const densityRadioTags = [...html.matchAll(/<button\b[^>]*role="radio"[^>]*data-density="(grid|compact)"[^>]*>/g)].map(match => match[0]);

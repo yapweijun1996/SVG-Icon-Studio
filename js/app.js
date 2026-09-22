@@ -176,15 +176,25 @@ async function start() {
   refs.clearSearchButton.addEventListener('click', clearSearch);
   refs.emptyResetButton.addEventListener('click', recoverEmptyCatalogue);
   refs.clearFiltersButton.addEventListener('click', resetFilters);
-  refs.filterButton.addEventListener('click', event => {
-    const expanded = refs.advancedFilter.hidden;
+  function setAdvancedFiltersExpanded(expanded) {
     refs.advancedFilter.hidden = !expanded;
     refs.filterButton.setAttribute('aria-expanded', String(expanded));
     refs.filterButton.setAttribute('aria-label', expanded ? 'Hide advanced filters' : 'Show advanced filters');
     refs.filterButton.classList.toggle('is-active', expanded);
+  }
+  refs.filterButton.addEventListener('click', event => {
+    const expanded = refs.advancedFilter.hidden;
+    setAdvancedFiltersExpanded(expanded);
     // Keyboard activation emits click detail=0. Move directly into the newly
     // disclosed controls so the density radio group cannot interrupt that flow.
     if (expanded && event.detail === 0) refs.styleFilter.focus();
+  });
+  refs.advancedFilter.addEventListener('keydown', event => {
+    if (event.key !== 'Escape' || !refs.advancedFilter.contains(document.activeElement)) return;
+    event.preventDefault();
+    event.stopPropagation();
+    setAdvancedFiltersExpanded(false);
+    refs.filterButton.focus();
   });
   refs.styleFilter.addEventListener('change', event => { state.style = event.target.value; state.visibleLimit = 24; catalogue.render(); });
   refs.sortFilter.addEventListener('change', event => { state.sort = event.target.value; state.visibleLimit = 24; catalogue.render(); });

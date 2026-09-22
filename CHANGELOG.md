@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.38 — 2026-09-23
+
+### Fixed
+
+- Fixed **Advanced Filters** keyboard dismissal. Pre-fix Chrome 153 evidence after keyboard-style opening showed `advancedFilter.hidden=false`, `filterButton[aria-expanded]=true`, and focus on `styleFilter`; pressing Escape left all three unchanged and allowed the outer shell Escape handler to run. Escape from any focused control inside the disclosure now collapses it, synchronizes the trigger's visibility state, accessible action label and active class, restores focus to `#filterButton`, and stops propagation so an unrelated mobile/tablet drawer is not dismissed.
+
+### Validation
+
+- Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, and `git diff --check` all passed. Fresh Chrome 153 against the production preview passed at 1440×900, 834×1112, and 390×844: Escape from Style, Sort, and Clear filters collapsed the disclosure, restored `#filterButton`, synchronized `aria-expanded=false`/“Show advanced filters”/inactive state, did not reach a document-level Escape probe, produced zero runtime/console errors, and caused no horizontal overflow. A real pointer click still opened the disclosure while keeping focus on the trigger.
+
 ## 0.9.37 — 2026-09-22
 
 ### Fixed
