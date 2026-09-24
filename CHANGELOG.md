@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.52 — 2026-09-25
+
+### Fixed
+
+- Stopped the persistent Advanced **Clear filters** control from repeating an unchanged catalogue result announcement when activation only resets Sort or is already at the default state. Query/category/style resets still announce their changed result context exactly once, and the persistent Advanced Filters control keeps keyboard focus after activation.
+
+### Validation
+
+- Pre-fix Chrome 153 first confirmed the planned focus audit already behaved correctly for a real Style reset: `#clearFiltersButton` retained focus and the live region changed once from `Showing 9 icons — filled style` to `Showing 24 of 120 icons`. The same browser then reproduced the remaining accessibility noise at defaults: activating Advanced **Clear filters** kept the visible summary unchanged at `Showing 24 of 120 icons` but still emitted one identical live-region mutation. Post-fix validation covers that result-neutral/no-op path, a real Style reset, focused DOM regression, the full required suite, and exact-head responsive Chrome checks.
+
 ## 0.9.51 — 2026-09-24
 
 ### Fixed

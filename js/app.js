@@ -151,7 +151,7 @@ async function start() {
     }
   });
 
-  function resetFilters() {
+  function resetFilters(renderOptions) {
     state.query = '';
     state.category = 'All';
     state.style = 'all';
@@ -160,7 +160,12 @@ async function start() {
     refs.searchInput.value = '';
     refs.styleFilter.value = 'all';
     refs.sortFilter.value = state.sort;
-    renderAll();
+    renderAll(renderOptions);
+  }
+
+  function clearAdvancedFilters() {
+    const changesResultContext = Boolean(state.query) || state.category !== 'All' || state.style !== 'all';
+    resetFilters({ announceResultStatus: changesResultContext });
   }
 
   function recoverEmptyCatalogue() {
@@ -205,7 +210,7 @@ async function start() {
   });
   refs.clearSearchButton.addEventListener('click', clearResultFilters);
   refs.emptyResetButton.addEventListener('click', recoverEmptyCatalogue);
-  refs.clearFiltersButton.addEventListener('click', resetFilters);
+  refs.clearFiltersButton.addEventListener('click', clearAdvancedFilters);
   function setAdvancedFiltersExpanded(expanded) {
     refs.advancedFilter.hidden = !expanded;
     refs.filterButton.setAttribute('aria-expanded', String(expanded));

@@ -10,6 +10,7 @@ Required viewports: desktop 1440×900, tablet 834×1112 and mobile 390×844.
 4. Grid and Compact density choices form one labelled radio group with a single Tab stop; Arrow Left/Right/Up/Down moves focus and selection with wraparound, updates layout, and persists. Density-only changes must not repeat an unchanged catalogue result live announcement.
 4a. Keyboard activation of **Show advanced filters** opens the disclosure and moves focus directly to Style; pointer activation keeps the trigger-focused pointer flow unchanged.
 4b. With Advanced Filters open, Escape from Style, Sort or Clear filters collapses the disclosure, changes the trigger to “Show advanced filters” with `aria-expanded=false` and no active class, restores focus to `#filterButton`, and does not dismiss an unrelated mobile/tablet drawer.
+4c. Advanced **Clear filters** keeps focus on its persistent control. When query/category/style context changes, it produces exactly one updated result-status announcement; when activation only resets Sort or is a no-op at defaults, it must not repeat an unchanged result announcement.
 5. Favorite toggling updates card, inspector, navigation count and Favorites view.
 5a. Catalogue and inspector favorite toggles keep the same accessible name before/after activation while `aria-pressed` changes false ↔ true.
 5b. Every catalogue `Copy SVG` action keeps the compact visible text but exposes an icon-specific accessible name (for example `Copy Invoice SVG`) so repeated card actions are distinguishable.

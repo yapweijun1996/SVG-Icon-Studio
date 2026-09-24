@@ -117,6 +117,12 @@ assert.match(clearResultFiltersHandler, /const hadSearchQuery = Boolean\(state\.
 assert.match(clearResultFiltersHandler, /resetFilters\(\)/, 'results filter reset should preserve the existing shared reset behavior');
 assert.match(clearResultFiltersHandler, /\(hadSearchQuery \? refs\.searchInput : refs\.resultsTitle\)\.focus\(\)/, 'results filter reset should restore search focus for queries and results-heading focus for filter-only resets');
 assert.match(appSource, /refs\.clearSearchButton\.addEventListener\('click', clearResultFilters\)/, 'results reset control should use the context-aware focus handler');
+const resetFiltersHandler = appSource.match(/function resetFilters\(renderOptions\) \{[\s\S]*?\n  \}/)?.[0] || '';
+assert.match(resetFiltersHandler, /renderAll\(renderOptions\)/, 'shared filter reset should forward catalogue announcement options');
+const clearAdvancedFiltersHandler = appSource.match(/function clearAdvancedFilters\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
+assert.match(clearAdvancedFiltersHandler, /const changesResultContext = Boolean\(state\.query\) \|\| state\.category !== 'All' \|\| state\.style !== 'all'/, 'advanced Clear filters should distinguish semantic filter resets from result-neutral reset actions');
+assert.match(clearAdvancedFiltersHandler, /resetFilters\(\{ announceResultStatus: changesResultContext \}\)/, 'advanced Clear filters should announce only when query/category/style result context changes');
+assert.match(appSource, /refs\.clearFiltersButton\.addEventListener\('click', clearAdvancedFilters\)/, 'advanced Clear filters should use the result-context-aware reset handler');
 assert.match(resultsTitleTag, /tabindex="-1"/, 'results heading should accept programmatic focus after an empty-state recovery without adding a Tab stop');
 assert.match(catalogueSource, /refs\.emptyResetButton\.textContent = hasIconsInView\(state\) \? 'Reset filters' : 'Browse all icons'/, 'empty-state recovery label should distinguish hidden results from an intrinsically empty scoped view');
 assert.match(emptyRecoveryHandler, /const returnToLibrary = !hasIconsInView\(state\)/, 'empty-state recovery should detect when the current scoped view contains no items at all');
