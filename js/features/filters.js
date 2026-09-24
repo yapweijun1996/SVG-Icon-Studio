@@ -1,9 +1,11 @@
 export function createResultStatusUpdater(node, delayMs = 300) {
   let timer;
+  let pendingMessage;
 
   function cancel() {
     clearTimeout(timer);
     timer = undefined;
+    pendingMessage = undefined;
   }
 
   function update(message, { defer = false } = {}) {
@@ -12,17 +14,25 @@ export function createResultStatusUpdater(node, delayMs = 300) {
       node.textContent = message;
       return;
     }
+    pendingMessage = message;
     timer = setTimeout(() => {
-      node.textContent = message;
+      node.textContent = pendingMessage;
       timer = undefined;
+      pendingMessage = undefined;
     }, delayMs);
+  }
+
+  function refreshPending(message) {
+    if (timer === undefined) return false;
+    pendingMessage = message;
+    return true;
   }
 
   function destroy() {
     cancel();
   }
 
-  return { update, cancel, destroy };
+  return { update, refreshPending, cancel, destroy };
 }
 
 export function getViewIcons(state) {

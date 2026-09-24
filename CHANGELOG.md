@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.46 — 2026-09-24
+
+### Fixed
+
+- Reduced catalogue screen-reader noise from scroll-to-load pagination. The visible `resultsSummary` now stays current on every render, while a separate visually hidden polite status region handles advisory announcements. Manual **Load more icons** still announces its updated count, but `IntersectionObserver`-driven automatic loads no longer create new live announcements. If auto-pagination happens while a debounced search announcement is already pending, it refreshes that pending message to the latest visible count instead of scheduling an additional announcement or leaving stale count text.
+
+### Validation
+
+- The previous hourly Chrome check had already observed automatic pagination changing the live status from `Showing 24 of 120 icons` to `Showing 48 of 120 icons`; read-only exact-head review confirmed the observer calls the same `loadMore()` path that rewrites the status on every automatic page. Focused status-updater and DOM/source regressions, `npm run typecheck`, full `npm test` (120 SVG / zero errors), `npm run build`, and `git diff --check` pass. A Chrome 153 browser harness at 1440×900, 834×1112, and 390×844 verified that an automatic visible-count change creates no new status update when nothing is pending, while auto-pagination during a deferred search refreshes that one pending message to the latest visible count. Full-app browser inspection was attempted twice but the inspection connector returned `We couldn’t connect your account`; no product/runtime failure was observed from that infrastructure error.
+
 ## 0.9.45 — 2026-09-23
 
 ### Fixed

@@ -72,13 +72,20 @@ assert.match(importCompletionHandler, /shell\.setView\('uploaded'\)/, 'import co
 
 const resultsHeaderTag = html.match(/<section\b[^>]*class="results-header"[^>]*>/)?.[0] || '';
 const resultsSummaryTag = html.match(/<span\b[^>]*id="resultsSummary"[^>]*>/)?.[0] || '';
+const resultsAnnouncementTag = html.match(/<span\b[^>]*id="resultsAnnouncement"[^>]*>/)?.[0] || '';
 const iconGridTag = html.match(/<div\b[^>]*id="iconGrid"[^>]*>/)?.[0] || '';
 assert.doesNotMatch(resultsHeaderTag, /aria-live=/, 'results header should not duplicate catalogue live announcements');
-assert.match(resultsSummaryTag, /role="status"/, 'result count should be the dedicated advisory status region');
-assert.match(resultsSummaryTag, /aria-live="polite"/, 'result-count status should announce updates politely');
-assert.match(resultsSummaryTag, /aria-atomic="true"/, 'result-count status should announce the complete concise message');
+assert.doesNotMatch(resultsSummaryTag, /role="status"|aria-live=/, 'visible result count should stay readable without becoming a live region on auto-pagination');
+assert.match(resultsAnnouncementTag, /class="sr-only"/, 'result announcements should use the existing visually hidden utility');
+assert.match(resultsAnnouncementTag, /role="status"/, 'result announcement should be the dedicated advisory status region');
+assert.match(resultsAnnouncementTag, /aria-live="polite"/, 'result announcement should update politely');
+assert.match(resultsAnnouncementTag, /aria-atomic="true"/, 'result announcement should announce the complete concise message');
 assert.doesNotMatch(iconGridTag, /aria-live=/, 'interactive icon grid should not announce every card rebuild as a live region');
-assert.match(catalogueSource, /resultStatusUpdater\.update\([\s\S]*?formatResultsSummary\(state, visible\.length, filtered\.length\)/, 'result live region should receive the contextual summary formatter output through the status updater');
+assert.match(catalogueSource, /const resultSummary = formatResultsSummary\(state, visible\.length, filtered\.length\)/, 'catalogue should calculate one contextual result summary for visible and assistive output');
+assert.match(catalogueSource, /refs\.resultsSummary\.textContent = resultSummary/, 'visible result summary should stay current even when automatic pagination is silent');
+assert.match(catalogueSource, /createResultStatusUpdater\(refs\.resultsAnnouncement\)/, 'live status updater should target the dedicated hidden announcement region');
+assert.match(catalogueSource, /loadMore\(\{ automatic: true \}\)/, 'IntersectionObserver pagination should identify itself as automatic');
+assert.match(catalogueSource, /announceResultStatus: !automatic[\s\S]*?refreshPendingResultStatus: automatic/, 'automatic pagination should stay silent while refreshing only an already-pending search announcement');
 assert.match(appSource, /catalogue\.render\(\{ deferResultStatus: Boolean\(state\.query\) \}\)/, 'non-empty rapid search input should defer only the advisory result-status announcement while clear-to-empty updates immediately');
 assert.match(appSource, /addEventListener\('compositionstart',[\s\S]*?catalogue\.setResultStatusSuppressed\(true\)/, 'IME composition should suppress result-status announcements as soon as composition starts');
 assert.match(appSource, /const isComposing = searchIsComposing \|\| event\.isComposing;[\s\S]*?catalogue\.setResultStatusSuppressed\(isComposing\)/, 'search input should also honor InputEvent.isComposing while filtering visually');
@@ -111,10 +118,10 @@ assert.match(catalogueSource, /chips\.forEach\(\(chip, chipIndex\) => \{ chip\.t
 assert.match(catalogueSource, /chips\[nextIndex\]\.focus\(\)/, 'category toolbar should move focus without requiring Tab through every category');
 assert.match(catalogueSource, /replacement\?\.focus\(\)/, 'category activation should restore focus to the re-rendered selected chip');
 
-const loadMoreHandler = catalogueSource.match(/function loadMore\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
+const loadMoreHandler = catalogueSource.match(/function loadMore\(\{ automatic = false \} = \{\}\) \{[\s\S]*?\n  \}/)?.[0] || '';
 assert.match(loadMoreHandler, /document\.activeElement === refs\.loadMoreButton/, 'Load more should detect when the manual pagination control owns focus');
 assert.match(loadMoreHandler, /previousVisibleCount = refs\.iconGrid\.querySelectorAll\('\.icon-card'\)\.length/, 'Load more should remember the first newly revealed card position before re-rendering');
-assert.match(loadMoreHandler, /render\(\{ deferResultStatus: document\.activeElement === refs\.searchInput \}\)/, 'automatic pagination during active search typing should preserve live-status coalescing');
+assert.match(loadMoreHandler, /announceResultStatus: !automatic[\s\S]*?refreshPendingResultStatus: automatic/, 'automatic pagination should update visible results without starting a new live announcement');
 assert.match(loadMoreHandler, /restoreFocus && refs\.loadMoreButton\.parentElement\.hidden/, 'Load more should restore focus only when the focused manual control disappears');
 assert.match(loadMoreHandler, /firstNewCard\?\.querySelector\('\[data-action=\"select\"\]'\)\?\.focus\(\)/, 'Final Load more should move focus to the first newly revealed Select action');
 assert.match(catalogueSource, /'data-action': 'copy', 'aria-label': `Copy \${icon\.name} SVG`/, 'catalogue copy actions should include the icon name in their accessible label');

@@ -23,7 +23,7 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
   let renderVersion = 0;
   let observer;
   let resultStatusSuppressed = false;
-  const resultStatusUpdater = createResultStatusUpdater(refs.resultsSummary);
+  const resultStatusUpdater = createResultStatusUpdater(refs.resultsAnnouncement);
 
   function disconnectObserver() {
     observer?.disconnect();
@@ -108,7 +108,7 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     }
   }
 
-  function render({ deferResultStatus = false } = {}) {
+  function render({ deferResultStatus = false, announceResultStatus = true, refreshPendingResultStatus = false } = {}) {
     renderVersion += 1;
     disconnectObserver();
     setupObserver(renderVersion);
@@ -122,13 +122,11 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     refs.iconGrid.hidden = filtered.length === 0;
     refs.emptyResetButton.textContent = hasIconsInView(state) ? 'Reset filters' : 'Browse all icons';
     refs.loadMoreButton.parentElement.hidden = filtered.length === 0 || visible.length >= filtered.length;
+    const resultSummary = formatResultsSummary(state, visible.length, filtered.length);
+    refs.resultsSummary.textContent = resultSummary;
     if (resultStatusSuppressed) resultStatusUpdater.cancel();
-    else {
-      resultStatusUpdater.update(
-        formatResultsSummary(state, visible.length, filtered.length),
-        { defer: deferResultStatus }
-      );
-    }
+    else if (announceResultStatus) resultStatusUpdater.update(resultSummary, { defer: deferResultStatus });
+    else if (refreshPendingResultStatus) resultStatusUpdater.refreshPending(resultSummary);
     refs.visibleIconCount.textContent = String(filtered.length);
     refs.totalIconCount.textContent = String(state.icons.length);
     refs.favoriteCount.textContent = String(state.favorites.size);
@@ -215,24 +213,27 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     }
   });
 
-  function loadMore() {
+  function loadMore({ automatic = false } = {}) {
     const restoreFocus = document.activeElement === refs.loadMoreButton;
     const previousVisibleCount = refs.iconGrid.querySelectorAll('.icon-card').length;
     state.visibleLimit += 24;
-    render({ deferResultStatus: document.activeElement === refs.searchInput });
+    render({
+      announceResultStatus: !automatic,
+      refreshPendingResultStatus: automatic
+    });
     if (restoreFocus && refs.loadMoreButton.parentElement.hidden) {
       const firstNewCard = refs.iconGrid.querySelectorAll('.icon-card')[previousVisibleCount];
       firstNewCard?.querySelector('[data-action="select"]')?.focus();
     }
   }
-  refs.loadMoreButton.addEventListener('click', loadMore);
+  refs.loadMoreButton.addEventListener('click', () => loadMore());
 
   // Auto-load once the (still visible, non-hidden) load-more control nears the
   // viewport, so scrolling to the bottom of the grid keeps extending it. The
   // button itself stays as a manual fallback -- for keyboard use, and for the
   // rare case IntersectionObserver isn't available.
   const loadMoreObserver = createIntersectionObserver(entries => {
-    if (entries.some(entry => entry.isIntersecting)) loadMore();
+    if (entries.some(entry => entry.isIntersecting)) loadMore({ automatic: true });
   }, { rootMargin: '600px 0px' });
   loadMoreObserver?.observe(refs.loadMoreButton);
 

@@ -38,6 +38,11 @@ statusUpdater.update('IME partial query', { defer: true });
 statusUpdater.cancel();
 await new Promise(resolve => setTimeout(resolve, 25));
 assert.equal(fakeStatus.textContent, 'Immediate filter result', 'cancelling a pending result status should keep IME partial text out of the live region');
+statusUpdater.update('Showing 24 of 120 icons — search “order”', { defer: true });
+assert.equal(statusUpdater.refreshPending('Showing 48 of 120 icons — search “order”'), true, 'auto-pagination should refresh a pending search announcement without creating a new one');
+await new Promise(resolve => setTimeout(resolve, 25));
+assert.equal(fakeStatus.textContent, 'Showing 48 of 120 icons — search “order”', 'pending search announcement should use the latest silently paginated visible count');
+assert.equal(statusUpdater.refreshPending('Should stay silent'), false, 'auto-pagination should not create a live announcement when no deferred search announcement is pending');
 statusUpdater.destroy();
 
 const baseSummaryState = { view: 'library', query: '', category: 'All', style: 'all' };
