@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.49 — 2026-09-24
+
+### Fixed
+
+- Stopped Sort-only catalogue rerenders from repeating the polite result status. Changing Featured/Name/Category/Recently viewed reorders the existing result set without changing the active query, filters, scoped view, or result count, so the visible grid still reorders immediately while the advisory live region stays quiet.
+
+### Validation
+
+- Pre-fix Chrome 153 reproduced one unchanged `Showing 24 of 120 icons` live-region mutation when switching Featured → Name A–Z even though the first card changed from Invoice to Accounts Payable and the result semantics were unchanged. Post-fix validation covers the focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and an exact-head Chrome 153 sort harness confirming the grid reorders while the result live region records zero mutations.
+
 ## 0.9.48 — 2026-09-24
 
 ### Fixed

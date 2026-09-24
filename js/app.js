@@ -225,7 +225,7 @@ async function start() {
     refs.filterButton.focus();
   });
   refs.styleFilter.addEventListener('change', event => { state.style = event.target.value; state.visibleLimit = 24; catalogue.render(); });
-  refs.sortFilter.addEventListener('change', event => { state.sort = event.target.value; state.visibleLimit = 24; catalogue.render(); });
+  refs.sortFilter.addEventListener('change', event => { state.sort = event.target.value; state.visibleLimit = 24; catalogue.render({ announceResultStatus: false }); });
   const densityButtons = $$('.density-switch button');
 
   function syncDensityButtons() {
