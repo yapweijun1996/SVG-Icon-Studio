@@ -541,7 +541,7 @@ Each feature module MUST own only its related state bindings and user interactio
 - `inspector.js`: controls, preview, code tabs and selected icon details.
 - `importer.js`: upload validation and user-uploaded asset persistence.
 - `shell.js`: sidebar, inspector drawer, overlays and responsive shell state.
-- `theme.js`: light/dark state and theme persistence.
+- `theme.js`: light/dark resolution, explicit override persistence, and live follow-system colour-scheme state.
 
 A feature module MUST NOT directly fetch catalogue SVG files. It MUST use `icon-repository.js`.
 

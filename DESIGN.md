@@ -1,7 +1,7 @@
 # Icon Studio — Design System
 
 **Document:** `DESIGN.md`
-**Status:** Living document — reflects the design system as actually shipped in `v0.9.34`, not an aspirational brief.
+**Status:** Living document — reflects the design system as actually shipped in `v0.9.56`, not an aspirational brief.
 **Source of truth for tokens:** [`css/tokens.css`](css/tokens.css) (design-system.json is a synced machine-readable snapshot of the same values, not an independent source)
 **Relationship to `components.md`:** `components.md` is the original pre-implementation design brief written before any code existed. It is kept for historical reference only — where the two disagree, this document and the current codebase win. See the note at the top of `components.md`.
 
@@ -56,7 +56,7 @@ Only surface/text/line tokens repaint; `--accent` and its variants are **intenti
 | `--accent-soft` | `#3a1c0d` |
 | `--accent-border` | `#7c3312` |
 
-Theme is picked up from `prefers-color-scheme` on first load, then persisted explicitly (`localStorage['iconStudioTheme']`) once the user toggles it — there is currently no UI to reset back to "follow system" once overridden (see `TASK.md` backlog).
+Theme follows `prefers-color-scheme` by default. The compact theme button can cycle through explicit light/dark overrides and back to **Follow system**; explicit modes persist in `localStorage['iconStudioTheme']`, while Follow system removes that key and reacts live to later OS/browser colour-scheme changes.
 
 ## 3. Layout
 

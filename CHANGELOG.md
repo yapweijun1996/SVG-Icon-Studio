@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.9.56 — 2026-09-25
+
+### Improved
+
+- Added a compact route back to **Follow system** using the existing theme button instead of adding topbar clutter. The control now cycles through explicit light/dark overrides and then exposes **Follow system theme** as its next action; choosing it removes `localStorage['iconStudioTheme']` instead of persisting a third mode.
+- While following system, live `prefers-color-scheme` changes update both the page theme and PWA `theme-color` immediately. Explicit light/dark overrides remain pinned across system changes.
+
+### Validation
+
+- Pre-fix Chrome reproduced the backlog gap: after switching from a light system theme to explicit dark, the override survived reload and no button/select/radio exposed a system-theme reset. Post-fix validation covers the dedicated theme-state regression, DOM contract checks, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact-head Chrome checks at 1440×900, 834×1112, and 390×844 for the system → explicit opposite → explicit system-matching → Follow system cycle, live system-preference changes, persistence removal, synchronized action labels/tooltips and PWA theme colour, runtime/network health, and horizontal overflow.
+
 ## 0.9.55 — 2026-09-25
 
 ### Fixed

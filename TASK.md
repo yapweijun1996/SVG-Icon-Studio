@@ -104,6 +104,7 @@
 - [x] Preserve focused Category chips and icon-card actions across automatic IntersectionObserver pagination rerenders so background loading cannot drop keyboard focus to `body`, released as `v0.9.53`
 - [x] Make re-activating the already-selected Category a true no-op so expanded result batches are preserved and unchanged polite result announcements are not repeated, released as `v0.9.54`
 - [x] Make re-activating the already-current workspace navigation item a true catalogue-state no-op while still closing the mobile drawer, released as `v0.9.55`
+- [x] Let the compact theme control cycle back to live **Follow system** mode, clearing the explicit override and reacting to OS/browser colour-scheme changes, released as `v0.9.56`
 - [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
 - [x] Browser/build SVG validation enforce strict XML declaration grammar and reject malformed declarations consistently
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
@@ -141,7 +142,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.9.55` passed the required suite plus exact-head Chromium same-view navigation checks at desktop/tablet/mobile. Local commit remains unpushed by policy.)*
+*(none — current local release `v0.9.56` passed the required suite plus exact-head Chromium follow-system theme checks at desktop/tablet/mobile. Local commit remains unpushed by policy.)*
 
 ---
 
@@ -158,7 +159,6 @@
 - [ ] Search relevance ranking + match highlighting (`js/features/filters.js` is currently plain substring match).
 - [ ] Toast stacking cap (`js/ui/toast.js` has no limit on concurrent toasts).
 - [ ] Bulk multi-select export (currently one icon at a time).
-- [ ] Theme: no UI to reset an explicit light/dark override back to "follow system".
 - [ ] Minimal dependency-free accessibility-audit script (considered, deferred — see `ROADMAP.md`).
 
 ## Blocked

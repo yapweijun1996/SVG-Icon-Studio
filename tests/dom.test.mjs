@@ -267,9 +267,12 @@ const themeButtonTag = html.match(/<button\b[^>]*id="themeButton"[^>]*>/)?.[0] |
 const themeSync = themeSource.match(/function sync\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
 assert.match(themeButtonTag, /aria-label="Switch to dark theme"/, 'theme toggle should expose a concrete initial action');
 assert.match(themeButtonTag, /title="Switch to dark theme"/, 'theme toggle initial tooltip should match its action');
-assert.match(themeSync, /const actionLabel = `Switch to \${body\.dataset\.theme === 'dark' \? 'light' : 'dark'} theme`/, 'theme toggle action should derive from the active theme');
+assert.match(themeSource, /let mode = storedTheme === 'light' \|\| storedTheme === 'dark' \? storedTheme : 'system'/, 'theme controller should treat no explicit override as system-following mode');
+assert.match(themeSource, /if \(mode === 'system'\) removeValue\(STORAGE\.theme\)/, 'returning to system theme should clear the explicit persisted override');
+assert.match(themeSync, /nextMode === 'system' \? 'Follow system theme' : 'Switch to ' \+ nextMode \+ ' theme'/, 'theme toggle action should expose the follow-system reset when it is next');
 assert.match(themeSync, /setAttribute\('aria-label', actionLabel\)/, 'theme toggle should synchronize its accessible action name');
 assert.match(themeSync, /title = actionLabel/, 'theme toggle should synchronize its visible tooltip action');
+assert.match(themeSource, /systemPreference\.addEventListener\('change', sync\)/, 'system-following theme should react to preference changes');
 
 const restoreFocusHelper = shellSource.match(/function restoreDrawerFocus\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
 const sidebarCollapseSync = shellSource.match(/function syncCollapsedState\(collapsed\) \{[\s\S]*?\n  \}/)?.[0] || '';
