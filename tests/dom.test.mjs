@@ -80,6 +80,7 @@ const resultsHeaderTag = html.match(/<section\b[^>]*class="results-header"[^>]*>
 const resultsSummaryTag = html.match(/<span\b[^>]*id="resultsSummary"[^>]*>/)?.[0] || '';
 const resultsAnnouncementTag = html.match(/<span\b[^>]*id="resultsAnnouncement"[^>]*>/)?.[0] || '';
 const iconGridTag = html.match(/<div\b[^>]*id="iconGrid"[^>]*>/)?.[0] || '';
+const toastRegionTag = html.match(/<div\b[^>]*id="toastRegion"[^>]*>/)?.[0] || '';
 assert.doesNotMatch(resultsHeaderTag, /aria-live=/, 'results header should not duplicate catalogue live announcements');
 assert.doesNotMatch(resultsSummaryTag, /role="status"|aria-live=/, 'visible result count should stay readable without becoming a live region on auto-pagination');
 assert.match(resultsAnnouncementTag, /class="sr-only"/, 'result announcements should use the existing visually hidden utility');
@@ -87,6 +88,9 @@ assert.match(resultsAnnouncementTag, /role="status"/, 'result announcement shoul
 assert.match(resultsAnnouncementTag, /aria-live="polite"/, 'result announcement should update politely');
 assert.match(resultsAnnouncementTag, /aria-atomic="true"/, 'result announcement should announce the complete concise message');
 assert.doesNotMatch(iconGridTag, /aria-live=/, 'interactive icon grid should not announce every card rebuild as a live region');
+assert.match(toastRegionTag, /aria-live="polite"/, 'toast feedback should remain a polite live region');
+assert.match(toastRegionTag, /aria-atomic="false"/, 'toast additions should announce only the changed toast instead of replaying the whole visible stack');
+assert.match(toastRegionTag, /aria-relevant="additions"/, 'toast eviction should not make removals relevant to assistive technology');
 const clearFiltersButtonTag = html.match(/<button\b[^>]*id="clearSearchButton"[^>]*>[\s\S]*?<\/button>/)?.[0] || '';
 assert.match(clearFiltersButtonTag, />Clear filters<\/button>/, 'results reset control should be named for the query/category/style filters it actually clears');
 assert.match(catalogueSource, /const resultSummary = formatResultsSummary\(state, visible\.length, filtered\.length\)/, 'catalogue should calculate one contextual result summary for visible and assistive output');

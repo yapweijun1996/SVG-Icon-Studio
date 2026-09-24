@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.9.58 — 2026-09-25
+
+### Fixed
+
+- Prevented burst toast feedback from re-presenting the entire visible toast stack to assistive technology. The shared polite live region is now explicitly non-atomic, so each newly added toast is the relevant changed node instead of making earlier still-visible messages part of every update.
+- Limited live-region relevance to additions. Oldest-first visual eviction at the three-toast cap stays silent, while newly added feedback remains eligible for polite announcement.
+
+### Validation
+
+- Pre-fix Chromium 152 exposed #toastRegion as live=polite, atomic=true, relevant=additions text; concurrent toasts therefore formed one atomic region whose entire contents are eligible for presentation on each addition. This matches WAI-ARIA/MDN aria-atomic semantics: true presents the whole changed region, while false presents only changed nodes. Post-fix validation covers the DOM accessibility contract, exact-head Chromium Accessibility Tree semantics and burst behavior across desktop/tablet/mobile, plus the full required typecheck/test/build/diff suite.
+
 ## 0.9.57 — 2026-09-25
 
 ### Improved

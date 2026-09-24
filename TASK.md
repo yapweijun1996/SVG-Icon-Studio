@@ -106,6 +106,7 @@
 - [x] Make re-activating the already-current workspace navigation item a true catalogue-state no-op while still closing the mobile drawer, released as `v0.9.55`
 - [x] Let the compact theme control cycle back to live **Follow system** mode, clearing the explicit override and reacting to OS/browser colour-scheme changes, released as `v0.9.56`
 - [x] Cap concurrent toast feedback at three visible messages, evicting the oldest first so rapid actions cannot cover most of a mobile viewport, released as `v0.9.57`
+- [x] Make burst toast announcements non-atomic and additions-only so new feedback does not replay earlier still-visible toasts, released as `v0.9.58`
 - [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
 - [x] Browser/build SVG validation enforce strict XML declaration grammar and reject malformed declarations consistently
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
@@ -143,7 +144,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.9.57` passed the required suite plus exact-head Chromium rapid-toast checks at desktop/tablet/mobile. Local commit remains unpushed by policy.)*
+*(none — current local release `v0.9.58` passed the required suite plus exact-head Chromium toast live-region checks at desktop/tablet/mobile. Local commit remains unpushed by policy.)*
 
 ---
 

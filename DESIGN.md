@@ -1,7 +1,7 @@
 # Icon Studio — Design System
 
 **Document:** `DESIGN.md`
-**Status:** Living document — reflects the design system as actually shipped in `v0.9.57`, not an aspirational brief.
+**Status:** Living document — reflects the design system as actually shipped in `v0.9.58`, not an aspirational brief.
 **Source of truth for tokens:** [`css/tokens.css`](css/tokens.css) (design-system.json is a synced machine-readable snapshot of the same values, not an independent source)
 **Relationship to `components.md`:** `components.md` is the original pre-implementation design brief written before any code existed. It is kept for historical reference only — where the two disagree, this document and the current codebase win. See the note at the top of `components.md`.
 
@@ -96,7 +96,7 @@ Three-column desktop shell (`.app-shell`, CSS grid: `sidebar-width | 1fr | inspe
 | Icon card | `.icon-card` | Lazy-loaded preview (`IntersectionObserver`, 240px lookahead), favourite star, Copy SVG action, "⋮" more-options action |
 | Inspector | `.inspector` | Selected icon summary, live preview (Light/Dark/Brand/Transparent background tabs), Appearance controls (size/stroke width/stroke colour/fill toggle+colour/currentColor/include-title), Transform controls (rotate/flip), code tabs (SVG/JSX/CSS) |
 | Full preview dialog | `<dialog class="preview-dialog">` | Native `<dialog>` element — free focus trap and Escape handling; explicit `aria-labelledby` / `aria-describedby` bind the visible icon name and resize guidance as its accessible name/description |
-| Toast | `.toast-region` | `aria-live="polite"`, auto-dismiss after 2.8s, maximum three concurrent visible messages with oldest-first eviction |
+| Toast | `.toast-region` | `aria-live="polite"`, non-atomic additions-only announcements, auto-dismiss after 2.8s, maximum three concurrent visible messages with oldest-first eviction |
 
 ## 5. Icon design system
 
@@ -135,7 +135,7 @@ Before drawing a new icon, check existing geometry for visual collision (documen
 ## 6. Accessibility
 
 - Interactive targets are ≥44px (`--control-height` equivalent throughout).
-- `aria-live="polite"` regions: results summary, toast region.
+- `aria-live="polite"` regions: the dedicated result-status announcer and toast region. Result status is atomic because each message is one complete summary; toast feedback is explicitly non-atomic/additions-only so a new toast does not replay earlier visible messages.
 - Catalogue search uses a visually-hidden text label for its accessible name; the visible `/` shortcut hint is `aria-hidden` so it is not mistaken for the label.
 - `aria-pressed`/`aria-expanded`/`aria-current` used correctly for toggle/disclosure/nav-active state.
 - Preview background is a single-choice `radiogroup`: one `radio` is checked/tabbable at a time, and Arrow Left/Right/Up/Down moves focus and selection with wraparound.
