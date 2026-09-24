@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.9.59 — 2026-09-25
+
+### Fixed
+
+- Moved the mobile toast stack below the sticky topbar and top safe-area inset. Burst feedback remains centered and capped at three, but transient messages no longer visually cover primary menu/import/theme/inspector controls.
+- Kept desktop/tablet placement unchanged; the adjustment is limited to the existing ≤820px mobile breakpoint.
+
+### Validation
+
+- Pre-fix Chromium at 390×844 reproduced the issue: a three-toast burst occupied y=10–178 while the sticky topbar occupied y=0–65, producing 55px of visual overlap, with the toast layer above the topbar (`z-index: 200` vs `25`). Post-fix browser validation verifies zero toast/topbar overlap on mobile while preserving the three-toast cap, no horizontal overflow, and desktop/tablet placement.
+
 ## 0.9.58 — 2026-09-25
 
 ### Fixed

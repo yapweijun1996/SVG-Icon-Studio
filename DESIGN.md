@@ -96,7 +96,7 @@ Three-column desktop shell (`.app-shell`, CSS grid: `sidebar-width | 1fr | inspe
 | Icon card | `.icon-card` | Lazy-loaded preview (`IntersectionObserver`, 240px lookahead), favourite star, Copy SVG action, "⋮" more-options action |
 | Inspector | `.inspector` | Selected icon summary, live preview (Light/Dark/Brand/Transparent background tabs), Appearance controls (size/stroke width/stroke colour/fill toggle+colour/currentColor/include-title), Transform controls (rotate/flip), code tabs (SVG/JSX/CSS) |
 | Full preview dialog | `<dialog class="preview-dialog">` | Native `<dialog>` element — free focus trap and Escape handling; explicit `aria-labelledby` / `aria-describedby` bind the visible icon name and resize guidance as its accessible name/description |
-| Toast | `.toast-region` | `aria-live="polite"`, non-atomic additions-only announcements, auto-dismiss after 2.8s, maximum three concurrent visible messages with oldest-first eviction |
+| Toast | `.toast-region` | `aria-live="polite"`, non-atomic additions-only announcements, auto-dismiss after 2.8s, maximum three concurrent visible messages with oldest-first eviction; on mobile the stack is offset below the sticky topbar + safe area |
 
 ## 5. Icon design system
 

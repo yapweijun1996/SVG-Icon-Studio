@@ -40,7 +40,7 @@
   .category-row::-webkit-scrollbar { display: none; }
   .category-chip { flex: 0 0 auto; scroll-snap-align: center; }
   .search-row { grid-template-columns: minmax(0, 1fr) 44px; }
-  .toast-region { right: 50%; bottom: auto; top: calc(10px + env(safe-area-inset-top)); transform: translateX(50%); justify-items: center; }
+  .toast-region { right: 50%; bottom: auto; top: calc(var(--topbar-height) + var(--safe-top) + 10px); transform: translateX(50%); justify-items: center; }
   .density-switch { grid-column: 1 / -1; justify-self: start; }
   .advanced-filter { align-items: stretch; flex-direction: column; }
   .advanced-filter label { min-width: 0; }

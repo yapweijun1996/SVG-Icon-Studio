@@ -107,6 +107,7 @@
 - [x] Let the compact theme control cycle back to live **Follow system** mode, clearing the explicit override and reacting to OS/browser colour-scheme changes, released as `v0.9.56`
 - [x] Cap concurrent toast feedback at three visible messages, evicting the oldest first so rapid actions cannot cover most of a mobile viewport, released as `v0.9.57`
 - [x] Make burst toast announcements non-atomic and additions-only so new feedback does not replay earlier still-visible toasts, released as `v0.9.58`
+- [x] Keep mobile burst toast feedback below the sticky topbar and top safe-area inset so transient messages never cover primary navigation/actions, released as `v0.9.59`
 - [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
 - [x] Browser/build SVG validation enforce strict XML declaration grammar and reject malformed declarations consistently
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
@@ -144,7 +145,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.9.58` passed the required suite plus exact-head Chromium toast live-region checks at desktop/tablet/mobile. Local commit remains unpushed by policy.)*
+*(none — current local release `v0.9.59` passed the required suite plus exact-head Chromium mobile toast/topbar separation checks and responsive smoke checks. Local commit remains unpushed by policy.)*
 
 ---
 

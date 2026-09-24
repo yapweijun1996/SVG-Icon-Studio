@@ -91,6 +91,7 @@ assert.doesNotMatch(iconGridTag, /aria-live=/, 'interactive icon grid should not
 assert.match(toastRegionTag, /aria-live="polite"/, 'toast feedback should remain a polite live region');
 assert.match(toastRegionTag, /aria-atomic="false"/, 'toast additions should announce only the changed toast instead of replaying the whole visible stack');
 assert.match(toastRegionTag, /aria-relevant="additions"/, 'toast eviction should not make removals relevant to assistive technology');
+assert.match(responsiveSource, /\.toast-region\s*\{[^}]*top:\s*calc\(var\(--topbar-height\) \+ var\(--safe-top\) \+ 10px\)/s, 'mobile toast stack should start below the sticky topbar and safe-area inset');
 const clearFiltersButtonTag = html.match(/<button\b[^>]*id="clearSearchButton"[^>]*>[\s\S]*?<\/button>/)?.[0] || '';
 assert.match(clearFiltersButtonTag, />Clear filters<\/button>/, 'results reset control should be named for the query/category/style filters it actually clears');
 assert.match(catalogueSource, /const resultSummary = formatResultsSummary\(state, visible\.length, filtered\.length\)/, 'catalogue should calculate one contextual result summary for visible and assistive output');
