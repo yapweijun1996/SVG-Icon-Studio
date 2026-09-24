@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.9.57 — 2026-09-25
+
+### Improved
+
+- Bounded transient toast feedback to at most three concurrent visible messages. Rapid actions now evict the oldest toast before adding a newer one, preserving the most recent feedback without letting notifications cover most of the mobile workspace.
+- Kept the existing 2.8 second auto-dismiss behavior and polite live region; stale timers for already-evicted messages remain harmless and cannot remove newer toasts.
+
+### Validation
+
+- Pre-fix Chromium 152 reproduced eight rapid Favorite actions producing eight simultaneous toasts on a 390×844 viewport: the toast region reached 472 px tall (55.9% of the viewport). Post-fix validation covers focused toast-controller behavior plus exact-head responsive Chromium checks at desktop/tablet/mobile, including the three-toast cap, newest-message retention, runtime/network health, and horizontal overflow.
+
 ## 0.9.56 — 2026-09-25
 
 ### Improved

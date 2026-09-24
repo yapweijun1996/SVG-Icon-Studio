@@ -105,6 +105,7 @@
 - [x] Make re-activating the already-selected Category a true no-op so expanded result batches are preserved and unchanged polite result announcements are not repeated, released as `v0.9.54`
 - [x] Make re-activating the already-current workspace navigation item a true catalogue-state no-op while still closing the mobile drawer, released as `v0.9.55`
 - [x] Let the compact theme control cycle back to live **Follow system** mode, clearing the explicit override and reacting to OS/browser colour-scheme changes, released as `v0.9.56`
+- [x] Cap concurrent toast feedback at three visible messages, evicting the oldest first so rapid actions cannot cover most of a mobile viewport, released as `v0.9.57`
 - [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
 - [x] Browser/build SVG validation enforce strict XML declaration grammar and reject malformed declarations consistently
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
@@ -142,7 +143,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.9.56` passed the required suite plus exact-head Chromium follow-system theme checks at desktop/tablet/mobile. Local commit remains unpushed by policy.)*
+*(none — current local release `v0.9.57` passed the required suite plus exact-head Chromium rapid-toast checks at desktop/tablet/mobile. Local commit remains unpushed by policy.)*
 
 ---
 
@@ -157,7 +158,6 @@
 
 - [ ] Command palette (Cmd+K) — stretch, depends on the `window.IconStudio` API above.
 - [ ] Search relevance ranking + match highlighting (`js/features/filters.js` is currently plain substring match).
-- [ ] Toast stacking cap (`js/ui/toast.js` has no limit on concurrent toasts).
 - [ ] Bulk multi-select export (currently one icon at a time).
 - [ ] Minimal dependency-free accessibility-audit script (considered, deferred — see `ROADMAP.md`).
 
