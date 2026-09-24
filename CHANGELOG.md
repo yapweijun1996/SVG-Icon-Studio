@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.54 — 2026-09-25
+
+### Fixed
+
+- Made re-activating the already-selected Category a no-op. Previously, activating an active chip rebuilt the catalogue and reset `visibleLimit` to 24; after a user had loaded more ERP icons this unexpectedly collapsed the visible batch from 48/56 back to 24 and repeated the polite result announcement even though the selected category had not changed. Active-category reactivation now leaves pagination, DOM, focus and the result live region untouched.
+
+### Validation
+
+- Pre-fix Chrome 153 reproduced the defect with ERP: after manual pagination expanded the result set from 24 to 48 icons, re-activating the already-selected ERP chip collapsed it back to 24 and emitted one `Showing 24 of 56 icons — ERP category` live-region mutation. Post-fix exact-head Chrome 153 checks at 1440×900, 834×1112 and 390×844 preserved the expanded batch exactly (56/48/48 respectively), kept focus on ERP, recorded zero result-status mutations, reported no horizontal overflow, and captured no runtime/console/network errors. Focused DOM regression, full typecheck/test/build and diff validation also pass.
+
 ## 0.9.53 — 2026-09-25
 
 ### Fixed

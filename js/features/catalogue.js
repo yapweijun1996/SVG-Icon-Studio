@@ -144,7 +144,9 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
   refs.categoryChips.addEventListener('click', event => {
     const button = event.target.closest('[data-category]');
     if (!button) return;
-    state.category = button.dataset.category;
+    const nextCategory = button.dataset.category;
+    if (state.category === nextCategory) return;
+    state.category = nextCategory;
     state.visibleLimit = 24;
     render();
     const replacement = [...refs.categoryChips.querySelectorAll('[data-category]')]

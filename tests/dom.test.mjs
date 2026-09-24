@@ -136,6 +136,8 @@ assert.match(catalogueSource, /\['ArrowLeft', 'ArrowRight', 'Home', 'End'\]/, 'c
 assert.match(catalogueSource, /chips\.forEach\(\(chip, chipIndex\) => \{ chip\.tabIndex = chipIndex === nextIndex \? 0 : -1; \}\)/, 'category toolbar should maintain roving tabindex');
 assert.match(catalogueSource, /chips\[nextIndex\]\.focus\(\)/, 'category toolbar should move focus without requiring Tab through every category');
 assert.match(catalogueSource, /replacement\?\.focus\(\)/, 'category activation should restore focus to the re-rendered selected chip');
+const categoryActivationHandler = catalogueSource.match(/refs\.categoryChips\.addEventListener\('click', event => \{[\s\S]*?\n  \}\);/)?.[0] || '';
+assert.match(categoryActivationHandler, /const nextCategory = button\.dataset\.category;[\s\S]*?if \(state\.category === nextCategory\) return;[\s\S]*?state\.category = nextCategory;/, 're-activating the selected category should be a no-op before pagination state or live results are rebuilt');
 
 const capturePaginationFocusHelper = catalogueSource.match(/function capturePaginationFocus\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
 const restorePaginationFocusHelper = catalogueSource.match(/function restorePaginationFocus\(snapshot\) \{[\s\S]*?\n  \}/)?.[0] || '';
