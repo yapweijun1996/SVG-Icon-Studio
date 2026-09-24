@@ -58,6 +58,8 @@ assert.match(appSource, /button\.tabIndex = active \? 0 : -1/, 'density radios s
 assert.match(appSource, /\['ArrowRight', 'ArrowDown'\]\.includes\(event\.key\)/, 'density radios should support forward Arrow navigation');
 assert.match(appSource, /\['ArrowLeft', 'ArrowUp'\]\.includes\(event\.key\)/, 'density radios should support reverse Arrow navigation');
 assert.match(appSource, /activateDensity\(densityButtons\[nextIndex\], \{ focus: true \}\)/, 'density Arrow navigation should update selection and focus together');
+const activateDensityHandler = appSource.match(/function activateDensity\(button, \{ focus = false \} = \{\}\) \{[\s\S]*?\n  \}/)?.[0] || '';
+assert.match(activateDensityHandler, /catalogue\.render\(\{ announceResultStatus: false \}\)/, 'density-only rerenders should not repeat an unchanged catalogue live announcement');
 
 const setViewHandler = shellSource.match(/function setView\(view\) \{[\s\S]*?\n  \}/)?.[0] || '';
 assert.match(shellSource, /let lastNonCollectionSort = state\.sort/, 'shell should remember the non-Collections sort before applying the Collections default');

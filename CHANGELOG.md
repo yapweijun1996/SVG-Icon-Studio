@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.47 — 2026-09-24
+
+### Fixed
+
+- Stopped Grid/Compact density changes from repeating the catalogue's polite result announcement. Density changes only alter presentation, so they now re-render cards and keep the density radio state/focus behavior without rewriting the unchanged live-region message. Existing pending search announcements are left intact rather than being cancelled or announced early.
+
+### Validation
+
+- Pre-fix Chrome 153 reproduced one `resultsAnnouncement` mutation (`Showing 48 of 120 icons`) when switching Grid → Compact even though the result semantics were unchanged. Category and reset checks still produced one contextual announcement each while IntersectionObserver auto-pagination stayed silent after the initial semantic update. Post-fix, the focused DOM regression, npm run typecheck, full npm test (120 SVG / zero errors), npm run build, and git diff --check all pass. Production-preview Chrome 153 at 1440×900, 834×1112, and 390×844 recorded zero live-region mutations for Grid → Compact, exactly one contextual mutation for category/style/reset changes, zero runtime/console/network failures, and no horizontal overflow. A second Chrome check confirmed that switching density while a debounced order search is pending preserves that pending update and produces exactly one final search announcement.
+
 ## 0.9.46 — 2026-09-24
 
 ### Fixed

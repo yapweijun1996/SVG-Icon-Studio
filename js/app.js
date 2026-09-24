@@ -238,7 +238,9 @@ async function start() {
     state.density = button.dataset.density;
     setValue(STORAGE.density, state.density);
     syncDensityButtons();
-    catalogue.render();
+    // Density changes only alter presentation. Re-render the cards without
+    // repeating an unchanged catalogue result announcement.
+    catalogue.render({ announceResultStatus: false });
     if (focus) button.focus();
   }
 
