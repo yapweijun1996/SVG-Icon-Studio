@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.55 — 2026-09-25
+
+### Fixed
+
+- Made re-activating the already-current workspace navigation item a true catalogue-state no-op. Previously, clicking the active **Library** item silently cleared an active search/category and reset pagination even though no navigation occurred; the same path also rebuilt results and repeated the polite result announcement. Current-view activation now preserves search/filter/pagination state. On mobile it still closes the navigation drawer and restores focus to the menu trigger.
+
+### Validation
+
+- Pre-fix Chromium 152 reproduced the defect in Library with search `truck`: the active Library item changed `Showing 2 icons — search “truck”` to `Showing 24 of 120 icons`, cleared the search field, emitted one new result-status mutation, and left the same workspace view active. Post-fix validation covers unchanged search/result context, zero live-region mutations on same-view activation, preserved navigation focus on desktop/tablet, mobile drawer dismissal/focus restoration, and the full required typecheck/test/build/diff suite.
+
 ## 0.9.54 — 2026-09-25
 
 ### Fixed

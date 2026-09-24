@@ -73,6 +73,8 @@ assert.match(setViewHandler, /refs\.sortFilter\.value = state\.sort/, 'the visib
 const importCompletionHandler = appSource.match(/onImported: record => \{[\s\S]*?\n    \}/)?.[0] || '';
 assert.doesNotMatch(importCompletionHandler, /state\.view\s*=/, 'import completion should not pre-mutate view state before the shell can restore view-scoped sort state');
 assert.match(importCompletionHandler, /shell\.setView\('uploaded'\)/, 'import completion should route the Uploaded view transition through the shell controller');
+assert.match(shellSource, /if \(button\.dataset\.view === state\.view\) return closeSidebar\(\)/, 're-activating the current navigation item should preserve catalogue state while still closing a mobile drawer');
+assert.match(shellSource, /if \(button\.dataset\.view === state\.view\) return closeSidebar\(\)[\s\S]*?setView\(button\.dataset\.view\)/, 'only changed navigation destinations should invoke the resetting view transition');
 
 const resultsHeaderTag = html.match(/<section\b[^>]*class="results-header"[^>]*>/)?.[0] || '';
 const resultsSummaryTag = html.match(/<span\b[^>]*id="resultsSummary"[^>]*>/)?.[0] || '';
