@@ -49,6 +49,53 @@
 - [x] Generated-code SVG/JSX/CSS tabs use complete ARIA tab/tabpanel relationships and keyboard navigation with roving focus
 - [x] Catalogue Grid/Compact density controls expose synchronized `aria-pressed` selection state
 - [x] Catalogue search exposes a meaningful accessible name instead of announcing only the `/` keyboard shortcut hint
+- [x] Advanced-filter disclosure exposes `aria-controls` plus synchronized expanded state and Show/Hide accessible action labels, released as `v0.9.1`
+- [x] Drawer close/Escape restores focus only after a real open→closed transition, preventing stale drawer trigger focus theft, released as `v0.9.2`
+- [x] Catalogue Select/More inspector flows restore focus to the corresponding re-rendered card control on mobile/tablet, released as `v0.9.3`
+- [x] Catalogue result updates use one concise `status` live region instead of making both the results header and interactive icon grid live, released as `v0.9.4`
+- [x] Icon categories toolbar uses one roving Tab stop with Left/Right/Home/End keyboard navigation, released as `v0.9.5`
+- [x] Full-preview modal Escape dismisses only the topmost dialog before an underlying mobile/tablet inspector drawer, released as `v0.9.6`
+- [x] Replace the ineffective meta `frame-ancestors` claim with a static-host anti-framing fallback and document response-header hardening, released as `v0.9.7`
+- [x] Protect the service-worker offline app-shell cache from failed/unrelated navigation responses and invalidate the pre-fix cache, released as `v0.9.8`
+- [x] Keep stale-while-revalidate asset refreshes alive through their network fetch and cache write with `FetchEvent.waitUntil()`, released as `v0.9.9`
+- [x] Scope service-worker cache eviction to `icon-studio-*` names so activation preserves unrelated same-origin application caches, released as `v0.9.10`
+- [x] Bound service-worker runtime caching to canonical app-owned asset namespaces and query-free URLs so cache-busting/arbitrary same-origin requests cannot grow persistent CacheStorage, released as `v0.9.11`
+- [x] Cap runtime CacheStorage at 256 app-asset entries and evict oldest overflow without touching the offline shell/manifest, preventing obsolete hashed deployment assets from accumulating indefinitely, released as `v0.9.12`
+- [x] Keep the desktop inspector collapse/expand button accessible name and tooltip synchronized with its current action, released as `v0.9.13`
+- [x] Keep the theme icon button accessible action name and visible tooltip synchronized with the theme it will switch to, released as `v0.9.14`
+- [x] Keep the desktop sidebar brand toggle's accessible action name and tooltip synchronized across expanded/collapsed states, released as `v0.9.15`
+- [x] Keep favorite toggle accessible names stable while `aria-pressed` alone communicates saved/unsaved state, released as `v0.9.16`
+- [x] Keep the mobile navigation trigger accessible name synchronized with its current open/close action, released as `v0.9.17`
+- [x] Keep the mobile inspector trigger accessible name synchronized with its current open/close action, released as `v0.9.18`
+- [x] Remove the non-functional Inspector Pin control/dead persisted state and keep drawer focus entry on visible controls, released as `v0.9.19`
+- [x] Keep the drawer-only Close inspector control hidden on docked desktop so it does not duplicate the Collapse inspector action, released as `v0.9.20`
+- [x] Give the Inspector Size range an explicit native label so its browser accessibility name is non-empty, released as `v0.9.21`
+- [x] Keep Inspector Stroke/Fill colour accessible names stable while their native values and visible hex readouts change, released as `v0.9.22`
+- [x] Include the degree unit in the Inspector Rotation slider accessible name so Chrome’s native numeric range value is understandable, released as `v0.9.23`
+- [x] Associate the visible Fill icon helper text with its checkbox as an accessible description, released as `v0.9.24`
+- [x] Keep the Use currentColor checkbox name concise and expose its visible helper as a separate accessible description, released as `v0.9.25`
+- [x] Keep the Include title checkbox name concise and expose its visible helper as a separate accessible description, released as `v0.9.26`
+- [x] Expose Preview background as one mutually-exclusive radio group with roving Arrow-key focus, released as `v0.9.27`
+- [x] Give every catalogue Copy SVG action an icon-specific accessible name while retaining the compact visible label, released as `v0.9.28`
+- [x] Preserve keyboard focus on the re-rendered catalogue Favorite action after toggling, released as `v0.9.29`
+- [x] Preserve keyboard focus on re-rendered catalogue Select and More actions on desktop without disrupting mobile/tablet inspector focus transfer, released as `v0.9.30`
+- [x] Preserve keyboard focus when unfavoriting removes the focused card from Favorites view, moving to the nearest remaining Favorite action or the visible empty-state heading, released as `v0.9.31`
+- [x] Make empty-state recovery context-aware: reset filters when results are merely hidden, otherwise browse the full library and move focus to the visible results heading, released as `v0.9.32`
+- [x] Preserve keyboard focus when Clear search hides itself by returning focus to the search field, released as `v0.9.33`
+- [x] Preserve focus when final Load more activation hides the manual pagination control by moving to the first newly revealed icon action, released as `v0.9.34`
+- [x] Keep mobile/tablet drawer Tab traps limited to rendered controls with non-negative effective tabindex, released as `v0.9.35`
+- [x] Expose Catalogue Grid/Compact density as a single-choice radio group with one Tab stop and Arrow-key selection/focus, released as `v0.9.36`
+- [x] Move keyboard focus directly into the first Advanced Filter control when the disclosure opens, avoiding an unrelated density stop between trigger and disclosed content, released as `v0.9.37`
+- [x] Dismiss the Advanced Filters disclosure with Escape from any contained control, restore trigger focus, and keep outer drawer Escape handling isolated, released as `v0.9.38`
+- [x] Keep the zero-dependency `npm run serve` path aligned with Vite by serving `public/` assets from the app root with correct manifest/PNG MIME types, released as `v0.9.39`
+- [x] Keep the Collections view's category-grouped default sort scoped to Collections and restore the previous non-Collections sort when navigating away, released as `v0.9.40`
+- [x] Announce SPA workspace navigation by focusing the updated page heading and synchronizing the browser document title with the active view, released as `v0.9.41`
+- [x] Add active search/category/style/scoped-view context to the catalogue result status so screen-reader users hear what a dynamic result count refers to, released as `v0.9.42`
+- [x] Coalesce rapid search typing into one delayed result-status announcement while keeping visual filtering immediate, preventing partial queries from flooding the polite live region, released as `v0.9.43`
+- [x] Keep Chinese/Japanese IME composition visually responsive while suppressing partial-query live announcements until composition commits, released as `v0.9.44`
+- [x] Keep native search Escape/cancel clearing synchronized with the visible/live result status immediately while preserving the non-empty typing debounce, released as `v0.9.45`
+- [x] Keep IntersectionObserver auto-pagination silent in the polite result live region while preserving the visible count and refreshing any already-pending search announcement, released as `v0.9.46`
+- [x] Keep Grid/Compact density changes silent in the catalogue result live region because they alter presentation only, avoiding duplicate unchanged announcements, released as `v0.9.47`
 - [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
 - [x] Browser/build SVG validation enforce strict XML declaration grammar and reject malformed declarations consistently
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
@@ -86,7 +133,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.9.0` is fully verified; local commits remain unpushed by policy.)*
+*(none — current local release `v0.9.47` passed the required suite plus a production-preview Chrome 153 live-region harness at desktop/tablet/mobile viewports. Local commits remain unpushed by policy.)*
 
 ---
 

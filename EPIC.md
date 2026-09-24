@@ -84,6 +84,7 @@
 - `v0.7.32` — Matched XML comment grammar by rejecting internal `--` sequences while preserving valid empty, normal, and single-hyphen comments.
 - `v0.7.33` — Matched XML character-data parsing by rejecting literal `<` outside element markup while preserving `&lt;`, literal `>`, comments, and CDATA.
 - `v0.8.1` — Catalogue startup now remains functional when `IntersectionObserver` is unavailable; fallback previews and manual pagination remain usable.
+- `v0.9.1` — Advanced-filter disclosure now exposes its controlled panel and synchronized expanded/action-label semantics to assistive technology.
 
 - `v0.6.1` — Fixed the Inspector fill-colour picker being inert for all 9 `filled` icons (their colour was silently controlled by the *stroke* picker instead) — a pre-existing bug in `purchase-order`/`delivery-order`/`ai-spark` that Epic 3 made easier to notice.
 - `v0.7.0` — Unified catalogue-grid icon colour across styles (removed the `filled`→accent-orange override, ADR-011); added scroll-to-load auto-pagination (ADR-012).
@@ -91,8 +92,42 @@
 - `v0.7.2` — Added explicit accessible naming and description relationships to the full-preview native dialog, verified from Chrome's computed Accessibility Tree.
 - `v0.7.3` — Added keyboard focus entry, focus trapping and trigger restoration for the mobile navigation and inspector drawers, verified in real Chromium at mobile/tablet breakpoints.
 - `v0.7.4` — Made the non-active app regions inert while a mobile navigation or inspector drawer is open, restoring them on close or resize without changing desktop docked panels.
+- `v0.9.2` — Guarded drawer focus restoration so no-op close/Escape calls cannot steal focus to a trigger remembered from an earlier drawer session.
+- `v0.9.3` — Catalogue-triggered mobile inspector drawers restore focus to the re-rendered originating card control instead of the unrelated topbar inspector button.
+- `v0.9.4` — Catalogue filtering announces one concise result-count status instead of exposing both the results header and the entire interactive icon grid as polite live regions.
+- `v0.9.5` — Icon-category toolbar follows the ARIA composite keyboard model with one roving Tab stop plus Left/Right/Home/End focus movement.
 
-**Status:** Complete for the current scope through `v0.9.0`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
+- `v0.9.6` — Full-preview modal Escape handling now dismisses only the topmost dialog layer before the underlying mobile/tablet inspector drawer.
+- `v0.9.7` — Removed the non-functional `frame-ancestors` directive from meta CSP and added a static-host anti-framing guard, while documenting HTTP response headers as the preferred production control.
+- `v0.9.8` — Hardened service-worker navigation caching so failed, non-HTML, or unrelated navigations cannot overwrite the known-good offline app-shell fallback; bumped the cache generation to evict pre-fix entries.
+- `v0.9.9` — Made stale-while-revalidate asset refreshes lifetime-safe by extending each fetch event until the background network refresh and cache write finish.
+- `v0.9.10` — Scoped service-worker cache eviction to Icon Studio-owned cache names so activation cannot delete unrelated CacheStorage from other same-origin applications.
+- `v0.9.11` — Bounded service-worker runtime caching to canonical Icon Studio asset namespaces and query-free URLs so cache-busting/arbitrary same-origin requests cannot grow the persistent cache.
+- `v0.9.12` — Added a 256-entry cap for runtime app assets so obsolete hashed bundles from repeated deployments are evicted oldest-first without removing the offline shell or manifest.
+- `v0.9.13` — Kept the desktop inspector collapse/expand control's accessible name and tooltip synchronized with the action it will perform.
+- `v0.9.14` — Kept the theme icon button's accessible action name and visible tooltip synchronized with the theme it will switch to.
+- `v0.9.15` — Kept the desktop sidebar brand toggle's accessible action name and tooltip synchronized across expanded/collapsed states.
+- `v0.9.16` — Kept catalogue and inspector favorite toggle names stable while `aria-pressed` communicates the favorite state.
+- `v0.9.17` — Kept the mobile navigation trigger's accessible action name synchronized with its open/closed drawer state.
+- `v0.9.18` — Kept the mobile inspector trigger's accessible action name synchronized with its open/closed drawer state.
+- `v0.9.19` — Removed the non-functional Inspector Pin control/dead storage state and kept mobile/tablet drawer focus on visible controls.
+- `v0.9.20` — Hid the drawer-only Close inspector control on docked desktop so it no longer duplicates the Collapse inspector action.
+- `v0.9.21` — Restored the Inspector Size range's programmatic accessible name with an explicit native label association.
+- `v0.9.22` — Kept Inspector Stroke/Fill colour accessible names stable while their hex values change.
+- `v0.9.23` — Added degree-unit context to the Inspector Rotation slider's stable accessible name while preserving its native numeric range behavior.
+- `v0.9.24` — Associated the visible Fill icon helper copy with its checkbox as a separate accessible description while preserving its concise name and native checked state.
+- `v0.9.25` — Separated the Use currentColor checkbox visible label from its helper description while preserving native checked state and preview behavior.
+- `v0.9.26` — Separated the Include title checkbox visible label from its helper description while preserving native checked state and SVG title generation behavior.
+- `v0.9.27` — Converted Preview background from four independent toggle buttons to a single-choice radio group with one Tab stop and Arrow-key selection/focus.
+- `v0.9.28` — Scoped each catalogue Copy SVG action to its icon in the accessibility tree while preserving the compact visible button text and existing copy behavior.
+- `v0.9.29` — Preserved keyboard focus on the same catalogue Favorite action after its state-changing re-render, while retaining stable names and `aria-pressed` semantics.
+- `v0.9.30` — Preserved keyboard focus on re-rendering catalogue Select and More actions on desktop while keeping mobile/tablet inspector-drawer focus transfer intact.
+- `v0.9.31` — Preserved keyboard focus when an unfavorite action removes its focused Favorites-view card by moving to the nearest remaining Favorite action, or to the visible empty-state heading when the list becomes empty.
+- `v0.9.32` — Made empty-state recovery context-aware: filtered-empty views reset their filters, intrinsically empty scoped views return to the full library, and focus moves to the visible results heading.
+- `v0.9.33` — Kept Clear search keyboard activation focus-safe by returning focus to the search field after the focused action hides itself.
+- `v0.9.34` — Preserved focus after the final manual Load more batch hides its control by moving keyboard users into the first newly revealed card.
+
+**Status:** Complete for the current scope through `v0.9.34`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
 
 ---
 

@@ -2,8 +2,9 @@ import { $$ } from '../core/dom.js';
 import { STORAGE, getValue, setValue } from '../core/storage.js';
 
 export function createShellController({ state, refs, toast, onViewChange, onBrandPreview }) {
-  const focusableSelector = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  const focusableSelector = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]';
   let restoreFocusTarget = null;
+  let lastNonCollectionSort = state.sort;
 
   function activeDrawer() {
     if (refs.body.classList.contains('inspector-open')) return refs.inspector;
@@ -11,8 +12,16 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
     return null;
   }
 
+  function getDrawerTabbables(drawer) {
+    return [...(drawer?.querySelectorAll(focusableSelector) || [])].filter(element =>
+      element.getClientRects().length > 0 &&
+      getComputedStyle(element).visibility !== 'hidden' &&
+      element.tabIndex >= 0
+    );
+  }
+
   function focusDrawer(drawer) {
-    const firstFocusable = drawer?.querySelector(focusableSelector);
+    const firstFocusable = getDrawerTabbables(drawer)[0];
     if (firstFocusable) firstFocusable.focus();
   }
 
@@ -21,10 +30,22 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
     focusDrawer(drawer);
   }
 
+  function restoreDrawerFocus() {
+    const target = restoreFocusTarget;
+    restoreFocusTarget = null;
+    target?.focus();
+  }
+
   function updateBackdrop() {
     const active = refs.body.classList.contains('sidebar-open') || refs.body.classList.contains('inspector-open');
     refs.backdrop.hidden = !active;
     syncInertState();
+  }
+
+  function syncInspectorCollapsedState(collapsed) {
+    const actionLabel = collapsed ? 'Expand inspector' : 'Collapse inspector';
+    refs.collapseInspectorButton.setAttribute('aria-label', actionLabel);
+    refs.collapseInspectorButton.title = actionLabel;
   }
 
   function syncInertState() {
@@ -35,56 +56,73 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
     refs.sidebar.inert = inspectorDrawerOpen;
     refs.inspector.inert = sidebarDrawerOpen;
   }
+  function syncMobileMenuState(open) {
+    refs.mobileMenuButton.setAttribute('aria-expanded', String(open));
+    refs.mobileMenuButton.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+  }
+  function syncMobileInspectorState(open) {
+    refs.mobileInspectorButton.setAttribute('aria-expanded', String(open));
+    refs.mobileInspectorButton.setAttribute('aria-label', open ? 'Close icon inspector' : 'Open icon inspector');
+  }
   function openSidebar() {
     refs.body.classList.add('sidebar-open');
-    refs.mobileMenuButton.setAttribute('aria-expanded', 'true');
+    syncMobileMenuState(true);
     updateBackdrop();
     openDrawer(refs.sidebar, refs.mobileMenuButton);
   }
   function closeSidebar() {
+    const wasOpen = refs.body.classList.contains('sidebar-open');
     refs.body.classList.remove('sidebar-open');
-    refs.mobileMenuButton.setAttribute('aria-expanded', 'false');
+    syncMobileMenuState(false);
     updateBackdrop();
-    if (!refs.body.classList.contains('inspector-open')) restoreFocusTarget?.focus();
+    if (wasOpen && !refs.body.classList.contains('inspector-open')) restoreDrawerFocus();
   }
-  function openInspector() {
+  function openInspector(trigger = refs.mobileInspectorButton) {
     refs.body.classList.remove('inspector-collapsed');
+    syncInspectorCollapsedState(false);
     // inspector-open (and the dimming backdrop it triggers) is the mobile
     // slide-in drawer -- on desktop the inspector is already docked, so
     // adding it there just shows a backdrop with no panel motion behind it.
     // Mirrors the same viewport branch closeInspector() already uses.
     if (window.matchMedia('(max-width: 1180px)').matches) {
       refs.body.classList.remove('sidebar-open');
-      refs.mobileMenuButton.setAttribute('aria-expanded', 'false');
+      syncMobileMenuState(false);
       refs.body.classList.add('inspector-open');
-      refs.mobileInspectorButton.setAttribute('aria-expanded', 'true');
+      syncMobileInspectorState(true);
       updateBackdrop();
-      openDrawer(refs.inspector, refs.mobileInspectorButton);
+      openDrawer(refs.inspector, trigger || refs.mobileInspectorButton);
       return;
     }
     updateBackdrop();
   }
   function closeInspector() {
-    if (window.matchMedia('(max-width: 1180px)').matches) {
+    const drawerMode = window.matchMedia('(max-width: 1180px)').matches;
+    const wasOpen = drawerMode && refs.body.classList.contains('inspector-open');
+    if (drawerMode) {
       refs.body.classList.remove('inspector-open');
-      refs.mobileInspectorButton.setAttribute('aria-expanded', 'false');
+      syncMobileInspectorState(false);
     } else {
       refs.body.classList.add('inspector-collapsed');
+      syncInspectorCollapsedState(true);
       setValue(STORAGE.inspector, 'true');
     }
     updateBackdrop();
-    if (!refs.body.classList.contains('sidebar-open')) restoreFocusTarget?.focus();
+    if (wasOpen && !refs.body.classList.contains('sidebar-open')) restoreDrawerFocus();
   }
   function setView(view) {
+    const previousView = state.view;
+    if (view === 'collections') {
+      if (previousView !== 'collections') lastNonCollectionSort = state.sort;
+      state.sort = 'category';
+    } else if (previousView === 'collections') {
+      state.sort = lastNonCollectionSort;
+    }
     state.view = view;
     state.visibleLimit = 24;
     state.category = 'All';
     state.query = '';
     refs.searchInput.value = '';
-    if (view === 'collections') {
-      state.sort = 'category';
-      refs.sortFilter.value = 'category';
-    }
+    refs.sortFilter.value = state.sort;
     if (view === 'brand') onBrandPreview();
     $$('.nav-item').forEach(button => {
       const active = button.dataset.view === view;
@@ -93,14 +131,17 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
     });
     onViewChange();
     closeSidebar();
+    if (view !== previousView) refs.pageTitle.focus();
   }
 
   // Nav labels are display:none while collapsed, which would strip the buttons'
   // accessible names — aria-label keeps them; title gives sighted users a tooltip
   // when only the icon is visible.
   function syncCollapsedState(collapsed) {
+    const actionLabel = collapsed ? 'Expand sidebar' : 'Collapse sidebar';
     refs.brandToggle.setAttribute('aria-expanded', String(!collapsed));
-    refs.brandToggle.title = collapsed ? 'Expand sidebar' : 'Collapse sidebar';
+    refs.brandToggle.setAttribute('aria-label', actionLabel);
+    refs.brandToggle.title = actionLabel;
     $$('.nav-item').forEach(button => {
       const label = button.querySelector('span')?.textContent || '';
       if (!button.hasAttribute('aria-label')) button.setAttribute('aria-label', label);
@@ -110,13 +151,10 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
 
   const sidebarCollapsed = getValue(STORAGE.sidebar, 'false') === 'true';
   const inspectorCollapsed = getValue(STORAGE.inspector, 'false') === 'true';
-  const pinned = getValue(STORAGE.pinned, 'true') !== 'false';
   refs.body.classList.toggle('sidebar-collapsed', sidebarCollapsed);
   refs.body.classList.toggle('inspector-collapsed', inspectorCollapsed);
   syncCollapsedState(sidebarCollapsed);
-  refs.pinInspectorButton.setAttribute('aria-pressed', String(pinned));
-  refs.pinInspectorButton.classList.toggle('is-active', pinned);
-  refs.inspectorPinState.textContent = pinned ? 'Pinned' : 'Unpinned';
+  syncInspectorCollapsedState(inspectorCollapsed);
 
   refs.brandToggle.addEventListener('click', () => {
     if (window.matchMedia('(max-width: 820px)').matches) return closeSidebar();
@@ -129,16 +167,9 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
   refs.backdrop.addEventListener('click', () => { closeSidebar(); closeInspector(); });
   $$('.nav-item').forEach(button => button.addEventListener('click', () => setView(button.dataset.view)));
 
-  refs.pinInspectorButton.addEventListener('click', () => {
-    const next = refs.pinInspectorButton.getAttribute('aria-pressed') !== 'true';
-    refs.pinInspectorButton.setAttribute('aria-pressed', String(next));
-    refs.pinInspectorButton.classList.toggle('is-active', next);
-    refs.inspectorPinState.textContent = next ? 'Pinned' : 'Unpinned';
-    setValue(STORAGE.pinned, String(next));
-    toast(next ? 'Inspector pinned' : 'Inspector unpinned');
-  });
   refs.collapseInspectorButton.addEventListener('click', () => {
     const collapsed = refs.body.classList.toggle('inspector-collapsed');
+    syncInspectorCollapsedState(collapsed);
     setValue(STORAGE.inspector, String(collapsed));
   });
   refs.closeInspectorButton.addEventListener('click', closeInspector);
@@ -147,7 +178,7 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
   document.addEventListener('keydown', event => {
     const drawer = activeDrawer();
     if (drawer && event.key === 'Tab') {
-      const focusable = [...drawer.querySelectorAll(focusableSelector)];
+      const focusable = getDrawerTabbables(drawer);
       if (!focusable.length) {
         event.preventDefault();
       } else {
@@ -168,16 +199,19 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
       refs.searchInput.focus();
     }
     if (event.key === 'Escape') {
+      // The native modal dialog is the topmost interaction layer. Let its own
+      // Escape/cancel behavior close it first; an underlying mobile drawer must
+      // remain open until the user dismisses that layer separately.
+      if (refs.previewDialog.open) return;
       closeSidebar();
       if (window.matchMedia('(max-width: 1180px)').matches) closeInspector();
-      if (refs.previewDialog.open) refs.previewDialog.close();
     }
   });
   window.addEventListener('resize', () => {
     if (!window.matchMedia('(max-width: 820px)').matches) closeSidebar();
     if (!window.matchMedia('(max-width: 1180px)').matches) {
       refs.body.classList.remove('inspector-open');
-      refs.mobileInspectorButton.setAttribute('aria-expanded', 'false');
+      syncMobileInspectorState(false);
     }
     updateBackdrop();
   });

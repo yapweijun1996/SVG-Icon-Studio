@@ -5,7 +5,9 @@ export function createThemeController({ body, button }) {
   body.dataset.theme = getValue(STORAGE.theme, preferred);
   const themeColorMeta = document.querySelector('meta[name="theme-color"]');
   function sync() {
-    button.setAttribute('aria-label', `Switch to ${body.dataset.theme === 'dark' ? 'light' : 'dark'} theme`);
+    const actionLabel = `Switch to ${body.dataset.theme === 'dark' ? 'light' : 'dark'} theme`;
+    button.setAttribute('aria-label', actionLabel);
+    button.title = actionLabel;
     // Keeps the PWA title bar / iOS status area matching the active theme.
     if (themeColorMeta) themeColorMeta.content = body.dataset.theme === 'dark' ? '#151b24' : '#f45b0b';
   }

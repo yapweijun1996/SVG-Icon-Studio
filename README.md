@@ -5,7 +5,7 @@
 An SVG catalogue, customisation and export workspace built with static HTML, modular CSS and browser-native ES modules. The runtime itself still has zero third-party dependencies — [Vite](https://vitejs.dev) is only a dev-server/bundler wrapper on top, used for local development and the GitHub Pages build.
 
 - Project ID: `project_f2a74b23-33c1-4c5c-b43d-e2b5b3108428`
-- Release: `v0.9.0`
+- Release: `v0.9.40`
 - Entry: `index.html`
 - Live demo: https://yapweijun1996.github.io/SVG-Icon-Studio/ (built and deployed automatically from `main` by [.github/workflows/deploy.yml](.github/workflows/deploy.yml))
 - License: [MIT](LICENSE)
@@ -133,7 +133,8 @@ Uploaded SVGs are a separate browser-local library. Metadata and sanitized SVG a
 - No scripts, event handlers, `foreignObject`, external URLs, data URLs, animations, embedded media or cross-origin references.
 - Browser and build-time checks both resolve XML character references before external-reference policy checks, so encoded protocols cannot bypass CI validation.
 - One failed asset receives a local fallback and does not break the catalogue.
-- A Content-Security-Policy `<meta>` tag in `index.html` provides defence in depth behind the sanitizer above (see `SPEC.md` ADR-009).
+- A Content-Security-Policy `<meta>` tag in `index.html` provides defence in depth behind the sanitizer above (see `SPEC.md` ADR-009). `frame-ancestors` is deliberately excluded because browsers ignore that directive in meta-delivered CSP.
+- Static-host anti-framing fallback: an early same-origin module keeps the app shell hidden unless it confirms a top-level browsing context; framed documents attempt top navigation and remain hidden when that navigation is denied. Hosts that can set response headers SHOULD still send `Content-Security-Policy: frame-ancestors 'none'` (and may also send `X-Frame-Options: DENY` for legacy coverage).
 
 ## Development
 
@@ -142,7 +143,7 @@ npm install   # installs Vite only — the app's own runtime stays dependency-fr
 npm run dev   # Vite dev server with instant reload, http://localhost:5173
 ```
 
-`npm run serve` still starts the old zero-dependency static server (`tools/serve.mjs`, Node built-ins only) if you ever want to run the app with no `node_modules` at all — open `index.html` through it exactly as before.
+`npm run serve` starts the zero-dependency static server (`tools/serve.mjs`, Node built-ins only) if you want to run the app with no `node_modules` at all. It mirrors Vite's root-mounted `public/` assets, so the manifest, service worker and PWA icons are available at the same URLs as the production build.
 
 ## Build & deploy
 
@@ -152,6 +153,8 @@ npm run preview   # serve the dist/ build locally to sanity-check it
 ```
 
 `vite.config.js` uses `base: './'` (relative asset paths) so the same build works unmodified from a GitHub Pages project page, a custom domain, or a local folder. `data/icon-registry.json` and `icons/catalog/*.svg` are fetched at runtime by URL rather than imported, so a small Vite plugin in `vite.config.js` copies both folders into `dist/` verbatim during build.
+
+The production service worker caches only canonical app resources under `assets/`, `data/`, `icons/`, `icons-pwa/`, plus the manifest. Requests with query strings and unrelated same-origin paths stay network-managed instead of becoming persistent CacheStorage keys. Runtime assets are additionally capped at 256 insertion-ordered entries, so obsolete hashed bundles from repeated deployments cannot make CacheStorage grow forever; the fixed offline shell and manifest are excluded from that eviction set.
 
 Pushing to `main` runs [.github/workflows/deploy.yml](.github/workflows/deploy.yml): install → `npm test` → `npm run build` → publish `dist/` to GitHub Pages. To enable it on a fork, turn on **Settings → Pages → Source: GitHub Actions** once.
 

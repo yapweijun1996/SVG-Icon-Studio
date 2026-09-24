@@ -1,7 +1,7 @@
 # Icon Studio — Design System
 
 **Document:** `DESIGN.md`
-**Status:** Living document — reflects the design system as actually shipped in `v0.9.0`, not an aspirational brief.
+**Status:** Living document — reflects the design system as actually shipped in `v0.9.34`, not an aspirational brief.
 **Source of truth for tokens:** [`css/tokens.css`](css/tokens.css) (design-system.json is a synced machine-readable snapshot of the same values, not an independent source)
 **Relationship to `components.md`:** `components.md` is the original pre-implementation design brief written before any code existed. It is kept for historical reference only — where the two disagree, this document and the current codebase win. See the note at the top of `components.md`.
 
@@ -78,7 +78,7 @@ Three-column desktop shell (`.app-shell`, CSS grid: `sidebar-width | 1fr | inspe
 | Breakpoint | Behaviour |
 | --- | --- |
 | `≤1450px` | Icon grid column width narrows (`minmax(145px,1fr)`), content padding reduces |
-| `≤1180px` | Inspector becomes a fixed slide-in drawer (`transform: translateX(101%)` closed / `translateX(0)` open) with a dimming backdrop; sidebar narrows to `208px` |
+| `≤1180px` | Inspector becomes a fixed slide-in drawer (`transform: translateX(101%)` closed / `translateX(0)` open) with a dimming backdrop; its drawer-only Close control appears while the desktop Collapse control hides; sidebar narrows to `208px` |
 | `≤820px` | Sidebar becomes a fixed slide-in drawer too; topbar/toolbar padding shrinks; category chips become a single horizontally-scrollable row |
 | `≤560px` | Icon grid drops to 2 columns; brand card and hero subtitle hide; topbar action labels hide (icon-only) |
 | `prefers-reduced-motion: reduce` | All transitions/animations collapse to `.01ms` |
@@ -89,7 +89,7 @@ Three-column desktop shell (`.app-shell`, CSS grid: `sidebar-width | 1fr | inspe
 
 | Component | Where | Notes |
 | --- | --- | --- |
-| Collapsible sidebar | `.sidebar` | Nav items: Icon library, Collections, Favorites, Recently viewed, Uploaded icons, Brand kit. Collapse state and pin state persist to `localStorage`. |
+| Collapsible sidebar | `.sidebar` | Nav items: Icon library, Collections, Favorites, Recently viewed, Uploaded icons, Brand kit. Collapse state persists to `localStorage`. |
 | Sticky topbar | `.topbar` | Import SVG, live icon-count pill, theme toggle, mobile inspector trigger |
 | Search + filters | `.catalogue-toolbar` | Free-text search (`/` keyboard shortcut focuses it), style filter, sort filter, category chips (10, derived live from the registry — never hardcode a count, see ADR-011-adjacent history in `CHANGELOG.md` 0.4.0) |
 | Icon grid | `.icon-grid` | Responsive `auto-fill` grid; Grid/Compact density toggle; scroll-to-load pagination (24 per page) with a manual "Load more" fallback button |
@@ -138,10 +138,12 @@ Before drawing a new icon, check existing geometry for visual collision (documen
 - `aria-live="polite"` regions: results summary, toast region.
 - Catalogue search uses a visually-hidden text label for its accessible name; the visible `/` shortcut hint is `aria-hidden` so it is not mistaken for the label.
 - `aria-pressed`/`aria-expanded`/`aria-current` used correctly for toggle/disclosure/nav-active state.
+- Preview background is a single-choice `radiogroup`: one `radio` is checked/tabbable at a time, and Arrow Left/Right/Up/Down moves focus and selection with wraparound.
+- Toggle buttons that expose aria-pressed keep a stable accessible name across on/off states; the pressed state communicates the change. Action-changing labels are reserved for buttons that do not use aria-pressed.
 - Decorative catalogue previews: `aria-hidden="true"`. Exported/semantic icon output can instead carry `<title>` + `aria-labelledby` when "Include title" is on.
 - Full preview uses the native `<dialog>` element (built-in focus trap, `Escape` close) rather than a hand-rolled modal, with explicit `aria-labelledby` and `aria-describedby` relationships to its visible heading and guidance text.
 - Generated-code format switching follows the ARIA tabs pattern: labelled `tablist`, `tab` → `tabpanel` relationships, one tabbable active tab, and Arrow Left/Right plus Home/End keyboard navigation.
-- Catalogue Grid/Compact density buttons use `aria-pressed` so their mutually-exclusive selected state is available to assistive technology as well as visually.
+- Catalogue Grid/Compact density is a single-choice `radiogroup`: one `radio` is checked/tabbable at a time, and Arrow Left/Right/Up/Down moves focus and selection with wraparound.
 - At drawer breakpoints, mobile navigation and inspector drawers move focus inside when opened, keep keyboard Tab navigation inside the active drawer, and return focus to the opening trigger when closed.
 - While a drawer is active, non-active shell regions use native `inert` so background controls are removed from keyboard navigation and the accessibility tree; inspector takes precedence during a sidebar → inspector handoff.
 - `prefers-reduced-motion: reduce` is respected globally.

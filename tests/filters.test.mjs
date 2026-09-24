@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { getFilteredIcons } from '../js/features/filters.js';
+import { getFilteredIcons, hasIconsInView } from '../js/features/filters.js';
 
 function baseState(overrides = {}) {
   const icons = [
@@ -42,6 +42,14 @@ function baseState(overrides = {}) {
 {
   const result = getFilteredIcons(baseState({ view: 'uploaded' }));
   assert.deepEqual(result.map(icon => icon.id), ['warehouse']);
+}
+
+// Empty-view recovery distinguishes an intrinsically empty scoped view from filters that merely hide its items.
+{
+  assert.equal(hasIconsInView(baseState({ view: 'favorites' })), false);
+  assert.equal(hasIconsInView(baseState({ view: 'favorites', favorites: new Set(['invoice']), query: 'no-match' })), true);
+  assert.equal(hasIconsInView(baseState({ view: 'recent' })), false);
+  assert.equal(hasIconsInView(baseState({ view: 'uploaded' })), true);
 }
 
 // Text query matches aliases even when the name/category/style/tags don't.

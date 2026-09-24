@@ -34,17 +34,27 @@ export function createInspectorController({ state, refs, toast, onFavorite, onAp
     refs.selectedIconMeta.textContent = `${icon.category} · ${icon.style[0].toUpperCase()}${icon.style.slice(1)}`;
     const favorite = state.favorites.has(icon.id);
     refs.favoriteSelectedButton.setAttribute('aria-pressed', String(favorite));
-    refs.favoriteSelectedButton.setAttribute('aria-label', favorite ? `Remove ${icon.name} from favorites` : `Add ${icon.name} to favorites`);
+    refs.favoriteSelectedButton.setAttribute('aria-label', `Favorite ${icon.name}`);
     await renderPreview();
   }
 
+  const backgroundButtons = $$('[data-background]', refs.backgroundTabs);
+
   function updateBackgroundTabs() {
-    $$('[data-background]', refs.backgroundTabs).forEach(button => {
+    backgroundButtons.forEach(button => {
       const active = button.dataset.background === state.previewBackground;
       button.classList.toggle('is-active', active);
-      button.setAttribute('aria-pressed', String(active));
+      button.setAttribute('aria-checked', String(active));
+      button.tabIndex = active ? 0 : -1;
     });
     renderPreview();
+  }
+
+  function activateBackground(button, { focus = false } = {}) {
+    if (!button) return;
+    state.previewBackground = button.dataset.background;
+    updateBackgroundTabs();
+    if (focus) button.focus();
   }
 
   function syncControls() {
@@ -76,10 +86,17 @@ export function createInspectorController({ state, refs, toast, onFavorite, onAp
 
   refs.favoriteSelectedButton.addEventListener('click', () => onFavorite(state.selectedId));
   refs.backgroundTabs.addEventListener('click', event => {
-    const button = event.target.closest('[data-background]');
-    if (!button) return;
-    state.previewBackground = button.dataset.background;
-    updateBackgroundTabs();
+    activateBackground(event.target.closest('[data-background]'));
+  });
+  backgroundButtons.forEach((button, index) => {
+    button.addEventListener('keydown', event => {
+      let nextIndex = null;
+      if (['ArrowRight', 'ArrowDown'].includes(event.key)) nextIndex = (index + 1) % backgroundButtons.length;
+      if (['ArrowLeft', 'ArrowUp'].includes(event.key)) nextIndex = (index - 1 + backgroundButtons.length) % backgroundButtons.length;
+      if (nextIndex === null) return;
+      event.preventDefault();
+      activateBackground(backgroundButtons[nextIndex], { focus: true });
+    });
   });
 
   refs.sizeRange.addEventListener('input', event => {

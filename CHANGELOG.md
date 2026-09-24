@@ -1,5 +1,478 @@
 # Changelog
 
+## 0.9.47 — 2026-09-24
+
+### Fixed
+
+- Stopped Grid/Compact density changes from repeating the catalogue's polite result announcement. Density changes only alter presentation, so they now re-render cards and keep the density radio state/focus behavior without rewriting the unchanged live-region message. Existing pending search announcements are left intact rather than being cancelled or announced early.
+
+### Validation
+
+- Pre-fix Chrome 153 reproduced one `resultsAnnouncement` mutation (`Showing 48 of 120 icons`) when switching Grid → Compact even though the result semantics were unchanged. Category and reset checks still produced one contextual announcement each while IntersectionObserver auto-pagination stayed silent after the initial semantic update. Post-fix, the focused DOM regression, npm run typecheck, full npm test (120 SVG / zero errors), npm run build, and git diff --check all pass. Production-preview Chrome 153 at 1440×900, 834×1112, and 390×844 recorded zero live-region mutations for Grid → Compact, exactly one contextual mutation for category/style/reset changes, zero runtime/console/network failures, and no horizontal overflow. A second Chrome check confirmed that switching density while a debounced order search is pending preserves that pending update and produces exactly one final search announcement.
+
+## 0.9.46 — 2026-09-24
+
+### Fixed
+
+- Reduced catalogue screen-reader noise from scroll-to-load pagination. The visible `resultsSummary` now stays current on every render, while a separate visually hidden polite status region handles advisory announcements. Manual **Load more icons** still announces its updated count, but `IntersectionObserver`-driven automatic loads no longer create new live announcements. If auto-pagination happens while a debounced search announcement is already pending, it refreshes that pending message to the latest visible count instead of scheduling an additional announcement or leaving stale count text.
+
+### Validation
+
+- The previous hourly Chrome check had already observed automatic pagination changing the live status from `Showing 24 of 120 icons` to `Showing 48 of 120 icons`; read-only exact-head review confirmed the observer calls the same `loadMore()` path that rewrites the status on every automatic page. Focused status-updater and DOM/source regressions, `npm run typecheck`, full `npm test` (120 SVG / zero errors), `npm run build`, and `git diff --check` pass. A Chrome 153 browser harness at 1440×900, 834×1112, and 390×844 verified that an automatic visible-count change creates no new status update when nothing is pending, while auto-pagination during a deferred search refreshes that one pending message to the latest visible count. Full-app browser inspection was attempted twice but the inspection connector returned `We couldn’t connect your account`; no product/runtime failure was observed from that infrastructure error.
+
+## 0.9.45 — 2026-09-23
+
+### Fixed
+
+- Made native search clearing immediately synchronize the catalogue result status. Chrome’s `type="search"` Escape/cancel behavior already cleared the input and re-rendered the grid while preserving focus, but the result status still showed the previous query for the 300 ms typing debounce. Empty-query input/composition commits now bypass that debounce, while non-empty rapid typing and IME partial text keep the existing coalesced/suppressed announcement behavior.
+
+### Validation
+
+- Pre-fix Chrome 153 reproduced the mismatch at both 1440×900 and 390×844: 60 ms after Escape the search value was empty and the unfiltered grid was visible, but the status still said `Showing 2 icons — search “truck”`; it corrected only after the debounce window. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact-head Chrome verification cover immediate clear-to-empty status synchronization, retained search focus, preserved non-empty typing debounce, responsive layouts, and runtime/network health.
+
+## 0.9.44 — 2026-09-23
+
+### Fixed
+
+- Made catalogue search announcements safe for Chinese/Japanese IME composition. Visual filtering still follows each composition input immediately, but the polite result status is now suppressed and any pending debounce is cancelled while composition is active, so a long candidate-selection pause cannot announce unfinished text. `compositionend` commits the input's final value and resumes one deferred announcement, with `InputEvent.isComposing` used as an additional guard for browser event-order differences.
+
+### Validation
+
+- Pre-fix real Chrome 153 reproduced a composed `input` event with `isComposing=true` updating the live region after the 300 ms debounce to `Showing 24 of 120 icons — search “t”` before composition ended. Focused status-updater and DOM regressions, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact-head Chrome verification cover immediate visual filtering during composition, zero partial-query status mutations even after the debounce window, one final committed-query announcement, responsive layouts, and runtime/network health.
+
+## 0.9.43 — 2026-09-23
+
+### Fixed
+
+- Reduced screen-reader noise during live catalogue search. The visual grid still filters immediately on every input event, but the dedicated polite result-status region now waits 300 ms for typing to pause and coalesces rapid intermediate queries into the latest summary. Any non-search render cancels a pending search announcement and updates the status immediately, preventing stale delayed text from overwriting a newer category, style, view, pagination, or reset result.
+
+### Validation
+
+- Pre-fix Chrome 153 reproduced five live-region mutations within 255 ms while entering `truck` (`t` → `tr` → `tru` → `truc` → `truck`). Focused status-updater regression, DOM contract checks, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact-head Chrome verification cover immediate visual filtering, one final delayed live-region mutation for rapid input, stale-timer cancellation by immediate renders, responsive layouts, and runtime/network health.
+
+## 0.9.42 — 2026-09-23
+
+### Fixed
+
+- Improved the catalogue's dedicated polite result-status announcement. Dynamic searches and filters previously announced only counts such as `Showing 2 icons` or `Showing 0 icons`, even when the visible result heading/filter controls carried the query or filter context elsewhere. The status now stays concise for the default library (`Showing 24 of 120 icons`) and adds only relevant active context for search text, category, style, and result-scoping Favorites/Recent/Uploaded views. The interactive grid remains outside any live region, avoiding noisy card-by-card announcements.
+
+### Validation
+
+- Pre-fix Chrome 153 reproduced `search=truck` as `Showing 2 icons`, `search=truck + ERP` as `Showing 0 icons`, and Outline + search `order` as `Showing 3 icons`, none of which identified the active criteria in the status text. Focused result-summary tests, DOM integration regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact-head responsive Chrome verification cover contextual query/category/style/scoped-view messages, zero-result context, concise default pagination, the single polite atomic status region, runtime/network health, and horizontal overflow.
+
+## 0.9.41 — 2026-09-23
+
+### Fixed
+
+- Improved SPA workspace navigation for screen-reader and keyboard users. Library/Favorites/Recent/Uploaded/Collections/Brand changes already replaced the visible `<h1>`, but the new heading was not focused or announced, the result live region only announced icon counts, and the browser document title remained the generic app title. Changed workspace views now move programmatic focus to the updated page heading after any mobile navigation drawer closes, and the document title is synchronized to the active workspace view. The heading is focusable only programmatically (`tabindex="-1"`), so it does not add a normal Tab stop.
+
+### Validation
+
+- Pre-fix Chrome 153 reproduced Favorites navigation with the visible/AX heading updated to `Favorite icons` while focus fell to `body`, the only polite status exposed just the icon count, and `document.title` remained `Icon Studio — SVG Icon Collection`. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact-head Chrome verification cover heading focus after changed desktop/mobile workspace navigation, unchanged focus when re-activating the already-current view, synchronized document titles, current-page semantics, responsive layouts, and zero runtime/console errors.
+
+## 0.9.40 — 2026-09-23
+
+### Fixed
+
+- Fixed view-sort state leaking out of **Collections**. Entering Collections intentionally switches the catalogue to category grouping, but that automatic default previously remained active after navigating back to Library or another workspace view. The shell now snapshots the current non-Collections sort before entering Collections, applies the category default only inside that view, restores the previous sort when leaving, and keeps the visible Sort control synchronized.
+
+### Validation
+
+- Pre-fix Chrome 153 at 1440×900 reproduced `featured → category → category` across Library → Collections → Library, with the first Library cards changing from Invoice/Customer/Delivery Truck to alphabetical category-grouped results. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact-head Chrome verification cover restoring both the default Featured sort and a user-selected Name A–Z sort after leaving Collections, synchronized Sort UI, stable navigation focus, responsive viewports, and zero runtime/console errors.
+
+## 0.9.39 — 2026-09-23
+
+### Fixed
+
+- Fixed the zero-dependency `npm run serve` path so it serves Vite-style `public/` assets from the application root. Before the fix, the app shell and catalogue assets returned 200, but `/manifest.webmanifest`, `/sw.js`, and `/icons-pwa/*` returned 404 even though those are the canonical URLs used by `index.html` and the production build. The server now falls back from repository-root files to `public/` while preserving root asset behavior, and returns `application/manifest+json` for web manifests plus `image/png` for PWA icons.
+- Added an integration regression using an ephemeral loopback port so root assets, catalogue assets, manifest, service worker, PWA icons, MIME types, and unknown-path 404 behavior are exercised without external dependencies.
+
+### Validation
+
+- Focused zero-dependency server regression, `npm run typecheck`, full `npm test`, `npm run build`, and `git diff --check` all passed. Direct `node tools/serve.mjs` verification returned HTTP 200 for the app shell, manifest, service worker, PWA PNG, and catalogue SVG with the expected MIME types. Fresh headless Chrome 153 at 1440×900 rendered 24 initial cards with `Showing 24 of 120`, fetched `/manifest.webmanifest`, `/sw.js`, and `/icons-pwa/icon-192.png` as HTTP 200 with the expected content types, and reported zero runtime, console, HTTP, or network failures through the DevTools Protocol.
+
+## 0.9.38 — 2026-09-23
+
+### Fixed
+
+- Fixed **Advanced Filters** keyboard dismissal. Pre-fix Chrome 153 evidence after keyboard-style opening showed `advancedFilter.hidden=false`, `filterButton[aria-expanded]=true`, and focus on `styleFilter`; pressing Escape left all three unchanged and allowed the outer shell Escape handler to run. Escape from any focused control inside the disclosure now collapses it, synchronizes the trigger's visibility state, accessible action label and active class, restores focus to `#filterButton`, and stops propagation so an unrelated mobile/tablet drawer is not dismissed.
+
+### Validation
+
+- Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, and `git diff --check` all passed. Fresh Chrome 153 against the production preview passed at 1440×900, 834×1112, and 390×844: Escape from Style, Sort, and Clear filters collapsed the disclosure, restored `#filterButton`, synchronized `aria-expanded=false`/“Show advanced filters”/inactive state, did not reach a document-level Escape probe, produced zero runtime/console errors, and caused no horizontal overflow. A real pointer click still opened the disclosure while keeping focus on the trigger.
+
+## 0.9.37 — 2026-09-22
+
+### Fixed
+
+- Improved the **Advanced filters** disclosure keyboard flow. The filter trigger sits before the density selector while the disclosed Style/Sort controls render on the following row, so keyboard activation previously left focus on the trigger and the next Tab stopped on the unrelated density radio group before reaching the filters just opened. Keyboard-origin activation now moves focus directly to the first disclosed Style control, while pointer activation keeps normal button focus behavior.
+
+### Validation
+
+- Pre-fix Chrome 153 confirmed the disclosure trigger retained focus and the next Tab stop was the Grid/Compact density control rather than Style. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact-head Chrome verification cover keyboard-origin focus transfer, pointer behavior, synchronized disclosure state, responsive layouts, and zero runtime exceptions.
+
+## 0.9.36 — 2026-09-22
+
+### Fixed
+
+- Reworked the mutually-exclusive **Grid / Compact** catalogue density selector as a true radio group. Real Chrome previously exposed two independently tabbable toggle buttons (`role=button`, `aria-pressed`) even though only one density can be active, and Arrow keys did not move or select within the group. The selector now exposes a labelled `radiogroup` with `radio` children, synchronized `aria-checked`, one roving Tab stop, and Arrow Left/Right/Up/Down selection with wraparound while preserving click/tap behavior, persisted density, and catalogue rendering.
+
+### Validation
+
+- Pre-fix Chrome 153 at 1440×900 exposed `Catalogue density` as `role=group`, Grid/Compact as two `button` controls with `tabIndex=0`, and ArrowRight left both focus and density unchanged. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact committed-head Chrome verification cover radio semantics, one roving Tab stop, Arrow-key selection/focus, persisted density, unchanged click behavior, and zero runtime exceptions.
+
+## 0.9.35 — 2026-09-22
+
+### Fixed
+
+- Kept mobile/tablet Inspector and sidebar drawer Tab traps inside their actual rendered tabbable controls. Hidden controls and inactive roving controls with effective `tabindex=-1` are now excluded from both drawer focus entry and first/last wrap boundaries.
+
+### Validation
+
+- Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and real Chrome/CDP verification at 390×844, 834×1112, and 1440×900 cover Inspector Shift+Tab/Tab wrapping, sidebar containment, desktop docking, and zero runtime exceptions.
+
+## 0.9.34 — 2026-09-22
+
+### Fixed
+
+- Preserved keyboard focus when the manual **Load more icons** fallback reaches the final catalogue page and hides itself. Real Chrome with `IntersectionObserver` unavailable previously kept focus on the button through 24 → 48 → 72 → 96 visible icons, then moved focus to `body` when the final 120-icon render hid the focused control. The handler now remembers whether the button owned focus before loading; when that final render hides it, focus moves to the first newly revealed icon's Select action. Intermediate manual loads keep focus on the Load more button, and IntersectionObserver-driven auto-loading remains unchanged because it never triggers the focus-restoration branch.
+
+### Validation
+
+- Pre-fix real Chrome at 1440×900 reproduced the manual-fallback focus loss with 120 icons and zero runtime exceptions. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact committed-head Chrome verification cover 24-item pagination increments, retained focus on intermediate loads, final focus transfer to the first newly revealed Select action, hidden terminal control, and unchanged auto-load behavior.
+
+## 0.9.33 — 2026-09-22
+
+### Fixed
+
+- Preserved keyboard focus when the catalogue **Clear search** action hides itself. Real Chrome previously moved focus to `body` after Space activation reset the filters and hid the focused button. The action now detects when it owns focus, performs the existing reset, then moves focus to the persistent search field so keyboard users stay in the search workflow.
+
+### Validation
+
+- Pre-fix real Chrome at 1440×900 reproduced `clearSearchButton → body` after Space while the query cleared and the full 120-icon catalogue returned. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix Chrome verification cover query reset, hidden-button state, focus transfer to `searchInput`, and zero runtime exceptions.
+
+## 0.9.32 — 2026-09-22
+
+### Fixed
+
+- Made the catalogue empty-state primary action actually recover from the state it describes. Real Chrome showed that `Reset catalogue` worked when search/filter criteria hid Library results, but did nothing useful in an intrinsically empty **Favorites**, **Recently viewed**, or **Uploaded** view because it cleared filters without leaving that scoped view. The empty state now says `Reset filters` when the current view contains items that filters are hiding, and `Browse all icons` when the scoped view itself has no items. The latter resets filters and returns to Library. After either recovery, focus moves to the visible results heading instead of falling back to `body` when the empty-state button disappears.
+
+### Validation
+
+- Pre-fix real Chrome at 1440×900 confirmed the filtered-Library reset path restored all 120 icons, while empty Favorites remained empty after `Reset catalogue`; a focused reset also dropped focus to `body`. Focused filter/DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact committed-head Chrome verification cover filtered-empty recovery staying in its view, intrinsically empty scoped recovery returning to Library, visible action labels, results-heading focus, 120 icons, and zero runtime exceptions.
+
+## 0.9.31 — 2026-09-22
+
+### Fixed
+
+- Preserved keyboard focus when unfavoriting removes the focused card from the **Favorites** view. Real Chrome previously removed the card correctly but left focus on `body`. The catalogue now first restores the same icon's Favorite control when it still exists; if the card disappeared because it was filtered out of Favorites, focus moves to the nearest remaining Favorite action at the same list position (or the previous item when the removed card was last). If the final favorite is removed, focus moves to the now-visible `No icons found` heading, which is programmatically focusable but remains outside the normal Tab order.
+
+### Validation
+
+- Pre-fix real Chrome at 1440×900 reproduced a focused Favorite action removing its card from a two-item Favorites view and dropping focus to `body`. Focused DOM/source regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact committed-head Chrome verification cover nearest-item fallback, final-item empty-state focus, unchanged normal-library Favorite focus restoration, 120 loaded icons, and zero runtime exceptions.
+
+## 0.9.30 — 2026-09-22
+
+### Fixed
+
+- Preserved keyboard focus when catalogue **Select** and **More export options** actions rebuild the card grid on docked desktop. Real Chrome previously executed both actions correctly but removed the focused button during the catalogue re-render, leaving focus on `body`. A focused action now falls back to the equivalent newly rendered card control only when the rebuild actually loses focus. Mobile/tablet behavior is intentionally unchanged: opening the inspector drawer still moves focus to its first visible control and closing it restores focus to the replacement card trigger.
+
+### Validation
+
+- Pre-fix real Chrome at 1440×900 reproduced `Select Customer icon` and `More export options for Delivery Truck` both moving focus to `body` after successful keyboard activation, while 390×844 correctly transferred Select focus into the inspector drawer. Focused DOM/source regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact committed-head Chrome verification cover desktop Select/More focus retention, unchanged mobile drawer focus transfer/restore, 120 loaded icons, and zero runtime exceptions.
+
+## 0.9.29 — 2026-09-22
+
+### Fixed
+
+- Preserved keyboard focus when toggling a catalogue **Favorite** button. Favorite changes rebuild the catalogue so counts, card state and Favorites view stay synchronized; previously that rebuild removed the focused button and real Chrome moved focus to `body`. The delegated handler now detects when the activated Favorite action owns focus and restores focus to the same icon's newly rendered Favorite button after the state update. Stable icon-specific names and native `aria-pressed` state remain unchanged.
+
+### Validation
+
+- Pre-fix real Chrome focused `Favorite Invoice`, activated it with Space, confirmed `aria-pressed=false→true`, and observed focus fall back to `body`. Focused DOM/source regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact committed-head real Chrome verification cover focus retention across both favorite/unfavorite transitions, unchanged accessible name/state, and zero runtime exceptions.
+
+## 0.9.28 — 2026-09-22
+
+### Fixed
+
+- Scoped every catalogue **Copy SVG** button to its card icon in the accessibility tree. The visible label remains the intentionally compact `Copy SVG`, but each control now exposes an icon-specific accessible name such as `Copy Invoice SVG` or `Copy Customer SVG`, avoiding a long sequence of indistinguishable `Copy SVG` controls for screen-reader users. The delegated copy handler and generated SVG are unchanged.
+
+### Validation
+
+- Pre-fix real Chrome reproduced three consecutive catalogue copy controls named only `Copy SVG` for Invoice, Customer and Delivery Truck. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact committed-head real Chrome verification cover icon-specific names while retaining the visible `Copy SVG` text and existing delegated copy action.
+
+## 0.9.27 — 2026-09-22
+
+### Fixed
+
+- Reworked the Inspector **Preview background** selector as a true single-choice radio group instead of four independently tabbable toggle buttons. The container now exposes `role=radiogroup`; each Light/Dark/Brand/Transparent choice exposes `role=radio` with synchronized `aria-checked`, and only the selected choice remains in the Tab sequence. Arrow Left/Right/Up/Down moves selection and focus with wraparound while click/tap behavior and preview rendering stay unchanged.
+
+### Validation
+
+- Pre-fix inspection confirmed all four background choices were independent Tab stops (`tabIndex=0`) and Arrow keys did not switch the selected preview background. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and real Chrome committed-head interaction verify radio semantics, one roving Tab stop, Arrow-key state/preview updates, click behavior, and zero runtime exceptions.
+
+## 0.9.26 — 2026-09-22
+
+### Fixed
+
+- Kept the Inspector **Include title** checkbox accessible name concise while exposing its visible helper separately. Real Chrome previously announced the whole nested label as `Include title Adds an accessible SVG title.` with an empty description. The checkbox now uses `aria-labelledby=includeTitleLabel` and `aria-describedby=includeTitleDescription`, producing name `Include title` and description `Adds an accessible SVG title.` while preserving native checked state and SVG title generation/removal behavior.
+
+### Validation
+
+- Pre-fix real Chrome at 1440×900 confirmed the helper text was merged into the checkbox name and the description was empty, while toggling still correctly removed/restored the preview SVG `<title>`. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix Chrome Accessibility Tree verification cover the concise name, separate description, checked-state transitions, and unchanged SVG title behavior.
+
+## 0.9.25 — 2026-09-22
+
+### Fixed
+
+- Kept the Inspector **Use currentColor** checkbox accessible name concise while exposing its visible helper copy separately. Real Chrome previously announced the whole nested label as `Use currentColor Icon inherits colour from CSS.` with an empty accessible description. The checkbox now uses `aria-labelledby=currentColorLabel` and `aria-describedby=currentColorDescription`, so its name is `Use currentColor`, its description is `Icon inherits colour from CSS.`, and native checked-state behavior remains unchanged.
+
+### Validation
+
+- Pre-fix real Chrome at 1440×900 confirmed the helper text was merged into the checkbox name and the description was empty. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix Chrome Accessibility Tree verification cover the concise name, separate description, checked-state transition, and unchanged preview behavior.
+
+## 0.9.24 — 2026-09-14
+
+### Fixed
+
+- Exposed the Inspector **Fill icon** helper text to assistive technology without bloating the control name. Real Chrome showed the checkbox as `name=Fill icon`, `checked=false`, but with an empty accessible description even though the visible UI says `Apply a solid fill colour.`. The checkbox now references that same visible helper with `aria-describedby=fillToggleDescription`, keeping the concise name and native checked state unchanged.
+
+### Validation
+
+- Pre-fix real Chrome at 1440×900 confirmed the visible helper text was absent from the checkbox accessibility description while Stroke width and checkbox states otherwise behaved correctly. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix Chrome Accessibility Tree verification cover `name=Fill icon`, `description=Apply a solid fill colour.`, native checked-state transitions, and unchanged preview behavior.
+
+## 0.9.23 — 2026-09-12
+
+### Fixed
+
+- Made the Inspector **Rotation** slider's native numeric value understandable with its unit in assistive technology. Real Chrome exposed the control as `Rotation`, value/value-text `0` / `45`, while the visible output showed `0°` / `45°`. Chrome did not reflect an authored `aria-valuetext` on this native range control, so the robust fix is a stable accessible name of `Rotation (degrees)` while preserving the browser-native numeric slider value and visible compact degree output.
+
+### Validation
+
+- Pre-fix real Chrome at 1440×900 confirmed `name=Rotation`, numeric `value=0→45`, and accessible `valuetext=0→45` with no unit. A diagnostic Chrome run also confirmed authored `aria-valuetext` did not change that native AX value text, while `Rotation (degrees)` was reflected reliably as the control name. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix Chrome Accessibility Tree verification cover the unit context without changing slider/preview behavior.
+
+## 0.9.22 — 2026-09-12
+
+### Fixed
+
+- Stabilized the Inspector **Stroke colour** and **Fill colour** accessible names. The nested label previously included each live hex-code readout, so real Chrome changed the control names from `Stroke colour #1F2937` / `Fill colour #F45B0B` as values changed. Each native colour input now uses `aria-labelledby` to reference only its visible text label, while the native colour value and visible hex readout remain separate and continue updating normally.
+
+### Validation
+
+- Pre-fix real Chrome at 1440×900 exposed `ColorWell` names that changed with their hex values. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix Chrome Accessibility Tree verification cover stable names while colour values and preview/readouts continue updating.
+
+## 0.9.21 — 2026-09-12
+
+### Fixed
+
+- Restored a programmatic accessible name for the Inspector **Size** slider. The previous nested-label/output structure rendered the visible `Size` text but real Chrome exposed the range control as an unnamed `slider`; the control now uses an explicit native `<label for="sizeRange">Size</label>` association while preserving the existing live `48 px` output and range behavior.
+
+### Validation
+
+- Pre-fix real Chrome at 1440×900 exposed `sizeRange` as `role=slider`, `name=""`, `value=48`. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix Chrome Accessibility Tree verification cover the explicit `Size` name while preserving native slider value updates.
+
+## 0.9.20 — 2026-09-12
+
+### Fixed
+
+- Removed a redundant desktop Inspector action by making the `Close inspector` button drawer-only. At desktop widths the docked Inspector now exposes only its existing Collapse/Expand control; at `≤1180px`, the desktop collapse control stays hidden and the drawer-specific Close control is visible.
+
+### Validation
+
+- Pre-fix real Chrome at 1440×900 confirmed both `Collapse inspector` and `Close inspector` were simultaneously visible and both placed the docked Inspector into the same `inspector-collapsed` state. Focused responsive-control regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix Chrome verification cover the breakpoint-specific control contract.
+
+## 0.9.19 — 2026-09-12
+
+### Fixed
+
+- Removed the Inspector “Pin” control and its persisted `iconStudioInspectorPinned` state because the control never affected Inspector docking, opening, collapsing, or any other product behavior; it only changed its own pressed state, status text, storage value, and toast.
+- Drawer focus entry now skips hidden controls, so after removing the no-op Pin button the mobile/tablet Inspector focuses the first actually visible control instead of the desktop-only collapse button.
+
+### Validation
+
+- Focused dead-control regression, `npm run typecheck`, full `npm test`, `npm run build`, and `git diff --check` pass. Real Chrome verifies the dead Pin UI/state are absent, desktop collapse still works, mobile Inspector focus lands on the visible Close inspector button, and Horizontal/Vertical flip toggles retain their existing `aria-pressed` behavior and preview transform.
+
+## 0.9.18 — 2026-09-12
+
+### Fixed
+
+- The mobile/tablet inspector icon button now keeps its accessible action name synchronized with the drawer state: “Open icon inspector” while closed and “Close icon inspector” while open. Previously `aria-expanded` changed to `true` but the button continued to announce the contradictory “Open icon inspector” action.
+
+### Validation
+
+- Pre-fix Google Chrome at 390×844 reproduced `aria-label="Open icon inspector"`, `aria-expanded=false` before activation and the stale `aria-label="Open icon inspector"`, `aria-expanded=true` after the drawer opened. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix real Chrome mobile verification cover the synchronized action/state contract.
+
+## 0.9.17 — 2026-09-12
+
+### Fixed
+
+- The mobile navigation icon button now keeps its accessible action name synchronized with the drawer state: “Open navigation” while closed and “Close navigation” while open. Previously `aria-expanded` changed to `true` but the button continued to announce the contradictory “Open navigation” action.
+
+### Validation
+
+- Pre-fix Google Chrome at 390×844 reproduced `aria-label="Open navigation"`, `aria-expanded=false` before activation and the stale `aria-label="Open navigation"`, `aria-expanded=true` after the drawer opened. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix real Chrome mobile verification cover the synchronized action/state contract.
+
+## 0.9.16 — 2026-09-12
+
+### Fixed
+
+- Catalogue-card and selected-icon favorite controls now keep a stable accessible name (for example, “Favorite Invoice”) while `aria-pressed` alone communicates whether the icon is currently saved. Previously the same toggle changed its name from “Add Invoice to favorites” to “Remove Invoice from favorites” while also changing `aria-pressed`, which breaks the WAI-ARIA toggle-button convention that a pressed toggle keeps the same label across states.
+
+### Validation
+
+- Pre-fix Google Chrome 153 at 1440×900 exposed both favorite controls as `name="Add Invoice to favorites"`, `pressed=false`, then changed both to `name="Remove Invoice from favorites"`, `pressed=true` after activation. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix Chrome Accessibility Tree verification cover the stable-name/pressed-state contract.
+
+## 0.9.15 — 2026-09-12
+
+### Fixed
+
+- The desktop sidebar brand toggle now keeps its accessible action name and visible tooltip synchronized with the action it will perform: “Collapse sidebar” while expanded and “Expand sidebar” while collapsed. Previously Chrome exposed the visible brand text “Icon Studio” as the expanded control’s accessible name, then fell back to the `title` only after collapse, so the announced purpose changed inconsistently across states.
+
+### Validation
+
+- Pre-fix Google Chrome 153 at 1440×900 exposed the expanded toggle as `name="Icon Studio"`, `expanded=true`, with no `aria-label`; after collapse it became `name="Expand sidebar"` only through the `title` fallback. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, and `git diff --check` pass. Post-fix Chrome verifies `Collapse sidebar` → `Expand sidebar` → `Collapse sidebar` in the Accessibility Tree with matching `aria-expanded`/tooltip state and zero runtime exceptions.
+
+## 0.9.14 — 2026-09-12
+
+### Fixed
+
+- The theme icon button now keeps its accessible action name and visible tooltip synchronized with the theme it will switch to. In light mode both say “Switch to dark theme”; after switching to dark mode both say “Switch to light theme”. Previously `aria-label` updated correctly but the `title` tooltip remained the stale generic “Toggle dark theme”.
+
+### Validation
+
+- Pre-fix real Chromium reproduced the mismatch: light mode exposed `aria-label="Switch to dark theme"` with `title="Toggle dark theme"`, and after activation dark mode exposed `aria-label="Switch to light theme"` while the title still remained unchanged. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix real Chromium action/tooltip verification cover the fix.
+
+## 0.9.13 — 2026-09-12
+
+### Fixed
+
+- The desktop inspector collapse/expand icon button now keeps its accessible name and tooltip synchronized with the action it will perform. After collapsing the inspector it announces “Expand inspector”; after expanding it returns to “Collapse inspector”. Previously the visual chevron reversed but the button continued to announce “Collapse inspector” in both states.
+
+### Validation
+
+- Pre-fix real Chrome at 1440×900 confirmed the desktop toggle stayed visible and retained `aria-label="Collapse inspector"` after the inspector entered `inspector-collapsed`. Focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix real Chrome action-label verification cover the fix.
+
+## 0.9.12 — 2026-09-12
+
+### Fixed
+
+- Runtime CacheStorage now keeps at most 256 app-asset entries. The service worker trims oldest insertion-ordered runtime assets during activation and after successful cache refreshes, preventing obsolete hashed JS/CSS bundles from accumulating across repeated deployments. The fixed offline root/index shell and manifest are excluded from the eviction set.
+
+### Validation
+
+- Pre-fix deterministic reproduction on `v0.9.11` simulated 140 hashed JS/CSS deployments and retained all **280** runtime entries, including the very first bundle. Focused service-worker regression verifies activation and post-refresh trimming preserve only the newest 256 runtime entries while keeping shell/manifest entries; `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and real Chrome CacheStorage overflow verification cover the fix.
+
+## 0.9.11 — 2026-09-12
+
+### Fixed
+
+- Service-worker runtime caching is now limited to canonical Icon Studio asset namespaces (`assets/`, `data/`, `icons/`, `icons-pwa/`, and the manifest) with query-free URLs. Cache-busting query variants, arbitrary same-scope requests, and same-origin resources outside the application scope bypass CacheStorage instead of creating persistent entries. The cache generation is bumped to `icon-studio-v3` so broad pre-fix runtime entries are evicted on activation.
+
+### Validation
+
+- Pre-fix deterministic reproduction on `v0.9.10` showed three query variants of one asset, an arbitrary same-scope API-like URL, and an out-of-scope same-origin URL all being intercepted and written as distinct runtime cache keys. Focused service-worker boundary regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and real Chrome cache-boundary verification cover the fix.
+
+## 0.9.10 — 2026-09-12
+
+### Fixed
+
+- Service-worker activation now removes only obsolete CacheStorage names owned by Icon Studio (`icon-studio-*`). Previously activation deleted every named cache except the current Icon Studio cache, which could erase offline/runtime caches belonging to unrelated applications hosted on the same origin.
+
+### Validation
+
+- Pre-fix deterministic reproduction on `v0.9.9` showed activation deleting both an obsolete Icon Studio cache and unrelated same-origin cache names. Focused service-worker ownership regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and real Chrome cache-preservation verification cover the fix.
+
+## 0.9.9 — 2026-09-12
+
+### Fixed
+
+- Service-worker stale-while-revalidate asset refreshes now extend the active `FetchEvent` with `waitUntil()` until both the network fetch and cache write settle. Cached assets still return immediately, but browsers can no longer terminate an idle worker before the background cache update finishes. Cache-write failures remain best-effort and never replace a successful network response.
+
+### Validation
+
+- Pre-fix deterministic service-worker reproduction returned a cached asset while the refresh network request was still pending and recorded **0** `waitUntil()` lifetime promises. Focused lifecycle regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and real Chrome stale-while-revalidate verification pass.
+
+## 0.9.8 — 2026-09-12
+
+### Fixed
+
+- Service-worker navigation caching no longer lets a failed, non-HTML, or unrelated navigation replace the known-good cached `index.html` offline fallback. Only a successful HTML response for the actual app-shell path may refresh that fallback. The cache generation is bumped to `icon-studio-v2` so any pre-fix entry is evicted during activation.
+
+### Validation
+
+- Pre-fix real Chrome reproduced the bug: after a controlled app loaded with cached `index.html` status 200, navigating to a same-scope 404 changed that cached fallback to status 404 containing the 404 sentinel. Focused service-worker regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and post-fix real Chrome cache/offline checks pass.
+
+## 0.9.7 — 2026-09-12
+
+### Security
+
+- Removed `frame-ancestors 'none'` from the meta-delivered CSP because the CSP specification does not support that directive in `<meta>` policies; keeping it there created a false anti-framing guarantee.
+- Added an early static-host anti-framing fallback: the app shell starts hidden, `js/anti-frame.js` reveals it only at top level, and framed documents attempt top navigation while remaining hidden if navigation is blocked. Hosts with response-header control should still send `Content-Security-Policy: frame-ancestors 'none'` (optionally `X-Frame-Options: DENY` for legacy clients).
+
+### Validation
+
+- Focused shell-security regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and real Chrome top-level/cross-origin-frame checks pass. Live GitHub Pages response-header inspection confirms the current static host does not send CSP or X-Frame-Options headers, so the fallback closes a real gap rather than duplicating an active server control.
+
+## 0.9.6 — 2026-09-12
+
+### Fixed
+
+- Full-preview Escape handling now respects layered modal interaction on mobile/tablet. When the native preview dialog is open above the inspector drawer, the first Escape is left to the dialog's native cancel behavior and closes only that topmost modal; the underlying inspector remains open until it is dismissed separately. Previously the document-level Escape handler closed the inspector and preview in the same keypress.
+
+### Validation
+
+- Pre-fix real headless Chrome at 390×844 reproduced one Escape changing both `previewDialog.open` and `inspector-open` from true to false. Focused regression, `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass; post-fix production Chrome verifies the first Escape closes only the preview while the inspector remains open, and a second Escape then closes the inspector.
+
+## 0.9.5 — 2026-09-12
+
+### Fixed
+
+- The Icon categories toolbar now follows composite keyboard-navigation semantics instead of placing all 11 category buttons in the page Tab sequence. The active category is the toolbar's single initial tab stop; Left/Right Arrow wrap focus between categories, and Home/End move to the first/last category without changing the selected filter until the focused button is activated.
+
+### Validation
+
+- Pre-fix real headless Chrome confirmed all 11 category buttons had `tabIndex=0`, the Accessibility Tree exposed `role=toolbar`, and ArrowRight left focus on `All`. Focused regression, `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass; post-fix Chrome verification confirms one toolbar tab stop, ArrowLeft/ArrowRight/Home/End roving focus, selection remaining unchanged during navigation, and normal activation updating the selected category while retaining focus on the re-rendered active chip.
+
+## 0.9.4 — 2026-09-11
+
+### Fixed
+
+- Catalogue search/filter updates now use one concise result-count live region. `resultsSummary` is a `status` with polite, atomic announcements, while the surrounding results header and interactive icon grid are no longer live regions. This prevents one filter action from scheduling both the result summary and a full card-grid rebuild for assistive-technology announcement.
+
+### Validation
+
+- Pre-fix real headless Chrome confirmed both the results header and icon grid exposed `live=polite`; typing `invoice` rebuilt the grid from 24 cards to 4 while both live regions mutated. Focused regression, `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass; post-fix Chrome Accessibility Tree verification confirms only `resultsSummary` exposes `role=status`, `live=polite`, `atomic=true`, while search still renders the expected 4 invoice matches.
+
+## 0.9.3 — 2026-09-11
+
+### Fixed
+
+- Mobile/tablet inspector drawers opened from catalogue card controls now restore keyboard focus to the corresponding re-rendered card control when closed. Previously both card Select and “More export options” flows restored focus to the unrelated topbar inspector button because `openInspector()` always recorded that button as the trigger. Non-catalogue flows keep the existing topbar fallback when no stable visible trigger is supplied.
+
+### Validation
+
+- Reproduced the pre-fix issue in real headless Chrome at 390×844: opening Invoice via its “More export options” button and closing the inspector moved focus to `mobileInspectorButton` even though the replacement Invoice More button still existed. Focused regression, `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass; post-fix real Chrome verifies both Select and More flows return focus to their corresponding Invoice card controls.
+
+## 0.9.2 — 2026-09-11
+
+### Fixed
+
+- Drawer focus restoration now runs only when a mobile navigation or inspector drawer actually transitions from open to closed. Repeated `Escape` presses or close calls while no drawer is open no longer steal focus back to a stale trigger from an earlier drawer session. The consumed restore target is cleared after focus returns.
+
+### Validation
+
+- Reproduced the pre-fix bug in real headless Chrome at 390×844: after opening/closing navigation, focusing catalogue search, then pressing `Escape` with no drawer open moved focus from `searchInput` to `mobileMenuButton`. Focused regression, `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass; post-fix real Chrome mobile/tablet checks confirm no-drawer `Escape` preserves current focus while genuine drawer close still restores its trigger.
+
+## 0.9.1 — 2026-09-11
+
+### Fixed
+
+- Advanced filters now follow the disclosure accessibility contract: the trigger identifies `advancedFilter` with `aria-controls`, keeps `aria-expanded` synchronized with visibility, and changes its accessible action label between “Show advanced filters” and “Hide advanced filters”.
+
+### Validation
+
+- Focused disclosure semantics regression, `npm run typecheck`, `npm test`, `npm run build`, and `git diff --check` pass; real headless Chrome verification confirms the live button/panel relationship and synchronized expanded state/action label across open and close interactions.
+
 ## 0.9.0 — 2026-09-11
 
 ### Added

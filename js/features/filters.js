@@ -1,4 +1,41 @@
-export function getFilteredIcons(state) {
+export function createResultStatusUpdater(node, delayMs = 300) {
+  let timer;
+  let pendingMessage;
+
+  function cancel() {
+    clearTimeout(timer);
+    timer = undefined;
+    pendingMessage = undefined;
+  }
+
+  function update(message, { defer = false } = {}) {
+    cancel();
+    if (!defer) {
+      node.textContent = message;
+      return;
+    }
+    pendingMessage = message;
+    timer = setTimeout(() => {
+      node.textContent = pendingMessage;
+      timer = undefined;
+      pendingMessage = undefined;
+    }, delayMs);
+  }
+
+  function refreshPending(message) {
+    if (timer === undefined) return false;
+    pendingMessage = message;
+    return true;
+  }
+
+  function destroy() {
+    cancel();
+  }
+
+  return { update, refreshPending, cancel, destroy };
+}
+
+export function getViewIcons(state) {
   let icons = [...state.icons];
   if (state.view === 'favorites') {
     icons = icons.filter(icon => state.favorites.has(icon.id));
@@ -8,6 +45,36 @@ export function getFilteredIcons(state) {
   } else if (state.view === 'uploaded') {
     icons = icons.filter(icon => icon.uploaded);
   }
+  return icons;
+}
+
+export function hasIconsInView(state) {
+  return getViewIcons(state).length > 0;
+}
+
+const SCOPED_VIEW_CONTEXT = {
+  favorites: 'Favorites view',
+  recent: 'Recently viewed',
+  uploaded: 'Uploaded icons'
+};
+
+export function formatResultsSummary(state, visibleCount, filteredCount) {
+  const iconNoun = filteredCount === 1 ? 'icon' : 'icons';
+  const countSummary = visibleCount === filteredCount
+    ? `Showing ${filteredCount} ${iconNoun}`
+    : `Showing ${visibleCount} of ${filteredCount} ${iconNoun}`;
+  const context = [];
+  const scopedView = SCOPED_VIEW_CONTEXT[state.view];
+  if (scopedView) context.push(scopedView);
+  const query = state.query.trim();
+  if (query) context.push(`search “${query}”`);
+  if (state.category !== 'All') context.push(`${state.category} category`);
+  if (state.style !== 'all') context.push(`${state.style} style`);
+  return context.length ? `${countSummary} — ${context.join(', ')}` : countSummary;
+}
+
+export function getFilteredIcons(state) {
+  let icons = getViewIcons(state);
 
   const query = state.query.trim().toLowerCase();
   if (query) {

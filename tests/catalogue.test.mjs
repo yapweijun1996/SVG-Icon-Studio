@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { createIntersectionObserver } from '../js/core/observer.js';
+import { formatResultsSummary, createResultStatusUpdater } from '../js/features/filters.js';
 
 const originalObserver = globalThis.IntersectionObserver;
 try {
@@ -22,4 +23,53 @@ try {
   else globalThis.IntersectionObserver = originalObserver;
 }
 
-console.log('Catalogue observer compatibility tests passed.');
+const fakeStatus = { textContent: 'Initial status' };
+const statusUpdater = createResultStatusUpdater(fakeStatus, 15);
+statusUpdater.update('Showing partial results', { defer: true });
+statusUpdater.update('Showing final search results', { defer: true });
+assert.equal(fakeStatus.textContent, 'Initial status', 'deferred result status should not announce intermediate rapid-search updates');
+await new Promise(resolve => setTimeout(resolve, 25));
+assert.equal(fakeStatus.textContent, 'Showing final search results', 'deferred result status should announce the latest search result after typing pauses');
+statusUpdater.update('Stale delayed search', { defer: true });
+statusUpdater.update('Immediate filter result');
+await new Promise(resolve => setTimeout(resolve, 25));
+assert.equal(fakeStatus.textContent, 'Immediate filter result', 'an immediate status update should cancel any stale delayed search announcement');
+statusUpdater.update('IME partial query', { defer: true });
+statusUpdater.cancel();
+await new Promise(resolve => setTimeout(resolve, 25));
+assert.equal(fakeStatus.textContent, 'Immediate filter result', 'cancelling a pending result status should keep IME partial text out of the live region');
+statusUpdater.update('Showing 24 of 120 icons — search “order”', { defer: true });
+assert.equal(statusUpdater.refreshPending('Showing 48 of 120 icons — search “order”'), true, 'auto-pagination should refresh a pending search announcement without creating a new one');
+await new Promise(resolve => setTimeout(resolve, 25));
+assert.equal(fakeStatus.textContent, 'Showing 48 of 120 icons — search “order”', 'pending search announcement should use the latest silently paginated visible count');
+assert.equal(statusUpdater.refreshPending('Should stay silent'), false, 'auto-pagination should not create a live announcement when no deferred search announcement is pending');
+statusUpdater.destroy();
+
+const baseSummaryState = { view: 'library', query: '', category: 'All', style: 'all' };
+assert.equal(
+  formatResultsSummary(baseSummaryState, 24, 120),
+  'Showing 24 of 120 icons',
+  'default pagination summary should stay concise'
+);
+assert.equal(
+  formatResultsSummary({ ...baseSummaryState, query: 'truck' }, 2, 2),
+  'Showing 2 icons — search “truck”',
+  'search result status should identify the active query'
+);
+assert.equal(
+  formatResultsSummary({ ...baseSummaryState, query: 'order', category: 'ERP', style: 'outline' }, 0, 0),
+  'Showing 0 icons — search “order”, ERP category, outline style',
+  'combined filters should remain explicit even when there are no results'
+);
+assert.equal(
+  formatResultsSummary({ ...baseSummaryState, view: 'favorites' }, 1, 1),
+  'Showing 1 icon — Favorites view',
+  'scoped views should identify the result scope and preserve singular grammar'
+);
+assert.equal(
+  formatResultsSummary({ ...baseSummaryState, view: 'recent', query: '  invoice  ' }, 1, 1),
+  'Showing 1 icon — Recently viewed, search “invoice”',
+  'status context should use the trimmed query without changing search state'
+);
+
+console.log('Catalogue observer compatibility and result-summary tests passed.');

@@ -5,6 +5,7 @@ import { sanitizeSvgText } from './services/svg-sanitizer.js';
 import { loadRegistry, registerUploadedIcons, getAllIconMetadata, loadIconAsset } from './services/icon-repository.js';
 import { generateSvg } from './services/svg-exporter.js';
 import { createCatalogueController } from './features/catalogue.js';
+import { hasIconsInView } from './features/filters.js';
 import { createInspectorController } from './features/inspector.js';
 import { createImporterController } from './features/importer.js';
 import { createShellController } from './features/shell.js';
@@ -22,10 +23,11 @@ function collectRefs() {
     pageTitle: $('#pageTitle'), pageSubtitle: $('#pageSubtitle'), searchInput: $('#searchInput'),
     filterButton: $('#filterButton'), advancedFilter: $('#advancedFilter'), styleFilter: $('#styleFilter'),
     sortFilter: $('#sortFilter'), clearFiltersButton: $('#clearFiltersButton'), categoryChips: $('#categoryChips'),
-    resultsTitle: $('#resultsTitle'), resultsSummary: $('#resultsSummary'), clearSearchButton: $('#clearSearchButton'),
+    resultsTitle: $('#resultsTitle'), resultsSummary: $('#resultsSummary'), resultsAnnouncement: $('#resultsAnnouncement'),
+    clearSearchButton: $('#clearSearchButton'),
     iconGrid: $('#iconGrid'), emptyState: $('#emptyState'), emptyResetButton: $('#emptyResetButton'),
-    loadMoreButton: $('#loadMoreButton'), inspector: $('#inspector'), pinInspectorButton: $('#pinInspectorButton'),
-    inspectorPinState: $('#inspectorPinState'), collapseInspectorButton: $('#collapseInspectorButton'),
+    loadMoreButton: $('#loadMoreButton'), inspector: $('#inspector'),
+    collapseInspectorButton: $('#collapseInspectorButton'),
     closeInspectorButton: $('#closeInspectorButton'), selectedIconName: $('#selectedIconName'),
     selectedIconMeta: $('#selectedIconMeta'), favoriteSelectedButton: $('#favoriteSelectedButton'),
     iconPreview: $('#iconPreview'), backgroundTabs: $('#backgroundTabs'), sizeRange: $('#sizeRange'),
@@ -74,7 +76,12 @@ async function start() {
     inspector.update();
   }
 
-  function selectIcon(id, openPanel = true) {
+  function findRenderedCardAction(id, action) {
+    const card = [...refs.iconGrid.querySelectorAll('.icon-card')].find(item => item.dataset.iconId === id);
+    return card?.querySelector(`[data-action="${action}"]`) || null;
+  }
+
+  function selectIcon(id, openPanel = true, restoreAction = null) {
     const icon = getIcon(id);
     if (!icon) return;
     state.selectedId = icon.id;
@@ -82,7 +89,9 @@ async function start() {
     setJson(STORAGE.recent, state.recent);
     catalogue.render();
     inspector.update();
-    if (openPanel && window.matchMedia('(max-width: 1180px)').matches) shell.openInspector();
+    if (openPanel && window.matchMedia('(max-width: 1180px)').matches) {
+      shell.openInspector(restoreAction ? findRenderedCardAction(icon.id, restoreAction) : undefined);
+    }
   }
 
   function toggleFavorite(id) {
@@ -108,10 +117,10 @@ async function start() {
   catalogue = createCatalogueController({
     state, refs,
     categoryOrder: registry.categories.sort((a, b) => a.order - b.order).map(category => category.id),
-    onSelect: selectIcon,
+    onSelect: id => selectIcon(id, true, 'select'),
     onFavorite: toggleFavorite,
     onCopy: copyIcon,
-    onMore: id => { selectIcon(id, false); shell.openInspector(); toast('More export formats are available in the inspector'); }
+    onMore: id => { selectIcon(id, false); shell.openInspector(findRenderedCardAction(id, 'more') || undefined); toast('More export formats are available in the inspector'); }
   });
 
   inspector = createInspectorController({
@@ -129,7 +138,6 @@ async function start() {
   createImporterController({
     state, refs, toast,
     onImported: record => {
-      state.view = 'uploaded';
       state.category = 'All';
       state.selectedId = record.id;
       state.recent = [record.id, ...state.recent.filter(id => id !== record.id)].slice(0, 20);
@@ -151,32 +159,102 @@ async function start() {
     renderAll();
   }
 
-  refs.searchInput.addEventListener('input', event => { state.query = event.target.value; state.visibleLimit = 24; catalogue.render(); });
-  refs.clearSearchButton.addEventListener('click', resetFilters);
-  refs.emptyResetButton.addEventListener('click', resetFilters);
+  function recoverEmptyCatalogue() {
+    const returnToLibrary = !hasIconsInView(state);
+    resetFilters();
+    if (returnToLibrary) shell.setView('library');
+    refs.resultsTitle.focus();
+  }
+
+  function clearSearch() {
+    const restoreFocus = document.activeElement === refs.clearSearchButton;
+    resetFilters();
+    if (restoreFocus) refs.searchInput.focus();
+  }
+
+  let searchIsComposing = false;
+  refs.searchInput.addEventListener('compositionstart', () => {
+    searchIsComposing = true;
+    // An IME composition can pause longer than the normal search debounce.
+    // Cancel/suppress advisory announcements until the composition is committed.
+    catalogue.setResultStatusSuppressed(true);
+  });
+  refs.searchInput.addEventListener('input', event => {
+    state.query = event.target.value;
+    state.visibleLimit = 24;
+    const isComposing = searchIsComposing || event.isComposing;
+    catalogue.setResultStatusSuppressed(isComposing);
+    // Keep visual filtering immediate, but coalesce the advisory live-region
+    // message until typing pauses. IME partial text stays silent until committed.
+    catalogue.render({ deferResultStatus: Boolean(state.query) });
+  });
+  refs.searchInput.addEventListener('compositionend', event => {
+    searchIsComposing = false;
+    catalogue.setResultStatusSuppressed(false);
+    // Some browser/IME combinations do not provide a distinct trailing input
+    // event after compositionend, so commit the final value here as well.
+    state.query = event.target.value;
+    state.visibleLimit = 24;
+    catalogue.render({ deferResultStatus: Boolean(state.query) });
+  });
+  refs.clearSearchButton.addEventListener('click', clearSearch);
+  refs.emptyResetButton.addEventListener('click', recoverEmptyCatalogue);
   refs.clearFiltersButton.addEventListener('click', resetFilters);
-  refs.filterButton.addEventListener('click', () => {
-    const expanded = refs.advancedFilter.hidden;
+  function setAdvancedFiltersExpanded(expanded) {
     refs.advancedFilter.hidden = !expanded;
     refs.filterButton.setAttribute('aria-expanded', String(expanded));
+    refs.filterButton.setAttribute('aria-label', expanded ? 'Hide advanced filters' : 'Show advanced filters');
     refs.filterButton.classList.toggle('is-active', expanded);
+  }
+  refs.filterButton.addEventListener('click', event => {
+    const expanded = refs.advancedFilter.hidden;
+    setAdvancedFiltersExpanded(expanded);
+    // Keyboard activation emits click detail=0. Move directly into the newly
+    // disclosed controls so the density radio group cannot interrupt that flow.
+    if (expanded && event.detail === 0) refs.styleFilter.focus();
+  });
+  refs.advancedFilter.addEventListener('keydown', event => {
+    if (event.key !== 'Escape' || !refs.advancedFilter.contains(document.activeElement)) return;
+    event.preventDefault();
+    event.stopPropagation();
+    setAdvancedFiltersExpanded(false);
+    refs.filterButton.focus();
   });
   refs.styleFilter.addEventListener('change', event => { state.style = event.target.value; state.visibleLimit = 24; catalogue.render(); });
   refs.sortFilter.addEventListener('change', event => { state.sort = event.target.value; state.visibleLimit = 24; catalogue.render(); });
+  const densityButtons = $$('.density-switch button');
+
   function syncDensityButtons() {
-    $$('.density-switch button').forEach(button => {
+    densityButtons.forEach(button => {
       const active = button.dataset.density === state.density;
       button.classList.toggle('is-active', active);
-      button.setAttribute('aria-pressed', String(active));
+      button.setAttribute('aria-checked', String(active));
+      button.tabIndex = active ? 0 : -1;
     });
   }
 
-  $$('.density-switch button').forEach(button => button.addEventListener('click', () => {
+  function activateDensity(button, { focus = false } = {}) {
+    if (!button) return;
     state.density = button.dataset.density;
     setValue(STORAGE.density, state.density);
     syncDensityButtons();
-    catalogue.render();
-  }));
+    // Density changes only alter presentation. Re-render the cards without
+    // repeating an unchanged catalogue result announcement.
+    catalogue.render({ announceResultStatus: false });
+    if (focus) button.focus();
+  }
+
+  densityButtons.forEach((button, index) => {
+    button.addEventListener('click', () => activateDensity(button));
+    button.addEventListener('keydown', event => {
+      let nextIndex = null;
+      if (['ArrowRight', 'ArrowDown'].includes(event.key)) nextIndex = (index + 1) % densityButtons.length;
+      if (['ArrowLeft', 'ArrowUp'].includes(event.key)) nextIndex = (index - 1 + densityButtons.length) % densityButtons.length;
+      if (nextIndex === null) return;
+      event.preventDefault();
+      activateDensity(densityButtons[nextIndex], { focus: true });
+    });
+  });
   syncDensityButtons();
 
   catalogue.render();

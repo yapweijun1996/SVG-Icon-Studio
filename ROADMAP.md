@@ -56,12 +56,46 @@
 | `v0.8.0` | 2026-09-11 | +10 ERP outline icons (payables, returns, inventory, quality, assets, payroll) | 3 |
 | `v0.8.1` | 2026-09-11 | Keep catalogue functional without `IntersectionObserver` | 4 |
 | `v0.9.0` | 2026-09-11 | +10 ERP outline icons (materials, traceability, logistics, operational finance) | 3 |
+| `v0.9.1` | 2026-09-11 | Accessible advanced-filter disclosure semantics | 4 |
+| `v0.9.2` | 2026-09-11 | Prevent stale drawer focus restoration on no-op close/Escape | 4 |
+| `v0.9.3` | 2026-09-11 | Restore mobile inspector focus to originating catalogue controls | 4 |
+| `v0.9.4` | 2026-09-11 | Use one concise live status for catalogue result updates | 4 |
+| `v0.9.5` | 2026-09-12 | Add roving keyboard focus to icon-category toolbar | 4 |
+| `v0.9.6` | 2026-09-12 | Keep modal Escape dismissal scoped to the topmost preview layer | 4 |
+| `v0.9.7` | 2026-09-12 | Add static-host anti-framing protection and correct CSP framing claims | 4 |
+| `v0.9.8` | 2026-09-12 | Protect offline app-shell cache from failed/unrelated navigations | 4 |
+| `v0.9.9` | 2026-09-12 | Keep background asset revalidation alive through cache update | 4 |
+| `v0.9.10` | 2026-09-12 | Preserve unrelated same-origin caches during service-worker activation | 4 |
+| `v0.9.11` | 2026-09-12 | Bound runtime caching to canonical app assets and query-free URLs | 4 |
+| `v0.9.12` | 2026-09-12 | Cap runtime CacheStorage and evict oldest obsolete app assets | 4 |
+| `v0.9.13` | 2026-09-12 | Synchronize desktop inspector collapse/expand action labels | 4 |
+| `v0.9.14` | 2026-09-12 | Synchronize theme-switch accessible name and tooltip action | 4 |
+| `v0.9.15` | 2026-09-12 | Synchronize desktop sidebar collapse/expand action semantics | 4 |
+| `v0.9.16` | 2026-09-12 | Keep favorite toggle names stable with aria-pressed state | 4 |
+| `v0.9.17` | 2026-09-12 | Synchronize mobile navigation open/close action semantics | 4 |
+| `v0.9.18` | 2026-09-12 | Synchronize mobile inspector open/close action semantics | 4 |
+| `v0.9.19` | 2026-09-12 | Remove non-functional Inspector Pin control and dead state | 4 |
+| `v0.9.20` | 2026-09-12 | Remove redundant desktop Inspector Close action | 4 |
+| `v0.9.21` | 2026-09-12 | Restore accessible naming for Inspector Size slider | 4 |
+| `v0.9.22` | 2026-09-12 | Stabilize Inspector colour-control accessible names | 4 |
+| `v0.9.23` | 2026-09-12 | Give Rotation slider numeric values explicit degree context | 4 |
+| `v0.9.24` | 2026-09-14 | Expose Fill icon helper text as an accessible description | 4 |
+| `v0.9.25` | 2026-09-22 | Separate currentColor checkbox name from helper description | 4 |
+| `v0.9.26` | 2026-09-22 | Separate Include title checkbox name from helper description | 4 |
+| `v0.9.27` | 2026-09-22 | Give preview-background choices radio semantics and roving arrow-key focus | 4 |
+| `v0.9.28` | 2026-09-22 | Scope catalogue Copy SVG accessible names to each icon | 4 |
+| `v0.9.29` | 2026-09-22 | Preserve catalogue favorite focus across re-render | 4 |
+| `v0.9.30` | 2026-09-22 | Preserve catalogue Select/More focus across desktop re-render | 4 |
+| `v0.9.31` | 2026-09-22 | Preserve focus when unfavoriting removes a Favorites-view card | 4 |
+| `v0.9.32` | 2026-09-22 | Make empty-state recovery effective and focus-safe across scoped views | 4 |
+| `v0.9.33` | 2026-09-22 | Preserve keyboard focus when Clear search hides itself | 4 |
+| `v0.9.34` | 2026-09-22 | Preserve focus when the final Load more control disappears | 4 |
 
 Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`.
 
 ---
 
-## Current state (as of `v0.9.0`)
+## Current state (as of `v0.9.34`)
 
 - 120 icons, 10 categories, 2 styles (111 outline / 9 filled).
 - Zero runtime dependencies; Vite is dev/build tooling only.
