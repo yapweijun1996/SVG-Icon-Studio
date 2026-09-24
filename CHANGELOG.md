@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.51 — 2026-09-24
+
+### Fixed
+
+- Made the disappearing results **Clear filters** action restore focus according to the interaction that exposed it. Search-driven resets still return to the persistent search field, while Category/Style-only resets now move to the updated results heading instead of unexpectedly jumping back to search. This keeps keyboard and screen-reader users in the results context they just changed while preserving the established search workflow.
+
+### Validation
+
+- Pre-fix Chrome 153 reproduced both Category-only and Style-only resets moving focus from the disappearing `#clearSearchButton` to `#searchInput`; the focus event arrived immediately before the polite result-status mutation, so a filter-only reset jumped users out of the results context before the refreshed count was announced. The same harness confirmed search-driven reset focus should remain on Search. Post-fix validation covers the context-aware focus regression, full required suite, and exact-head responsive Chrome checks for focus destination, one synchronized reset announcement, runtime/network health, and horizontal overflow.
+
 ## 0.9.50 — 2026-09-24
 
 ### Fixed

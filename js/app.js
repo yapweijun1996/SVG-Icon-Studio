@@ -170,10 +170,12 @@ async function start() {
     refs.resultsTitle.focus();
   }
 
-  function clearSearch() {
+  function clearResultFilters() {
     const restoreFocus = document.activeElement === refs.clearSearchButton;
+    const hadSearchQuery = Boolean(state.query);
     resetFilters();
-    if (restoreFocus) refs.searchInput.focus();
+    if (!restoreFocus) return;
+    (hadSearchQuery ? refs.searchInput : refs.resultsTitle).focus();
   }
 
   let searchIsComposing = false;
@@ -201,7 +203,7 @@ async function start() {
     state.visibleLimit = 24;
     catalogue.render({ deferResultStatus: Boolean(state.query) });
   });
-  refs.clearSearchButton.addEventListener('click', clearSearch);
+  refs.clearSearchButton.addEventListener('click', clearResultFilters);
   refs.emptyResetButton.addEventListener('click', recoverEmptyCatalogue);
   refs.clearFiltersButton.addEventListener('click', resetFilters);
   function setAdvancedFiltersExpanded(expanded) {
