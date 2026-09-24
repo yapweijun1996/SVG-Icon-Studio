@@ -71,8 +71,8 @@ async function start() {
   let shell;
   const getIcon = id => state.icons.find(icon => icon.id === (id || state.selectedId)) || state.icons[0];
 
-  function renderAll() {
-    catalogue.render();
+  function renderAll(renderOptions) {
+    catalogue.render(renderOptions);
     inspector.update();
   }
 
@@ -87,7 +87,9 @@ async function start() {
     state.selectedId = icon.id;
     state.recent = [icon.id, ...state.recent.filter(item => item !== icon.id)].slice(0, 20);
     setJson(STORAGE.recent, state.recent);
-    catalogue.render();
+    // Selection/recent-order changes do not alter the current result set or
+    // filter context, so avoid repeating the unchanged catalogue live status.
+    catalogue.render({ announceResultStatus: false });
     inspector.update();
     if (openPanel && window.matchMedia('(max-width: 1180px)').matches) {
       shell.openInspector(restoreAction ? findRenderedCardAction(icon.id, restoreAction) : undefined);
@@ -105,7 +107,9 @@ async function start() {
       toast(`${icon.name} added to favorites`);
     }
     setJson(STORAGE.favorites, [...state.favorites]);
-    renderAll();
+    // Favorite membership changes the visible result set only inside the
+    // Favorites view. Elsewhere this is a presentation/state-only rerender.
+    renderAll({ announceResultStatus: state.view === 'favorites' });
   }
 
   async function copyIcon(icon) {

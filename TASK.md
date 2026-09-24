@@ -96,6 +96,7 @@
 - [x] Keep native search Escape/cancel clearing synchronized with the visible/live result status immediately while preserving the non-empty typing debounce, released as `v0.9.45`
 - [x] Keep IntersectionObserver auto-pagination silent in the polite result live region while preserving the visible count and refreshing any already-pending search announcement, released as `v0.9.46`
 - [x] Keep Grid/Compact density changes silent in the catalogue result live region because they alter presentation only, avoiding duplicate unchanged announcements, released as `v0.9.47`
+- [x] Keep Select/More and non-Favorites favorite rerenders silent in the catalogue result live region while preserving one contextual announcement when Favorites membership changes the visible result set, released as `v0.9.48`
 - [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
 - [x] Browser/build SVG validation enforce strict XML declaration grammar and reject malformed declarations consistently
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
@@ -133,7 +134,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.9.47` passed the required suite plus a production-preview Chrome 153 live-region harness at desktop/tablet/mobile viewports. Local commits remain unpushed by policy.)*
+*(none — current local release `v0.9.48` passed the required suite plus an exact-head Chrome 153 live-region harness. Local commit remains unpushed by policy.)*
 
 ---
 

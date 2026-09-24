@@ -93,6 +93,12 @@ assert.match(appSource, /addEventListener\('compositionstart',[\s\S]*?catalogue\
 assert.match(appSource, /const isComposing = searchIsComposing \|\| event\.isComposing;[\s\S]*?catalogue\.setResultStatusSuppressed\(isComposing\)/, 'search input should also honor InputEvent.isComposing while filtering visually');
 assert.match(appSource, /addEventListener\('compositionend',[\s\S]*?catalogue\.setResultStatusSuppressed\(false\)[\s\S]*?state\.query = event\.target\.value[\s\S]*?catalogue\.render\(\{ deferResultStatus: Boolean\(state\.query\) \}\)/, 'IME composition end should commit the final query, deferring only non-empty search announcements');
 assert.match(catalogueSource, /if \(resultStatusSuppressed\) resultStatusUpdater\.cancel\(\)/, 'catalogue renders during IME composition should cancel rather than announce partial result status');
+const renderAllHandler = appSource.match(/function renderAll\(renderOptions\) \{[\s\S]*?\n  \}/)?.[0] || '';
+const selectIconHandler = appSource.match(/function selectIcon\(id, openPanel = true, restoreAction = null\) \{[\s\S]*?\n  \}/)?.[0] || '';
+const toggleFavoriteHandler = appSource.match(/function toggleFavorite\(id\) \{[\s\S]*?\n  \}/)?.[0] || '';
+assert.match(renderAllHandler, /catalogue\.render\(renderOptions\)/, 'shared rerenders should forward catalogue announcement options');
+assert.match(selectIconHandler, /catalogue\.render\(\{ announceResultStatus: false \}\)/, 'Select/More rerenders should not repeat an unchanged catalogue result announcement');
+assert.match(toggleFavoriteHandler, /renderAll\(\{ announceResultStatus: state\.view === 'favorites' \}\)/, 'favorite rerenders should announce result changes only when Favorites membership changes the visible result set');
 
 const pageTitleTag = html.match(/<h1\b[^>]*id="pageTitle"[^>]*>/)?.[0] || '';
 assert.match(pageTitleTag, /tabindex="-1"/, 'workspace page title should accept programmatic focus after SPA view changes without adding a Tab stop');

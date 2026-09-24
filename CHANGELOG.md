@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.48 — 2026-09-24
+
+### Fixed
+
+- Stopped result-neutral catalogue rerenders from repeating the polite result status. Selecting an icon or opening More changes selection/recent state without changing the current result set, and Favorite toggles outside the Favorites view only change saved-state presentation, so those paths now rerender silently. Favorite membership changes inside the Favorites view still announce the updated contextual result count once.
+
+### Validation
+
+- Pre-fix Chrome 153 reproduced one unchanged `Showing 24 of 120 icons` live-region mutation for each Library Select, Favorite, and More activation. Post-fix production-preview Chrome at 1440×900, 834×1112, and 390×844 recorded zero result-status mutations for all three result-neutral actions; unfavoriting inside Favorites produced exactly one `Showing 0 icons — Favorites view` mutation and refavoriting from the Inspector produced exactly one `Showing 1 icon — Favorites view` mutation. All three viewports reported zero runtime/console/network failures and no horizontal overflow. Focused DOM regression, `npm run typecheck`, full `npm test` (120 SVG / zero errors), `npm run build`, and `git diff --check` also pass.
+
 ## 0.9.47 — 2026-09-24
 
 ### Fixed
