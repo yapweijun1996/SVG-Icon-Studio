@@ -85,6 +85,8 @@ assert.match(resultsAnnouncementTag, /role="status"/, 'result announcement shoul
 assert.match(resultsAnnouncementTag, /aria-live="polite"/, 'result announcement should update politely');
 assert.match(resultsAnnouncementTag, /aria-atomic="true"/, 'result announcement should announce the complete concise message');
 assert.doesNotMatch(iconGridTag, /aria-live=/, 'interactive icon grid should not announce every card rebuild as a live region');
+const clearFiltersButtonTag = html.match(/<button\b[^>]*id="clearSearchButton"[^>]*>[\s\S]*?<\/button>/)?.[0] || '';
+assert.match(clearFiltersButtonTag, />Clear filters<\/button>/, 'results reset control should be named for the query/category/style filters it actually clears');
 assert.match(catalogueSource, /const resultSummary = formatResultsSummary\(state, visible\.length, filtered\.length\)/, 'catalogue should calculate one contextual result summary for visible and assistive output');
 assert.match(catalogueSource, /refs\.resultsSummary\.textContent = resultSummary/, 'visible result summary should stay current even when automatic pagination is silent');
 assert.match(catalogueSource, /createResultStatusUpdater\(refs\.resultsAnnouncement\)/, 'live status updater should target the dedicated hidden announcement region');

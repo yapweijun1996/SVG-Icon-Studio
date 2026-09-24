@@ -98,6 +98,7 @@
 - [x] Keep Grid/Compact density changes silent in the catalogue result live region because they alter presentation only, avoiding duplicate unchanged announcements, released as `v0.9.47`
 - [x] Keep Select/More and non-Favorites favorite rerenders silent in the catalogue result live region while preserving one contextual announcement when Favorites membership changes the visible result set, released as `v0.9.48`
 - [x] Keep Sort-only catalogue rerenders silent in the result live region because ordering changes presentation without changing the result set or context, released as `v0.9.49`
+- [x] Name the results reset action **Clear filters** so its accessible/visible label matches its actual query/category/style reset behavior, released as `v0.9.50`
 - [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
 - [x] Browser/build SVG validation enforce strict XML declaration grammar and reject malformed declarations consistently
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
@@ -135,7 +136,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.9.49` passed the required suite plus an exact-head Chrome 153 live-region harness. Local commit remains unpushed by policy.)*
+*(none — current local release `v0.9.50` passed the required suite plus an exact-head Chrome 153 accessibility harness. Local commit remains unpushed by policy.)*
 
 ---
 

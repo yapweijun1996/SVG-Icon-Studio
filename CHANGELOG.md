@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.50 — 2026-09-24
+
+### Fixed
+
+- Renamed the catalogue results reset action from **Clear search** to **Clear filters**. The control is shown for an active search, category, or style and calls the shared reset path for all three, so the previous label was inaccurate whenever Category or Style was active without a query and understated what activation would change.
+
+### Validation
+
+- The planned sort-during-pending-search audit first confirmed the current `v0.9.49` behavior is already correct: Chrome 153 recorded exactly one final `Showing 6 icons — search “order”` live-region mutation after changing sort during the 300 ms search debounce. The same pre-fix browser run then reproduced the higher-value label defect with an empty query plus ERP category: the visible reset control said `Clear search`, while activation changed ERP → All and `Showing 24 of 56 icons — ERP category` → `Showing 24 of 120 icons`. Post-fix validation covers the static DOM regression, full required suite, and exact-head Chrome checks across desktop/tablet/mobile confirming the control says `Clear filters`, resets category/style/search consistently, and leaves no runtime/network/overflow failures.
+
 ## 0.9.49 — 2026-09-24
 
 ### Fixed
