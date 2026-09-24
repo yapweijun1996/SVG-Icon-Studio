@@ -101,6 +101,7 @@
 - [x] Name the results reset action **Clear filters** so its accessible/visible label matches its actual query/category/style reset behavior, released as `v0.9.50`
 - [x] Keep filter-only results reset focus in the updated results context while preserving Search focus for query-driven resets, released as `v0.9.51`
 - [x] Keep Advanced **Clear filters** silent when it only resets Sort or repeats defaults, while preserving one contextual announcement for query/category/style resets and retaining focus, released as `v0.9.52`
+- [x] Preserve focused Category chips and icon-card actions across automatic IntersectionObserver pagination rerenders so background loading cannot drop keyboard focus to `body`, released as `v0.9.53`
 - [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
 - [x] Browser/build SVG validation enforce strict XML declaration grammar and reject malformed declarations consistently
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics

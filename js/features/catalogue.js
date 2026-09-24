@@ -213,14 +213,44 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     }
   });
 
+  function capturePaginationFocus() {
+    const active = document.activeElement;
+    const category = active?.closest?.('[data-category]');
+    if (category && refs.categoryChips.contains(category)) {
+      return { category: category.dataset.category };
+    }
+    const action = active?.closest?.('[data-action]');
+    const card = active?.closest?.('.icon-card');
+    if (action && card && refs.iconGrid.contains(card)) {
+      return { iconId: card.dataset.iconId, actionName: action.dataset.action };
+    }
+    return null;
+  }
+
+  function restorePaginationFocus(snapshot) {
+    if (!snapshot) return;
+    if (snapshot.category) {
+      const category = [...refs.categoryChips.querySelectorAll('[data-category]')].find(
+        chip => chip.dataset.category === snapshot.category
+      );
+      category?.focus();
+      return;
+    }
+    if (snapshot.iconId && snapshot.actionName) {
+      focusRenderedCardAction(snapshot.iconId, snapshot.actionName);
+    }
+  }
+
   function loadMore({ automatic = false } = {}) {
     const restoreFocus = document.activeElement === refs.loadMoreButton;
+    const paginationFocus = automatic ? capturePaginationFocus() : null;
     const previousVisibleCount = refs.iconGrid.querySelectorAll('.icon-card').length;
     state.visibleLimit += 24;
     render({
       announceResultStatus: !automatic,
       refreshPendingResultStatus: automatic
     });
+    if (automatic) restorePaginationFocus(paginationFocus);
     if (restoreFocus && refs.loadMoreButton.parentElement.hidden) {
       const firstNewCard = refs.iconGrid.querySelectorAll('.icon-card')[previousVisibleCount];
       firstNewCard?.querySelector('[data-action="select"]')?.focus();

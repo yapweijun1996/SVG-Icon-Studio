@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.53 — 2026-09-25
+
+### Fixed
+
+- Preserved keyboard focus across automatic IntersectionObserver pagination. On wide layouts the load-more sentinel can enter its preload margin immediately after a category change or while a card action is focused; the automatic batch re-render previously replaced the focused Category chip or icon-card action and dropped focus to the document body. Automatic pagination now snapshots only focus inside the catalogue controls it replaces and restores the equivalent Category chip or card action after each background batch, without changing the existing manual Load more focus behavior.
+
+### Validation
+
+- The planned Advanced **Clear filters** during pending-search audit first confirmed `v0.9.52` is already correct: Chrome 153 recorded exactly one final `Showing 24 of 120 icons` mutation, cleared the query, retained `#clearFiltersButton` focus, and emitted no stale `search “order”` announcement. The higher-value pre-fix issue was then reproduced on desktop Chrome 153: changing All → ERP emitted the correct single contextual announcement, but the immediate automatic 24→48 pagination rebuild replaced the newly focused ERP chip and left `document.activeElement` without a catalogue control; focusing the first card Select action before that same auto-load was also lost. Post-fix validation covers both focus targets, the full required suite, and responsive production-preview checks.
+
 ## 0.9.52 — 2026-09-25
 
 ### Fixed
