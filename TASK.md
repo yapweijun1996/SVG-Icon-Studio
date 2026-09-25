@@ -110,6 +110,7 @@
 - [x] Keep mobile burst toast feedback below the sticky topbar and top safe-area inset so transient messages never cover primary navigation/actions, released as `v0.9.59`
 - [x] Improve search relevance ranking in `js/features/filters.js`: replace plain substring matching with word-boundary token scoring so short queries (e.g. "ai") no longer match mid-word substrings (mAIl, chAIn), and direct name/token matches rank ahead of tag/metadata matches under Featured sort while preserving all explicit user sorts, released as `v0.9.60`
 - [x] v0.9.61: replace the misleading unavailable-icon X during lazy loading with a neutral skeleton; reserve the error fallback for confirmed failures and load previews directly without IntersectionObserver.
+- [x] v0.9.62: show the running PWA version and surface a user-controlled Update vX.Y.Z action for waiting service workers; embed the release version into the built worker/cache generation so every deployment can be detected reliably.
 - [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
 - [x] Browser/build SVG validation enforce strict XML declaration grammar and reject malformed declarations consistently
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
@@ -147,7 +148,7 @@
 
 ## In Progress
 
-*(none — current local release v0.9.61 passed the required suite plus real Chrome lazy-loading verification. Local commit remains unpushed by policy.)*
+*(none — current local release v0.9.62 passed the required suite plus real Chrome waiting-worker/update-version E2E. Local commit remains unpushed by policy.)*
 
 ---
 

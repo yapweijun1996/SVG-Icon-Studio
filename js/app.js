@@ -10,6 +10,7 @@ import { createInspectorController } from './features/inspector.js';
 import { createImporterController } from './features/importer.js';
 import { createShellController } from './features/shell.js';
 import { createThemeController } from './features/theme.js';
+import { createPwaController } from './features/pwa.js';
 import { createToastController, copyText } from './ui/toast.js';
 
 function collectRefs() {
@@ -17,6 +18,7 @@ function collectRefs() {
     body: document.body, backdrop: $('#mobileBackdrop'), sidebar: $('#sidebar'), workspace: $('.workspace'),
     mobileMenuButton: $('#mobileMenuButton'), mobileInspectorButton: $('#mobileInspectorButton'),
     brandToggle: $('#brandToggle'), themeButton: $('#themeButton'), importButton: $('#importButton'),
+    appVersion: $('#appVersion'), pwaUpdateButton: $('#pwaUpdateButton'),
     svgFileInput: $('#svgFileInput'), totalIconCount: $('#totalIconCount'), visibleIconCount: $('#visibleIconCount'),
     favoriteCount: $('#favoriteCount'), recentCount: $('#recentCount'), uploadCount: $('#uploadCount'),
     collectionCount: $('#collectionCount'),
@@ -47,6 +49,7 @@ function collectRefs() {
 async function start() {
   const refs = collectRefs();
   const toast = createToastController(refs.toastRegion);
+  createPwaController({ versionNode: refs.appVersion, updateButton: refs.pwaUpdateButton, toast });
   const registry = await loadRegistry();
   const migration = await migrateLegacyUploads(sanitizeSvgText);
   if (migration.migrated) toast(`${migration.migrated} uploaded icon${migration.migrated === 1 ? '' : 's'} migrated to IndexedDB`);
@@ -271,15 +274,6 @@ async function start() {
   catalogue.render();
   await inspector.update();
   selectIcon(state.selectedId, false);
-}
-
-// PWA: register only in production builds — a caching worker in dev fights
-// Vite's module server and HMR. Relative URL keeps it working under a
-// GitHub Pages project subpath.
-if (import.meta.env?.PROD && 'serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(error => console.warn('[Icon Studio] SW registration failed:', error.message));
-  });
 }
 
 start().catch(error => {

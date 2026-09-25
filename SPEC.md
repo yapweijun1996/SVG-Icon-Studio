@@ -4,7 +4,7 @@
 **Project:** Icon Studio — SVG Icon Collection Admin Panel  
 **Code-MCP Project ID:** `project_f2a74b23-33c1-4c5c-b43d-e2b5b3108428`  
 **Status:** Living specification — the SSOT refactor this document originally proposed shipped in `v0.2.0` (2026-07-23) and is now the permanent baseline architecture. Sections 1–3 and 16 are kept as the historical record of that refactor; everything else describes the **current, as-built system**.  
-**Current release:** `v0.9.34` (2026-09-22) — see [CHANGELOG.md](CHANGELOG.md) for the full version history and [ROADMAP.md](ROADMAP.md) / [TASK.md](TASK.md) for what's planned next.
+**Current release:** v0.9.62 (2026-09-25) — see CHANGELOG.md for the full version history and ROADMAP.md / TASK.md for what is planned next.
 **Runtime:** Dependency-free static HTML, CSS and browser-native JavaScript (Vite is a dev-only wrapper — see ADR-001)  
 **Primary goal (original, achieved):** Replace the monolithic icon and application architecture with a scalable Single Source of Truth (SSOT) structure while preserving existing behaviour and visual output.
 
@@ -22,7 +22,7 @@ A quick-reference dashboard so this document doesn't have to be read end-to-end 
 | Runtime dependencies | 0 (unchanged since inception) |
 | Dev tooling | Vite (`npm run dev` / `npm run build` / `npm run preview`); `npm run serve` still works with zero `node_modules` |
 | Security | SVG allowlist sanitizer (§13) + Content-Security-Policy meta tag (added v0.4.0) |
-| PWA | Manifest + service worker (added alongside the 0.2.x/0.3.x line, see CHANGELOG) |
+| PWA | Manifest + versioned service worker + visible running version + user-controlled waiting-update action |
 | CI/CD | `.github/workflows/deploy.yml` — `npm ci && npm test && npm run build` → GitHub Pages on every push to `main` |
 | Test suite | `npm test` — 12 checks incl. full registry/icon validation (see §19) |
 | Known accepted deviation | `package-lock.json`'s `version` field intentionally left behind `package.json`'s — see ADR-013 |
@@ -127,7 +127,7 @@ Everything in §4.1 plus, added across `v0.3.0`–`v0.7.1` (full detail in [CHAN
 - A second icon style, `filled` (§7.4), authored via a dedicated generator script (`tools/gen-filled-icons.mjs`, ADR-010) rather than by hand, because the style's "strokes" are actually filled shapes with matched inner/outer contours.
 - Vite as an optional dev-server/bundler (`npm run dev`, `npm run build`, `npm run preview`) — the runtime itself is still zero-dependency (ADR-001).
 - A Content-Security-Policy `<meta>` tag as defence in depth behind the sanitizer (ADR-009).
-- A PWA manifest and service worker (prod-only registration, to avoid fighting Vite HMR in dev); navigation caching only refreshes the offline app-shell fallback from successful HTML responses for the shell URL, preventing failed/unrelated navigations from poisoning it. Asset stale-while-revalidate refreshes extend the active `FetchEvent` through the network request and cache write so browsers cannot terminate an idle worker before the background update completes. Activation cleanup is namespace-scoped to `icon-studio-*` cache names so this project never deletes CacheStorage owned by another same-origin application. Runtime asset caching is restricted to canonical Icon Studio resource namespaces (`assets/`, `data/`, `icons/`, `icons-pwa/`, and the manifest); query-bearing or unrelated same-origin requests bypass the service-worker cache. Cacheable runtime assets under the resource namespaces are capped at 256 insertion-ordered entries, trimming the oldest overflow during activation and after successful refreshes while excluding the fixed offline shell and manifest from eviction.
+- A PWA manifest and service worker with prod-only registration. The topbar exposes the running release version; a newer installed worker remains waiting until the user activates the visible Update vX.Y.Z control. Production output includes uncached version metadata and embeds the package version into the worker/cache generation so every release produces a distinct worker and isolated cache. Navigation caching refreshes the offline app shell only from successful shell HTML responses. Canonical runtime assets remain bounded and unrelated/query-bearing requests bypass CacheStorage.
 - GitHub Actions CI/CD (`.github/workflows/deploy.yml`): install → test → build → publish to GitHub Pages on every push to `main`.
 - Catalogue-grid colouring unified across both icon styles (ADR-011) after `filled` growing from 3 → 9 icons made a per-style accent-colour override visually inconsistent.
 - Scroll-to-load auto-pagination on top of the original manual "Load more" button (ADR-012).

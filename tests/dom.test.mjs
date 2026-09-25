@@ -18,6 +18,8 @@ const appSource = fs.readFileSync(new URL('../js/app.js', import.meta.url), 'utf
 const shellSource = fs.readFileSync(new URL('../js/features/shell.js', import.meta.url), 'utf8');
 const themeSource = fs.readFileSync(new URL('../js/features/theme.js', import.meta.url), 'utf8');
 const catalogueSource = fs.readFileSync(new URL('../js/features/catalogue.js', import.meta.url), 'utf8');
+const pwaSource = fs.readFileSync(new URL('../js/features/pwa.js', import.meta.url), 'utf8');
+const viteSource = fs.readFileSync(new URL('../vite.config.js', import.meta.url), 'utf8');
 const inspectorSource = fs.readFileSync(new URL('../js/features/inspector.js', import.meta.url), 'utf8');
 const utilitiesSource = fs.readFileSync(new URL('../css/utilities.css', import.meta.url), 'utf8');
 const responsiveSource = fs.readFileSync(new URL('../css/responsive.css', import.meta.url), 'utf8');
@@ -75,6 +77,22 @@ assert.doesNotMatch(importCompletionHandler, /state\.view\s*=/, 'import completi
 assert.match(importCompletionHandler, /shell\.setView\('uploaded'\)/, 'import completion should route the Uploaded view transition through the shell controller');
 assert.match(shellSource, /if \(button\.dataset\.view === state\.view\) return closeSidebar\(\)/, 're-activating the current navigation item should preserve catalogue state while still closing a mobile drawer');
 assert.match(shellSource, /if \(button\.dataset\.view === state\.view\) return closeSidebar\(\)[\s\S]*?setView\(button\.dataset\.view\)/, 'only changed navigation destinations should invoke the resetting view transition');
+
+const appVersionTag = html.match(/<span\b[^>]*id="appVersion"[^>]*>/)?.[0] || '';
+const pwaUpdateButtonTag = html.match(/<button\b[^>]*id="pwaUpdateButton"[^>]*>/)?.[0] || '';
+assert.match(appVersionTag, /class="pwa-version-pill"/, 'topbar should expose a visible app-version pill');
+assert.match(pwaUpdateButtonTag, /hidden/, 'PWA update action should stay hidden until a waiting worker exists');
+assert.match(html, /data-update-full>Update app/, 'PWA update action should have a full desktop label');
+assert.match(html, /data-update-short aria-hidden="true">Update/, 'PWA update action should retain a compact mobile label');
+assert.match(appSource, /createPwaController\(\{ versionNode: refs\.appVersion, updateButton: refs\.pwaUpdateButton, toast \}\)/, 'app startup should initialize the PWA version/update controller');
+assert.doesNotMatch(appSource, /navigator\.serviceWorker\.register\('\.\/sw\.js'\)/, 'legacy direct service-worker registration should be owned by the PWA controller instead');
+assert.match(pwaSource, /registration\.waiting && navigator\.serviceWorker\.controller/, 'PWA controller should surface an already-waiting update');
+assert.match(pwaSource, /registration\.addEventListener\('updatefound'/, 'PWA controller should detect newly installed updates');
+assert.match(pwaSource, /navigator\.serviceWorker\.addEventListener\('controllerchange'/, 'PWA controller should reload only after the chosen worker becomes controller');
+assert.match(pwaSource, /waitingWorker\.postMessage\(\{ type: 'SKIP_WAITING' \}\)/, 'Update button should explicitly activate the waiting worker');
+assert.match(pwaSource, /new URL\('version\.json', document\.baseURI\)/, 'waiting update label should fetch uncached deployment version metadata');
+assert.match(viteSource, /__APP_VERSION__:\s*JSON\.stringify\(appVersion\)/, 'production bundle should embed the running app version');
+assert.match(viteSource, /version\.json/, 'production build should publish deployment version metadata for waiting-update labels');
 
 const resultsHeaderTag = html.match(/<section\b[^>]*class="results-header"[^>]*>/)?.[0] || '';
 const resultsSummaryTag = html.match(/<span\b[^>]*id="resultsSummary"[^>]*>/)?.[0] || '';

@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.9.62 — 2026-09-25
+
+### Added
+
+- The topbar now shows the running app version. When a newer service worker reaches the waiting state, the version pill is replaced by an explicit Update vX.Y.Z action instead of silently taking over.
+- Clicking Update sends an explicit SKIP_WAITING message to the waiting worker; the page reloads only after controllerchange confirms the chosen worker became active.
+- Production builds publish version.json and embed the running package version in both the JavaScript bundle and generated service worker. Each release therefore produces a distinct worker script and an isolated Icon Studio cache generation, so update detection works even when service-worker logic itself did not otherwise change.
+
+### Validation
+
+- Exact-head typecheck, full npm test (120 SVG / zero validation errors), build and git diff --check pass. Build verification confirms dist/version.json is 0.9.62 and the built service worker contains the same app version with no unreplaced placeholder.
+- Real Chrome production-preview E2E started on v0.9.62 with a visible v0.9.62 pill and no update button, then served a simulated v0.9.63 worker/version metadata and called registration.update(). Chrome reported the new worker waiting, the UI switched to Update v0.9.63 with matching accessible label, and the 390x844 mobile layout showed the compact v0.9.63 update control with no horizontal overflow. Service-worker tests separately verify install no longer auto-calls skipWaiting and the explicit SKIP_WAITING message activates it exactly once.
+
 ## 0.9.61 — 2026-09-25
 
 ### Fixed

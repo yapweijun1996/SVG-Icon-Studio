@@ -90,7 +90,7 @@ Three-column desktop shell (`.app-shell`, CSS grid: `sidebar-width | 1fr | inspe
 | Component | Where | Notes |
 | --- | --- | --- |
 | Collapsible sidebar | `.sidebar` | Nav items: Icon library, Collections, Favorites, Recently viewed, Uploaded icons, Brand kit. Collapse state persists to `localStorage`. |
-| Sticky topbar | `.topbar` | Import SVG, live icon-count pill, theme toggle, mobile inspector trigger |
+| Sticky topbar | .topbar | Import SVG, live icon-count pill, running-version pill / waiting-update action, theme toggle, mobile inspector trigger |
 | Search + filters | `.catalogue-toolbar` | Free-text search (`/` keyboard shortcut focuses it), style filter, sort filter, category chips (10, derived live from the registry — never hardcode a count, see ADR-011-adjacent history in `CHANGELOG.md` 0.4.0) |
 | Icon grid | `.icon-grid` | Responsive `auto-fill` grid; Grid/Compact density toggle; scroll-to-load pagination (24 per page) with a manual "Load more" fallback button |
 | Icon card | `.icon-card` | Lazy-loaded preview (`IntersectionObserver`, 240px lookahead), favourite star, Copy SVG action, "⋮" more-options action |
