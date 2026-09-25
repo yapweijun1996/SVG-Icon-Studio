@@ -168,7 +168,7 @@
       "id": "ai-spark",
       "name": "AI Spark",
       "category": "AI",
-      "style": "filled",
+      "style": "outline",
       "tags": [
         "artificial intelligence",
         "magic",
@@ -353,7 +353,7 @@
       "id": "purchase-order",
       "name": "Purchase Order",
       "category": "ERP",
-      "style": "filled",
+      "style": "outline",
       "tags": [
         "po",
         "vendor",
@@ -391,7 +391,7 @@
       "id": "delivery-order",
       "name": "Delivery Order",
       "category": "Logistics",
-      "style": "filled",
+      "style": "outline",
       "tags": [
         "do",
         "shipping document",
@@ -1724,7 +1724,7 @@
       "id": "purchase-requisition",
       "name": "Purchase Requisition",
       "category": "ERP",
-      "style": "filled",
+      "style": "outline",
       "tags": [
         "pr",
         "requisition",
@@ -1744,7 +1744,7 @@
       "id": "debit-note",
       "name": "Debit Note",
       "category": "ERP",
-      "style": "filled",
+      "style": "outline",
       "tags": [
         "dn",
         "debit memo",
@@ -1764,7 +1764,7 @@
       "id": "packing-list",
       "name": "Packing List",
       "category": "ERP",
-      "style": "filled",
+      "style": "outline",
       "tags": [
         "packing slip",
         "carton",
@@ -1784,7 +1784,7 @@
       "id": "pick-list",
       "name": "Pick List",
       "category": "ERP",
-      "style": "filled",
+      "style": "outline",
       "tags": [
         "picking",
         "warehouse pick",
@@ -1804,7 +1804,7 @@
       "id": "journal-entry",
       "name": "Journal Entry",
       "category": "ERP",
-      "style": "filled",
+      "style": "outline",
       "tags": [
         "je",
         "voucher",
@@ -1824,7 +1824,7 @@
       "id": "dashboard",
       "name": "Dashboard",
       "category": "ERP",
-      "style": "filled",
+      "style": "outline",
       "tags": [
         "overview",
         "kpi",

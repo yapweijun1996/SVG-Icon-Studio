@@ -1,7 +1,7 @@
 # Icon Studio — Design System
 
 **Document:** `DESIGN.md`
-**Status:** Living document — reflects the design system as actually shipped in `v0.9.58`, not an aspirational brief.
+**Status:** Living document — reflects the design system as actually shipped in `v0.9.63`, not an aspirational brief.
 **Source of truth for tokens:** [`css/tokens.css`](css/tokens.css) (design-system.json is a synced machine-readable snapshot of the same values, not an independent source)
 **Relationship to `components.md`:** `components.md` is the original pre-implementation design brief written before any code existed. It is kept for historical reference only — where the two disagree, this document and the current codebase win. See the note at the top of `components.md`.
 
@@ -100,29 +100,23 @@ Three-column desktop shell (`.app-shell`, CSS grid: `sidebar-width | 1fr | inspe
 
 ## 5. Icon design system
 
-Two supported styles, both on an exact `0 0 24 24` viewBox (full contract in `SPEC.md` §7):
+The built-in catalogue uses one visual style on an exact `0 0 24 24` viewBox. Runtime/import code still recognises filled uploaded SVGs for compatibility, but filled artwork is no longer part of the built-in library.
 
-### 5.1 Outline (111 of 120 icons)
+### 5.1 Built-in outline contract (120 of 120 icons)
 
 ```svg
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
 ```
 
-- Standard stroke width `1.5`. Isolated, documented exceptions exist (`invoice.svg` uses `1` because `1.5` merges its currency mark into a blob at icon scale; `delivery-truck.svg` uses `stroke-linecap="butt" stroke-linejoin="miter"` to match sharp-cornered reference art) — any new exception must be similarly justified and noted in `CHANGELOG.md`, not silently introduced.
+- Standard stroke width is `1.5` across the built-in catalogue.
 - `fill`/`stroke` are set **only on the root `<svg>`**; child shapes carry no colour attributes of their own so they inherit correctly.
+- The only intentional drawing-style exception is `delivery-truck.svg`, which keeps sharp `butt` caps / `miter` joins to match its approved vehicle geometry. It still uses the same `1.5` outline weight and `currentColor` stroke.
+- The former filled ERP/AI icons and the old `invoice.svg` 1px exception were redrawn in `v0.9.63` so cards no longer switch visual weight/style inside one catalogue.
 
-### 5.2 Filled (9 of 120 icons: `purchase-order`, `delivery-order`, `ai-spark`, `purchase-requisition`, `debit-note`, `packing-list`, `pick-list`, `journal-entry`, `dashboard`)
+### 5.2 Filled compatibility
 
-```svg
-<svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
-```
-
-- Every "stroke" is actually a filled shape with matched inner/outer contours at a constant weight of `0.73` units (measured off `purchase-order.svg`).
-- A single `<path>` per icon, built from multiple `evenodd` subpaths (frame + inner cutout + badge + glyph knockout, etc.).
-- **Do not hand-author new ones.** Use `tools/gen-filled-icons.mjs` — see `SPEC.md` §7.4/ADR-010 for the two failure modes (blob badges from ring-nesting, and evenodd's inability to occlude one shape behind another) discovered building the current 9.
-- Because each shape carries its own `fill="currentColor"`, any code that recolours a filled icon (e.g. the Inspector's fill-colour picker) must write the resolved paint onto every descendant with a `fill` attribute, not just the root — see the `v0.6.1` fix in `CHANGELOG.md` if extending this logic.
-- **Grid colour:** filled and outline icons render in the *same* colour in the catalogue grid (ADR-011) — do not reintroduce a per-style accent override without a deliberate design decision.
+The SVG sanitizer, importer and renderer still support `fill="currentColor" stroke="none"` assets. This exists for uploaded/legacy SVG compatibility, not as a second built-in catalogue style. Historical filled authoring notes and the generator remain documented in `SPEC.md` and release history for maintenance of older assets.
 
 ### 5.3 Category taxonomy (10 categories, `order` controls display sequence)
 

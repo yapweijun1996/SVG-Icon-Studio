@@ -111,6 +111,7 @@
 - [x] Improve search relevance ranking in `js/features/filters.js`: replace plain substring matching with word-boundary token scoring so short queries (e.g. "ai") no longer match mid-word substrings (mAIl, chAIn), and direct name/token matches rank ahead of tag/metadata matches under Featured sort while preserving all explicit user sorts, released as `v0.9.60`
 - [x] v0.9.61: replace the misleading unavailable-icon X during lazy loading with a neutral skeleton; reserve the error fallback for confirmed failures and load previews directly without IntersectionObserver.
 - [x] v0.9.62: show the running PWA version and surface a user-controlled Update vX.Y.Z action for waiting service workers; embed the release version into the built worker/cache generation so every deployment can be detected reliably.
+- [x] v0.9.63: standardize all 120 built-in SVGs on the canonical 1.5-weight outline language; redraw the 9 former filled outliers plus Invoice, enforce the outline contract in validation, and keep filled support only for validated imported/future assets.
 - [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
 - [x] Browser/build SVG validation enforce strict XML declaration grammar and reject malformed declarations consistently
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
@@ -148,7 +149,7 @@
 
 ## In Progress
 
-*(none — current local release v0.9.62 passed the required suite plus real Chrome waiting-worker/update-version E2E. Local commit remains unpushed by policy.)*
+*(none — current local release v0.9.63 passed typecheck, full tests, build, diff check, legacy-generator guard verification, and production Chrome checks for all 10 redrawn icons at desktop/mobile sizes. Local commit remains unpushed by policy.)*
 
 ---
 

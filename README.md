@@ -70,10 +70,10 @@ npm test
 npm run build
 ```
 
-The catalogue supports two icon styles — see [DESIGN.md](DESIGN.md#5-icon-design-system) for the full contract:
+The built-in catalogue uses one consistent **`outline`** style — see [DESIGN.md](DESIGN.md#5-icon-design-system) for the full contract:
 
-- **`outline`** (most icons): `fill="none" stroke="currentColor"`, hand-authored paths.
-- **`filled`**: `fill="currentColor" stroke="none"`, every "stroke" is actually a filled shape with matched inner/outer contours. Don't hand-author these — use `tools/gen-filled-icons.mjs` as a reference for the authoring pattern (constant `0.73`-unit contour weight, solid-disc-with-knockout badges, no overlapping `evenodd` shapes).
+- All 120 built-in icons use `fill="none" stroke="currentColor" stroke-width="1.5"` at the root.
+- The importer/runtime still understands legacy or uploaded **`filled`** SVGs for backwards compatibility, but new built-in icons should follow the outline contract.
 
 ## Converting an arbitrary SVG
 

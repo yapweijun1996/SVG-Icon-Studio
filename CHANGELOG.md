@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.9.63 — 2026-09-25
+
+### Changed
+
+- Unified the built-in catalogue on one 1.5px outline design language. The 9 former filled icons (`ai-spark`, `purchase-order`, `delivery-order`, `purchase-requisition`, `debit-note`, `packing-list`, `pick-list`, `journal-entry`, `dashboard`) were redrawn as native 24×24 outline SVGs.
+- Redrew `invoice.svg` on the same 1.5px outline contract, removing its historical 1px stroke exception. Registry metadata now reports all 120 built-in icons as `outline`.
+- Filled SVG import/render compatibility remains intact for uploaded or legacy assets; this change only removes mixed styles from the shipped catalogue.
+- Build-time validation now enforces root `fill="none"` and `stroke-width="1.5"` on every built-in outline icon. The historical filled-icon generator is disabled by default and requires explicit `ICON_STUDIO_LEGACY_FILLED=1` opt-in, preventing accidental overwrite of the normalized catalogue.
+
+### Validation
+
+- `npm run typecheck`, full `npm test`, `npm run build`, and `git diff --check` pass. Validation reports 120 SVG icons with zero errors and registry style totals of `outline: 120`.
+- Production-preview Chrome verified all 10 redrawn icons (`invoice` plus the former 9 filled icons) render as `outline` with `fill="none"`, `stroke="currentColor"`, `stroke-width="1.5"`, no fallback/error state, and no console or network failures. Desktop (1200px) and mobile (390×844) had no horizontal overflow; the built UI reported `v0.9.63`.
+- Running the legacy filled generator without opt-in exits 1 with the expected disabled message and leaves the icon diff unchanged.
+
 ## 0.9.62 — 2026-09-25
 
 ### Added

@@ -1,9 +1,15 @@
-// Authoring-time generator for the FILLED glyph style used by
-// icons/catalog/purchase-order.svg: every "stroke" is really a filled shape
-// of a constant weight, and hollow shapes are evenodd subpath pairs.
-// Output is plain static SVG committed to the repo -- nothing runs at runtime.
+// Legacy authoring reference for the pre-v0.9.63 FILLED built-in icon style.
+// The production built-in catalogue is now canonical outline-only. Keep this
+// file for design-history/research, but require an explicit opt-in before it
+// can generate legacy assets so an accidental run cannot overwrite the current
+// normalized SVGs.
 import fs from 'node:fs/promises';
 import path from 'node:path';
+
+if (process.env.ICON_STUDIO_LEGACY_FILLED !== '1') {
+  console.error('Legacy filled generator disabled. Set ICON_STUDIO_LEGACY_FILLED=1 only for historical/reference output.');
+  process.exit(1);
+}
 
 const T = 0.73; // measured off purchase-order.svg (6.75-6.023 and 11.742-11.016)
 const n = v => {
