@@ -82,4 +82,67 @@ function baseState(overrides = {}) {
   assert.deepEqual(result.map(icon => icon.id), ['invoice', 'purchase-order', 'warehouse']);
 }
 
+// --- Relevance ranking regression tests (v0.9.60) ---
+
+function relevanceState(overrides = {}) {
+  const icons = [
+    { id: 'report', name: 'Report', category: 'Analytics', style: 'outline', tags: [], aliases: [], featured: false, sortOrder: 1 },
+    { id: 'chart-bar', name: 'Chart Bar', category: 'Analytics', style: 'outline', tags: ['report'], aliases: [], featured: true, sortOrder: 2 },
+    { id: 'purchase-order', name: 'Purchase Order', category: 'Finance', style: 'outline', tags: [], aliases: [], featured: false, sortOrder: 3 },
+    { id: 'cart', name: 'Cart', category: 'Commerce', style: 'outline', tags: ['order'], aliases: [], featured: true, sortOrder: 4 },
+    { id: 'mail', name: 'Mail', category: 'Comm', style: 'outline', tags: [], aliases: [], featured: false, sortOrder: 5 },
+    { id: 'ai-assistant', name: 'AI Assistant', category: 'Tools', style: 'outline', tags: [], aliases: ['ai'], featured: false, sortOrder: 6 },
+  ];
+  return {
+    icons,
+    view: 'library',
+    query: '',
+    category: 'All',
+    style: 'all',
+    sort: 'featured',
+    favorites: new Set(),
+    recent: [],
+    ...overrides,
+  };
+}
+
+// "ai" does not match mid-word substrings — Mail, Cart (no 'ai') are excluded.
+// Only AI Assistant (alias 'ai') matches.
+{
+  const result = getFilteredIcons(relevanceState({ query: 'ai' }));
+  assert.deepEqual(result.map(icon => icon.id), ['ai-assistant']);
+}
+
+// "report" ranks exact-name Report (score 7) before tagged Chart Bar (score 2)
+// even though chart-bar has featured=true and sortOrder=2 (both beat report's featured=false,sortOrder=1 in the old sort).
+{
+  const result = getFilteredIcons(relevanceState({ query: 'report' }));
+  assert.equal(result[0].id, 'report');
+  assert.equal(result[1].id, 'chart-bar');
+}
+
+// "order" ranks direct-name-token Purchase Order (score 5) before tag-matched Cart (score 2)
+// even though cart has featured=true.
+{
+  const result = getFilteredIcons(relevanceState({ query: 'order' }));
+  assert.equal(result[0].id, 'purchase-order');
+  assert.equal(result[1].id, 'cart');
+}
+
+// Explicit sort='name' ignores relevance scores — alphabetical order is preserved.
+{
+  const result = getFilteredIcons(relevanceState({ query: 'order', sort: 'name' }));
+  // Cart < Purchase Order alphabetically
+  assert.equal(result[0].id, 'cart');
+  assert.equal(result[1].id, 'purchase-order');
+}
+
+// Explicit sort='category' ignores relevance scores — category then name order is preserved.
+{
+  const result = getFilteredIcons(relevanceState({ query: 'report', sort: 'category' }));
+  // Both in Analytics; Chart Bar < Report alphabetically
+  assert.equal(result[0].id, 'chart-bar');
+  assert.equal(result[1].id, 'report');
+}
+
 console.log('Icon filter tests passed.');

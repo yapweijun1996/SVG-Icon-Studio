@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.9.60 — 2026-09-25
+
+### Improved
+
+- Replaced plain substring search matching with word-boundary token scoring. Queries are now matched against per-field token lists (name, id, aliases, tags, category, style split on spaces/hyphens/underscores); a match is only recognised when the query equals or is a prefix of a token — not a mid-word substring.
+- Under the default Featured sort, results are ranked by match strength: exact full-name match (score 7) > exact alias (6) > exact name-token (5) > name-token prefix (4) > alias token (3) > tag token (2) > category/style/id token (1). Relevance score is the primary sort key, with the existing featured/sortOrder values as the deterministic tie-break.
+- Explicit user sorts (Name, Category, Recently viewed) ignore relevance scores and sort by their own criteria; only filtering (score > 0) applies.
+
+### Validation
+
+- Pre-fix real Chrome 153 evidence: query "ai" returned 8 results including unrelated Home, Mail, Link, Info, Work Order, Audit Trail, Expense Claim (plain mid-word substring matches mAIl, chAIn, detAIl, etc.); query "report" returned Chart Bar before the exact-name Report icon; query "order" returned Cart before Purchase Order/Sales Order/Delivery Order.
+- Post-fix production-preview Chrome 153 at 1440×900, 834×1112, and 390×844 returned only **AI Spark** for `ai`; ranked **Report** first for `report`; ranked Purchase Order / Sales Order / Delivery Order / Work Order ahead of Cart for `order`; and preserved explicit Name A–Z ordering (Cart first for `order`). All three viewports reported zero runtime/log/network failures and no horizontal overflow. `npm run typecheck`, full `npm test` (120 SVG / zero errors), `npm run build`, and `git diff --check` also pass.
+
 ## 0.9.59 — 2026-09-25
 
 ### Fixed

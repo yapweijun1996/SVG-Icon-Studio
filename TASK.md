@@ -108,6 +108,7 @@
 - [x] Cap concurrent toast feedback at three visible messages, evicting the oldest first so rapid actions cannot cover most of a mobile viewport, released as `v0.9.57`
 - [x] Make burst toast announcements non-atomic and additions-only so new feedback does not replay earlier still-visible toasts, released as `v0.9.58`
 - [x] Keep mobile burst toast feedback below the sticky topbar and top safe-area inset so transient messages never cover primary navigation/actions, released as `v0.9.59`
+- [x] Improve search relevance ranking in `js/features/filters.js`: replace plain substring matching with word-boundary token scoring so short queries (e.g. "ai") no longer match mid-word substrings (mAIl, chAIn), and direct name/token matches rank ahead of tag/metadata matches under Featured sort while preserving all explicit user sorts, released as `v0.9.60`
 - [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
 - [x] Browser/build SVG validation enforce strict XML declaration grammar and reject malformed declarations consistently
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
@@ -145,7 +146,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.9.59` passed the required suite plus exact-head Chromium mobile toast/topbar separation checks and responsive smoke checks. Local commit remains unpushed by policy.)*
+*(none — current local release `v0.9.60` passed the required suite plus exact-head Chromium search-relevance checks at 1440×900, 834×1112, and 390×844. Local commit remains unpushed by policy.)*
 
 ---
 
@@ -159,7 +160,7 @@
 ## Backlog (smaller, UX-only — not part of any current epic)
 
 - [ ] Command palette (Cmd+K) — stretch, depends on the `window.IconStudio` API above.
-- [ ] Search relevance ranking + match highlighting (`js/features/filters.js` is currently plain substring match).
+- [ ] Search match highlighting (relevance ranking shipped in `v0.9.60`; highlighting the matched portion in the catalogue card name/tag remains).
 - [ ] Bulk multi-select export (currently one icon at a time).
 - [ ] Minimal dependency-free accessibility-audit script (considered, deferred — see `ROADMAP.md`).
 
