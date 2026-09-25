@@ -23,6 +23,13 @@ const viteSource = fs.readFileSync(new URL('../vite.config.js', import.meta.url)
 const inspectorSource = fs.readFileSync(new URL('../js/features/inspector.js', import.meta.url), 'utf8');
 const utilitiesSource = fs.readFileSync(new URL('../css/utilities.css', import.meta.url), 'utf8');
 const responsiveSource = fs.readFileSync(new URL('../css/responsive.css', import.meta.url), 'utf8');
+const tabletResponsiveStart = responsiveSource.indexOf('@media (max-width: 1180px)');
+const mobileResponsiveStart = responsiveSource.indexOf('@media (max-width: 820px)');
+const tabletResponsiveSource = tabletResponsiveStart >= 0 && mobileResponsiveStart > tabletResponsiveStart
+  ? responsiveSource.slice(tabletResponsiveStart, mobileResponsiveStart)
+  : '';
+assert.match(tabletResponsiveSource, /\.topbar-actions \.stats-pill \{ display: none; \}/, 'tablet topbar should hide the redundant icon-count pill before the PWA/version actions can overflow');
+
 const filterButtonTag = html.match(/<button\b[^>]*id="filterButton"[^>]*>/)?.[0] || '';
 const filterHandlerStart = appSource.indexOf("refs.filterButton.addEventListener('click'");
 const filterHandler = filterHandlerStart >= 0 ? appSource.slice(filterHandlerStart, filterHandlerStart + 650) : '';

@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.9.64 — 2026-09-25
+
+### Fixed
+
+- At the tablet inspector-drawer breakpoint (≤1180px), hide the redundant topbar icon-count pill so the PWA version/update control, Import action, theme action and inspector trigger fit without widening the workspace.
+- This specifically fixes the 834px tablet layout where the topbar was 611px wide but its actions forced a 643px scroll width after the version pill was introduced. Desktop keeps the icon-count pill; mobile keeps the existing compact topbar.
+
+### Validation
+
+- Exact-head `npm run typecheck`, full `npm test` (120 SVG / zero errors), `npm run build`, production version-contract check and `git diff --check` pass. Real Chrome production-preview checks at 1440×900, 834×1112 and 390×844 show no horizontal overflow and zero runtime/network failures. At 834px the topbar is now 611px wide with scrollWidth=611 (pre-fix: scrollWidth=643). A simulated waiting v0.9.65 worker also shows `Update v0.9.65` at 834px with no overflow.
+
 ## 0.9.63 — 2026-09-25
 
 ### Changed

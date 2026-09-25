@@ -12,6 +12,7 @@
   .category-row { flex-wrap: wrap; overflow: visible; }
   .icon-button.inspector-mobile-trigger { display: inline-grid; }
   .inspector-close-button { display: inline-grid; }
+  .topbar-actions .stats-pill { display: none; }
   body.inspector-open { overflow: hidden; }
   .inspector { padding-bottom: var(--safe-bottom); padding-right: var(--safe-right); }
   body.inspector-collapsed { --inspector-width: 0px; }
@@ -29,7 +30,6 @@
   body.sidebar-open { overflow: hidden; }
   .icon-button.mobile-only { display: inline-grid; }
   .topbar { padding: 10px 14px; padding-top: calc(10px + var(--safe-top)); }
-  .topbar-actions .stats-pill { display: none; }
   .main-content { padding: 20px 14px calc(40px + var(--safe-bottom)); padding-left: calc(14px + var(--safe-left)); padding-right: calc(14px + var(--safe-right)); }
   .hero-block { display: block; }
   .library-badge { display: inline-flex; margin-top: 13px; }
