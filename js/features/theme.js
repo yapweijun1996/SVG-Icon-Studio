@@ -1,20 +1,48 @@
-import { STORAGE, getValue, setValue } from '../core/storage.js';
+import { STORAGE, getValue, removeValue, setValue } from '../core/storage.js';
 
 export function createThemeController({ body, button }) {
-  const preferred = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  body.dataset.theme = getValue(STORAGE.theme, preferred);
+  const systemPreference = window.matchMedia('(prefers-color-scheme: dark)');
+  const storedTheme = getValue(STORAGE.theme);
+  let mode = storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : 'system';
   const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+
+  function getSystemTheme() {
+    return systemPreference.matches ? 'dark' : 'light';
+  }
+
+  function getResolvedTheme() {
+    return mode === 'system' ? getSystemTheme() : mode;
+  }
+
+  function getNextMode() {
+    const systemTheme = getSystemTheme();
+    if (mode === 'system') return systemTheme === 'dark' ? 'light' : 'dark';
+    if (mode !== systemTheme) return systemTheme;
+    return 'system';
+  }
+
   function sync() {
-    const actionLabel = `Switch to ${body.dataset.theme === 'dark' ? 'light' : 'dark'} theme`;
+    const theme = getResolvedTheme();
+    const nextMode = getNextMode();
+    const actionLabel = nextMode === 'system' ? 'Follow system theme' : 'Switch to ' + nextMode + ' theme';
+    body.dataset.theme = theme;
     button.setAttribute('aria-label', actionLabel);
     button.title = actionLabel;
-    // Keeps the PWA title bar / iOS status area matching the active theme.
-    if (themeColorMeta) themeColorMeta.content = body.dataset.theme === 'dark' ? '#151b24' : '#f45b0b';
+    if (themeColorMeta) themeColorMeta.content = theme === 'dark' ? '#151b24' : '#f45b0b';
   }
+
   sync();
+
   button.addEventListener('click', () => {
-    body.dataset.theme = body.dataset.theme === 'dark' ? 'light' : 'dark';
-    setValue(STORAGE.theme, body.dataset.theme);
+    mode = getNextMode();
+    if (mode === 'system') removeValue(STORAGE.theme);
+    else setValue(STORAGE.theme, mode);
     sync();
   });
+
+  if (typeof systemPreference.addEventListener === 'function') {
+    systemPreference.addEventListener('change', sync);
+  } else {
+    systemPreference.addListener?.(sync);
+  }
 }

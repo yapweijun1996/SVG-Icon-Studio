@@ -18,9 +18,18 @@ const appSource = fs.readFileSync(new URL('../js/app.js', import.meta.url), 'utf
 const shellSource = fs.readFileSync(new URL('../js/features/shell.js', import.meta.url), 'utf8');
 const themeSource = fs.readFileSync(new URL('../js/features/theme.js', import.meta.url), 'utf8');
 const catalogueSource = fs.readFileSync(new URL('../js/features/catalogue.js', import.meta.url), 'utf8');
+const pwaSource = fs.readFileSync(new URL('../js/features/pwa.js', import.meta.url), 'utf8');
+const viteSource = fs.readFileSync(new URL('../vite.config.js', import.meta.url), 'utf8');
 const inspectorSource = fs.readFileSync(new URL('../js/features/inspector.js', import.meta.url), 'utf8');
 const utilitiesSource = fs.readFileSync(new URL('../css/utilities.css', import.meta.url), 'utf8');
 const responsiveSource = fs.readFileSync(new URL('../css/responsive.css', import.meta.url), 'utf8');
+const tabletResponsiveStart = responsiveSource.indexOf('@media (max-width: 1180px)');
+const mobileResponsiveStart = responsiveSource.indexOf('@media (max-width: 820px)');
+const tabletResponsiveSource = tabletResponsiveStart >= 0 && mobileResponsiveStart > tabletResponsiveStart
+  ? responsiveSource.slice(tabletResponsiveStart, mobileResponsiveStart)
+  : '';
+assert.match(tabletResponsiveSource, /\.topbar-actions \.stats-pill \{ display: none; \}/, 'tablet topbar should hide the redundant icon-count pill before the PWA/version actions can overflow');
+
 const filterButtonTag = html.match(/<button\b[^>]*id="filterButton"[^>]*>/)?.[0] || '';
 const filterHandlerStart = appSource.indexOf("refs.filterButton.addEventListener('click'");
 const filterHandler = filterHandlerStart >= 0 ? appSource.slice(filterHandlerStart, filterHandlerStart + 650) : '';
@@ -60,6 +69,8 @@ assert.match(appSource, /\['ArrowLeft', 'ArrowUp'\]\.includes\(event\.key\)/, 'd
 assert.match(appSource, /activateDensity\(densityButtons\[nextIndex\], \{ focus: true \}\)/, 'density Arrow navigation should update selection and focus together');
 const activateDensityHandler = appSource.match(/function activateDensity\(button, \{ focus = false \} = \{\}\) \{[\s\S]*?\n  \}/)?.[0] || '';
 assert.match(activateDensityHandler, /catalogue\.render\(\{ announceResultStatus: false \}\)/, 'density-only rerenders should not repeat an unchanged catalogue live announcement');
+const sortFilterHandler = appSource.match(/refs\.sortFilter\.addEventListener\('change',[\s\S]*?\);/)?.[0] || '';
+assert.match(sortFilterHandler, /catalogue\.render\(\{ announceResultStatus: false \}\)/, 'sort-only rerenders should not repeat an unchanged catalogue live announcement');
 
 const setViewHandler = shellSource.match(/function setView\(view\) \{[\s\S]*?\n  \}/)?.[0] || '';
 assert.match(shellSource, /let lastNonCollectionSort = state\.sort/, 'shell should remember the non-Collections sort before applying the Collections default');
@@ -71,11 +82,30 @@ assert.match(setViewHandler, /refs\.sortFilter\.value = state\.sort/, 'the visib
 const importCompletionHandler = appSource.match(/onImported: record => \{[\s\S]*?\n    \}/)?.[0] || '';
 assert.doesNotMatch(importCompletionHandler, /state\.view\s*=/, 'import completion should not pre-mutate view state before the shell can restore view-scoped sort state');
 assert.match(importCompletionHandler, /shell\.setView\('uploaded'\)/, 'import completion should route the Uploaded view transition through the shell controller');
+assert.match(shellSource, /if \(button\.dataset\.view === state\.view\) return closeSidebar\(\)/, 're-activating the current navigation item should preserve catalogue state while still closing a mobile drawer');
+assert.match(shellSource, /if \(button\.dataset\.view === state\.view\) return closeSidebar\(\)[\s\S]*?setView\(button\.dataset\.view\)/, 'only changed navigation destinations should invoke the resetting view transition');
+
+const appVersionTag = html.match(/<span\b[^>]*id="appVersion"[^>]*>/)?.[0] || '';
+const pwaUpdateButtonTag = html.match(/<button\b[^>]*id="pwaUpdateButton"[^>]*>/)?.[0] || '';
+assert.match(appVersionTag, /class="pwa-version-pill"/, 'topbar should expose a visible app-version pill');
+assert.match(pwaUpdateButtonTag, /hidden/, 'PWA update action should stay hidden until a waiting worker exists');
+assert.match(html, /data-update-full>Update app/, 'PWA update action should have a full desktop label');
+assert.match(html, /data-update-short aria-hidden="true">Update/, 'PWA update action should retain a compact mobile label');
+assert.match(appSource, /createPwaController\(\{ versionNode: refs\.appVersion, updateButton: refs\.pwaUpdateButton, toast \}\)/, 'app startup should initialize the PWA version/update controller');
+assert.doesNotMatch(appSource, /navigator\.serviceWorker\.register\('\.\/sw\.js'\)/, 'legacy direct service-worker registration should be owned by the PWA controller instead');
+assert.match(pwaSource, /registration\.waiting && navigator\.serviceWorker\.controller/, 'PWA controller should surface an already-waiting update');
+assert.match(pwaSource, /registration\.addEventListener\('updatefound'/, 'PWA controller should detect newly installed updates');
+assert.match(pwaSource, /navigator\.serviceWorker\.addEventListener\('controllerchange'/, 'PWA controller should reload only after the chosen worker becomes controller');
+assert.match(pwaSource, /waitingWorker\.postMessage\(\{ type: 'SKIP_WAITING' \}\)/, 'Update button should explicitly activate the waiting worker');
+assert.match(pwaSource, /new URL\('version\.json', document\.baseURI\)/, 'waiting update label should fetch uncached deployment version metadata');
+assert.match(viteSource, /__APP_VERSION__:\s*JSON\.stringify\(appVersion\)/, 'production bundle should embed the running app version');
+assert.match(viteSource, /version\.json/, 'production build should publish deployment version metadata for waiting-update labels');
 
 const resultsHeaderTag = html.match(/<section\b[^>]*class="results-header"[^>]*>/)?.[0] || '';
 const resultsSummaryTag = html.match(/<span\b[^>]*id="resultsSummary"[^>]*>/)?.[0] || '';
 const resultsAnnouncementTag = html.match(/<span\b[^>]*id="resultsAnnouncement"[^>]*>/)?.[0] || '';
 const iconGridTag = html.match(/<div\b[^>]*id="iconGrid"[^>]*>/)?.[0] || '';
+const toastRegionTag = html.match(/<div\b[^>]*id="toastRegion"[^>]*>/)?.[0] || '';
 assert.doesNotMatch(resultsHeaderTag, /aria-live=/, 'results header should not duplicate catalogue live announcements');
 assert.doesNotMatch(resultsSummaryTag, /role="status"|aria-live=/, 'visible result count should stay readable without becoming a live region on auto-pagination');
 assert.match(resultsAnnouncementTag, /class="sr-only"/, 'result announcements should use the existing visually hidden utility');
@@ -83,6 +113,12 @@ assert.match(resultsAnnouncementTag, /role="status"/, 'result announcement shoul
 assert.match(resultsAnnouncementTag, /aria-live="polite"/, 'result announcement should update politely');
 assert.match(resultsAnnouncementTag, /aria-atomic="true"/, 'result announcement should announce the complete concise message');
 assert.doesNotMatch(iconGridTag, /aria-live=/, 'interactive icon grid should not announce every card rebuild as a live region');
+assert.match(toastRegionTag, /aria-live="polite"/, 'toast feedback should remain a polite live region');
+assert.match(toastRegionTag, /aria-atomic="false"/, 'toast additions should announce only the changed toast instead of replaying the whole visible stack');
+assert.match(toastRegionTag, /aria-relevant="additions"/, 'toast eviction should not make removals relevant to assistive technology');
+assert.match(responsiveSource, /\.toast-region\s*\{[^}]*top:\s*calc\(var\(--topbar-height\) \+ var\(--safe-top\) \+ 10px\)/s, 'mobile toast stack should start below the sticky topbar and safe-area inset');
+const clearFiltersButtonTag = html.match(/<button\b[^>]*id="clearSearchButton"[^>]*>[\s\S]*?<\/button>/)?.[0] || '';
+assert.match(clearFiltersButtonTag, />Clear filters<\/button>/, 'results reset control should be named for the query/category/style filters it actually clears');
 assert.match(catalogueSource, /const resultSummary = formatResultsSummary\(state, visible\.length, filtered\.length\)/, 'catalogue should calculate one contextual result summary for visible and assistive output');
 assert.match(catalogueSource, /refs\.resultsSummary\.textContent = resultSummary/, 'visible result summary should stay current even when automatic pagination is silent');
 assert.match(catalogueSource, /createResultStatusUpdater\(refs\.resultsAnnouncement\)/, 'live status updater should target the dedicated hidden announcement region');
@@ -93,6 +129,12 @@ assert.match(appSource, /addEventListener\('compositionstart',[\s\S]*?catalogue\
 assert.match(appSource, /const isComposing = searchIsComposing \|\| event\.isComposing;[\s\S]*?catalogue\.setResultStatusSuppressed\(isComposing\)/, 'search input should also honor InputEvent.isComposing while filtering visually');
 assert.match(appSource, /addEventListener\('compositionend',[\s\S]*?catalogue\.setResultStatusSuppressed\(false\)[\s\S]*?state\.query = event\.target\.value[\s\S]*?catalogue\.render\(\{ deferResultStatus: Boolean\(state\.query\) \}\)/, 'IME composition end should commit the final query, deferring only non-empty search announcements');
 assert.match(catalogueSource, /if \(resultStatusSuppressed\) resultStatusUpdater\.cancel\(\)/, 'catalogue renders during IME composition should cancel rather than announce partial result status');
+const renderAllHandler = appSource.match(/function renderAll\(renderOptions\) \{[\s\S]*?\n  \}/)?.[0] || '';
+const selectIconHandler = appSource.match(/function selectIcon\(id, openPanel = true, restoreAction = null\) \{[\s\S]*?\n  \}/)?.[0] || '';
+const toggleFavoriteHandler = appSource.match(/function toggleFavorite\(id\) \{[\s\S]*?\n  \}/)?.[0] || '';
+assert.match(renderAllHandler, /catalogue\.render\(renderOptions\)/, 'shared rerenders should forward catalogue announcement options');
+assert.match(selectIconHandler, /catalogue\.render\(\{ announceResultStatus: false \}\)/, 'Select/More rerenders should not repeat an unchanged catalogue result announcement');
+assert.match(toggleFavoriteHandler, /renderAll\(\{ announceResultStatus: state\.view === 'favorites' \}\)/, 'favorite rerenders should announce result changes only when Favorites membership changes the visible result set');
 
 const pageTitleTag = html.match(/<h1\b[^>]*id="pageTitle"[^>]*>/)?.[0] || '';
 assert.match(pageTitleTag, /tabindex="-1"/, 'workspace page title should accept programmatic focus after SPA view changes without adding a Tab stop');
@@ -101,11 +143,18 @@ assert.match(catalogueSource, /document\.title = `\$\{title\} — Icon Studio`/,
 
 const resultsTitleTag = html.match(/<h2\b[^>]*id="resultsTitle"[^>]*>/)?.[0] || '';
 const emptyRecoveryHandler = appSource.match(/function recoverEmptyCatalogue\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
-const clearSearchHandler = appSource.match(/function clearSearch\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
-assert.match(clearSearchHandler, /const restoreFocus = document\.activeElement === refs\.clearSearchButton/, 'Clear search should detect when the disappearing action currently owns focus');
-assert.match(clearSearchHandler, /resetFilters\(\)/, 'Clear search should preserve the existing filter reset behavior');
-assert.match(clearSearchHandler, /if \(restoreFocus\) refs\.searchInput\.focus\(\)/, 'Clear search should return focus to the persistent search field when its button hides');
-assert.match(appSource, /refs\.clearSearchButton\.addEventListener\('click', clearSearch\)/, 'Clear search should use the focus-safe clear handler');
+const clearResultFiltersHandler = appSource.match(/function clearResultFilters\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
+assert.match(clearResultFiltersHandler, /const restoreFocus = document\.activeElement === refs\.clearSearchButton/, 'results filter reset should detect when the disappearing action currently owns focus');
+assert.match(clearResultFiltersHandler, /const hadSearchQuery = Boolean\(state\.query\)/, 'results filter reset should distinguish search-driven resets from category/style-only resets');
+assert.match(clearResultFiltersHandler, /resetFilters\(\)/, 'results filter reset should preserve the existing shared reset behavior');
+assert.match(clearResultFiltersHandler, /\(hadSearchQuery \? refs\.searchInput : refs\.resultsTitle\)\.focus\(\)/, 'results filter reset should restore search focus for queries and results-heading focus for filter-only resets');
+assert.match(appSource, /refs\.clearSearchButton\.addEventListener\('click', clearResultFilters\)/, 'results reset control should use the context-aware focus handler');
+const resetFiltersHandler = appSource.match(/function resetFilters\(renderOptions\) \{[\s\S]*?\n  \}/)?.[0] || '';
+assert.match(resetFiltersHandler, /renderAll\(renderOptions\)/, 'shared filter reset should forward catalogue announcement options');
+const clearAdvancedFiltersHandler = appSource.match(/function clearAdvancedFilters\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
+assert.match(clearAdvancedFiltersHandler, /const changesResultContext = Boolean\(state\.query\) \|\| state\.category !== 'All' \|\| state\.style !== 'all'/, 'advanced Clear filters should distinguish semantic filter resets from result-neutral reset actions');
+assert.match(clearAdvancedFiltersHandler, /resetFilters\(\{ announceResultStatus: changesResultContext \}\)/, 'advanced Clear filters should announce only when query/category/style result context changes');
+assert.match(appSource, /refs\.clearFiltersButton\.addEventListener\('click', clearAdvancedFilters\)/, 'advanced Clear filters should use the result-context-aware reset handler');
 assert.match(resultsTitleTag, /tabindex="-1"/, 'results heading should accept programmatic focus after an empty-state recovery without adding a Tab stop');
 assert.match(catalogueSource, /refs\.emptyResetButton\.textContent = hasIconsInView\(state\) \? 'Reset filters' : 'Browse all icons'/, 'empty-state recovery label should distinguish hidden results from an intrinsically empty scoped view');
 assert.match(emptyRecoveryHandler, /const returnToLibrary = !hasIconsInView\(state\)/, 'empty-state recovery should detect when the current scoped view contains no items at all');
@@ -119,9 +168,24 @@ assert.match(catalogueSource, /\['ArrowLeft', 'ArrowRight', 'Home', 'End'\]/, 'c
 assert.match(catalogueSource, /chips\.forEach\(\(chip, chipIndex\) => \{ chip\.tabIndex = chipIndex === nextIndex \? 0 : -1; \}\)/, 'category toolbar should maintain roving tabindex');
 assert.match(catalogueSource, /chips\[nextIndex\]\.focus\(\)/, 'category toolbar should move focus without requiring Tab through every category');
 assert.match(catalogueSource, /replacement\?\.focus\(\)/, 'category activation should restore focus to the re-rendered selected chip');
+const categoryActivationHandler = catalogueSource.match(/refs\.categoryChips\.addEventListener\('click', event => \{[\s\S]*?\n  \}\);/)?.[0] || '';
+assert.match(categoryActivationHandler, /const nextCategory = button\.dataset\.category;[\s\S]*?if \(state\.category === nextCategory\) return;[\s\S]*?state\.category = nextCategory;/, 're-activating the selected category should be a no-op before pagination state or live results are rebuilt');
 
+assert.match(catalogueSource, /className: 'card-preview is-loading'/, 'catalogue cards should use a neutral loading state before SVG assets resolve');
+assert.doesNotMatch(catalogueSource, /preview\.append\(createFallbackSvg/, 'catalogue cards must not present the error fallback while an SVG is merely loading');
+assert.match(catalogueSource, /preview\.classList\.remove\('is-loading'\)/, 'resolved SVG previews should clear the loading state');
+assert.match(catalogueSource, /if \(observer\) observer\.observe\(preview\);[\s\S]*?else hydratePreview\(preview, icon, renderVersion\)/, 'browsers without IntersectionObserver should load real SVG previews directly instead of leaving a placeholder forever');
+
+const capturePaginationFocusHelper = catalogueSource.match(/function capturePaginationFocus\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
+const restorePaginationFocusHelper = catalogueSource.match(/function restorePaginationFocus\(snapshot\) \{[\s\S]*?\n  \}/)?.[0] || '';
+assert.match(capturePaginationFocusHelper, /refs\.categoryChips\.contains\(category\)/, 'automatic pagination should detect focus inside the category controls that render replaces');
+assert.match(capturePaginationFocusHelper, /refs\.iconGrid\.contains\(card\)/, 'automatic pagination should detect focus inside a rendered icon card that render replaces');
+assert.match(restorePaginationFocusHelper, /chip => chip\.dataset\.category === snapshot\.category/, 'automatic pagination should restore the equivalent category chip after rebuilding category controls');
+assert.match(restorePaginationFocusHelper, /focusRenderedCardAction\(snapshot\.iconId, snapshot\.actionName\)/, 'automatic pagination should restore the equivalent card action after rebuilding the icon grid');
 const loadMoreHandler = catalogueSource.match(/function loadMore\(\{ automatic = false \} = \{\}\) \{[\s\S]*?\n  \}/)?.[0] || '';
 assert.match(loadMoreHandler, /document\.activeElement === refs\.loadMoreButton/, 'Load more should detect when the manual pagination control owns focus');
+assert.match(loadMoreHandler, /const paginationFocus = automatic \? capturePaginationFocus\(\) : null/, 'only automatic pagination should snapshot focus that its asynchronous rerender can replace');
+assert.match(loadMoreHandler, /if \(automatic\) restorePaginationFocus\(paginationFocus\)/, 'automatic pagination should restore replaced catalogue focus immediately after rendering');
 assert.match(loadMoreHandler, /previousVisibleCount = refs\.iconGrid\.querySelectorAll\('\.icon-card'\)\.length/, 'Load more should remember the first newly revealed card position before re-rendering');
 assert.match(loadMoreHandler, /announceResultStatus: !automatic[\s\S]*?refreshPendingResultStatus: automatic/, 'automatic pagination should update visible results without starting a new live announcement');
 assert.match(loadMoreHandler, /restoreFocus && refs\.loadMoreButton\.parentElement\.hidden/, 'Load more should restore focus only when the focused manual control disappears');
@@ -238,9 +302,12 @@ const themeButtonTag = html.match(/<button\b[^>]*id="themeButton"[^>]*>/)?.[0] |
 const themeSync = themeSource.match(/function sync\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
 assert.match(themeButtonTag, /aria-label="Switch to dark theme"/, 'theme toggle should expose a concrete initial action');
 assert.match(themeButtonTag, /title="Switch to dark theme"/, 'theme toggle initial tooltip should match its action');
-assert.match(themeSync, /const actionLabel = `Switch to \${body\.dataset\.theme === 'dark' \? 'light' : 'dark'} theme`/, 'theme toggle action should derive from the active theme');
+assert.match(themeSource, /let mode = storedTheme === 'light' \|\| storedTheme === 'dark' \? storedTheme : 'system'/, 'theme controller should treat no explicit override as system-following mode');
+assert.match(themeSource, /if \(mode === 'system'\) removeValue\(STORAGE\.theme\)/, 'returning to system theme should clear the explicit persisted override');
+assert.match(themeSync, /nextMode === 'system' \? 'Follow system theme' : 'Switch to ' \+ nextMode \+ ' theme'/, 'theme toggle action should expose the follow-system reset when it is next');
 assert.match(themeSync, /setAttribute\('aria-label', actionLabel\)/, 'theme toggle should synchronize its accessible action name');
 assert.match(themeSync, /title = actionLabel/, 'theme toggle should synchronize its visible tooltip action');
+assert.match(themeSource, /systemPreference\.addEventListener\('change', sync\)/, 'system-following theme should react to preference changes');
 
 const restoreFocusHelper = shellSource.match(/function restoreDrawerFocus\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
 const sidebarCollapseSync = shellSource.match(/function syncCollapsedState\(collapsed\) \{[\s\S]*?\n  \}/)?.[0] || '';

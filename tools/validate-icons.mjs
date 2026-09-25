@@ -31,6 +31,8 @@ for (const icon of registry.icons || []) {
     if (!/currentColor/i.test(text)) errors.push(`${icon.id}: currentColor is required.`);
     if (icon.style === 'filled' && !/stroke\s*=\s*["']none["']/i.test(text)) errors.push(`${icon.id}: filled icon must use stroke="none".`);
     if (icon.style === 'outline' && !/stroke\s*=\s*["']currentColor["']/i.test(text)) errors.push(`${icon.id}: outline icon must use currentColor stroke.`);
+    if (icon.style === 'outline' && !/<svg\b[^>]*\bfill\s*=\s*["']none["']/i.test(text)) errors.push(`${icon.id}: outline icon must use root fill="none".`);
+    if (icon.style === 'outline' && !/<svg\b[^>]*\bstroke-width\s*=\s*["']1\.5["']/i.test(text)) errors.push(`${icon.id}: outline icon must use root stroke-width="1.5".`);
   } catch { errors.push(`Missing SVG file: ${icon.id}`); }
 }
 for (const file of files) {

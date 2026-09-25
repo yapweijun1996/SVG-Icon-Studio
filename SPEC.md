@@ -4,13 +4,13 @@
 **Project:** Icon Studio — SVG Icon Collection Admin Panel  
 **Code-MCP Project ID:** `project_f2a74b23-33c1-4c5c-b43d-e2b5b3108428`  
 **Status:** Living specification — the SSOT refactor this document originally proposed shipped in `v0.2.0` (2026-07-23) and is now the permanent baseline architecture. Sections 1–3 and 16 are kept as the historical record of that refactor; everything else describes the **current, as-built system**.  
-**Current release:** `v0.9.34` (2026-09-22) — see [CHANGELOG.md](CHANGELOG.md) for the full version history and [ROADMAP.md](ROADMAP.md) / [TASK.md](TASK.md) for what's planned next.
+**Current release:** v0.9.64 (2026-09-25) — see CHANGELOG.md for the full version history and ROADMAP.md / TASK.md for what is planned next.
 **Runtime:** Dependency-free static HTML, CSS and browser-native JavaScript (Vite is a dev-only wrapper — see ADR-001)  
 **Primary goal (original, achieved):** Replace the monolithic icon and application architecture with a scalable Single Source of Truth (SSOT) structure while preserving existing behaviour and visual output.
 
 ---
 
-## 0. Current status snapshot (v0.9.34, 2026-09-22)
+## 0. Current status snapshot (v0.9.64, 2026-09-25)
 
 A quick-reference dashboard so this document doesn't have to be read end-to-end just to answer "what does the app actually do right now." Everything here is derived from the current codebase, not from plan.
 
@@ -18,11 +18,11 @@ A quick-reference dashboard so this document doesn't have to be read end-to-end 
 | --- | --- |
 | Total icons | 120 (see `data/icon-registry.json`) |
 | Categories | 10 — Interface, Arrows, Actions, Files, Users, Commerce, Finance, Logistics, AI, ERP |
-| Icon styles | `outline` (111) and `filled` (9) — see §7.3/§7.4 |
+| Built-in icon style | `outline` (120/120); filled remains supported for uploaded/legacy compatibility — see §7.3/§7.4 |
 | Runtime dependencies | 0 (unchanged since inception) |
 | Dev tooling | Vite (`npm run dev` / `npm run build` / `npm run preview`); `npm run serve` still works with zero `node_modules` |
 | Security | SVG allowlist sanitizer (§13) + Content-Security-Policy meta tag (added v0.4.0) |
-| PWA | Manifest + service worker (added alongside the 0.2.x/0.3.x line, see CHANGELOG) |
+| PWA | Manifest + versioned service worker + visible running version + user-controlled waiting-update action |
 | CI/CD | `.github/workflows/deploy.yml` — `npm ci && npm test && npm run build` → GitHub Pages on every push to `main` |
 | Test suite | `npm test` — 12 checks incl. full registry/icon validation (see §19) |
 | Known accepted deviation | `package-lock.json`'s `version` field intentionally left behind `package.json`'s — see ADR-013 |
@@ -124,12 +124,13 @@ All of the above was resolved by the `v0.2.0` migration (§16) and no longer ref
 Everything in §4.1 plus, added across `v0.3.0`–`v0.7.1` (full detail in [CHANGELOG.md](CHANGELOG.md)):
 
 - Catalogue grown from 39 → 100 icons, with a 10th category (`ERP`, 36 icons) added specifically for ERP/back-office use cases.
-- A second icon style, `filled` (§7.4), authored via a dedicated generator script (`tools/gen-filled-icons.mjs`, ADR-010) rather than by hand, because the style's "strokes" are actually filled shapes with matched inner/outer contours.
+- Built-in icons use one canonical `outline` style. The `filled` style (§7.4) remains accepted for validated uploaded/future assets; `tools/gen-filled-icons.mjs` is retained only as an opt-in legacy authoring reference (ADR-010).
 - Vite as an optional dev-server/bundler (`npm run dev`, `npm run build`, `npm run preview`) — the runtime itself is still zero-dependency (ADR-001).
 - A Content-Security-Policy `<meta>` tag as defence in depth behind the sanitizer (ADR-009).
-- A PWA manifest and service worker (prod-only registration, to avoid fighting Vite HMR in dev); navigation caching only refreshes the offline app-shell fallback from successful HTML responses for the shell URL, preventing failed/unrelated navigations from poisoning it. Asset stale-while-revalidate refreshes extend the active `FetchEvent` through the network request and cache write so browsers cannot terminate an idle worker before the background update completes. Activation cleanup is namespace-scoped to `icon-studio-*` cache names so this project never deletes CacheStorage owned by another same-origin application. Runtime asset caching is restricted to canonical Icon Studio resource namespaces (`assets/`, `data/`, `icons/`, `icons-pwa/`, and the manifest); query-bearing or unrelated same-origin requests bypass the service-worker cache. Cacheable runtime assets under the resource namespaces are capped at 256 insertion-ordered entries, trimming the oldest overflow during activation and after successful refreshes while excluding the fixed offline shell and manifest from eviction.
+- A PWA manifest and service worker with prod-only registration. The topbar exposes the running release version; a newer installed worker remains waiting until the user activates the visible Update vX.Y.Z control. Production output includes uncached version metadata and embeds the package version into the worker/cache generation so every release produces a distinct worker and isolated cache. Navigation caching refreshes the offline app shell only from successful shell HTML responses. Canonical runtime assets remain bounded and unrelated/query-bearing requests bypass CacheStorage.
 - GitHub Actions CI/CD (`.github/workflows/deploy.yml`): install → test → build → publish to GitHub Pages on every push to `main`.
-- Catalogue-grid colouring unified across both icon styles (ADR-011) after `filled` growing from 3 → 9 icons made a per-style accent-colour override visually inconsistent.
+- Catalogue-grid colouring remains uniform across styles (ADR-011); `v0.9.63` additionally removed the built-in visual-weight split by redrawing all 120 built-ins as outline.
+- Built-in catalogue artwork unified to the standard 1.5px outline system in `v0.9.63`; the former 9 filled icons and the special 1px invoice drawing were redrawn while filled import/render support remains for uploaded/legacy assets.
 - Scroll-to-load auto-pagination on top of the original manual "Load more" button (ADR-012).
 - The `js/services/svg-policy.js` allow-list module, shared byte-for-byte between the browser sanitizer and the Node build-time checker (§9.3, extracted in `v0.2.2` after the two had already drifted once).
 
@@ -301,9 +302,9 @@ Each source SVG MUST:
 - Be valid XML/SVG.
 - Use a kebab-case filename matching the registry ID.
 
-### 7.3 Outline icon contract
+### 7.3 Built-in outline icon contract
 
-An Outline icon SHOULD use:
+Every built-in catalogue icon MUST use:
 
 ```svg
 <svg ... fill="none" stroke="currentColor"
@@ -312,11 +313,12 @@ An Outline icon SHOULD use:
      stroke-linejoin="round">
 ```
 
-The icon MAY use another documented default stroke width when optically required, but the metadata and inspector MUST treat it consistently.
+New built-in icons MUST preserve that shared weight/style. A geometry-specific cap/join exception MAY be documented when required (currently only `delivery-truck.svg`), but built-in stroke width remains 1.5.
 
-### 7.4 Filled icon contract
+### 7.4 Filled compatibility contract
 
-A Filled icon SHOULD use:
+Filled SVGs are supported for uploaded/legacy assets, not for new built-in catalogue entries. A compatible Filled icon SHOULD use:
+
 
 ```svg
 <svg ... fill="currentColor" stroke="none">
@@ -324,7 +326,7 @@ A Filled icon SHOULD use:
 
 A filled icon MAY use `fill-rule="evenodd"` and `clip-rule="evenodd"` when required.
 
-**Authoring guidance (added after `v0.6.0`):** in this style every visual "stroke" is actually a filled shape with a matched inner and outer contour at a constant weight (`0.73` units, as measured off the original `purchase-order.svg`: its document wall is `6.75 − 6.023` and its text rule is `11.742 − 11.016`). Hand-computing these coordinate pairs is not reliably correct, so new filled icons SHOULD be produced with `tools/gen-filled-icons.mjs` (ADR-010) rather than authored by hand. Two failure modes to avoid, both discovered the hard way while building the current 9 filled icons:
+**Legacy authoring guidance:** the pre-`v0.9.63` filled built-ins used matched inner/outer filled contours at a constant weight. No built-in currently uses this style; `tools/gen-filled-icons.mjs` remains explicitly opt-in historical/reference tooling for validated uploaded/future experiments. Two historical failure modes remain useful when reviewing filled SVGs:
 
 - A badge/knockout MUST be a solid shape with the glyph cut out of it by `fill-rule="evenodd"` (as `purchase-order.svg`'s tick does), never two nested outline circles forming a ring — nesting makes the fill alternate against the glyph and renders as a blob.
 - A single `evenodd` path cannot mask one shape *behind* another; overlapping regions cancel instead of one occluding the other. A badge and a document shape must not overlap in source geometry — layout the document to stop short of the badge, not underneath it.
@@ -541,7 +543,7 @@ Each feature module MUST own only its related state bindings and user interactio
 - `inspector.js`: controls, preview, code tabs and selected icon details.
 - `importer.js`: upload validation and user-uploaded asset persistence.
 - `shell.js`: sidebar, inspector drawer, overlays and responsive shell state.
-- `theme.js`: light/dark state and theme persistence.
+- `theme.js`: light/dark resolution, explicit override persistence, and live follow-system colour-scheme state.
 
 A feature module MUST NOT directly fetch catalogue SVG files. It MUST use `icon-repository.js`.
 
@@ -902,7 +904,7 @@ Any future one-time migration script MUST NOT be loaded in the browser and MUST 
 
 ### 18.4 `tools/gen-filled-icons.mjs` (added `v0.6.0`)
 
-Authoring-time generator for the `filled` glyph style (§7.4, ADR-010). Not part of the app or the build — it only emits static SVG that gets committed to `icons/catalog/`. Covered by `npm run typecheck` (Node syntax check only, since it's Node-only tooling) but has no dedicated test file.
+Legacy authoring reference for the pre-`v0.9.63` built-in filled style (§7.4, ADR-010). It is not part of the app/build and is disabled by default; `ICON_STUDIO_LEGACY_FILLED=1` is required before it can emit historical/reference SVG output. Current built-ins MUST NOT be regenerated from it.
 
 ### 18.5 `tools/convert-svg.mjs`
 
@@ -1111,11 +1113,11 @@ Ship a Content-Security-Policy `<meta>` tag alongside the existing SVG sanitizer
 
 ### ADR-010 — Filled-style icons are generated, not hand-authored (added `v0.6.0`)
 
-The `filled` glyph style (§7.4) requires matched inner/outer contours at a constant stroke weight, which is not reliably correct to hand-compute. New filled icons MUST be produced with `tools/gen-filled-icons.mjs` rather than authored directly as raw path data.
+Historical note: pre-`v0.9.63` built-in filled glyphs required matched inner/outer contours and used `tools/gen-filled-icons.mjs`. `v0.9.63` standardized every built-in on outline; the generator is now opt-in legacy/reference tooling only, while runtime filled support remains for validated uploaded/future assets.
 
 ### ADR-011 — Catalogue-grid colour is uniform across icon styles (added `v0.7.0`)
 
-Earlier releases coloured `filled`-style icons with the brand accent colour in the catalogue grid while `outline` icons used the normal ink colour. This was sustainable at 3 filled icons but became visually inconsistent once the style grew to 9 (`v0.6.0`). The grid now uses the same colour for every icon regardless of style; per-style colour differentiation, if ever wanted again, MUST be a deliberate design decision recorded here, not a CSS rule left over from an earlier icon count.
+Earlier releases coloured filled-style icons with the brand accent while outline icons used normal ink. The grid was later unified, and `v0.9.63` removed the remaining built-in style split by redrawing all built-ins as outline. Imported/future filled assets still use the same grid colour; any new per-style differentiation requires a deliberate design decision.
 
 ### ADR-012 — Catalogue pagination auto-loads on scroll, manual button stays as fallback (added `v0.7.0`)
 
@@ -1126,6 +1128,10 @@ An `IntersectionObserver` on the existing "Load more" control extends the visibl
 Regenerating `package-lock.json` on Windows (`npm install --package-lock-only`) has been observed to drop optional platform-specific peer dependency entries (e.g. `@emnapi/core`) that Linux CI (`npm ci` on `ubuntu-latest` in `.github/workflows/deploy.yml`) may need. The version-field mismatch between `package.json` and `package-lock.json` is a known, accepted deviation, not a bug to fix reflexively — regenerate the lockfile on Linux/CI if it ever needs to move forward.
 
 ---
+
+### ADR-014 — Built-in catalogue uses one outline style (added `v0.9.63`)
+
+The mixed built-in catalogue (111 outline + 9 filled, plus a 1px invoice exception) produced visibly inconsistent weight and shape language in the same browsing grid. All 120 built-in icons now use the standard 1.5px `currentColor` outline contract. Filled parsing/rendering remains supported for uploaded and legacy assets so compatibility is preserved; the decision only removes mixed visual styles from the shipped catalogue.
 
 ## 24. Definition of Done
 
@@ -1152,7 +1158,7 @@ When implementing *new* work in this repo (not the historical §16 migration):
 2. Follow the existing module boundaries (§9) and CSS layering (§12) rather than introducing new ones.
 3. Run `npm test`, `npm run typecheck` and `npm run build` before considering any change done — all three are fast and are the actual quality gate, not a formality.
 4. Preserve all current icon IDs and user-facing behaviour unless a change is explicitly scoped to replace them.
-5. Any new icon added to `icons/catalog/` MUST pass `npm run validate` and follow §7's contract (outline §7.3 or filled §7.4/ADR-010).
+5. Any new built-in icon added to `icons/catalog/` MUST pass `npm run validate` and follow the canonical outline contract in §7.3. Filled §7.4 remains for validated uploaded/future compatibility, not built-in additions.
 6. Update `CHANGELOG.md` (with a **Validation** subsection describing what was actually checked, not just what changed) and bump `package.json`'s version for any user-visible change — this has been the project's convention since `v0.3.0` and keeps `SPEC.md §0` accurate without a separate sync step.
 7. Do not ask for confirmation on routine implementation decisions already covered by this specification; do ask before decisions that aren't (new architecture, a new external dependency, anything touching the security model in §13).
 8. Leave unrelated enhancements for a separate task — see `TASK.md` for the backlog rather than scope-creeping the current change.

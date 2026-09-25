@@ -96,6 +96,23 @@
 - [x] Keep native search Escape/cancel clearing synchronized with the visible/live result status immediately while preserving the non-empty typing debounce, released as `v0.9.45`
 - [x] Keep IntersectionObserver auto-pagination silent in the polite result live region while preserving the visible count and refreshing any already-pending search announcement, released as `v0.9.46`
 - [x] Keep Grid/Compact density changes silent in the catalogue result live region because they alter presentation only, avoiding duplicate unchanged announcements, released as `v0.9.47`
+- [x] Keep Select/More and non-Favorites favorite rerenders silent in the catalogue result live region while preserving one contextual announcement when Favorites membership changes the visible result set, released as `v0.9.48`
+- [x] Keep Sort-only catalogue rerenders silent in the result live region because ordering changes presentation without changing the result set or context, released as `v0.9.49`
+- [x] Name the results reset action **Clear filters** so its accessible/visible label matches its actual query/category/style reset behavior, released as `v0.9.50`
+- [x] Keep filter-only results reset focus in the updated results context while preserving Search focus for query-driven resets, released as `v0.9.51`
+- [x] Keep Advanced **Clear filters** silent when it only resets Sort or repeats defaults, while preserving one contextual announcement for query/category/style resets and retaining focus, released as `v0.9.52`
+- [x] Preserve focused Category chips and icon-card actions across automatic IntersectionObserver pagination rerenders so background loading cannot drop keyboard focus to `body`, released as `v0.9.53`
+- [x] Make re-activating the already-selected Category a true no-op so expanded result batches are preserved and unchanged polite result announcements are not repeated, released as `v0.9.54`
+- [x] Make re-activating the already-current workspace navigation item a true catalogue-state no-op while still closing the mobile drawer, released as `v0.9.55`
+- [x] Let the compact theme control cycle back to live **Follow system** mode, clearing the explicit override and reacting to OS/browser colour-scheme changes, released as `v0.9.56`
+- [x] Cap concurrent toast feedback at three visible messages, evicting the oldest first so rapid actions cannot cover most of a mobile viewport, released as `v0.9.57`
+- [x] Make burst toast announcements non-atomic and additions-only so new feedback does not replay earlier still-visible toasts, released as `v0.9.58`
+- [x] Keep mobile burst toast feedback below the sticky topbar and top safe-area inset so transient messages never cover primary navigation/actions, released as `v0.9.59`
+- [x] Improve search relevance ranking in `js/features/filters.js`: replace plain substring matching with word-boundary token scoring so short queries (e.g. "ai") no longer match mid-word substrings (mAIl, chAIn), and direct name/token matches rank ahead of tag/metadata matches under Featured sort while preserving all explicit user sorts, released as `v0.9.60`
+- [x] v0.9.61: replace the misleading unavailable-icon X during lazy loading with a neutral skeleton; reserve the error fallback for confirmed failures and load previews directly without IntersectionObserver.
+- [x] v0.9.62: show the running PWA version and surface a user-controlled Update vX.Y.Z action for waiting service workers; embed the release version into the built worker/cache generation so every deployment can be detected reliably.
+- [x] v0.9.63: standardize all 120 built-in SVGs on the canonical 1.5-weight outline language; redraw the 9 former filled outliers plus Invoice, enforce the outline contract in validation, and keep filled support only for validated imported/future assets.
+- [x] v0.9.64: prevent tablet topbar overflow by hiding the redundant icon-count pill at the existing ≤1180px inspector-drawer breakpoint while keeping the PWA version/update action visible.
 - [x] Browser SVG sanitizer rejects `DOCTYPE` before XML parsing so untrusted entity declarations cannot reach `DOMParser`
 - [x] Browser/build SVG validation enforce strict XML declaration grammar and reject malformed declarations consistently
 - [x] Build-time SVG validator decodes XML character references before URL/reference checks, matching browser `DOMParser` security semantics
@@ -133,7 +150,7 @@
 
 ## In Progress
 
-*(none — current local release `v0.9.47` passed the required suite plus a production-preview Chrome 153 live-region harness at desktop/tablet/mobile viewports. Local commits remain unpushed by policy.)*
+*(none — current local release v0.9.64 passed typecheck, full tests, build, diff check and production Chrome checks at 1440×900 / 834×1112 / 390×844, including a simulated waiting-update state. Local commits remain unpushed by policy.)*
 
 ---
 
@@ -147,10 +164,8 @@
 ## Backlog (smaller, UX-only — not part of any current epic)
 
 - [ ] Command palette (Cmd+K) — stretch, depends on the `window.IconStudio` API above.
-- [ ] Search relevance ranking + match highlighting (`js/features/filters.js` is currently plain substring match).
-- [ ] Toast stacking cap (`js/ui/toast.js` has no limit on concurrent toasts).
+- [ ] Search match highlighting (relevance ranking shipped in `v0.9.60`; highlighting the matched portion in the catalogue card name/tag remains).
 - [ ] Bulk multi-select export (currently one icon at a time).
-- [ ] Theme: no UI to reset an explicit light/dark override back to "follow system".
 - [ ] Minimal dependency-free accessibility-audit script (considered, deferred — see `ROADMAP.md`).
 
 ## Blocked

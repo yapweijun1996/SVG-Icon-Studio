@@ -10,6 +10,7 @@ import { createInspectorController } from './features/inspector.js';
 import { createImporterController } from './features/importer.js';
 import { createShellController } from './features/shell.js';
 import { createThemeController } from './features/theme.js';
+import { createPwaController } from './features/pwa.js';
 import { createToastController, copyText } from './ui/toast.js';
 
 function collectRefs() {
@@ -17,6 +18,7 @@ function collectRefs() {
     body: document.body, backdrop: $('#mobileBackdrop'), sidebar: $('#sidebar'), workspace: $('.workspace'),
     mobileMenuButton: $('#mobileMenuButton'), mobileInspectorButton: $('#mobileInspectorButton'),
     brandToggle: $('#brandToggle'), themeButton: $('#themeButton'), importButton: $('#importButton'),
+    appVersion: $('#appVersion'), pwaUpdateButton: $('#pwaUpdateButton'),
     svgFileInput: $('#svgFileInput'), totalIconCount: $('#totalIconCount'), visibleIconCount: $('#visibleIconCount'),
     favoriteCount: $('#favoriteCount'), recentCount: $('#recentCount'), uploadCount: $('#uploadCount'),
     collectionCount: $('#collectionCount'),
@@ -47,6 +49,7 @@ function collectRefs() {
 async function start() {
   const refs = collectRefs();
   const toast = createToastController(refs.toastRegion);
+  createPwaController({ versionNode: refs.appVersion, updateButton: refs.pwaUpdateButton, toast });
   const registry = await loadRegistry();
   const migration = await migrateLegacyUploads(sanitizeSvgText);
   if (migration.migrated) toast(`${migration.migrated} uploaded icon${migration.migrated === 1 ? '' : 's'} migrated to IndexedDB`);
@@ -71,8 +74,8 @@ async function start() {
   let shell;
   const getIcon = id => state.icons.find(icon => icon.id === (id || state.selectedId)) || state.icons[0];
 
-  function renderAll() {
-    catalogue.render();
+  function renderAll(renderOptions) {
+    catalogue.render(renderOptions);
     inspector.update();
   }
 
@@ -87,7 +90,9 @@ async function start() {
     state.selectedId = icon.id;
     state.recent = [icon.id, ...state.recent.filter(item => item !== icon.id)].slice(0, 20);
     setJson(STORAGE.recent, state.recent);
-    catalogue.render();
+    // Selection/recent-order changes do not alter the current result set or
+    // filter context, so avoid repeating the unchanged catalogue live status.
+    catalogue.render({ announceResultStatus: false });
     inspector.update();
     if (openPanel && window.matchMedia('(max-width: 1180px)').matches) {
       shell.openInspector(restoreAction ? findRenderedCardAction(icon.id, restoreAction) : undefined);
@@ -105,7 +110,9 @@ async function start() {
       toast(`${icon.name} added to favorites`);
     }
     setJson(STORAGE.favorites, [...state.favorites]);
-    renderAll();
+    // Favorite membership changes the visible result set only inside the
+    // Favorites view. Elsewhere this is a presentation/state-only rerender.
+    renderAll({ announceResultStatus: state.view === 'favorites' });
   }
 
   async function copyIcon(icon) {
@@ -147,7 +154,7 @@ async function start() {
     }
   });
 
-  function resetFilters() {
+  function resetFilters(renderOptions) {
     state.query = '';
     state.category = 'All';
     state.style = 'all';
@@ -156,7 +163,12 @@ async function start() {
     refs.searchInput.value = '';
     refs.styleFilter.value = 'all';
     refs.sortFilter.value = state.sort;
-    renderAll();
+    renderAll(renderOptions);
+  }
+
+  function clearAdvancedFilters() {
+    const changesResultContext = Boolean(state.query) || state.category !== 'All' || state.style !== 'all';
+    resetFilters({ announceResultStatus: changesResultContext });
   }
 
   function recoverEmptyCatalogue() {
@@ -166,10 +178,12 @@ async function start() {
     refs.resultsTitle.focus();
   }
 
-  function clearSearch() {
+  function clearResultFilters() {
     const restoreFocus = document.activeElement === refs.clearSearchButton;
+    const hadSearchQuery = Boolean(state.query);
     resetFilters();
-    if (restoreFocus) refs.searchInput.focus();
+    if (!restoreFocus) return;
+    (hadSearchQuery ? refs.searchInput : refs.resultsTitle).focus();
   }
 
   let searchIsComposing = false;
@@ -197,9 +211,9 @@ async function start() {
     state.visibleLimit = 24;
     catalogue.render({ deferResultStatus: Boolean(state.query) });
   });
-  refs.clearSearchButton.addEventListener('click', clearSearch);
+  refs.clearSearchButton.addEventListener('click', clearResultFilters);
   refs.emptyResetButton.addEventListener('click', recoverEmptyCatalogue);
-  refs.clearFiltersButton.addEventListener('click', resetFilters);
+  refs.clearFiltersButton.addEventListener('click', clearAdvancedFilters);
   function setAdvancedFiltersExpanded(expanded) {
     refs.advancedFilter.hidden = !expanded;
     refs.filterButton.setAttribute('aria-expanded', String(expanded));
@@ -221,7 +235,7 @@ async function start() {
     refs.filterButton.focus();
   });
   refs.styleFilter.addEventListener('change', event => { state.style = event.target.value; state.visibleLimit = 24; catalogue.render(); });
-  refs.sortFilter.addEventListener('change', event => { state.sort = event.target.value; state.visibleLimit = 24; catalogue.render(); });
+  refs.sortFilter.addEventListener('change', event => { state.sort = event.target.value; state.visibleLimit = 24; catalogue.render({ announceResultStatus: false }); });
   const densityButtons = $$('.density-switch button');
 
   function syncDensityButtons() {
@@ -260,15 +274,6 @@ async function start() {
   catalogue.render();
   await inspector.update();
   selectIcon(state.selectedId, false);
-}
-
-// PWA: register only in production builds — a caching worker in dev fights
-// Vite's module server and HMR. Relative URL keeps it working under a
-// GitHub Pages project subpath.
-if (import.meta.env?.PROD && 'serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(error => console.warn('[Icon Studio] SW registration failed:', error.message));
-  });
 }
 
 start().catch(error => {

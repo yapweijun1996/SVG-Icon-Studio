@@ -73,13 +73,55 @@ export function formatResultsSummary(state, visibleCount, filteredCount) {
   return context.length ? `${countSummary} — ${context.join(', ')}` : countSummary;
 }
 
+function tokenize(str) {
+  return str.toLowerCase().split(/[\s\-_]+/).filter(Boolean);
+}
+
+function tokenMatches(fieldTokens, qt) {
+  return fieldTokens.some(t => t === qt || t.startsWith(qt));
+}
+
+function scoreIcon(icon, query) {
+  const q = query.toLowerCase();
+  const qTokens = tokenize(q);
+  if (!qTokens.length) return 0;
+
+  const name = icon.name.toLowerCase();
+  const nameTokens = tokenize(name);
+  const idTokens = tokenize(icon.id);
+  const catTokens = tokenize(icon.category);
+  const styleTokens = tokenize(icon.style);
+  const tagTokens = (icon.tags || []).flatMap(t => tokenize(t));
+  const aliasTokens = (icon.aliases || []).flatMap(a => tokenize(a));
+  const aliasExact = (icon.aliases || []).map(a => a.toLowerCase());
+
+  if (qTokens.length > 1) {
+    const allTokens = [...nameTokens, ...idTokens, ...catTokens, ...styleTokens, ...tagTokens, ...aliasTokens];
+    if (!qTokens.every(qt => tokenMatches(allTokens, qt))) return 0;
+    const nameMatches = qTokens.filter(qt => tokenMatches(nameTokens, qt)).length;
+    return nameMatches === qTokens.length ? 5 : nameMatches > 0 ? 3 : 2;
+  }
+
+  const qt = qTokens[0];
+  if (name === qt) return 7;
+  if (aliasExact.includes(qt)) return 6;
+  if (nameTokens.some(t => t === qt)) return 5;
+  if (nameTokens.some(t => t.startsWith(qt))) return 4;
+  if (tokenMatches(aliasTokens, qt)) return 3;
+  if (tokenMatches(tagTokens, qt)) return 2;
+  if (tokenMatches(idTokens, qt) || tokenMatches(catTokens, qt) || tokenMatches(styleTokens, qt)) return 1;
+  return 0;
+}
+
 export function getFilteredIcons(state) {
   let icons = getViewIcons(state);
 
   const query = state.query.trim().toLowerCase();
+  let searchScores = null;
   if (query) {
-    icons = icons.filter(icon => [icon.name, icon.category, icon.style, ...(icon.tags || []), ...(icon.aliases || [])]
-      .join(' ').toLowerCase().includes(query));
+    const scored = icons.map(icon => ({ icon, score: scoreIcon(icon, query) }));
+    icons = scored.filter(e => e.score > 0).map(e => e.icon);
+    searchScores = new Map(scored.filter(e => e.score > 0).map(e => [e.icon.id, e.score]));
   }
   if (state.category !== 'All') icons = icons.filter(icon => icon.category === state.category);
   if (state.style !== 'all') icons = icons.filter(icon => icon.style === state.style);
@@ -90,7 +132,13 @@ export function getFilteredIcons(state) {
     else if (state.sort === 'recent') {
       const order = new Map(state.recent.map((id, index) => [id, index]));
       icons.sort((a, b) => (order.get(a.id) ?? 9999) - (order.get(b.id) ?? 9999));
-    } else icons.sort((a, b) => Number(b.featured) - Number(a.featured) || a.sortOrder - b.sortOrder);
+    } else {
+      icons.sort((a, b) =>
+        (searchScores ? (searchScores.get(b.id) ?? 0) - (searchScores.get(a.id) ?? 0) : 0) ||
+        Number(b.featured) - Number(a.featured) ||
+        a.sortOrder - b.sortOrder
+      );
+    }
   }
   return icons;
 }

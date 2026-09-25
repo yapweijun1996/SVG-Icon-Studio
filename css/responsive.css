@@ -12,6 +12,7 @@
   .category-row { flex-wrap: wrap; overflow: visible; }
   .icon-button.inspector-mobile-trigger { display: inline-grid; }
   .inspector-close-button { display: inline-grid; }
+  .topbar-actions .stats-pill { display: none; }
   body.inspector-open { overflow: hidden; }
   .inspector { padding-bottom: var(--safe-bottom); padding-right: var(--safe-right); }
   body.inspector-collapsed { --inspector-width: 0px; }
@@ -29,7 +30,6 @@
   body.sidebar-open { overflow: hidden; }
   .icon-button.mobile-only { display: inline-grid; }
   .topbar { padding: 10px 14px; padding-top: calc(10px + var(--safe-top)); }
-  .topbar-actions .stats-pill { display: none; }
   .main-content { padding: 20px 14px calc(40px + var(--safe-bottom)); padding-left: calc(14px + var(--safe-left)); padding-right: calc(14px + var(--safe-right)); }
   .hero-block { display: block; }
   .library-badge { display: inline-flex; margin-top: 13px; }
@@ -40,7 +40,7 @@
   .category-row::-webkit-scrollbar { display: none; }
   .category-chip { flex: 0 0 auto; scroll-snap-align: center; }
   .search-row { grid-template-columns: minmax(0, 1fr) 44px; }
-  .toast-region { right: 50%; bottom: auto; top: calc(10px + env(safe-area-inset-top)); transform: translateX(50%); justify-items: center; }
+  .toast-region { right: 50%; bottom: auto; top: calc(var(--topbar-height) + var(--safe-top) + 10px); transform: translateX(50%); justify-items: center; }
   .density-switch { grid-column: 1 / -1; justify-self: start; }
   .advanced-filter { align-items: stretch; flex-direction: column; }
   .advanced-filter label { min-width: 0; }
@@ -55,6 +55,10 @@
   .topbar-actions { gap: 6px; }
   .topbar-actions .button span { display: none; }
   .topbar-actions .button { width: 44px; padding: 0; }
+  .pwa-version-pill { min-width: 52px; padding-inline: 8px; }
+  .pwa-update-button { min-width: 58px; padding-inline: 8px; }
+  .pwa-update-button [data-update-full] { display: none; }
+  .pwa-update-button [data-update-short] { display: inline; }
   .breadcrumb span:first-child, .breadcrumb span:nth-child(2) { display: none; }
   .hero-block h1 { font-size: 27px; }
   .icon-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }

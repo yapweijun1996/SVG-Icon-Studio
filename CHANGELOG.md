@@ -1,5 +1,192 @@
 # Changelog
 
+## 0.9.64 — 2026-09-25
+
+### Fixed
+
+- At the tablet inspector-drawer breakpoint (≤1180px), hide the redundant topbar icon-count pill so the PWA version/update control, Import action, theme action and inspector trigger fit without widening the workspace.
+- This specifically fixes the 834px tablet layout where the topbar was 611px wide but its actions forced a 643px scroll width after the version pill was introduced. Desktop keeps the icon-count pill; mobile keeps the existing compact topbar.
+
+### Validation
+
+- Exact-head `npm run typecheck`, full `npm test` (120 SVG / zero errors), `npm run build`, production version-contract check and `git diff --check` pass. Real Chrome production-preview checks at 1440×900, 834×1112 and 390×844 show no horizontal overflow and zero runtime/network failures. At 834px the topbar is now 611px wide with scrollWidth=611 (pre-fix: scrollWidth=643). A simulated waiting v0.9.65 worker also shows `Update v0.9.65` at 834px with no overflow.
+
+## 0.9.63 — 2026-09-25
+
+### Changed
+
+- Unified the built-in catalogue on one 1.5px outline design language. The 9 former filled icons (`ai-spark`, `purchase-order`, `delivery-order`, `purchase-requisition`, `debit-note`, `packing-list`, `pick-list`, `journal-entry`, `dashboard`) were redrawn as native 24×24 outline SVGs.
+- Redrew `invoice.svg` on the same 1.5px outline contract, removing its historical 1px stroke exception. Registry metadata now reports all 120 built-in icons as `outline`.
+- Filled SVG import/render compatibility remains intact for uploaded or legacy assets; this change only removes mixed styles from the shipped catalogue.
+- Build-time validation now enforces root `fill="none"` and `stroke-width="1.5"` on every built-in outline icon. The historical filled-icon generator is disabled by default and requires explicit `ICON_STUDIO_LEGACY_FILLED=1` opt-in, preventing accidental overwrite of the normalized catalogue.
+
+### Validation
+
+- `npm run typecheck`, full `npm test`, `npm run build`, and `git diff --check` pass. Validation reports 120 SVG icons with zero errors and registry style totals of `outline: 120`.
+- Production-preview Chrome verified all 10 redrawn icons (`invoice` plus the former 9 filled icons) render as `outline` with `fill="none"`, `stroke="currentColor"`, `stroke-width="1.5"`, no fallback/error state, and no console or network failures. Desktop (1200px) and mobile (390×844) had no horizontal overflow; the built UI reported `v0.9.63`.
+- Running the legacy filled generator without opt-in exits 1 with the expected disabled message and leaves the icon diff unchanged.
+
+## 0.9.62 — 2026-09-25
+
+### Added
+
+- The topbar now shows the running app version. When a newer service worker reaches the waiting state, the version pill is replaced by an explicit Update vX.Y.Z action instead of silently taking over.
+- Clicking Update sends an explicit SKIP_WAITING message to the waiting worker; the page reloads only after controllerchange confirms the chosen worker became active.
+- Production builds publish version.json and embed the running package version in both the JavaScript bundle and generated service worker. Each release therefore produces a distinct worker script and an isolated Icon Studio cache generation, so update detection works even when service-worker logic itself did not otherwise change.
+
+### Validation
+
+- Exact-head typecheck, full npm test (120 SVG / zero validation errors), build and git diff --check pass. Build verification confirms dist/version.json is 0.9.62 and the built service worker contains the same app version with no unreplaced placeholder.
+- Real Chrome production-preview E2E started on v0.9.62 with a visible v0.9.62 pill and no update button, then served a simulated v0.9.63 worker/version metadata and called registration.update(). Chrome reported the new worker waiting, the UI switched to Update v0.9.63 with matching accessible label, and the 390x844 mobile layout showed the compact v0.9.63 update control with no horizontal overflow. Service-worker tests separately verify install no longer auto-calls skipWaiting and the explicit SKIP_WAITING message activates it exactly once.
+
+## 0.9.61 — 2026-09-25
+
+### Fixed
+
+- Catalogue cards no longer render the unavailable-icon X while their real SVG asset is merely lazy-loading. The initial preview is now a neutral skeleton, and the error fallback is reserved for a confirmed asset failure.
+- When IntersectionObserver is unavailable, visible card previews load their real SVG directly instead of leaving a permanent placeholder.
+
+### Validation
+
+- Regression checks cover the loading-vs-error distinction and direct fallback loading without IntersectionObserver. Exact-head typecheck, full npm test (120 SVG / zero validation errors), npm run build and git diff --check pass. Real Chrome against the zero-dependency server rendered 24 cards with 10 already-hydrated real SVG previews, 14 neutral loading states still in flight, and 0 error fallbacks; the first visible cards included Invoice, Customer, Delivery Truck, Search, Settings and Cart.
+
+## 0.9.60 — 2026-09-25
+
+### Improved
+
+- Replaced plain substring search matching with word-boundary token scoring. Queries are now matched against per-field token lists (name, id, aliases, tags, category, style split on spaces/hyphens/underscores); a match is only recognised when the query equals or is a prefix of a token — not a mid-word substring.
+- Under the default Featured sort, results are ranked by match strength: exact full-name match (score 7) > exact alias (6) > exact name-token (5) > name-token prefix (4) > alias token (3) > tag token (2) > category/style/id token (1). Relevance score is the primary sort key, with the existing featured/sortOrder values as the deterministic tie-break.
+- Explicit user sorts (Name, Category, Recently viewed) ignore relevance scores and sort by their own criteria; only filtering (score > 0) applies.
+
+### Validation
+
+- Pre-fix real Chrome 153 evidence: query "ai" returned 8 results including unrelated Home, Mail, Link, Info, Work Order, Audit Trail, Expense Claim (plain mid-word substring matches mAIl, chAIn, detAIl, etc.); query "report" returned Chart Bar before the exact-name Report icon; query "order" returned Cart before Purchase Order/Sales Order/Delivery Order.
+- Post-fix production-preview Chrome 153 at 1440×900, 834×1112, and 390×844 returned only **AI Spark** for `ai`; ranked **Report** first for `report`; ranked Purchase Order / Sales Order / Delivery Order / Work Order ahead of Cart for `order`; and preserved explicit Name A–Z ordering (Cart first for `order`). All three viewports reported zero runtime/log/network failures and no horizontal overflow. `npm run typecheck`, full `npm test` (120 SVG / zero errors), `npm run build`, and `git diff --check` also pass.
+
+## 0.9.59 — 2026-09-25
+
+### Fixed
+
+- Moved the mobile toast stack below the sticky topbar and top safe-area inset. Burst feedback remains centered and capped at three, but transient messages no longer visually cover primary menu/import/theme/inspector controls.
+- Kept desktop/tablet placement unchanged; the adjustment is limited to the existing ≤820px mobile breakpoint.
+
+### Validation
+
+- Pre-fix Chromium at 390×844 reproduced the issue: a three-toast burst occupied y=10–178 while the sticky topbar occupied y=0–65, producing 55px of visual overlap, with the toast layer above the topbar (`z-index: 200` vs `25`). Post-fix browser validation verifies zero toast/topbar overlap on mobile while preserving the three-toast cap, no horizontal overflow, and desktop/tablet placement.
+
+## 0.9.58 — 2026-09-25
+
+### Fixed
+
+- Prevented burst toast feedback from re-presenting the entire visible toast stack to assistive technology. The shared polite live region is now explicitly non-atomic, so each newly added toast is the relevant changed node instead of making earlier still-visible messages part of every update.
+- Limited live-region relevance to additions. Oldest-first visual eviction at the three-toast cap stays silent, while newly added feedback remains eligible for polite announcement.
+
+### Validation
+
+- Pre-fix Chromium 152 exposed #toastRegion as live=polite, atomic=true, relevant=additions text; concurrent toasts therefore formed one atomic region whose entire contents are eligible for presentation on each addition. This matches WAI-ARIA/MDN aria-atomic semantics: true presents the whole changed region, while false presents only changed nodes. Post-fix validation covers the DOM accessibility contract, exact-head Chromium Accessibility Tree semantics and burst behavior across desktop/tablet/mobile, plus the full required typecheck/test/build/diff suite.
+
+## 0.9.57 — 2026-09-25
+
+### Improved
+
+- Bounded transient toast feedback to at most three concurrent visible messages. Rapid actions now evict the oldest toast before adding a newer one, preserving the most recent feedback without letting notifications cover most of the mobile workspace.
+- Kept the existing 2.8 second auto-dismiss behavior and polite live region; stale timers for already-evicted messages remain harmless and cannot remove newer toasts.
+
+### Validation
+
+- Pre-fix Chromium 152 reproduced eight rapid Favorite actions producing eight simultaneous toasts on a 390×844 viewport: the toast region reached 472 px tall (55.9% of the viewport). Post-fix validation covers focused toast-controller behavior plus exact-head responsive Chromium checks at desktop/tablet/mobile, including the three-toast cap, newest-message retention, runtime/network health, and horizontal overflow.
+
+## 0.9.56 — 2026-09-25
+
+### Improved
+
+- Added a compact route back to **Follow system** using the existing theme button instead of adding topbar clutter. The control now cycles through explicit light/dark overrides and then exposes **Follow system theme** as its next action; choosing it removes `localStorage['iconStudioTheme']` instead of persisting a third mode.
+- While following system, live `prefers-color-scheme` changes update both the page theme and PWA `theme-color` immediately. Explicit light/dark overrides remain pinned across system changes.
+
+### Validation
+
+- Pre-fix Chrome reproduced the backlog gap: after switching from a light system theme to explicit dark, the override survived reload and no button/select/radio exposed a system-theme reset. Post-fix validation covers the dedicated theme-state regression, DOM contract checks, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and exact-head Chrome checks at 1440×900, 834×1112, and 390×844 for the system → explicit opposite → explicit system-matching → Follow system cycle, live system-preference changes, persistence removal, synchronized action labels/tooltips and PWA theme colour, runtime/network health, and horizontal overflow.
+
+## 0.9.55 — 2026-09-25
+
+### Fixed
+
+- Made re-activating the already-current workspace navigation item a true catalogue-state no-op. Previously, clicking the active **Library** item silently cleared an active search/category and reset pagination even though no navigation occurred; the same path also rebuilt results and repeated the polite result announcement. Current-view activation now preserves search/filter/pagination state. On mobile it still closes the navigation drawer and restores focus to the menu trigger.
+
+### Validation
+
+- Pre-fix Chromium 152 reproduced the defect in Library with search `truck`: the active Library item changed `Showing 2 icons — search “truck”` to `Showing 24 of 120 icons`, cleared the search field, emitted one new result-status mutation, and left the same workspace view active. Post-fix validation covers unchanged search/result context, zero live-region mutations on same-view activation, preserved navigation focus on desktop/tablet, mobile drawer dismissal/focus restoration, and the full required typecheck/test/build/diff suite.
+
+## 0.9.54 — 2026-09-25
+
+### Fixed
+
+- Made re-activating the already-selected Category a no-op. Previously, activating an active chip rebuilt the catalogue and reset `visibleLimit` to 24; after a user had loaded more ERP icons this unexpectedly collapsed the visible batch from 48/56 back to 24 and repeated the polite result announcement even though the selected category had not changed. Active-category reactivation now leaves pagination, DOM, focus and the result live region untouched.
+
+### Validation
+
+- Pre-fix Chrome 153 reproduced the defect with ERP: after manual pagination expanded the result set from 24 to 48 icons, re-activating the already-selected ERP chip collapsed it back to 24 and emitted one `Showing 24 of 56 icons — ERP category` live-region mutation. Post-fix exact-head Chrome 153 checks at 1440×900, 834×1112 and 390×844 preserved the expanded batch exactly (56/48/48 respectively), kept focus on ERP, recorded zero result-status mutations, reported no horizontal overflow, and captured no runtime/console/network errors. Focused DOM regression, full typecheck/test/build and diff validation also pass.
+
+## 0.9.53 — 2026-09-25
+
+### Fixed
+
+- Preserved keyboard focus across automatic IntersectionObserver pagination. On wide layouts the load-more sentinel can enter its preload margin immediately after a category change or while a card action is focused; the automatic batch re-render previously replaced the focused Category chip or icon-card action and dropped focus to the document body. Automatic pagination now snapshots only focus inside the catalogue controls it replaces and restores the equivalent Category chip or card action after each background batch, without changing the existing manual Load more focus behavior.
+
+### Validation
+
+- The planned Advanced **Clear filters** during pending-search audit first confirmed `v0.9.52` is already correct: Chrome 153 recorded exactly one final `Showing 24 of 120 icons` mutation, cleared the query, retained `#clearFiltersButton` focus, and emitted no stale `search “order”` announcement. The higher-value pre-fix issue was then reproduced on desktop Chrome 153: changing All → ERP emitted the correct single contextual announcement, but the immediate automatic 24→48 pagination rebuild replaced the newly focused ERP chip and left `document.activeElement` without a catalogue control; focusing the first card Select action before that same auto-load was also lost. Post-fix validation covers both focus targets, the full required suite, and responsive production-preview checks.
+
+## 0.9.52 — 2026-09-25
+
+### Fixed
+
+- Stopped the persistent Advanced **Clear filters** control from repeating an unchanged catalogue result announcement when activation only resets Sort or is already at the default state. Query/category/style resets still announce their changed result context exactly once, and the persistent Advanced Filters control keeps keyboard focus after activation.
+
+### Validation
+
+- Pre-fix Chrome 153 first confirmed the planned focus audit already behaved correctly for a real Style reset: `#clearFiltersButton` retained focus and the live region changed once from `Showing 9 icons — filled style` to `Showing 24 of 120 icons`. The same browser then reproduced the remaining accessibility noise at defaults: activating Advanced **Clear filters** kept the visible summary unchanged at `Showing 24 of 120 icons` but still emitted one identical live-region mutation. Post-fix validation covers that result-neutral/no-op path, a real Style reset, focused DOM regression, the full required suite, and exact-head responsive Chrome checks.
+
+## 0.9.51 — 2026-09-24
+
+### Fixed
+
+- Made the disappearing results **Clear filters** action restore focus according to the interaction that exposed it. Search-driven resets still return to the persistent search field, while Category/Style-only resets now move to the updated results heading instead of unexpectedly jumping back to search. This keeps keyboard and screen-reader users in the results context they just changed while preserving the established search workflow.
+
+### Validation
+
+- Pre-fix Chrome 153 reproduced both Category-only and Style-only resets moving focus from the disappearing `#clearSearchButton` to `#searchInput`; the focus event arrived immediately before the polite result-status mutation, so a filter-only reset jumped users out of the results context before the refreshed count was announced. The same harness confirmed search-driven reset focus should remain on Search. Post-fix validation covers the context-aware focus regression, full required suite, and exact-head responsive Chrome checks for focus destination, one synchronized reset announcement, runtime/network health, and horizontal overflow.
+
+## 0.9.50 — 2026-09-24
+
+### Fixed
+
+- Renamed the catalogue results reset action from **Clear search** to **Clear filters**. The control is shown for an active search, category, or style and calls the shared reset path for all three, so the previous label was inaccurate whenever Category or Style was active without a query and understated what activation would change.
+
+### Validation
+
+- The planned sort-during-pending-search audit first confirmed the current `v0.9.49` behavior is already correct: Chrome 153 recorded exactly one final `Showing 6 icons — search “order”` live-region mutation after changing sort during the 300 ms search debounce. The same pre-fix browser run then reproduced the higher-value label defect with an empty query plus ERP category: the visible reset control said `Clear search`, while activation changed ERP → All and `Showing 24 of 56 icons — ERP category` → `Showing 24 of 120 icons`. Post-fix validation covers the static DOM regression, full required suite, and exact-head Chrome checks across desktop/tablet/mobile confirming the control says `Clear filters`, resets category/style/search consistently, and leaves no runtime/network/overflow failures.
+
+## 0.9.49 — 2026-09-24
+
+### Fixed
+
+- Stopped Sort-only catalogue rerenders from repeating the polite result status. Changing Featured/Name/Category/Recently viewed reorders the existing result set without changing the active query, filters, scoped view, or result count, so the visible grid still reorders immediately while the advisory live region stays quiet.
+
+### Validation
+
+- Pre-fix Chrome 153 reproduced one unchanged `Showing 24 of 120 icons` live-region mutation when switching Featured → Name A–Z even though the first card changed from Invoice to Accounts Payable and the result semantics were unchanged. Post-fix validation covers the focused DOM regression, `npm run typecheck`, full `npm test`, `npm run build`, `git diff --check`, and an exact-head Chrome 153 sort harness confirming the grid reorders while the result live region records zero mutations.
+
+## 0.9.48 — 2026-09-24
+
+### Fixed
+
+- Stopped result-neutral catalogue rerenders from repeating the polite result status. Selecting an icon or opening More changes selection/recent state without changing the current result set, and Favorite toggles outside the Favorites view only change saved-state presentation, so those paths now rerender silently. Favorite membership changes inside the Favorites view still announce the updated contextual result count once.
+
+### Validation
+
+- Pre-fix Chrome 153 reproduced one unchanged `Showing 24 of 120 icons` live-region mutation for each Library Select, Favorite, and More activation. Post-fix production-preview Chrome at 1440×900, 834×1112, and 390×844 recorded zero result-status mutations for all three result-neutral actions; unfavoriting inside Favorites produced exactly one `Showing 0 icons — Favorites view` mutation and refavoriting from the Inspector produced exactly one `Showing 1 icon — Favorites view` mutation. All three viewports reported zero runtime/console/network failures and no horizontal overflow. Focused DOM regression, `npm run typecheck`, full `npm test` (120 SVG / zero errors), `npm run build`, and `git diff --check` also pass.
+
 ## 0.9.47 — 2026-09-24
 
 ### Fixed

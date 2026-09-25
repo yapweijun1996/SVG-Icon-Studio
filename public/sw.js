@@ -3,7 +3,8 @@
    URL so the same file works at the domain root and under a GitHub Pages
    subpath. Bump CACHE_VERSION to invalidate every cached asset at once. */
 const CACHE_PREFIX = 'icon-studio-';
-const CACHE_VERSION = 'icon-studio-v3';
+const APP_VERSION = '__ICON_STUDIO_VERSION__';
+const CACHE_VERSION = CACHE_PREFIX + APP_VERSION;
 const APP_SHELL = ['./', './index.html', './manifest.webmanifest'];
 const CACHEABLE_ASSET_PREFIXES = ['assets/', 'data/', 'icons/', 'icons-pwa/'];
 const MAX_RUNTIME_ENTRIES = 256;
@@ -47,8 +48,12 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_VERSION)
       .then(cache => cache.addAll(APP_SHELL))
-      .then(() => self.skipWaiting())
   );
+});
+
+self.addEventListener('message', event => {
+  if (event.data?.type !== 'SKIP_WAITING') return;
+  event.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener('activate', event => {

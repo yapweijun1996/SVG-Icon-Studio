@@ -4,6 +4,7 @@ const registry = JSON.parse(await fs.readFile('data/icon-registry.json', 'utf8')
 assert.equal(registry.schemaVersion, 1);
 assert.ok(registry.icons.length >= 39, 'Icon count must preserve the published baseline.');
 assert.equal(new Set(registry.icons.map(icon => icon.id)).size, registry.icons.length, 'Icon IDs must be unique.');
+assert.equal(registry.icons.filter(icon => icon.style === 'outline').length, registry.icons.length, 'Built-in catalogue should use one consistent outline style.');
 for (const id of ['invoice', 'purchase-order', 'delivery-order']) {
   assert.ok(registry.icons.some(icon => icon.id === id), `Missing required icon: ${id}`);
 }

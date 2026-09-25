@@ -1,7 +1,7 @@
 # Icon Studio — Design System
 
 **Document:** `DESIGN.md`
-**Status:** Living document — reflects the design system as actually shipped in `v0.9.34`, not an aspirational brief.
+**Status:** Living document — reflects the design system as actually shipped in `v0.9.64`, not an aspirational brief.
 **Source of truth for tokens:** [`css/tokens.css`](css/tokens.css) (design-system.json is a synced machine-readable snapshot of the same values, not an independent source)
 **Relationship to `components.md`:** `components.md` is the original pre-implementation design brief written before any code existed. It is kept for historical reference only — where the two disagree, this document and the current codebase win. See the note at the top of `components.md`.
 
@@ -56,7 +56,7 @@ Only surface/text/line tokens repaint; `--accent` and its variants are **intenti
 | `--accent-soft` | `#3a1c0d` |
 | `--accent-border` | `#7c3312` |
 
-Theme is picked up from `prefers-color-scheme` on first load, then persisted explicitly (`localStorage['iconStudioTheme']`) once the user toggles it — there is currently no UI to reset back to "follow system" once overridden (see `TASK.md` backlog).
+Theme follows `prefers-color-scheme` by default. The compact theme button can cycle through explicit light/dark overrides and back to **Follow system**; explicit modes persist in `localStorage['iconStudioTheme']`, while Follow system removes that key and reacts live to later OS/browser colour-scheme changes.
 
 ## 3. Layout
 
@@ -90,39 +90,33 @@ Three-column desktop shell (`.app-shell`, CSS grid: `sidebar-width | 1fr | inspe
 | Component | Where | Notes |
 | --- | --- | --- |
 | Collapsible sidebar | `.sidebar` | Nav items: Icon library, Collections, Favorites, Recently viewed, Uploaded icons, Brand kit. Collapse state persists to `localStorage`. |
-| Sticky topbar | `.topbar` | Import SVG, live icon-count pill, theme toggle, mobile inspector trigger |
+| Sticky topbar | .topbar | Import SVG, live icon-count pill, running-version pill / waiting-update action, theme toggle, mobile inspector trigger |
 | Search + filters | `.catalogue-toolbar` | Free-text search (`/` keyboard shortcut focuses it), style filter, sort filter, category chips (10, derived live from the registry — never hardcode a count, see ADR-011-adjacent history in `CHANGELOG.md` 0.4.0) |
 | Icon grid | `.icon-grid` | Responsive `auto-fill` grid; Grid/Compact density toggle; scroll-to-load pagination (24 per page) with a manual "Load more" fallback button |
 | Icon card | `.icon-card` | Lazy-loaded preview (`IntersectionObserver`, 240px lookahead), favourite star, Copy SVG action, "⋮" more-options action |
 | Inspector | `.inspector` | Selected icon summary, live preview (Light/Dark/Brand/Transparent background tabs), Appearance controls (size/stroke width/stroke colour/fill toggle+colour/currentColor/include-title), Transform controls (rotate/flip), code tabs (SVG/JSX/CSS) |
 | Full preview dialog | `<dialog class="preview-dialog">` | Native `<dialog>` element — free focus trap and Escape handling; explicit `aria-labelledby` / `aria-describedby` bind the visible icon name and resize guidance as its accessible name/description |
-| Toast | `.toast-region` | `aria-live="polite"`, auto-dismiss after 2.8s, no stacking cap yet (see `TASK.md` backlog) |
+| Toast | `.toast-region` | `aria-live="polite"`, non-atomic additions-only announcements, auto-dismiss after 2.8s, maximum three concurrent visible messages with oldest-first eviction; on mobile the stack is offset below the sticky topbar + safe area |
 
 ## 5. Icon design system
 
-Two supported styles, both on an exact `0 0 24 24` viewBox (full contract in `SPEC.md` §7):
+The built-in catalogue uses one visual style on an exact `0 0 24 24` viewBox. Runtime/import code still recognises filled uploaded SVGs for compatibility, but filled artwork is no longer part of the built-in library.
 
-### 5.1 Outline (111 of 120 icons)
+### 5.1 Built-in outline contract (120 of 120 icons)
 
 ```svg
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
 ```
 
-- Standard stroke width `1.5`. Isolated, documented exceptions exist (`invoice.svg` uses `1` because `1.5` merges its currency mark into a blob at icon scale; `delivery-truck.svg` uses `stroke-linecap="butt" stroke-linejoin="miter"` to match sharp-cornered reference art) — any new exception must be similarly justified and noted in `CHANGELOG.md`, not silently introduced.
+- Standard stroke width is `1.5` across the built-in catalogue.
 - `fill`/`stroke` are set **only on the root `<svg>`**; child shapes carry no colour attributes of their own so they inherit correctly.
+- The only intentional drawing-style exception is `delivery-truck.svg`, which keeps sharp `butt` caps / `miter` joins to match its approved vehicle geometry. It still uses the same `1.5` outline weight and `currentColor` stroke.
+- The former filled ERP/AI icons and the old `invoice.svg` 1px exception were redrawn in `v0.9.63` so cards no longer switch visual weight/style inside one catalogue.
 
-### 5.2 Filled (9 of 120 icons: `purchase-order`, `delivery-order`, `ai-spark`, `purchase-requisition`, `debit-note`, `packing-list`, `pick-list`, `journal-entry`, `dashboard`)
+### 5.2 Filled compatibility
 
-```svg
-<svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
-```
-
-- Every "stroke" is actually a filled shape with matched inner/outer contours at a constant weight of `0.73` units (measured off `purchase-order.svg`).
-- A single `<path>` per icon, built from multiple `evenodd` subpaths (frame + inner cutout + badge + glyph knockout, etc.).
-- **Do not hand-author new ones.** Use `tools/gen-filled-icons.mjs` — see `SPEC.md` §7.4/ADR-010 for the two failure modes (blob badges from ring-nesting, and evenodd's inability to occlude one shape behind another) discovered building the current 9.
-- Because each shape carries its own `fill="currentColor"`, any code that recolours a filled icon (e.g. the Inspector's fill-colour picker) must write the resolved paint onto every descendant with a `fill` attribute, not just the root — see the `v0.6.1` fix in `CHANGELOG.md` if extending this logic.
-- **Grid colour:** filled and outline icons render in the *same* colour in the catalogue grid (ADR-011) — do not reintroduce a per-style accent override without a deliberate design decision.
+The SVG sanitizer, importer and renderer still support `fill="currentColor" stroke="none"` assets. This exists for uploaded/legacy SVG compatibility, not as a second built-in catalogue style. Historical filled authoring notes and the generator remain documented in `SPEC.md` and release history for maintenance of older assets.
 
 ### 5.3 Category taxonomy (10 categories, `order` controls display sequence)
 
@@ -135,7 +129,7 @@ Before drawing a new icon, check existing geometry for visual collision (documen
 ## 6. Accessibility
 
 - Interactive targets are ≥44px (`--control-height` equivalent throughout).
-- `aria-live="polite"` regions: results summary, toast region.
+- `aria-live="polite"` regions: the dedicated result-status announcer and toast region. Result status is atomic because each message is one complete summary; toast feedback is explicitly non-atomic/additions-only so a new toast does not replay earlier visible messages.
 - Catalogue search uses a visually-hidden text label for its accessible name; the visible `/` shortcut hint is `aria-hidden` so it is not mistaken for the label.
 - `aria-pressed`/`aria-expanded`/`aria-current` used correctly for toggle/disclosure/nav-active state.
 - Preview background is a single-choice `radiogroup`: one `radio` is checked/tabbable at a time, and Arrow Left/Right/Up/Down moves focus and selection with wraparound.

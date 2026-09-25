@@ -165,7 +165,13 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
   refs.mobileMenuButton.addEventListener('click', () => refs.body.classList.contains('sidebar-open') ? closeSidebar() : openSidebar());
   refs.mobileInspectorButton.addEventListener('click', () => refs.body.classList.contains('inspector-open') ? closeInspector() : openInspector());
   refs.backdrop.addEventListener('click', () => { closeSidebar(); closeInspector(); });
-  $$('.nav-item').forEach(button => button.addEventListener('click', () => setView(button.dataset.view)));
+  $$('.nav-item').forEach(button => button.addEventListener('click', () => {
+    // Re-activating the current navigation destination must not behave like a
+    // hidden reset action. Preserve the current catalogue state; on mobile the
+    // only effect is closing the navigation drawer and restoring its trigger.
+    if (button.dataset.view === state.view) return closeSidebar();
+    setView(button.dataset.view);
+  }));
 
   refs.collapseInspectorButton.addEventListener('click', () => {
     const collapsed = refs.body.classList.toggle('inspector-collapsed');

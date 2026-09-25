@@ -30,6 +30,15 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     observer = undefined;
   }
 
+  function hydratePreview(preview, icon, version) {
+    loadIconAsset(icon.id).then(asset => {
+      if (version !== renderVersion || !preview.isConnected) return;
+      preview.replaceChildren(asset.ok ? createCanonicalPreview(icon, asset, state.density === 'compact' ? 36 : 48) : createFallbackSvg(icon.name, 42));
+      preview.classList.remove('is-loading');
+      preview.classList.toggle('has-error', !asset.ok);
+    });
+  }
+
   function setupObserver(version) {
     observer = createIntersectionObserver(entries => {
       for (const entry of entries) {
@@ -38,11 +47,7 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
         const preview = entry.target;
         const icon = state.icons.find(item => item.id === preview.dataset.iconId);
         if (!icon) continue;
-        loadIconAsset(icon.id).then(asset => {
-          if (version !== renderVersion || !preview.isConnected) return;
-          preview.replaceChildren(asset.ok ? createCanonicalPreview(icon, asset, state.density === 'compact' ? 36 : 48) : createFallbackSvg(icon.name, 42));
-          preview.classList.toggle('has-error', !asset.ok);
-        });
+        hydratePreview(preview, icon, version);
       }
     }, { rootMargin: '240px 0px' });
   }
@@ -68,8 +73,7 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
       className: 'card-select',
       attributes: { type: 'button', 'data-action': 'select', 'aria-label': `Select ${icon.name} icon` }
     });
-    const preview = createElement('span', { className: 'card-preview', attributes: { 'aria-hidden': 'true' }, dataset: { iconId: icon.id } });
-    preview.append(createFallbackSvg(icon.name, state.density === 'compact' ? 36 : 48));
+    const preview = createElement('span', { className: 'card-preview is-loading', attributes: { 'aria-hidden': 'true' }, dataset: { iconId: icon.id } });
     const copy = createElement('span', { className: 'card-copy' });
     copy.append(createElement('strong', { text: icon.name }));
     copy.append(createElement('span', { text: `${icon.category} · ${icon.style[0].toUpperCase()}${icon.style.slice(1)}` }));
@@ -79,7 +83,8 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     actions.append(createElement('button', { className: 'card-action', text: 'Copy SVG', attributes: { type: 'button', 'data-action': 'copy', 'aria-label': `Copy ${icon.name} SVG` } }));
     actions.append(createElement('button', { className: 'card-action', text: '⋮', attributes: { type: 'button', 'data-action': 'more', 'aria-label': `More export options for ${icon.name}` } }));
     article.append(favoriteButton, selectButton, actions);
-    observer?.observe(preview);
+    if (observer) observer.observe(preview);
+    else hydratePreview(preview, icon, renderVersion);
     return article;
   }
 
@@ -144,7 +149,9 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
   refs.categoryChips.addEventListener('click', event => {
     const button = event.target.closest('[data-category]');
     if (!button) return;
-    state.category = button.dataset.category;
+    const nextCategory = button.dataset.category;
+    if (state.category === nextCategory) return;
+    state.category = nextCategory;
     state.visibleLimit = 24;
     render();
     const replacement = [...refs.categoryChips.querySelectorAll('[data-category]')]
@@ -213,14 +220,44 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     }
   });
 
+  function capturePaginationFocus() {
+    const active = document.activeElement;
+    const category = active?.closest?.('[data-category]');
+    if (category && refs.categoryChips.contains(category)) {
+      return { category: category.dataset.category };
+    }
+    const action = active?.closest?.('[data-action]');
+    const card = active?.closest?.('.icon-card');
+    if (action && card && refs.iconGrid.contains(card)) {
+      return { iconId: card.dataset.iconId, actionName: action.dataset.action };
+    }
+    return null;
+  }
+
+  function restorePaginationFocus(snapshot) {
+    if (!snapshot) return;
+    if (snapshot.category) {
+      const category = [...refs.categoryChips.querySelectorAll('[data-category]')].find(
+        chip => chip.dataset.category === snapshot.category
+      );
+      category?.focus();
+      return;
+    }
+    if (snapshot.iconId && snapshot.actionName) {
+      focusRenderedCardAction(snapshot.iconId, snapshot.actionName);
+    }
+  }
+
   function loadMore({ automatic = false } = {}) {
     const restoreFocus = document.activeElement === refs.loadMoreButton;
+    const paginationFocus = automatic ? capturePaginationFocus() : null;
     const previousVisibleCount = refs.iconGrid.querySelectorAll('.icon-card').length;
     state.visibleLimit += 24;
     render({
       announceResultStatus: !automatic,
       refreshPendingResultStatus: automatic
     });
+    if (automatic) restorePaginationFocus(paginationFocus);
     if (restoreFocus && refs.loadMoreButton.parentElement.hidden) {
       const firstNewCard = refs.iconGrid.querySelectorAll('.icon-card')[previousVisibleCount];
       firstNewCard?.querySelector('[data-action="select"]')?.focus();

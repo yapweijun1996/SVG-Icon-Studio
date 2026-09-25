@@ -35,6 +35,7 @@ function createHarness(fetchImpl, { cachedResponse = null, cacheNames = [], init
     })
   };
 
+  let skipWaitingCalls = 0;
   const context = {
     URL,
     Response,
@@ -51,13 +52,20 @@ function createHarness(fetchImpl, { cachedResponse = null, cacheNames = [], init
       location: { origin: 'https://example.test' },
       registration: { scope: 'https://example.test/app/' },
       clients: { claim: async () => {} },
-      skipWaiting: async () => {},
+      skipWaiting: async () => { skipWaitingCalls += 1; },
       addEventListener(type, listener) { listeners[type] = listener; }
     }
   };
 
   vm.runInNewContext(source, context, { filename: 'sw.js' });
-  return { listeners, puts, deletedCaches, deletedEntries, cacheUrls };
+  return { listeners, puts, deletedCaches, deletedEntries, cacheUrls, get skipWaitingCalls() { return skipWaitingCalls; } };
+}
+
+async function install(harness) {
+  const lifetimePromises = [];
+  harness.listeners.install({ waitUntil(promise) { lifetimePromises.push(Promise.resolve(promise)); } });
+  assert.equal(lifetimePromises.length, 1, 'installation should extend the service-worker lifetime');
+  await Promise.all(lifetimePromises);
 }
 
 async function activate(harness) {
@@ -94,17 +102,35 @@ async function fetchAsset(harness, url) {
   return result;
 }
 
-assert.match(source, /const CACHE_VERSION = 'icon-studio-v3'/, 'cache version should invalidate pre-boundary runtime entries');
+assert.match(source, /const APP_VERSION = '__ICON_STUDIO_VERSION__'/, 'source service worker should carry a build-time app-version placeholder');
+assert.match(source, /const CACHE_VERSION = CACHE_PREFIX \+ APP_VERSION/, 'each deployed app version should get an isolated cache generation');
 assert.match(source, /key\.startsWith\(CACHE_PREFIX\)/, 'activation should scope cleanup to Icon Studio-owned cache names');
+
+
+{
+  const harness = createHarness(async () => new Response('ok'));
+  await install(harness);
+  assert.equal(harness.skipWaitingCalls, 0, 'a newly installed update should wait for explicit user activation instead of auto-reloading');
+
+  const lifetimePromises = [];
+  harness.listeners.message({
+    data: { type: 'SKIP_WAITING' },
+    waitUntil(promise) { lifetimePromises.push(Promise.resolve(promise)); }
+  });
+  assert.equal(lifetimePromises.length, 1, 'explicit update activation should extend the message event lifetime');
+  await Promise.all(lifetimePromises);
+  assert.equal(harness.skipWaitingCalls, 1, 'the explicit update action should activate the waiting worker exactly once');
+}
+
 
 {
   const harness = createHarness(async () => new Response('ok'), {
-    cacheNames: ['other-project-v7', 'icon-studio-v1', 'icon-studio-v2', 'icon-studio-v3', 'public-api-cache-v3']
+    cacheNames: ['other-project-v7', 'icon-studio-v1', 'icon-studio-v2', 'icon-studio-v3', 'icon-studio-__ICON_STUDIO_VERSION__', 'public-api-cache-v3']
   });
   await activate(harness);
   assert.deepEqual(
     harness.deletedCaches,
-    ['icon-studio-v1', 'icon-studio-v2'],
+    ['icon-studio-v1', 'icon-studio-v2', 'icon-studio-v3'],
     'activation must delete only obsolete Icon Studio caches and preserve unrelated same-origin caches'
   );
 }
@@ -114,7 +140,7 @@ assert.match(source, /key\.startsWith\(CACHE_PREFIX\)/, 'activation should scope
   const runtimeUrls = Array.from({ length: 260 }, (_, index) =>
     `https://example.test/app/assets/index-${String(index + 1).padStart(8, '0')}.js`);
   const harness = createHarness(async () => new Response('ok'), {
-    cacheNames: ['icon-studio-v3'],
+    cacheNames: ['icon-studio-__ICON_STUDIO_VERSION__'],
     initialCacheUrls: [
       'https://example.test/app/',
       'https://example.test/app/index.html',

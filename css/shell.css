@@ -39,6 +39,13 @@
 .stats-pill { min-height: 38px; display: inline-flex; align-items: center; gap: 6px; padding: 0 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); color: var(--muted); font-size: 11px; white-space: nowrap; box-shadow: var(--shadow-xs); }
 .stats-pill strong { color: var(--text-soft); }
 .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 0 4px color-mix(in srgb, var(--success) 13%, transparent); }
+.pwa-version-pill, .pwa-update-button { min-height: 38px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); white-space: nowrap; box-shadow: var(--shadow-xs); }
+.pwa-version-pill { min-width: 66px; padding: 0 10px; color: var(--muted); font-size: 10px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.pwa-update-button { gap: 6px; padding: 0 11px; color: var(--accent-strong); border-color: var(--accent-border); background: var(--accent-soft); font-size: 10px; font-weight: 800; cursor: pointer; }
+.pwa-update-button:hover { border-color: var(--accent); color: var(--accent); }
+.pwa-update-button:disabled { opacity: .7; cursor: progress; }
+.pwa-update-button svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.pwa-update-button [data-update-short] { display: none; }
 
 .button, .icon-button, .text-button, .density-switch button, .background-tabs button, .category-chip, .segmented-control button, .code-tabs button { border: 1px solid transparent; background: transparent; cursor: pointer; }
 .button { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 8px 14px; border-radius: 9px; font-size: 12px; font-weight: 700; white-space: nowrap; }

@@ -70,10 +70,10 @@ npm test
 npm run build
 ```
 
-The catalogue supports two icon styles — see [DESIGN.md](DESIGN.md#5-icon-design-system) for the full contract:
+The built-in catalogue uses one consistent **`outline`** style — see [DESIGN.md](DESIGN.md#5-icon-design-system) for the full contract:
 
-- **`outline`** (most icons): `fill="none" stroke="currentColor"`, hand-authored paths.
-- **`filled`**: `fill="currentColor" stroke="none"`, every "stroke" is actually a filled shape with matched inner/outer contours. Don't hand-author these — use `tools/gen-filled-icons.mjs` as a reference for the authoring pattern (constant `0.73`-unit contour weight, solid-disc-with-knockout badges, no overlapping `evenodd` shapes).
+- All 120 built-in icons use `fill="none" stroke="currentColor" stroke-width="1.5"` at the root.
+- The importer/runtime still understands legacy or uploaded **`filled`** SVGs for backwards compatibility, but new built-in icons should follow the outline contract.
 
 ## Converting an arbitrary SVG
 
@@ -154,7 +154,7 @@ npm run preview   # serve the dist/ build locally to sanity-check it
 
 `vite.config.js` uses `base: './'` (relative asset paths) so the same build works unmodified from a GitHub Pages project page, a custom domain, or a local folder. `data/icon-registry.json` and `icons/catalog/*.svg` are fetched at runtime by URL rather than imported, so a small Vite plugin in `vite.config.js` copies both folders into `dist/` verbatim during build.
 
-The production service worker caches only canonical app resources under `assets/`, `data/`, `icons/`, `icons-pwa/`, plus the manifest. Requests with query strings and unrelated same-origin paths stay network-managed instead of becoming persistent CacheStorage keys. Runtime assets are additionally capped at 256 insertion-ordered entries, so obsolete hashed bundles from repeated deployments cannot make CacheStorage grow forever; the fixed offline shell and manifest are excluded from that eviction set.
+The production service worker caches only canonical app resources under assets/, data/, icons/, icons-pwa/, plus the manifest. Requests with query strings and unrelated same-origin paths stay network-managed instead of becoming persistent CacheStorage keys. Runtime assets are capped at 256 insertion-ordered entries. The topbar shows the running app version; when a newer worker is waiting it becomes an explicit Update vX.Y.Z control. Updates are user-activated rather than auto-reloading, and each production build embeds its package version into the worker/cache generation so every release is detectable.
 
 Pushing to `main` runs [.github/workflows/deploy.yml](.github/workflows/deploy.yml): install → `npm test` → `npm run build` → publish `dist/` to GitHub Pages. To enable it on a fork, turn on **Settings → Pages → Source: GitHub Actions** once.
 

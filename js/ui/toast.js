@@ -1,8 +1,15 @@
+export const MAX_VISIBLE_TOASTS = 3;
+
 export function createToastController(region) {
   return function toast(message, { error = false } = {}) {
     const item = document.createElement('div');
     item.className = `toast${error ? ' is-error' : ''}`;
     item.textContent = message;
+
+    while (region.children.length >= MAX_VISIBLE_TOASTS) {
+      region.firstElementChild?.remove();
+    }
+
     region.append(item);
     window.setTimeout(() => item.remove(), 2800);
   };
