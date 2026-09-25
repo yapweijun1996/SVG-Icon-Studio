@@ -146,6 +146,11 @@ assert.match(catalogueSource, /replacement\?\.focus\(\)/, 'category activation s
 const categoryActivationHandler = catalogueSource.match(/refs\.categoryChips\.addEventListener\('click', event => \{[\s\S]*?\n  \}\);/)?.[0] || '';
 assert.match(categoryActivationHandler, /const nextCategory = button\.dataset\.category;[\s\S]*?if \(state\.category === nextCategory\) return;[\s\S]*?state\.category = nextCategory;/, 're-activating the selected category should be a no-op before pagination state or live results are rebuilt');
 
+assert.match(catalogueSource, /className: 'card-preview is-loading'/, 'catalogue cards should use a neutral loading state before SVG assets resolve');
+assert.doesNotMatch(catalogueSource, /preview\.append\(createFallbackSvg/, 'catalogue cards must not present the error fallback while an SVG is merely loading');
+assert.match(catalogueSource, /preview\.classList\.remove\('is-loading'\)/, 'resolved SVG previews should clear the loading state');
+assert.match(catalogueSource, /if \(observer\) observer\.observe\(preview\);[\s\S]*?else hydratePreview\(preview, icon, renderVersion\)/, 'browsers without IntersectionObserver should load real SVG previews directly instead of leaving a placeholder forever');
+
 const capturePaginationFocusHelper = catalogueSource.match(/function capturePaginationFocus\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
 const restorePaginationFocusHelper = catalogueSource.match(/function restorePaginationFocus\(snapshot\) \{[\s\S]*?\n  \}/)?.[0] || '';
 assert.match(capturePaginationFocusHelper, /refs\.categoryChips\.contains\(category\)/, 'automatic pagination should detect focus inside the category controls that render replaces');

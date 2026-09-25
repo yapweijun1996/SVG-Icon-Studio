@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.9.61 — 2026-09-25
+
+### Fixed
+
+- Catalogue cards no longer render the unavailable-icon X while their real SVG asset is merely lazy-loading. The initial preview is now a neutral skeleton, and the error fallback is reserved for a confirmed asset failure.
+- When IntersectionObserver is unavailable, visible card previews load their real SVG directly instead of leaving a permanent placeholder.
+
+### Validation
+
+- Regression checks cover the loading-vs-error distinction and direct fallback loading without IntersectionObserver. Exact-head typecheck, full npm test (120 SVG / zero validation errors), npm run build and git diff --check pass. Real Chrome against the zero-dependency server rendered 24 cards with 10 already-hydrated real SVG previews, 14 neutral loading states still in flight, and 0 error fallbacks; the first visible cards included Invoice, Customer, Delivery Truck, Search, Settings and Cart.
+
 ## 0.9.60 — 2026-09-25
 
 ### Improved
