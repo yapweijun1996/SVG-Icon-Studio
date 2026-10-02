@@ -2719,6 +2719,226 @@
       "status": "active",
       "featured": false,
       "sortOrder": 1800
+    },
+    {
+      "id": "chevron-left",
+      "name": "Chevron Left",
+      "category": "Arrows",
+      "style": "outline",
+      "tags": ["navigation", "previous", "collapse", "left"],
+      "aliases": ["chevron-back", "collapse-left"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1810
+    },
+    {
+      "id": "chevron-right",
+      "name": "Chevron Right",
+      "category": "Arrows",
+      "style": "outline",
+      "tags": ["navigation", "next", "expand", "right"],
+      "aliases": ["chevron-next", "expand-right"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1820
+    },
+    {
+      "id": "chevron-up",
+      "name": "Chevron Up",
+      "category": "Arrows",
+      "style": "outline",
+      "tags": ["navigation", "collapse", "disclosure", "up"],
+      "aliases": ["collapse-up", "chevron-top"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1830
+    },
+    {
+      "id": "chevron-down",
+      "name": "Chevron Down",
+      "category": "Arrows",
+      "style": "outline",
+      "tags": ["navigation", "expand", "disclosure", "down"],
+      "aliases": ["expand-down", "chevron-bottom"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1840
+    },
+    {
+      "id": "arrow-up-right",
+      "name": "Arrow Up Right",
+      "category": "Arrows",
+      "style": "outline",
+      "tags": ["diagonal", "up", "right", "northeast"],
+      "aliases": ["northeast-arrow", "diagonal-up-right"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1850
+    },
+    {
+      "id": "arrow-down-left",
+      "name": "Arrow Down Left",
+      "category": "Arrows",
+      "style": "outline",
+      "tags": ["diagonal", "down", "left", "southwest"],
+      "aliases": ["southwest-arrow", "diagonal-down-left"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1860
+    },
+    {
+      "id": "maximize",
+      "name": "Maximize",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["fullscreen", "expand", "viewport", "display"],
+      "aliases": ["full-screen", "expand-view"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1870
+    },
+    {
+      "id": "minimize",
+      "name": "Minimize",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["collapse", "shrink", "viewport", "display"],
+      "aliases": ["exit-fullscreen", "collapse-view"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1880
+    },
+    {
+      "id": "zoom-in",
+      "name": "Zoom In",
+      "category": "Actions",
+      "style": "outline",
+      "tags": ["magnify", "enlarge", "preview", "zoom"],
+      "aliases": ["increase-zoom", "magnifier-plus"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1890
+    },
+    {
+      "id": "zoom-out",
+      "name": "Zoom Out",
+      "category": "Actions",
+      "style": "outline",
+      "tags": ["reduce", "shrink", "preview", "zoom"],
+      "aliases": ["decrease-zoom", "magnifier-minus"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1900
+    },
+    {
+      "id": "move",
+      "name": "Move",
+      "category": "Actions",
+      "style": "outline",
+      "tags": ["drag", "position", "transform", "pan"],
+      "aliases": ["move-tool", "four-way-arrow"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1910
+    },
+    {
+      "id": "rotate-left",
+      "name": "Rotate Left",
+      "category": "Actions",
+      "style": "outline",
+      "tags": ["rotation", "counterclockwise", "transform", "orientation"],
+      "aliases": ["counterclockwise-rotation", "rotate-ccw"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1920
+    },
+    {
+      "id": "rotate-right",
+      "name": "Rotate Right",
+      "category": "Actions",
+      "style": "outline",
+      "tags": ["rotation", "clockwise", "transform", "orientation"],
+      "aliases": ["clockwise-rotation", "rotate-cw"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1930
+    },
+    {
+      "id": "crop",
+      "name": "Crop",
+      "category": "Actions",
+      "style": "outline",
+      "tags": ["trim", "image", "bounds", "editing"],
+      "aliases": ["crop-tool", "image-crop"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1940
+    },
+    {
+      "id": "sliders",
+      "name": "Sliders",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["adjustment", "controls", "settings", "tuning"],
+      "aliases": ["slider-controls", "adjustment-controls"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1950
+    },
+    {
+      "id": "code-file",
+      "name": "Code File",
+      "category": "Files",
+      "style": "outline",
+      "tags": ["source", "script", "programming", "code"],
+      "aliases": ["source-file", "script-document"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1960
+    },
+    {
+      "id": "image-file",
+      "name": "Image File",
+      "category": "Files",
+      "style": "outline",
+      "tags": ["picture", "photo", "media", "image"],
+      "aliases": ["picture-file", "image-document"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1970
+    },
+    {
+      "id": "file-zip",
+      "name": "ZIP File",
+      "category": "Files",
+      "style": "outline",
+      "tags": ["compressed", "archive", "zipper", "zip"],
+      "aliases": ["zip-file", "compressed-file"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1980
+    },
+    {
+      "id": "folder-plus",
+      "name": "Folder Plus",
+      "category": "Files",
+      "style": "outline",
+      "tags": ["create", "directory", "folder", "add"],
+      "aliases": ["new-folder", "add-folder"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1990
+    },
+    {
+      "id": "folder-lock",
+      "name": "Folder Lock",
+      "category": "Files",
+      "style": "outline",
+      "tags": ["private", "security", "directory", "protected"],
+      "aliases": ["locked-folder", "protected-directory"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2000
     }
   ]
 }

@@ -5,7 +5,7 @@
 An SVG catalogue, customisation and export workspace built with static HTML, modular CSS and browser-native ES modules. The runtime itself still has zero third-party dependencies — [Vite](https://vitejs.dev) is only a dev-server/bundler wrapper on top, used for local development and the GitHub Pages build.
 
 - Project ID: `project_f2a74b23-33c1-4c5c-b43d-e2b5b3108428`
-- Release: `v0.9.70`
+- Release: `v0.9.71`
 - Entry: `index.html`
 - Live demo: https://yapweijun1996.github.io/SVG-Icon-Studio/ (built and deployed automatically from `main` by [.github/workflows/deploy.yml](.github/workflows/deploy.yml))
 - License: [MIT](LICENSE)
@@ -72,7 +72,7 @@ npm run build
 
 The built-in catalogue uses one consistent **`outline`** style — see [DESIGN.md](DESIGN.md#5-icon-design-system) for the full contract:
 
-- All 180 built-in icons use `fill="none" stroke="currentColor" stroke-width="1.5"` at the root.
+- All 200 built-in icons use `fill="none" stroke="currentColor" stroke-width="1.5"` at the root.
 - The importer/runtime still understands legacy or uploaded **`filled`** SVGs for backwards compatibility, but new built-in icons should follow the outline contract.
 
 ## Reviewing individual artwork
