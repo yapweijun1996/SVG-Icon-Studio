@@ -1,0 +1,1042 @@
+[
+  {
+    "id": "search",
+    "x": 3.75,
+    "y": 3.75,
+    "width": 16.75,
+    "height": 16.75,
+    "stroke": "1.5"
+  },
+  {
+    "id": "settings",
+    "x": 2.7496070861816406,
+    "y": 2.749607563018799,
+    "width": 18.50078582763672,
+    "height": 18.50078582763672,
+    "stroke": "1.5"
+  },
+  {
+    "id": "notification",
+    "x": 2.9641497135162354,
+    "y": 2.3499999046325684,
+    "width": 18.07170295715332,
+    "height": 19.368928909301758,
+    "stroke": "1.5"
+  },
+  {
+    "id": "calendar",
+    "x": 3,
+    "y": 2,
+    "width": 18,
+    "height": 19,
+    "stroke": "1.5"
+  },
+  {
+    "id": "clock",
+    "x": 3,
+    "y": 3,
+    "width": 18,
+    "height": 18,
+    "stroke": "1.5"
+  },
+  {
+    "id": "home",
+    "x": 3,
+    "y": 3,
+    "width": 18,
+    "height": 18,
+    "stroke": "1.5"
+  },
+  {
+    "id": "menu",
+    "x": 4,
+    "y": 6,
+    "width": 16,
+    "height": 12,
+    "stroke": "1.5"
+  },
+  {
+    "id": "close",
+    "x": 5,
+    "y": 5,
+    "width": 14,
+    "height": 14,
+    "stroke": "1.5"
+  },
+  {
+    "id": "lock",
+    "x": 5.25,
+    "y": 4.000000476837158,
+    "width": 13.5,
+    "height": 17.25,
+    "stroke": "1.5"
+  },
+  {
+    "id": "eye",
+    "x": 2.75,
+    "y": 5.5,
+    "width": 18.5,
+    "height": 13,
+    "stroke": "1.5"
+  },
+  {
+    "id": "mail",
+    "x": 2.75,
+    "y": 4.75,
+    "width": 18.5,
+    "height": 14.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "star",
+    "x": 2.940000534057617,
+    "y": 2.9000000953674316,
+    "width": 18.1200008392334,
+    "height": 17.240001678466797,
+    "stroke": "1.5"
+  },
+  {
+    "id": "unlock",
+    "x": 5.25,
+    "y": 3.9964776039123535,
+    "width": 13.5,
+    "height": 17.253522872924805,
+    "stroke": "1.5"
+  },
+  {
+    "id": "eye-off",
+    "x": 2.75,
+    "y": 3.75,
+    "width": 18.5,
+    "height": 16.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "globe",
+    "x": 2.75,
+    "y": 2.75,
+    "width": 18.5,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "plus",
+    "x": 5,
+    "y": 5,
+    "width": 14,
+    "height": 14,
+    "stroke": "1.5"
+  },
+  {
+    "id": "minus",
+    "x": 5,
+    "y": 12,
+    "width": 14,
+    "height": 0,
+    "stroke": "1.5"
+  },
+  {
+    "id": "info",
+    "x": 2.75,
+    "y": 2.75,
+    "width": 18.5,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "help-circle",
+    "x": 2.75,
+    "y": 2.75,
+    "width": 18.5,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "bookmark",
+    "x": 6.25,
+    "y": 2.75,
+    "width": 11.5,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "download",
+    "x": 4,
+    "y": 3,
+    "width": 16,
+    "height": 18,
+    "stroke": "1.5"
+  },
+  {
+    "id": "upload",
+    "x": 4,
+    "y": 3,
+    "width": 16,
+    "height": 18,
+    "stroke": "1.5"
+  },
+  {
+    "id": "delete",
+    "x": 4,
+    "y": 4,
+    "width": 16,
+    "height": 17.399999618530273,
+    "stroke": "1.5"
+  },
+  {
+    "id": "edit",
+    "x": 3,
+    "y": 4,
+    "width": 17,
+    "height": 17,
+    "stroke": "1.5"
+  },
+  {
+    "id": "share",
+    "x": 3,
+    "y": 2,
+    "width": 18,
+    "height": 20,
+    "stroke": "1.5"
+  },
+  {
+    "id": "filter",
+    "x": 3,
+    "y": 4,
+    "width": 18,
+    "height": 17,
+    "stroke": "1.5"
+  },
+  {
+    "id": "arrow-left",
+    "x": 5,
+    "y": 6,
+    "width": 14,
+    "height": 12,
+    "stroke": "1.5"
+  },
+  {
+    "id": "arrow-right",
+    "x": 5,
+    "y": 6,
+    "width": 14,
+    "height": 12,
+    "stroke": "1.5"
+  },
+  {
+    "id": "check",
+    "x": 4,
+    "y": 6,
+    "width": 16,
+    "height": 11,
+    "stroke": "1.5"
+  },
+  {
+    "id": "alert",
+    "x": 2,
+    "y": 3,
+    "width": 20,
+    "height": 18,
+    "stroke": "1.5"
+  },
+  {
+    "id": "refresh",
+    "x": 4,
+    "y": 3.7749128341674805,
+    "width": 16,
+    "height": 16.450176239013672,
+    "stroke": "1.5"
+  },
+  {
+    "id": "external-link",
+    "x": 4,
+    "y": 4,
+    "width": 16,
+    "height": 16,
+    "stroke": "1.5"
+  },
+  {
+    "id": "copy",
+    "x": 2.75,
+    "y": 2.75,
+    "width": 18.5,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "print",
+    "x": 2.75,
+    "y": 2.75,
+    "width": 18.5,
+    "height": 18.499998092651367,
+    "stroke": "1.5"
+  },
+  {
+    "id": "send",
+    "x": 2.750000476837158,
+    "y": 2.75,
+    "width": 18.5,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "link",
+    "x": 2.7605693340301514,
+    "y": 3.2389535903930664,
+    "width": 18.4804744720459,
+    "height": 17.520477294921875,
+    "stroke": "1.5"
+  },
+  {
+    "id": "arrow-up",
+    "x": 6,
+    "y": 5,
+    "width": 12,
+    "height": 14,
+    "stroke": "1.5"
+  },
+  {
+    "id": "arrow-down",
+    "x": 6,
+    "y": 5,
+    "width": 12,
+    "height": 14,
+    "stroke": "1.5"
+  },
+  {
+    "id": "undo",
+    "x": 3.75,
+    "y": 3.75,
+    "width": 16.098134994506836,
+    "height": 15.799999237060547,
+    "stroke": "1.5"
+  },
+  {
+    "id": "invoice",
+    "x": 5.25,
+    "y": 2.75,
+    "width": 13.5,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "customer",
+    "x": 4,
+    "y": 4,
+    "width": 16,
+    "height": 18,
+    "stroke": "1.5"
+  },
+  {
+    "id": "cart",
+    "x": 3,
+    "y": 3.9000000953674316,
+    "width": 17.5,
+    "height": 17.69999885559082,
+    "stroke": "1.5"
+  },
+  {
+    "id": "user-add",
+    "x": 2,
+    "y": 4,
+    "width": 20,
+    "height": 18,
+    "stroke": "1.5"
+  },
+  {
+    "id": "folder",
+    "x": 2.75,
+    "y": 4.049999713897705,
+    "width": 18.499998092651367,
+    "height": 15.19999885559082,
+    "stroke": "1.5"
+  },
+  {
+    "id": "file",
+    "x": 5.25,
+    "y": 2.75,
+    "width": 13.5,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "sales-order",
+    "x": 4.75,
+    "y": 2.75,
+    "width": 14.5,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "vendor",
+    "x": 3.25,
+    "y": 3.75,
+    "width": 17.5,
+    "height": 17.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "receipt",
+    "x": 6,
+    "y": 2,
+    "width": 12,
+    "height": 20,
+    "stroke": "1.5"
+  },
+  {
+    "id": "users",
+    "x": 2.75,
+    "y": 4.5,
+    "width": 18.500003814697266,
+    "height": 16,
+    "stroke": "1.5"
+  },
+  {
+    "id": "tag",
+    "x": 2.75,
+    "y": 2.75,
+    "width": 18.566600799560547,
+    "height": 18.566598892211914,
+    "stroke": "1.5"
+  },
+  {
+    "id": "percent",
+    "x": 5.5,
+    "y": 5.5,
+    "width": 13,
+    "height": 13,
+    "stroke": "1.5"
+  },
+  {
+    "id": "archive",
+    "x": 2.75,
+    "y": 3.75,
+    "width": 18.5,
+    "height": 17.250003814697266,
+    "stroke": "1.5"
+  },
+  {
+    "id": "delivery-truck",
+    "x": 3,
+    "y": 6,
+    "width": 18,
+    "height": 15,
+    "stroke": "1.5"
+  },
+  {
+    "id": "payment",
+    "x": 2.75,
+    "y": 5.25,
+    "width": 18.5,
+    "height": 13.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "ai-spark",
+    "x": 3.049999713897705,
+    "y": 3.1999998092651367,
+    "width": 18.05000114440918,
+    "height": 17.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "chart-bar",
+    "x": 2.75,
+    "y": 4.349999904632568,
+    "width": 18.5,
+    "height": 15.399999618530273,
+    "stroke": "1.5"
+  },
+  {
+    "id": "delivery-order",
+    "x": 5.25,
+    "y": 2.75,
+    "width": 14.75,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "warehouse",
+    "x": 2.75,
+    "y": 3.250000476837158,
+    "width": 18.5,
+    "height": 18,
+    "stroke": "1.5"
+  },
+  {
+    "id": "package",
+    "x": 3,
+    "y": 3,
+    "width": 18,
+    "height": 18,
+    "stroke": "1.5"
+  },
+  {
+    "id": "credit-card",
+    "x": 2,
+    "y": 5,
+    "width": 20,
+    "height": 14,
+    "stroke": "1.5"
+  },
+  {
+    "id": "wallet",
+    "x": 2.75,
+    "y": 5.75,
+    "width": 18.5,
+    "height": 14.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "calculator",
+    "x": 5.25,
+    "y": 2.75,
+    "width": 13.5,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "map-pin",
+    "x": 4.5,
+    "y": 2.600001096725464,
+    "width": 15,
+    "height": 18.617698669433594,
+    "stroke": "1.5"
+  },
+  {
+    "id": "trending-up",
+    "x": 2.75,
+    "y": 6.75,
+    "width": 18.5,
+    "height": 10.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "pallet",
+    "x": 3,
+    "y": 3,
+    "width": 18,
+    "height": 18,
+    "stroke": "1.5"
+  },
+  {
+    "id": "conveyor",
+    "x": 2,
+    "y": 3,
+    "width": 20,
+    "height": 18,
+    "stroke": "1.5"
+  },
+  {
+    "id": "delivery-route",
+    "x": 2,
+    "y": 3,
+    "width": 20,
+    "height": 18,
+    "stroke": "1.5"
+  },
+  {
+    "id": "payment-schedule",
+    "x": 3,
+    "y": 3,
+    "width": 19,
+    "height": 18,
+    "stroke": "1.5"
+  },
+  {
+    "id": "currency-exchange",
+    "x": 2,
+    "y": 3,
+    "width": 20,
+    "height": 18,
+    "stroke": "1.5"
+  },
+  {
+    "id": "cash-flow",
+    "x": 3,
+    "y": 2,
+    "width": 18,
+    "height": 20,
+    "stroke": "1.5"
+  },
+  {
+    "id": "purchase-order",
+    "x": 5.25,
+    "y": 2.75,
+    "width": 14.25,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "database",
+    "x": 4,
+    "y": 2,
+    "width": 16,
+    "height": 20,
+    "stroke": "1.5"
+  },
+  {
+    "id": "collection",
+    "x": 4,
+    "y": 4,
+    "width": 16,
+    "height": 16,
+    "stroke": "1.5"
+  },
+  {
+    "id": "clipboard",
+    "x": 4.850000381469727,
+    "y": 2.75,
+    "width": 14.299999237060547,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "barcode",
+    "x": 3,
+    "y": 4,
+    "width": 18,
+    "height": 16,
+    "stroke": "1.5"
+  },
+  {
+    "id": "calendar-check",
+    "x": 3,
+    "y": 2,
+    "width": 18,
+    "height": 19,
+    "stroke": "1.5"
+  },
+  {
+    "id": "quotation",
+    "x": 5.25,
+    "y": 2.75,
+    "width": 13.5,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "goods-receipt",
+    "x": 2.9000000953674316,
+    "y": 4.599999904632568,
+    "width": 18.200000762939453,
+    "height": 14.649999618530273,
+    "stroke": "1.5"
+  },
+  {
+    "id": "stock-transfer",
+    "x": 2.75,
+    "y": 3.75,
+    "width": 18.5,
+    "height": 16.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "bill-of-materials",
+    "x": 2.75,
+    "y": 2.75,
+    "width": 18.5,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "work-order",
+    "x": 5.25,
+    "y": 2.75,
+    "width": 13.5,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "inventory",
+    "x": 3,
+    "y": 3,
+    "width": 18,
+    "height": 18,
+    "stroke": "1.5"
+  },
+  {
+    "id": "ledger",
+    "x": 5,
+    "y": 3,
+    "width": 14,
+    "height": 18,
+    "stroke": "1.5"
+  },
+  {
+    "id": "approval",
+    "x": 6,
+    "y": 3,
+    "width": 12,
+    "height": 17.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "workflow",
+    "x": 2.75,
+    "y": 3.25,
+    "width": 18.5,
+    "height": 17.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "tax",
+    "x": 5.25,
+    "y": 2.75,
+    "width": 13.5,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "report",
+    "x": 5.25,
+    "y": 2.75,
+    "width": 13.5,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "reconciliation",
+    "x": 2.75,
+    "y": 2.5,
+    "width": 18.5,
+    "height": 18.75,
+    "stroke": "1.5"
+  },
+  {
+    "id": "credit-note",
+    "x": 5.25,
+    "y": 2.75,
+    "width": 13.5,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "goods-issue",
+    "x": 4,
+    "y": 2,
+    "width": 16,
+    "height": 20,
+    "stroke": "1.5"
+  },
+  {
+    "id": "contract",
+    "x": 5.25,
+    "y": 2.75,
+    "width": 13.5,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "bank",
+    "x": 2.75,
+    "y": 3.75,
+    "width": 18.5,
+    "height": 17,
+    "stroke": "1.5"
+  },
+  {
+    "id": "employee",
+    "x": 4.25,
+    "y": 2.75,
+    "width": 15.5,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "timesheet",
+    "x": 2.4000000953674316,
+    "y": 4.25,
+    "width": 19.200000762939453,
+    "height": 15.75,
+    "stroke": "1.5"
+  },
+  {
+    "id": "audit-trail",
+    "x": 2.75,
+    "y": 3.5,
+    "width": 18.350000381469727,
+    "height": 16.850000381469727,
+    "stroke": "1.5"
+  },
+  {
+    "id": "budget",
+    "x": 3.3999996185302734,
+    "y": 3.3999996185302734,
+    "width": 17.200000762939453,
+    "height": 17.200000762939453,
+    "stroke": "1.5"
+  },
+  {
+    "id": "price-list",
+    "x": 2.75,
+    "y": 3.75,
+    "width": 18.5,
+    "height": 16.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "batch-lot",
+    "x": 2.75,
+    "y": 2.75,
+    "width": 18.5,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "bin-location",
+    "x": 3.75,
+    "y": 3.25,
+    "width": 16.5,
+    "height": 17.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "cost-center",
+    "x": 3.25,
+    "y": 3.25,
+    "width": 17.5,
+    "height": 17.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "purchase-requisition",
+    "x": 5.25,
+    "y": 2.75,
+    "width": 14.299999237060547,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "debit-note",
+    "x": 5.25,
+    "y": 2.75,
+    "width": 14.299999237060547,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "packing-list",
+    "x": 4.850000381469727,
+    "y": 2.75,
+    "width": 14.299999237060547,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "pick-list",
+    "x": 4.850000381469727,
+    "y": 2.75,
+    "width": 14.299999237060547,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "journal-entry",
+    "x": 5.25,
+    "y": 2.75,
+    "width": 13.5,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "dashboard",
+    "x": 3.25,
+    "y": 3.25,
+    "width": 17.5,
+    "height": 17.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "supplier-invoice",
+    "x": 4,
+    "y": 3,
+    "width": 17,
+    "height": 18,
+    "stroke": "1.5"
+  },
+  {
+    "id": "accounts-payable",
+    "x": 3,
+    "y": 5.25,
+    "width": 18,
+    "height": 13.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "accounts-receivable",
+    "x": 3,
+    "y": 5.25,
+    "width": 18,
+    "height": 13.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "sales-return",
+    "x": 0.75,
+    "y": 3.5,
+    "width": 19.25,
+    "height": 17,
+    "stroke": "1.5"
+  },
+  {
+    "id": "purchase-return",
+    "x": 4,
+    "y": 3.5,
+    "width": 19.25,
+    "height": 17,
+    "stroke": "1.5"
+  },
+  {
+    "id": "cycle-count",
+    "x": 4,
+    "y": 2.8306474685668945,
+    "width": 16,
+    "height": 18.338706970214844,
+    "stroke": "1.5"
+  },
+  {
+    "id": "stock-adjustment",
+    "x": 3,
+    "y": 3,
+    "width": 18,
+    "height": 18,
+    "stroke": "1.5"
+  },
+  {
+    "id": "quality-inspection",
+    "x": 3,
+    "y": 3.5,
+    "width": 18.5,
+    "height": 17,
+    "stroke": "1.5"
+  },
+  {
+    "id": "fixed-asset",
+    "x": 3,
+    "y": 3,
+    "width": 18,
+    "height": 18,
+    "stroke": "1.5"
+  },
+  {
+    "id": "payroll",
+    "x": 2,
+    "y": 4,
+    "width": 20,
+    "height": 16,
+    "stroke": "1.5"
+  },
+  {
+    "id": "material-request",
+    "x": 3,
+    "y": 3,
+    "width": 18,
+    "height": 18,
+    "stroke": "1.5"
+  },
+  {
+    "id": "serial-number",
+    "x": 3,
+    "y": 6,
+    "width": 18,
+    "height": 12,
+    "stroke": "1.5"
+  },
+  {
+    "id": "item-master",
+    "x": 2,
+    "y": 4,
+    "width": 19.5,
+    "height": 15.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "trial-balance",
+    "x": 4,
+    "y": 3,
+    "width": 16,
+    "height": 18,
+    "stroke": "1.5"
+  },
+  {
+    "id": "shipment",
+    "x": 3,
+    "y": 6,
+    "width": 18,
+    "height": 14,
+    "stroke": "1.5"
+  },
+  {
+    "id": "expense-claim",
+    "x": 3,
+    "y": 3,
+    "width": 18,
+    "height": 18,
+    "stroke": "1.5"
+  },
+  {
+    "id": "customer-payment",
+    "x": 3,
+    "y": 2.5,
+    "width": 18,
+    "height": 18.5,
+    "stroke": "1.5"
+  },
+  {
+    "id": "supplier-payment",
+    "x": 3,
+    "y": 3,
+    "width": 18,
+    "height": 18,
+    "stroke": "1.5"
+  },
+  {
+    "id": "invoice-verification",
+    "x": 3,
+    "y": 3,
+    "width": 18,
+    "height": 18,
+    "stroke": "1.5"
+  },
+  {
+    "id": "depreciation",
+    "x": 2,
+    "y": 5,
+    "width": 20,
+    "height": 15,
+    "stroke": "1.5"
+  },
+  {
+    "id": "manufacturing",
+    "x": 3,
+    "y": 3,
+    "width": 18,
+    "height": 18,
+    "stroke": "1.5"
+  },
+  {
+    "id": "maintenance",
+    "x": 2.9795749187469482,
+    "y": 1.9142141342163086,
+    "width": 19.106210708618164,
+    "height": 19.10620880126953,
+    "stroke": "1.5"
+  },
+  {
+    "id": "inventory-reservation",
+    "x": 3,
+    "y": 4,
+    "width": 19,
+    "height": 17,
+    "stroke": "1.5"
+  },
+  {
+    "id": "reorder-point",
+    "x": 3,
+    "y": 4,
+    "width": 19,
+    "height": 16,
+    "stroke": "1.5"
+  }
+]

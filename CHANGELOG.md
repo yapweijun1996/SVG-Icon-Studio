@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.9.67 — 2026-10-02
+
+### Improved
+
+- Reviewed all 130 canonical SVGs individually from source and native Chrome renders at 24px/48px on light/dark backgrounds. The per-icon ledger in `review/svg-review-v0.9.67.md` records 18 improvements and 112 deliberate keep decisions; the registry and icon count are unchanged.
+- Restored missing fold edges in Delivery Order, Purchase Order, Purchase Requisition and Debit Note; joined Refresh/Delivery Order shafts to their arrowheads; separated Invoice's payment marker and Timesheet's clock from underlying outlines; moved Sales/Purchase Return arrows away from package seams with distinct incoming/outgoing directions.
+- Balanced Calendar/Calendar Check bindings and the date grid, inset Close, rounded Alert, distinguished Payment from Credit Card, increased Bill of Materials node spacing, separated Material Request's arrow, restored Expense Claim's side sections and completed Inventory Reservation's package wall.
+
+### Added
+
+- `npm run review-icons` generates bounded authoring galleries with source hashes; metadata is escaped and SVG policy validation precedes embedding. Regression tests cover all canonical child paint inheritance, cap/join consistency, exact geometry duplication, gallery coverage/hashes, multiline SVG roots, unknown categories and unsafe input rejection.
+- Versioned before/after screenshots, source manifests and native SVG bounds for all 130 icons under `review/svg-v0.9.67/`.
+
+### Validation
+
+- Bounded `npm test`, `npm run typecheck`, `npm run build` and `git diff --check` pass; all 130 SVGs validate. Review coverage, the exact 18 source diffs, unchanged registry and source hashes were cross-checked against baseline commit `0b0a288` and the final worktree.
+- Clean-profile production Chrome searches and renders all 130 icons without fallback errors, compares their bounds to the canonical gallery, reports v0.9.67 and no runtime exceptions. Desktop/tablet/mobile checks retain native fill-switch click/Tab/Space/focus behavior and no page horizontal overflow.
+
 ## 0.9.66 — 2026-10-02
 
 ### Added

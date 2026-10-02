@@ -1,7 +1,7 @@
 # Icon Studio — Design System
 
 **Document:** `DESIGN.md`
-**Status:** Living document — reflects the design system as actually shipped in `v0.9.66`, not an aspirational brief.
+**Status:** Living document — reflects the design system as actually shipped in `v0.9.67`, not an aspirational brief.
 **Source of truth for tokens:** [`css/tokens.css`](css/tokens.css) (design-system.json is a synced machine-readable snapshot of the same values, not an independent source)
 **Relationship to `components.md`:** `components.md` is the original pre-implementation design brief written before any code existed. It is kept for historical reference only — where the two disagree, this document and the current codebase win. See the note at the top of `components.md`.
 
@@ -114,6 +114,8 @@ The built-in catalogue uses one visual style on an exact `0 0 24 24` viewBox. Ru
 - The only intentional drawing-style exception is `delivery-truck.svg`, which keeps sharp `butt` caps / `miter` joins to match its approved vehicle geometry. It still uses the same `1.5` outline weight and `currentColor` stroke.
 - The former filled ERP/AI icons and the old `invoice.svg` 1px exception were redrawn in `v0.9.63` so cards no longer switch visual weight/style inside one catalogue.
 - In `v0.9.65`, 16 ERP icons were simplified for legibility at 24px and 48px: inventory actions use packages, invoice actions use documents, customer/supplier payments share a banknote motif with opposite flow arrows, and trial balance uses a two-column ledger. Secondary symbols occupy their own space or deliberately interrupt the primary outline rather than drawing through it.
+
+- The [v0.9.67 one-by-one review](review/svg-review-v0.9.67.md) covers all 130 icons. Eighteen assets were improved for fold continuity, marker separation, matched bindings or spacing; 112 retain their already-correct geometry. Root paint inheritance and cap/join consistency are regression-tested, and bounded light/dark review pages can be regenerated with `npm run review-icons`.
 
 ### 5.2 Filled compatibility
 

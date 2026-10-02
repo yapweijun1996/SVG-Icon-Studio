@@ -5,7 +5,7 @@
 An SVG catalogue, customisation and export workspace built with static HTML, modular CSS and browser-native ES modules. The runtime itself still has zero third-party dependencies — [Vite](https://vitejs.dev) is only a dev-server/bundler wrapper on top, used for local development and the GitHub Pages build.
 
 - Project ID: `project_f2a74b23-33c1-4c5c-b43d-e2b5b3108428`
-- Release: `v0.9.40`
+- Release: `v0.9.67`
 - Entry: `index.html`
 - Live demo: https://yapweijun1996.github.io/SVG-Icon-Studio/ (built and deployed automatically from `main` by [.github/workflows/deploy.yml](.github/workflows/deploy.yml))
 - License: [MIT](LICENSE)
@@ -74,6 +74,18 @@ The built-in catalogue uses one consistent **`outline`** style — see [DESIGN.m
 
 - All 130 built-in icons use `fill="none" stroke="currentColor" stroke-width="1.5"` at the root.
 - The importer/runtime still understands legacy or uploaded **`filled`** SVGs for backwards compatibility, but new built-in icons should follow the outline contract.
+
+## Reviewing individual artwork
+
+```bash
+npm run review-icons
+# Or keep generated HTML outside the build directory:
+npm run review-icons -- --out /tmp/icon-studio-review
+```
+
+Open the generated HTML pages to inspect each canonical icon at 48px and 24px on light/dark backgrounds. Pages are limited to 20 icons, and `manifest.json` records every source hash. The default output is ignored `dist/icon-review/`; published app files and source artwork are not modified by the review tool. Metadata is escaped and canonical SVG policy validation runs before artwork is embedded.
+
+`npm test` also checks root-only paint inheritance, cap/join consistency and exact artwork duplication. Keep colour/stroke attributes on the root so inspector settings and exported variants remain effective. The [v0.9.67 individual review](review/svg-review-v0.9.67.md) records all 130 keep/improve decisions with before/after captures.
 
 ## Converting an arbitrary SVG
 

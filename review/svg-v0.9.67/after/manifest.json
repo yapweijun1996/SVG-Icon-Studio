@@ -1,0 +1,569 @@
+{
+  "version": "0.9.67",
+  "total": 130,
+  "sizes": [
+    48,
+    24
+  ],
+  "backgrounds": [
+    "light",
+    "dark"
+  ],
+  "pages": [
+    {
+      "file": "interface-1.html",
+      "icons": [
+        {
+          "id": "search",
+          "sha256": "fb867236c5eaec2e893a57448a0975328641515b4d1bdf85e2bd906d407929bd"
+        },
+        {
+          "id": "settings",
+          "sha256": "8970e78468e4d0a41fae4edff8028091844ee030602e67d81ce22144d20a070b"
+        },
+        {
+          "id": "notification",
+          "sha256": "a658f80925c04f5136238d18310787900a17e6d7e17bfee0d672dfe96c026ca1"
+        },
+        {
+          "id": "calendar",
+          "sha256": "8938058ae2490f8254ae0eb87c72796136e799e40bb6a41721794d65fcc41e55"
+        },
+        {
+          "id": "clock",
+          "sha256": "5e69e1a16c021207b5cdc531bccdfdf29bac5271bc7c8b12d2448d6f0b6b1071"
+        },
+        {
+          "id": "home",
+          "sha256": "102f1e23340ada1dd1f3204e4d001a7a4ca5a03934615f3442bd4e61aae057f1"
+        },
+        {
+          "id": "menu",
+          "sha256": "24978fc2505026d8f9801707f965cc6ddd04deb1c7827f5e0423996af50a855d"
+        },
+        {
+          "id": "close",
+          "sha256": "77255bdb8eb61ea35651f2d6f48c2c4d3ce29a72c2f044a460473ba14aaf82e8"
+        },
+        {
+          "id": "lock",
+          "sha256": "812bbb10f239b2885a2d2648c9ff9ed906f7d744bb1c1a07489ca82404b03b3d"
+        },
+        {
+          "id": "eye",
+          "sha256": "0937c069ee347561f3f2ab2025adeca9478d14638fcdfbda546affe0b8819b04"
+        },
+        {
+          "id": "mail",
+          "sha256": "bf5e7a8df80a104bd3994788affb77e16bf922b8389c58f8dc97bc423dee7a97"
+        },
+        {
+          "id": "star",
+          "sha256": "637d3159b28a1b30cdc33da62ee4bf2808396d2941661a357ab0b0680e86faff"
+        },
+        {
+          "id": "unlock",
+          "sha256": "5a774e0b4f43f6fbe88cf3d857afadac3f5f255cfc2146fe818e746bfa6e01c9"
+        },
+        {
+          "id": "eye-off",
+          "sha256": "daa75567f14ad05145d0eccaed6eefe5b478213345f1c00a47f32397115aef56"
+        },
+        {
+          "id": "globe",
+          "sha256": "572dc8e0cd58677efa0ed86f13709f59276c7c0637a9e1665855000a5495a61a"
+        },
+        {
+          "id": "plus",
+          "sha256": "2fc9d5ee297a84e1eeba7929f7b5b426c6936f5c2eac70810cef00402ce2d7f2"
+        },
+        {
+          "id": "minus",
+          "sha256": "3e81baead465fbebfa0089d9ea19b00873a22442b0fbd6b663d14ae821d1883b"
+        },
+        {
+          "id": "info",
+          "sha256": "8dba79e5b59474669b2335645765134daa0bd8b8db16bdbb9a53e573cef7b2bd"
+        },
+        {
+          "id": "help-circle",
+          "sha256": "76a5e870468c9128ca6ae003d54ef52e40b54e13c714c2b4cf6c0eab87285591"
+        },
+        {
+          "id": "bookmark",
+          "sha256": "5af0af4dfc8e425198323dd89ad7ef6c7d11098f21837d3587ff1c40cf217a9e"
+        }
+      ]
+    },
+    {
+      "file": "arrows-actions-1.html",
+      "icons": [
+        {
+          "id": "download",
+          "sha256": "52ca0521ee9317cc26082c09b9918dd40c972e21b2840b23aa829e5e6742dc17"
+        },
+        {
+          "id": "upload",
+          "sha256": "c4df36109a8d6e011f9bd79033b4fd1fff634f260209e355a6ffecbbfd97b389"
+        },
+        {
+          "id": "delete",
+          "sha256": "432be3ee8d5224f9aefcb8c81a974472a96f07277eabac628b5e5aab8d96e7ef"
+        },
+        {
+          "id": "edit",
+          "sha256": "290b6f3e1b6941f3052e9ff058c5a6876eff83784d93f4fe9fa898fa60342a7a"
+        },
+        {
+          "id": "share",
+          "sha256": "6b3e673f63f046786d1e0846d85ba09a8942d33d9df144b570b0746e1ad462f6"
+        },
+        {
+          "id": "filter",
+          "sha256": "9a3a7ad0019c4955a83073467527b52756f290b16b3aa1dc273274bb7ba56930"
+        },
+        {
+          "id": "arrow-left",
+          "sha256": "155f37f3d651770850f0a20b58e8999bc6156b4b8df676ffb80aad7bb0144398"
+        },
+        {
+          "id": "arrow-right",
+          "sha256": "06f2f2128c6d765612cd9e26d0fd7fc8b000dc472e82955b1a18a48e2214c35a"
+        },
+        {
+          "id": "check",
+          "sha256": "780b2d4c3a34f96e42b4e1884d417b57a3be547064781624df579cc76b3c3274"
+        },
+        {
+          "id": "alert",
+          "sha256": "3289976c2a366d0ddbb5d1e9853170a8618958220a9ec088caa56dd5764ab12e"
+        },
+        {
+          "id": "refresh",
+          "sha256": "4d23cbebe704d69275f2ac82911ff238d5cf9f1a997129d8dc8935a021255f92"
+        },
+        {
+          "id": "external-link",
+          "sha256": "9258f54616a69d9b106dd76eb9358e203819c26bc58473d2884bda85712aa80f"
+        },
+        {
+          "id": "copy",
+          "sha256": "72d28e7999240f17960714f5c90adb2502c5af99b8d5f0b9b38aaba9eba565de"
+        },
+        {
+          "id": "print",
+          "sha256": "e437f199fc894fd6610a1cad7c8e7ca4d658fcac0ef6ade3d0c2c7eda98a8aa5"
+        },
+        {
+          "id": "send",
+          "sha256": "e6710de8458880a935d32d82c563ac2e3c97546818e636fd408f31a600e6274d"
+        },
+        {
+          "id": "link",
+          "sha256": "e8cc50bd5d24adec11071e5a7edbb6d6b1d7f6ec2a1bb6fb80bb1928ececdfb3"
+        },
+        {
+          "id": "arrow-up",
+          "sha256": "68521c45cbdb63804f274fda6820bb199b584889210e1046387f91416e7d5fd8"
+        },
+        {
+          "id": "arrow-down",
+          "sha256": "bfd83a56b2f31be56a96c9e85b66f2bb335103545261516a50e24caadd192b53"
+        },
+        {
+          "id": "undo",
+          "sha256": "098aa8c9b3cdf2e856176ab1f92b012115dc7da4038405247e2163b79efbc9a4"
+        }
+      ]
+    },
+    {
+      "file": "files-users-commerce-1.html",
+      "icons": [
+        {
+          "id": "invoice",
+          "sha256": "4533fea259c030c643ec096c7e56297210da59da56a1e87319ec0f9e19f0bb23"
+        },
+        {
+          "id": "customer",
+          "sha256": "dde7502884c044f729d8c21d0e5ce4985ada6c4516069ad8ce8a13233298e95d"
+        },
+        {
+          "id": "cart",
+          "sha256": "136e36581333653b3f8e8bdde7002ec9ca10335670b01d106760e48a6b38c17a"
+        },
+        {
+          "id": "user-add",
+          "sha256": "893e006ba20aa85af24bbda26245364bf1493779baff485f42e408195fd3d5ad"
+        },
+        {
+          "id": "folder",
+          "sha256": "a8c4e5fb70e8cb46be5fcc1c3ab80de7fcb610f252b9f0360e39bf38c0833701"
+        },
+        {
+          "id": "file",
+          "sha256": "930dbe93b6bb5092b10045f8b58faa857f53ba9d9f322fc17bdd16c5bf87cc24"
+        },
+        {
+          "id": "sales-order",
+          "sha256": "a91952d177484b7330d4e80e418e033aa6342e2593a9f79697e7e18633043ab3"
+        },
+        {
+          "id": "vendor",
+          "sha256": "70eebe49e6a5eca1a04b03204dd38c7d01ac8909a5fe5a0e084c43f7d6baf3c7"
+        },
+        {
+          "id": "receipt",
+          "sha256": "8092547a3d4d8b2a7aa6d93c91485cc5e8651af945cf7f344850f508bf700db8"
+        },
+        {
+          "id": "users",
+          "sha256": "b68e1781886a92e449d8a6088d324dc39acf476c67dce139a396455f7d6640d9"
+        },
+        {
+          "id": "tag",
+          "sha256": "a18aeb8faf5d47db13314b2742c5ca42aff493600ec02c70bb581086c85248be"
+        },
+        {
+          "id": "percent",
+          "sha256": "7eb08a1e138657e0940ec6ef551f8519e58f09938929e60122eae530430098e1"
+        },
+        {
+          "id": "archive",
+          "sha256": "31ac307783f6c699c32bdd47fb9e712c17c2b2c1a2f36a3309fb391f2f7505e0"
+        }
+      ]
+    },
+    {
+      "file": "finance-logistics-ai-1.html",
+      "icons": [
+        {
+          "id": "delivery-truck",
+          "sha256": "1d244cb69cffdbe338cc1f0abb3cdac321672c995bdff2c8357f8b5400c2f9c3"
+        },
+        {
+          "id": "payment",
+          "sha256": "6e31baa445f274f7fdbeb779e1954fe1756840ff352371ad2f7435a2b5dbf349"
+        },
+        {
+          "id": "ai-spark",
+          "sha256": "fe55bb45a7ab47d84fb371713b0f5b161d53ea114cc6344a4b063793fdcee3aa"
+        },
+        {
+          "id": "chart-bar",
+          "sha256": "6a97528c6f8080eac75522d6edaf871a1571940e53f2e8ce579c235f13d86eca"
+        },
+        {
+          "id": "delivery-order",
+          "sha256": "1151fc78fe7b8f700e75473ef1353565d76d422c0ebe75ac549c2551449ae684"
+        },
+        {
+          "id": "warehouse",
+          "sha256": "4d4fe83168388869937a485c4c4315fffa6a1efd8839b46161054363250b7a99"
+        },
+        {
+          "id": "package",
+          "sha256": "23491e2e1ba3b857c3f1cca12321c02561a24ba97a2764fd58ff5ec70c6becd6"
+        },
+        {
+          "id": "credit-card",
+          "sha256": "3cfd4d732e339797f21f7256ac49c8bddeac714b7493c706df5908d77a064997"
+        },
+        {
+          "id": "wallet",
+          "sha256": "5792fee49b3ebdcfa19d5ff090650ed1602773cd513f66200a533e6045f6b2f1"
+        },
+        {
+          "id": "calculator",
+          "sha256": "6adff5207f597d70a9a9347481897c5fd82d3b26bf14bdddbeaa6dec5200bd1a"
+        },
+        {
+          "id": "map-pin",
+          "sha256": "0b6105b9343e461c79dadca4d05bcf0f21414231cae2dd0217854fe4a661060d"
+        },
+        {
+          "id": "trending-up",
+          "sha256": "d5d403f3cc5bf2d407ebacf4cf1a0ea877f7263c99c7ab626ed163e0daaff0bf"
+        },
+        {
+          "id": "pallet",
+          "sha256": "c90ea25e992850375a560669b34b8ed9c2ae09ef9b921c95cb3d66c507120450"
+        },
+        {
+          "id": "conveyor",
+          "sha256": "07e9c8f8ccf234959e3cc9a3e31b883d474cf59528ee465124723b11ccadc046"
+        },
+        {
+          "id": "delivery-route",
+          "sha256": "16f40caacde6729ba3954645a5c82a739e75ccc2b33aabcd19b43607b4fa5511"
+        },
+        {
+          "id": "payment-schedule",
+          "sha256": "db86569bc026e5f271311fd9dfcb91c63507412e9d89bb423d23c64d94b9a330"
+        },
+        {
+          "id": "currency-exchange",
+          "sha256": "815ad82589cd90408005f968e4bcdb660ee7131e5be04c32e38a39f71bc42c6a"
+        },
+        {
+          "id": "cash-flow",
+          "sha256": "14c6bf56631328367814a46065a7d886b17cae42fb2e3e76004c599ca266e127"
+        }
+      ]
+    },
+    {
+      "file": "erp-1.html",
+      "icons": [
+        {
+          "id": "purchase-order",
+          "sha256": "01b0812f794310514cd2f47d885fd3a881f15da01a0051938a13ed3986ce6c4a"
+        },
+        {
+          "id": "database",
+          "sha256": "c8839ae6c74a00e1e7930ab525d49dc55668ce63223d6712a24596772bcfda5e"
+        },
+        {
+          "id": "collection",
+          "sha256": "e356f9dcf6865665a5b647b3bcb985d989e74bcde60937e0b74544139bca41c8"
+        },
+        {
+          "id": "clipboard",
+          "sha256": "f32bd29e56588dae954feacfcd15566a4794b2e5dddadd741fd7576b6c82975d"
+        },
+        {
+          "id": "barcode",
+          "sha256": "7de45ee7d7e8bf95537fd90a7f5d2c8925495951a082bfbb1ec418e374e1f964"
+        },
+        {
+          "id": "calendar-check",
+          "sha256": "51fbf4a42cebd761b90930b3b5c69f6a979b8435dd039d9d00075d02063af932"
+        },
+        {
+          "id": "quotation",
+          "sha256": "11bfb1e3dffaab46338f9f28ca277f8910cdd5938eae2333e99c8ed78d52e5e0"
+        },
+        {
+          "id": "goods-receipt",
+          "sha256": "f5a184e40d9cb32dfd27dc04f7ce285909a8349b9e290b8fddc9a9b3ba743c54"
+        },
+        {
+          "id": "stock-transfer",
+          "sha256": "55a3f27cfba38b6fa1b7d93c77ab4e8cb5938bdc64c12a66108e1fa6f40923d9"
+        },
+        {
+          "id": "bill-of-materials",
+          "sha256": "5bfa1b540b499ebe5e7f1fc1648aa184c8bd7e679f60bfe18bd698e88f56f4f6"
+        },
+        {
+          "id": "work-order",
+          "sha256": "1d0621a783c3039022fc2078e5d62d635bbeb1058c2a7e9e9992c5bee120dc79"
+        },
+        {
+          "id": "inventory",
+          "sha256": "7c2b13e1649f5110116a53a093c81ee305868a693c7133aade5cc4546831092c"
+        },
+        {
+          "id": "ledger",
+          "sha256": "d888128dc3402dbdefd1ba3020963c0a864b378225f79a3f8c7ffbf85f5f9b43"
+        },
+        {
+          "id": "approval",
+          "sha256": "0c12b5505206f7b02db09bb112fa2b801d9a727e8856d46b74091cd1c23e5fdb"
+        },
+        {
+          "id": "workflow",
+          "sha256": "8d860837fb7fcfa97641c1ce7883e433fe3546be006c1cc4edc5cd60470bb3f0"
+        },
+        {
+          "id": "tax",
+          "sha256": "e8b6819bd7005d179220ae39d060f97e90c656b0ae2d91a93e080fe265389924"
+        },
+        {
+          "id": "report",
+          "sha256": "bbcd83990a5cb34c3fc5317894f29801f157ad90d786744dedf605fa1a516063"
+        },
+        {
+          "id": "reconciliation",
+          "sha256": "5732144edb844c2c9f919fe19d1f72d37068e60116157abeddb50bf1f358fb93"
+        },
+        {
+          "id": "credit-note",
+          "sha256": "fd34d9c76cacf398865b68f7305cb3386d7146a70edc90a4edbe33ddabd31b24"
+        },
+        {
+          "id": "goods-issue",
+          "sha256": "e9efbffac920f842dfe4e42f83d8fc8bc6ce7c5a534ee697ad79b5583b390f9f"
+        }
+      ]
+    },
+    {
+      "file": "erp-2.html",
+      "icons": [
+        {
+          "id": "contract",
+          "sha256": "ac8cbb1e524009642ee09b4d1842159482410887661a8045457b5b13f5d063ed"
+        },
+        {
+          "id": "bank",
+          "sha256": "5ec432f84581aeb7a665820ed7bbe05a4a649ffd51d2b8a7fcb3122bab563720"
+        },
+        {
+          "id": "employee",
+          "sha256": "fa4fcb57c0d8921e9cf29bd040663147796c024d49667a88c28b09803c45e161"
+        },
+        {
+          "id": "timesheet",
+          "sha256": "d018e557650945dcd3f57144d739ac0eb0407469728c5cebec55f2483c38d29b"
+        },
+        {
+          "id": "audit-trail",
+          "sha256": "ef0b5cd01c8fb045cde121ce47ce79534402bfc970405ee46e0cf75ad611f971"
+        },
+        {
+          "id": "budget",
+          "sha256": "cafd9984a65e013b039582cdd788c9360c33145188196ad3ebe6e091177b8384"
+        },
+        {
+          "id": "price-list",
+          "sha256": "e546a81387d756a55348f93a9ad2f2362b7c320139ce90ef97247aa61c45c6df"
+        },
+        {
+          "id": "batch-lot",
+          "sha256": "685ced0375e3ce67446620ce591096d7ed2bc476285d2d8caa6d4db2656d5cfc"
+        },
+        {
+          "id": "bin-location",
+          "sha256": "aa7578d1053bbca6b4db387173d05002d2c2632e0651316ab41676e7ae6c313e"
+        },
+        {
+          "id": "cost-center",
+          "sha256": "1e39b917f1eee158918b48bcf205fe88a1ae7570b6f2704fef7f2c0b20657f40"
+        },
+        {
+          "id": "purchase-requisition",
+          "sha256": "6d585b11c66ea3a184a8d8aa8fe349730041cf97c31b83f22f43af352a660157"
+        },
+        {
+          "id": "debit-note",
+          "sha256": "8a95ae9af43debad97a0e97b73fbb18de5228924fcf471f435b09a44ff258dac"
+        },
+        {
+          "id": "packing-list",
+          "sha256": "e71513941e738dfa0919dddf541d72dc273864e9d6d3211bcc36a7c37369ca1d"
+        },
+        {
+          "id": "pick-list",
+          "sha256": "5eae181f6de92aa3b33b713736873dea1a9ac268313b8375323c06342465bb8d"
+        },
+        {
+          "id": "journal-entry",
+          "sha256": "86970c8739ea89adf3d095a31e9f1c8a21908b103600da6ee10225ae8d869629"
+        },
+        {
+          "id": "dashboard",
+          "sha256": "62addcee3e3099c1d17fbe74a15f53b8294a029c51febdce5fca15b001b22572"
+        },
+        {
+          "id": "supplier-invoice",
+          "sha256": "3cbbb22cf0eb5a767ac33df8b1a0c7a1e46640561936a552b5e4dddee78ee8f7"
+        },
+        {
+          "id": "accounts-payable",
+          "sha256": "facfe177bc699ceba6dfb0e4007d4cd7b3c6f8d2ff053d867861838ebf0d3c72"
+        },
+        {
+          "id": "accounts-receivable",
+          "sha256": "eba1c1ec4f81e4ef28b3ae5db66aaec1af7b3de3ad31147a1e3096c98fc58cdf"
+        },
+        {
+          "id": "sales-return",
+          "sha256": "71df349271949ef650631105698fc509a78e8129c7dd999ca003c225e9d9ccdc"
+        }
+      ]
+    },
+    {
+      "file": "erp-3.html",
+      "icons": [
+        {
+          "id": "purchase-return",
+          "sha256": "69eb16e77cf615f63f667ed9a03b692250b7885c2c7e6d3cf0d31ae1c51f71b1"
+        },
+        {
+          "id": "cycle-count",
+          "sha256": "0b9bb6593d9af8797cf5c9db903699224d8e90a25a31f5f8a1d63928e58bbb24"
+        },
+        {
+          "id": "stock-adjustment",
+          "sha256": "82d44643d72a3b237cefa63d37c5a19604d63b3ef1c8c0f9b518f1d6742a0c14"
+        },
+        {
+          "id": "quality-inspection",
+          "sha256": "1c3b22d30ceedb710cfac1a1cf2d4ac8daab755c5facbf20097f839483811ca2"
+        },
+        {
+          "id": "fixed-asset",
+          "sha256": "e4bd94e6e994b2aa5e5c6c974ad47d35f73684fd86877fd1efc584391c16fefb"
+        },
+        {
+          "id": "payroll",
+          "sha256": "9cfe4a4a37576de794e7cd74cd3ee67fb2d4ae40ce73267f004e5e727eef1809"
+        },
+        {
+          "id": "material-request",
+          "sha256": "a8d5f2b8b8b0e498f3a3bae421c31a9c7e8de1bbad69d8cea899a881b4e801d4"
+        },
+        {
+          "id": "serial-number",
+          "sha256": "b6cc26ef66661aa8e5e19dd9938e6a9081b1a5677ce5fc26651e9dba39d016bd"
+        },
+        {
+          "id": "item-master",
+          "sha256": "d4b613b3495849ea144edf2d29bd5e5486152f4340b509ff3396452dadc30295"
+        },
+        {
+          "id": "trial-balance",
+          "sha256": "f2afa1fed5fe8d162a3a19fcdae1a4bf8c808ccc2970364571e5a02bdcac82c8"
+        },
+        {
+          "id": "shipment",
+          "sha256": "bd545938cbcbb7251e5322ab6a1a3e91caf131033a83227d8cc366ef9eb0ecc6"
+        },
+        {
+          "id": "expense-claim",
+          "sha256": "fe7087e84aa9d7d024e3352e9ec165e4c2947a9fcf73f4af4eb41243b5b05d13"
+        },
+        {
+          "id": "customer-payment",
+          "sha256": "4eac2ededb3b5b526089068765ef93559fd0fcc93197eb2f29a4a582123617c9"
+        },
+        {
+          "id": "supplier-payment",
+          "sha256": "48071c82e83dfa1a96ec2d13301402850447f027377c00a66a70dfb65f49d80a"
+        },
+        {
+          "id": "invoice-verification",
+          "sha256": "98b7354cf2c5a454d77ad44f08151aab829d83ba3c142c47dce91021f9275978"
+        },
+        {
+          "id": "depreciation",
+          "sha256": "45269fa1c0c9af88fbe41fcba16776a8b9edc4a24f8e22891bebd617d1403383"
+        },
+        {
+          "id": "manufacturing",
+          "sha256": "6db75ace20210198144579624da38b67b5a0d39ef8929202d911efcba9a073ef"
+        },
+        {
+          "id": "maintenance",
+          "sha256": "6dcaf5aacad8c5b3975480407e9fef745cc7b51923140f7a596aee926ab7d11e"
+        },
+        {
+          "id": "inventory-reservation",
+          "sha256": "e5e2aca3b1c174faa00b357e78c922ef1e431726d95f75f4c8f22d858c194ee3"
+        },
+        {
+          "id": "reorder-point",
+          "sha256": "c4d62bc11afe18922c1c5037d263115b5e007124916a051b8c65a4bcff6e8cd1"
+        }
+      ]
+    }
+  ]
+}
