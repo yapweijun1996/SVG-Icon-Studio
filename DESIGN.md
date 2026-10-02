@@ -1,7 +1,7 @@
 # Icon Studio — Design System
 
 **Document:** `DESIGN.md`
-**Status:** Living document — reflects the design system as actually shipped in `v0.9.69`, not an aspirational brief.
+**Status:** Living document — reflects the design system as actually shipped in `v0.9.70`, not an aspirational brief.
 **Source of truth for tokens:** [`css/tokens.css`](css/tokens.css) (design-system.json is a synced machine-readable snapshot of the same values, not an independent source)
 **Relationship to `components.md`:** `components.md` is the original pre-implementation design brief written before any code existed. It is kept for historical reference only — where the two disagree, this document and the current codebase win. See the note at the top of `components.md`.
 
@@ -10,7 +10,7 @@
 ## 1. Product identity
 
 - **Name:** Icon Studio — SVG Icon Collection
-- **Positioning:** a browse/customise/export workspace for production-ready SVG icons, aimed at ERP/back-office and general product UI use cases (see the `ERP` category, 71 of the 160 icons).
+- **Positioning:** a browse/customise/export workspace for production-ready SVG icons, aimed at ERP/back-office and general product UI use cases (see the `ERP` category, 71 of the 180 icons).
 - **Feel:** professional SaaS asset-management workspace — compact, enterprise-friendly density, restrained shadows, not a marketing landing page.
 - **Brand mark:** a four-point sparkle/compass path (`M12 2c.7 4.7 3.3 7.3 8 8-4.7.7-7.3 3.3-8 8-.7-4.7-3.3-7.3-8-8 4.7-.7 7.3-3.3 8-8Z`), used in the sidebar brand button and the "Brand kit" nav icon.
 
@@ -102,7 +102,7 @@ Three-column desktop shell (`.app-shell`, CSS grid: `sidebar-width | 1fr | inspe
 
 The built-in catalogue uses one visual style on an exact `0 0 24 24` viewBox. Runtime/import code still recognises filled uploaded SVGs for compatibility, but filled artwork is no longer part of the built-in library.
 
-### 5.1 Built-in outline contract (160 of 160 icons)
+### 5.1 Built-in outline contract (180 of 180 icons)
 
 ```svg
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -159,4 +159,4 @@ These aren't visual, but they constrain what any new UI feature is allowed to do
 See `ROADMAP.md` for full detail — the two items with direct design implications:
 
 - **Command palette** (Cmd+K): would reuse the same underlying action-dispatch logic as any future WebMCP tool layer, so the two should be designed together, not separately.
-- **Search relevance/highlighting**: current search is plain substring match with no ranking or highlighted match term — noted as a design gap now that the catalogue has grown to 160 icons.
+- **Search relevance/highlighting**: current search is plain substring match with no ranking or highlighted match term — noted as a design gap now that the catalogue has grown to 180 icons.

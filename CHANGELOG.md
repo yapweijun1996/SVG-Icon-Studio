@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.9.70 — 2026-10-03
+
+### Added
+
+- Twenty searchable canonical outline SVGs:
+  - Commerce: Shopping Bag, Gift, Coupon, Loyalty Card and Shopping Basket.
+  - Finance: Investment, Savings, Loan, Interest Rate and Subscription.
+  - Users: User Check, User Remove, User Shield, Team and Support Agent.
+  - Interface/Actions/Files: Wi-Fi, Bluetooth, Battery, Redo and Folder Open.
+- Catalogue total is now 180, all outline. Additions use the 24×24, root-only 1.5px/currentColor contract and include active metadata, tags/aliases and appended sort positions 1610–1800. Redo mirrors the existing Undo; user state variants match the existing User Add family.
+- Registry regression tests preserve the expanded baseline and cover each addition's ID/name/alias searches with category/style filtering. Current README/SPEC/DESIGN totals and release references are updated.
+
+### Validation
+
+- Bounded `npm test`, `npm run typecheck`, `npm run build` and `git diff --check` pass; all 180 SVGs validate, with no duplicate aliases or exact artwork duplicates.
+- Every addition was inspected in native Chrome at 24px/48px on light/dark backgrounds. Gallery source hashes match current canonical files and native bounds retain standard stroke clearance.
+- Clean-profile production Chrome searches and renders all 180 icons without fallback and matches their bounds to the canonical gallery. Responsive fill-switch click/Tab/Space/focus checks and no page horizontal overflow pass at desktop, tablet and mobile sizes.
+- The original 160 assets, metadata entries and category definitions are unchanged against `4a38faf`; application JavaScript is unchanged. Production version metadata and worker both match v0.9.70.
+
 ## 0.9.69 — 2026-10-02
 
 ### Added

@@ -2499,6 +2499,226 @@
       "status": "active",
       "featured": false,
       "sortOrder": 1600
+    },
+    {
+      "id": "shopping-bag",
+      "name": "Shopping Bag",
+      "category": "Commerce",
+      "style": "outline",
+      "tags": ["retail", "purchase", "store", "bag"],
+      "aliases": ["retail-bag", "carry-bag"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1610
+    },
+    {
+      "id": "gift",
+      "name": "Gift",
+      "category": "Commerce",
+      "style": "outline",
+      "tags": ["present", "reward", "promotion", "celebration"],
+      "aliases": ["gift-box", "wrapped-present"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1620
+    },
+    {
+      "id": "coupon",
+      "name": "Coupon",
+      "category": "Commerce",
+      "style": "outline",
+      "tags": ["discount", "voucher", "promotion", "offer"],
+      "aliases": ["discount-coupon", "discount-ticket"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1630
+    },
+    {
+      "id": "loyalty-card",
+      "name": "Loyalty Card",
+      "category": "Commerce",
+      "style": "outline",
+      "tags": ["rewards", "membership", "points", "loyalty"],
+      "aliases": ["rewards-card", "membership-card"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1640
+    },
+    {
+      "id": "shopping-basket",
+      "name": "Shopping Basket",
+      "category": "Commerce",
+      "style": "outline",
+      "tags": ["retail", "groceries", "purchase", "basket"],
+      "aliases": ["market-basket", "grocery-basket"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1650
+    },
+    {
+      "id": "investment",
+      "name": "Investment",
+      "category": "Finance",
+      "style": "outline",
+      "tags": ["capital", "growth", "portfolio", "yield"],
+      "aliases": ["capital-investment", "portfolio-growth"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1660
+    },
+    {
+      "id": "savings",
+      "name": "Savings",
+      "category": "Finance",
+      "style": "outline",
+      "tags": ["piggy bank", "saving", "fund", "deposit"],
+      "aliases": ["piggy-bank", "savings-fund"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1670
+    },
+    {
+      "id": "loan",
+      "name": "Loan",
+      "category": "Finance",
+      "style": "outline",
+      "tags": ["borrowing", "credit", "lending", "funds"],
+      "aliases": ["credit-loan", "lending"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1680
+    },
+    {
+      "id": "interest-rate",
+      "name": "Interest Rate",
+      "category": "Finance",
+      "style": "outline",
+      "tags": ["interest", "percentage", "borrowing", "term"],
+      "aliases": ["apr", "annual-percentage-rate"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1690
+    },
+    {
+      "id": "subscription",
+      "name": "Subscription",
+      "category": "Finance",
+      "style": "outline",
+      "tags": ["recurring", "billing", "renewal", "payment"],
+      "aliases": ["recurring-billing", "subscription-payment"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1700
+    },
+    {
+      "id": "user-check",
+      "name": "User Check",
+      "category": "Users",
+      "style": "outline",
+      "tags": ["verified", "approved", "account", "user"],
+      "aliases": ["verified-user", "approved-user"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1710
+    },
+    {
+      "id": "user-remove",
+      "name": "User Remove",
+      "category": "Users",
+      "style": "outline",
+      "tags": ["deactivate", "remove", "account", "user"],
+      "aliases": ["remove-user", "deactivate-user"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1720
+    },
+    {
+      "id": "user-shield",
+      "name": "User Shield",
+      "category": "Users",
+      "style": "outline",
+      "tags": ["security", "privacy", "permissions", "protection"],
+      "aliases": ["protected-user", "secure-user"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1730
+    },
+    {
+      "id": "team",
+      "name": "Team",
+      "category": "Users",
+      "style": "outline",
+      "tags": ["collaboration", "department", "crew", "organization"],
+      "aliases": ["work-team", "staff-team"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1740
+    },
+    {
+      "id": "support-agent",
+      "name": "Support Agent",
+      "category": "Users",
+      "style": "outline",
+      "tags": ["service", "headset", "help desk", "support"],
+      "aliases": ["helpdesk-agent", "customer-support"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1750
+    },
+    {
+      "id": "wifi",
+      "name": "Wi-Fi",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["network", "wireless", "connectivity", "internet"],
+      "aliases": ["wireless-network", "wifi-connection"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1760
+    },
+    {
+      "id": "bluetooth",
+      "name": "Bluetooth",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["pairing", "connection", "wireless", "device"],
+      "aliases": ["bluetooth-connection", "device-pairing"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1770
+    },
+    {
+      "id": "battery",
+      "name": "Battery",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["power", "charge", "energy", "level"],
+      "aliases": ["battery-power", "charge-level"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1780
+    },
+    {
+      "id": "redo",
+      "name": "Redo",
+      "category": "Actions",
+      "style": "outline",
+      "tags": ["history", "repeat", "edit", "forward"],
+      "aliases": ["redo-action", "repeat-edit"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1790
+    },
+    {
+      "id": "folder-open",
+      "name": "Folder Open",
+      "category": "Files",
+      "style": "outline",
+      "tags": ["directory", "files", "browse", "expanded"],
+      "aliases": ["open-folder", "expanded-folder"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1800
     }
   ]
 }

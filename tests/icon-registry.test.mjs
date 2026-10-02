@@ -4,7 +4,7 @@ import { getFilteredIcons } from '../js/features/filters.js';
 import { createState } from '../js/core/state.js';
 const registry = JSON.parse(await fs.readFile('data/icon-registry.json', 'utf8'));
 assert.equal(registry.schemaVersion, 1);
-assert.ok(registry.icons.length >= 160, 'Icon count must preserve the published baseline.');
+assert.ok(registry.icons.length >= 180, 'Icon count must preserve the published baseline.');
 assert.equal(new Set(registry.icons.map(icon => icon.id)).size, registry.icons.length, 'Icon IDs must be unique.');
 assert.equal(registry.icons.filter(icon => icon.style === 'outline').length, registry.icons.length, 'Built-in catalogue should use one consistent outline style.');
 for (const id of ['invoice', 'purchase-order', 'delivery-order']) {
@@ -23,7 +23,11 @@ const addedIds = [
   'qr-code', 'rfid', 'thermometer', 'fragile', 'package-check',
   'package-damage', 'hand-truck', 'cold-storage', 'safety-helmet', 'fire-extinguisher',
   'stamp', 'attachment', 'document-scan', 'cloud-sync', 'backup',
-  'restore', 'api', 'robot', 'ai-chat', 'key'
+  'restore', 'api', 'robot', 'ai-chat', 'key',
+  'shopping-bag', 'gift', 'coupon', 'loyalty-card', 'shopping-basket',
+  'investment', 'savings', 'loan', 'interest-rate', 'subscription',
+  'user-check', 'user-remove', 'user-shield', 'team', 'support-agent',
+  'wifi', 'bluetooth', 'battery', 'redo', 'folder-open'
 ];
 for (const id of addedIds) {
   const icon = registry.icons.find(candidate => candidate.id === id);
