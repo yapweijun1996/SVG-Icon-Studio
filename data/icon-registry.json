@@ -2279,6 +2279,226 @@
       "status": "active",
       "featured": false,
       "sortOrder": 1400
+    },
+    {
+      "id": "qr-code",
+      "name": "QR Code",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["scanning", "identification", "label", "tracking"],
+      "aliases": ["qrcode", "quick-response-code"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1410
+    },
+    {
+      "id": "rfid",
+      "name": "RFID Tag",
+      "category": "Logistics",
+      "style": "outline",
+      "tags": ["radio frequency", "wireless", "identification", "tracking"],
+      "aliases": ["rfid-tag", "radio-frequency-id"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1420
+    },
+    {
+      "id": "thermometer",
+      "name": "Thermometer",
+      "category": "Logistics",
+      "style": "outline",
+      "tags": ["temperature", "cold chain", "monitoring", "measurement"],
+      "aliases": ["temperature-gauge", "temperature-monitor"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1430
+    },
+    {
+      "id": "fragile",
+      "name": "Fragile",
+      "category": "Logistics",
+      "style": "outline",
+      "tags": ["breakable", "glass", "handling", "packing"],
+      "aliases": ["handle-with-care", "breakable-goods"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1440
+    },
+    {
+      "id": "package-check",
+      "name": "Package Check",
+      "category": "Logistics",
+      "style": "outline",
+      "tags": ["confirmed", "delivered", "parcel", "verification"],
+      "aliases": ["verified-package", "delivery-confirmation"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1450
+    },
+    {
+      "id": "package-damage",
+      "name": "Package Damage",
+      "category": "Logistics",
+      "style": "outline",
+      "tags": ["damaged", "breakage", "parcel", "claim"],
+      "aliases": ["damaged-package", "cargo-damage"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1460
+    },
+    {
+      "id": "hand-truck",
+      "name": "Hand Truck",
+      "category": "Logistics",
+      "style": "outline",
+      "tags": ["material handling", "moving", "warehouse", "trolley"],
+      "aliases": ["dolly", "hand-trolley"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1470
+    },
+    {
+      "id": "cold-storage",
+      "name": "Cold Storage",
+      "category": "Logistics",
+      "style": "outline",
+      "tags": ["refrigeration", "frozen", "warehouse", "cold chain"],
+      "aliases": ["refrigerated-warehouse", "freezer-storage"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1480
+    },
+    {
+      "id": "safety-helmet",
+      "name": "Safety Helmet",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["hard hat", "PPE", "safety", "construction"],
+      "aliases": ["hard-hat", "protective-helmet"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1490
+    },
+    {
+      "id": "fire-extinguisher",
+      "name": "Fire Extinguisher",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["fire safety", "emergency", "equipment", "protection"],
+      "aliases": ["fire-suppression", "extinguisher"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1500
+    },
+    {
+      "id": "stamp",
+      "name": "Stamp",
+      "category": "Actions",
+      "style": "outline",
+      "tags": ["seal", "endorsement", "document", "authorization"],
+      "aliases": ["rubber-stamp", "document-stamp"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1510
+    },
+    {
+      "id": "attachment",
+      "name": "Attachment",
+      "category": "Actions",
+      "style": "outline",
+      "tags": ["paperclip", "file", "document", "message"],
+      "aliases": ["paperclip", "file-attachment"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1520
+    },
+    {
+      "id": "document-scan",
+      "name": "Document Scan",
+      "category": "Files",
+      "style": "outline",
+      "tags": ["OCR", "digitize", "paper", "scanning"],
+      "aliases": ["document-scanner", "scan-document"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1530
+    },
+    {
+      "id": "cloud-sync",
+      "name": "Cloud Sync",
+      "category": "Actions",
+      "style": "outline",
+      "tags": ["synchronization", "cloud", "transfer", "online"],
+      "aliases": ["cloud-synchronization", "sync-cloud"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1540
+    },
+    {
+      "id": "backup",
+      "name": "Backup",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["database", "snapshot", "archive", "protection"],
+      "aliases": ["data-backup", "database-backup"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1550
+    },
+    {
+      "id": "restore",
+      "name": "Restore",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["database", "recovery", "snapshot", "rollback"],
+      "aliases": ["data-restore", "database-recovery"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1560
+    },
+    {
+      "id": "api",
+      "name": "API",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["integration", "endpoint", "REST", "code"],
+      "aliases": ["api-connection", "application-programming-interface"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1570
+    },
+    {
+      "id": "robot",
+      "name": "Robot",
+      "category": "AI",
+      "style": "outline",
+      "tags": ["automation", "bot", "agent", "assistant"],
+      "aliases": ["ai-robot", "automation-bot"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1580
+    },
+    {
+      "id": "ai-chat",
+      "name": "AI Chat",
+      "category": "AI",
+      "style": "outline",
+      "tags": ["assistant", "conversation", "chatbot", "generative AI"],
+      "aliases": ["ai-assistant", "smart-chat"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1590
+    },
+    {
+      "id": "key",
+      "name": "Key",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["security", "password", "authentication", "access"],
+      "aliases": ["access-key", "credential-key"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1600
     }
   ]
 }

@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.9.69 — 2026-10-02
+
+### Added
+
+- Twenty searchable canonical outline SVGs:
+  - Logistics: RFID Tag, Thermometer, Fragile, Package Check, Package Damage, Hand Truck and Cold Storage.
+  - ERP: QR Code, Safety Helmet, Fire Extinguisher, Backup and Restore.
+  - Actions/Files: Stamp, Attachment, Cloud Sync and Document Scan.
+  - Interface/AI: API, Key, Robot and AI Chat.
+- Catalogue total is now 160, all outline. New entries include active metadata, tags/aliases and appended sort positions 1410–1600. The original 140 assets, metadata entries and category definitions are unchanged.
+- Registry regression tests cover all additions' ID/name/alias searches with category/style filtering and preserve the expanded baseline. Current README/SPEC/DESIGN release references and totals are updated.
+
+### Validation
+
+- Bounded `npm test`, `npm run typecheck`, `npm run build` and `git diff --check` pass; all 160 SVGs validate, with no duplicate aliases or exact artwork duplicates.
+- Every addition was inspected in native Chrome at 24px/48px on light/dark backgrounds. Source hashes match the generated gallery, and geometric bounds retain standard stroke clearance inside the viewBox.
+- Clean-profile production Chrome searches and renders all 160 icons without fallback and matches their bounds to the canonical gallery. Existing responsive fill-switch click/Tab/Space/focus behavior and no page horizontal overflow pass at desktop, tablet and mobile sizes.
+- Original assets and metadata were cross-checked against `893db08`; production version metadata and worker both match v0.9.69. Static impact analysis was unavailable (`PROJECT_CONFIG_NOT_FOUND`); direct inspection and bounded tests were used instead. Application JavaScript is unchanged.
+
 ## 0.9.68 — 2026-10-02
 
 ### Added
