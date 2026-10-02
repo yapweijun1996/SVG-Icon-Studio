@@ -2169,6 +2169,116 @@
       "status": "active",
       "featured": false,
       "sortOrder": 1300
+    },
+    {
+      "id": "forklift",
+      "name": "Forklift",
+      "category": "Logistics",
+      "style": "outline",
+      "tags": ["material handling", "lifting", "warehouse", "pallet"],
+      "aliases": ["fork-lift", "lift-truck"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1310
+    },
+    {
+      "id": "shipping-container",
+      "name": "Shipping Container",
+      "category": "Logistics",
+      "style": "outline",
+      "tags": ["freight", "cargo", "intermodal", "shipping"],
+      "aliases": ["cargo-container", "sea-container"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1320
+    },
+    {
+      "id": "weighing-scale",
+      "name": "Weighing Scale",
+      "category": "Logistics",
+      "style": "outline",
+      "tags": ["weight", "measurement", "mass", "packing"],
+      "aliases": ["weight-scale", "cargo-weight"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1330
+    },
+    {
+      "id": "attendance",
+      "name": "Attendance",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["employee", "presence", "check-in", "human resources"],
+      "aliases": ["staff-attendance", "employee-presence"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1340
+    },
+    {
+      "id": "leave-request",
+      "name": "Leave Request",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["time off", "absence", "vacation", "human resources"],
+      "aliases": ["time-off", "leave-application"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1350
+    },
+    {
+      "id": "recruitment",
+      "name": "Recruitment",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["hiring", "candidate", "talent", "human resources"],
+      "aliases": ["hiring", "candidate-search"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1360
+    },
+    {
+      "id": "training",
+      "name": "Training",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["learning", "course", "education", "development"],
+      "aliases": ["staff-training", "learning-course"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1370
+    },
+    {
+      "id": "project-board",
+      "name": "Project Board",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["project", "kanban", "planning", "task management"],
+      "aliases": ["kanban-board", "project-planning"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1380
+    },
+    {
+      "id": "milestone",
+      "name": "Milestone",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["checkpoint", "project", "achievement", "target"],
+      "aliases": ["project-milestone", "checkpoint"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1390
+    },
+    {
+      "id": "profit-loss",
+      "name": "Profit & Loss",
+      "category": "Finance",
+      "style": "outline",
+      "tags": ["income statement", "earnings", "profitability", "accounting"],
+      "aliases": ["profit-and-loss", "income-statement"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1400
     }
   ]
 }

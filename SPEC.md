@@ -4,21 +4,21 @@
 **Project:** Icon Studio — SVG Icon Collection Admin Panel  
 **Code-MCP Project ID:** `project_f2a74b23-33c1-4c5c-b43d-e2b5b3108428`  
 **Status:** Living specification — the SSOT refactor this document originally proposed shipped in `v0.2.0` (2026-07-23) and is now the permanent baseline architecture. Sections 1–3 and 16 are kept as the historical record of that refactor; everything else describes the **current, as-built system**.  
-**Current release:** v0.9.67 (2026-10-02) — see CHANGELOG.md for the full version history and ROADMAP.md / TASK.md for what is planned next.
+**Current release:** v0.9.68 (2026-10-02) — see CHANGELOG.md for the full version history and ROADMAP.md / TASK.md for what is planned next.
 **Runtime:** Dependency-free static HTML, CSS and browser-native JavaScript (Vite is a dev-only wrapper — see ADR-001)  
 **Primary goal (original, achieved):** Replace the monolithic icon and application architecture with a scalable Single Source of Truth (SSOT) structure while preserving existing behaviour and visual output.
 
 ---
 
-## 0. Current status snapshot (v0.9.67, 2026-10-02)
+## 0. Current status snapshot (v0.9.68, 2026-10-02)
 
 A quick-reference dashboard so this document doesn't have to be read end-to-end just to answer "what does the app actually do right now." Everything here is derived from the current codebase, not from plan.
 
 | Fact | Value |
 | --- | --- |
-| Total icons | 130 (see `data/icon-registry.json`) |
+| Total icons | 140 (see `data/icon-registry.json`) |
 | Categories | 10 — Interface, Arrows, Actions, Files, Users, Commerce, Finance, Logistics, AI, ERP |
-| Built-in icon style | `outline` (130/130); filled remains supported for uploaded/legacy compatibility — see §7.3/§7.4 |
+| Built-in icon style | `outline` (140/140); filled remains supported for uploaded/legacy compatibility — see §7.3/§7.4 |
 | Runtime dependencies | 0 (unchanged since inception) |
 | Dev tooling | Vite (`npm run dev` / `npm run build` / `npm run preview`); `npm run serve` still works with zero `node_modules` |
 | Security | SVG allowlist sanitizer (§13) + Content-Security-Policy meta tag (added v0.4.0) |
@@ -712,7 +712,7 @@ Existing desktop tap-target warnings SHOULD be resolved during the modular CSS p
 
 ## 15. Performance requirements
 
-The architecture MUST remain responsive with the current 130 icons and be suitable for at least 1,000 metadata entries.
+The architecture MUST remain responsive with the current 140 icons and be suitable for at least 1,000 metadata entries.
 
 Targets:
 
@@ -974,7 +974,7 @@ The SSOT refactor was accepted at `v0.2.0` — every item below is satisfied and
 
 ### Catalogue SSOT
 
-- [x] Every built-in icon is an independent file under `icons/catalog/` (130 files).
+- [x] Every built-in icon is an independent file under `icons/catalog/` (140 files).
 - [x] No built-in catalogue geometry exists in JavaScript or JSON.
 - [x] Every icon ID maps to exactly one SVG file.
 - [x] Every SVG file maps to exactly one metadata entry.
@@ -986,7 +986,7 @@ The SSOT refactor was accepted at `v0.2.0` — every item below is satisfied and
 - [x] `data/icon-registry.json` is the only built-in metadata registry.
 - [x] Registry schema and category references validate (`npm test`).
 - [x] Search aliases and tags are preserved.
-- [x] Icon count remains complete (130/130, `npm run validate`).
+- [x] Icon count remains complete (140/140, `npm run validate`).
 
 ### JavaScript
 

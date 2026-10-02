@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.9.68 — 2026-10-02
+
+### Added
+
+- Ten searchable canonical outline SVGs: Forklift, Shipping Container, Weighing Scale, Attendance, Leave Request, Recruitment, Training, Project Board, Milestone and Profit & Loss.
+- Catalogue total is now 140 (Logistics: 11; ERP: 66; Finance: 10). All additions use the 24×24, root-only 1.5px outline contract, with active metadata, tags/aliases and appended sort positions. The original 130 assets, metadata entries and category definitions are unchanged.
+- Registry tests preserve the expanded baseline and exercise each addition's ID/name/alias searches with category/style filtering. Current README/SPEC/DESIGN totals and release references are updated.
+
+### Validation
+
+- Bounded `npm test`, `npm run typecheck`, `npm run build` and `git diff --check` pass; all 140 SVGs validate with no duplicate aliases or exact artwork duplicates.
+- Native Chrome light/dark galleries reviewed each addition at 24px and 48px; new geometry retains stroke clearance inside the viewBox. Clean-profile production Chrome searches and renders all 140 assets without fallback, matches their native bounds to the canonical gallery and reports v0.9.68.
+- Desktop/tablet/mobile smoke checks preserve keyboard and pointer fill-switch behavior, visible focus and no page horizontal overflow. Original assets/metadata were cross-checked against `f65718e`; production version metadata and the worker both match v0.9.68.
+
 ## 0.9.67 — 2026-10-02
 
 ### Improved
