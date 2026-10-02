@@ -2939,6 +2939,226 @@
       "status": "active",
       "featured": false,
       "sortOrder": 2000
+    },
+    {
+      "id": "monitor",
+      "name": "Monitor",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["desktop", "display", "screen", "workstation"],
+      "aliases": ["computer-monitor", "desktop-screen"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2010
+    },
+    {
+      "id": "laptop",
+      "name": "Laptop",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["computer", "portable", "notebook", "device"],
+      "aliases": ["notebook-computer", "portable-computer"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2020
+    },
+    {
+      "id": "smartphone",
+      "name": "Smartphone",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["mobile", "phone", "handheld", "device"],
+      "aliases": ["mobile-device", "smart-phone"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2030
+    },
+    {
+      "id": "tablet",
+      "name": "Tablet",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["touchscreen", "portable", "screen", "device"],
+      "aliases": ["tablet-device", "touchscreen-tablet"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2040
+    },
+    {
+      "id": "keyboard",
+      "name": "Keyboard",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["typing", "input", "keys", "computer"],
+      "aliases": ["computer-keyboard", "typing-device"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2050
+    },
+    {
+      "id": "mouse",
+      "name": "Mouse",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["pointer", "input", "click", "computer"],
+      "aliases": ["computer-mouse", "pointing-device"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2060
+    },
+    {
+      "id": "camera",
+      "name": "Camera",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["photography", "capture", "photo", "lens"],
+      "aliases": ["photo-camera", "still-camera"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2070
+    },
+    {
+      "id": "video-camera",
+      "name": "Video Camera",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["video", "recording", "film", "capture"],
+      "aliases": ["camcorder", "recording-camera"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2080
+    },
+    {
+      "id": "microphone",
+      "name": "Microphone",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["audio", "voice", "recording", "input"],
+      "aliases": ["microphone-input", "audio-input"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2090
+    },
+    {
+      "id": "headphones",
+      "name": "Headphones",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["audio", "listening", "music", "sound"],
+      "aliases": ["audio-headphones", "listening-device"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2100
+    },
+    {
+      "id": "play",
+      "name": "Play",
+      "category": "Actions",
+      "style": "outline",
+      "tags": ["playback", "start", "media", "player"],
+      "aliases": ["start-playback", "media-play"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2110
+    },
+    {
+      "id": "pause",
+      "name": "Pause",
+      "category": "Actions",
+      "style": "outline",
+      "tags": ["playback", "hold", "media", "player"],
+      "aliases": ["pause-playback", "media-pause"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2120
+    },
+    {
+      "id": "stop",
+      "name": "Stop",
+      "category": "Actions",
+      "style": "outline",
+      "tags": ["playback", "end", "media", "player"],
+      "aliases": ["stop-playback", "media-stop"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2130
+    },
+    {
+      "id": "skip-forward",
+      "name": "Skip Forward",
+      "category": "Actions",
+      "style": "outline",
+      "tags": ["playback", "next", "track", "player"],
+      "aliases": ["next-track", "media-next"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2140
+    },
+    {
+      "id": "skip-back",
+      "name": "Skip Back",
+      "category": "Actions",
+      "style": "outline",
+      "tags": ["playback", "previous", "track", "player"],
+      "aliases": ["previous-track", "media-previous"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2150
+    },
+    {
+      "id": "volume",
+      "name": "Volume",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["speaker", "audio", "sound", "loudness"],
+      "aliases": ["audio-volume", "sound-on"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2160
+    },
+    {
+      "id": "volume-off",
+      "name": "Volume Off",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["speaker", "muted", "silent", "audio"],
+      "aliases": ["mute-speaker", "sound-off"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2170
+    },
+    {
+      "id": "message-circle",
+      "name": "Message Circle",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["chat", "message", "conversation", "communication"],
+      "aliases": ["chat-bubble", "round-message"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2180
+    },
+    {
+      "id": "phone",
+      "name": "Phone",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["call", "telephone", "handset", "communication"],
+      "aliases": ["telephone-handset", "call-phone"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2190
+    },
+    {
+      "id": "video-file",
+      "name": "Video File",
+      "category": "Files",
+      "style": "outline",
+      "tags": ["movie", "clip", "media", "video"],
+      "aliases": ["movie-file", "video-document"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2200
     }
   ]
 }

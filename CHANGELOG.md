@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.9.72 — 2026-10-03
+
+### Added
+
+- Twenty searchable canonical outline SVGs:
+  - Devices: Monitor, Laptop, Smartphone, Tablet, Keyboard and Mouse.
+  - Capture/audio: Camera, Video Camera, Microphone, Headphones, Volume and Volume Off.
+  - Playback: Play, Pause, Stop, Skip Forward and Skip Back.
+  - Communication/files: Message Circle, Phone and Video File.
+- Catalogue total is now 220, all outline. New entries follow the 24×24, root-only 1.5px/currentColor contract and include active metadata, tags/aliases and appended sort positions 2010–2200. Video File retains the canonical folded-page frame; media controls are catalogue artwork, not new playback functionality.
+- Registry regression tests preserve the expanded baseline and cover each addition's ID/name/alias searches with category/style filtering. Current README/SPEC/DESIGN totals and release references are updated.
+
+### Validation
+
+- Bounded `npm test`, `npm run typecheck`, `npm run build` and `git diff --check` pass; all 220 SVGs validate with no duplicate aliases or exact artwork duplicates.
+- Every addition was inspected in native Chrome at 24px/48px on light/dark backgrounds. Gallery source hashes match current canonical files, and native bounds retain standard stroke clearance.
+- Clean-profile production Chrome searches and renders all 220 icons without fallback and matches their bounds to the canonical gallery. Responsive fill-switch click/Tab/Space/focus behavior and no page horizontal overflow pass at desktop, tablet and mobile sizes.
+- The original 200 assets, metadata entries and category definitions are unchanged against `940c0dd`; application JavaScript is unchanged. Production version metadata and worker both match v0.9.72.
+
 ## 0.9.71 — 2026-10-03
 
 ### Added

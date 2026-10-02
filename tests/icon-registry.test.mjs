@@ -4,7 +4,7 @@ import { getFilteredIcons } from '../js/features/filters.js';
 import { createState } from '../js/core/state.js';
 const registry = JSON.parse(await fs.readFile('data/icon-registry.json', 'utf8'));
 assert.equal(registry.schemaVersion, 1);
-assert.ok(registry.icons.length >= 200, 'Icon count must preserve the published baseline.');
+assert.ok(registry.icons.length >= 220, 'Icon count must preserve the published baseline.');
 assert.equal(new Set(registry.icons.map(icon => icon.id)).size, registry.icons.length, 'Icon IDs must be unique.');
 assert.equal(registry.icons.filter(icon => icon.style === 'outline').length, registry.icons.length, 'Built-in catalogue should use one consistent outline style.');
 for (const id of ['invoice', 'purchase-order', 'delivery-order']) {
@@ -31,7 +31,11 @@ const addedIds = [
   'chevron-left', 'chevron-right', 'chevron-up', 'chevron-down', 'arrow-up-right',
   'arrow-down-left', 'maximize', 'minimize', 'zoom-in', 'zoom-out',
   'move', 'rotate-left', 'rotate-right', 'crop', 'sliders',
-  'code-file', 'image-file', 'file-zip', 'folder-plus', 'folder-lock'
+  'code-file', 'image-file', 'file-zip', 'folder-plus', 'folder-lock',
+  'monitor', 'laptop', 'smartphone', 'tablet', 'keyboard',
+  'mouse', 'camera', 'video-camera', 'microphone', 'headphones',
+  'play', 'pause', 'stop', 'skip-forward', 'skip-back',
+  'volume', 'volume-off', 'message-circle', 'phone', 'video-file'
 ];
 for (const id of addedIds) {
   const icon = registry.icons.find(candidate => candidate.id === id);
