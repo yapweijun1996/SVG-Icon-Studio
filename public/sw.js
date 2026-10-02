@@ -52,6 +52,10 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('message', event => {
+  if (event.data?.type === 'GET_VERSION') {
+    event.ports?.[0]?.postMessage({ version: APP_VERSION });
+    return;
+  }
   if (event.data?.type !== 'SKIP_WAITING') return;
   event.waitUntil(self.skipWaiting());
 });

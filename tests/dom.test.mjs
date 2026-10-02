@@ -97,9 +97,9 @@ assert.match(pwaSource, /registration\.waiting && navigator\.serviceWorker\.cont
 assert.match(pwaSource, /registration\.addEventListener\('updatefound'/, 'PWA controller should detect newly installed updates');
 assert.match(pwaSource, /navigator\.serviceWorker\.addEventListener\('controllerchange'/, 'PWA controller should reload only after the chosen worker becomes controller');
 assert.match(pwaSource, /waitingWorker\.postMessage\(\{ type: 'SKIP_WAITING' \}\)/, 'Update button should explicitly activate the waiting worker');
-assert.match(pwaSource, /new URL\('version\.json', document\.baseURI\)/, 'waiting update label should fetch uncached deployment version metadata');
+assert.match(pwaSource, /worker\.postMessage\(\{ type: 'GET_VERSION' \}, \[channel\.port2\]\)/, 'waiting update label should ask the actual waiting worker for its build version');
 assert.match(viteSource, /__APP_VERSION__:\s*JSON\.stringify\(appVersion\)/, 'production bundle should embed the running app version');
-assert.match(viteSource, /version\.json/, 'production build should publish deployment version metadata for waiting-update labels');
+assert.match(viteSource, /version\.json/, 'production build should publish deployment version metadata');
 
 const resultsHeaderTag = html.match(/<section\b[^>]*class="results-header"[^>]*>/)?.[0] || '';
 const resultsSummaryTag = html.match(/<span\b[^>]*id="resultsSummary"[^>]*>/)?.[0] || '';

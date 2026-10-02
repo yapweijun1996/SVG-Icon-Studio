@@ -16,14 +16,28 @@ export async function resolveRunningVersion() {
   }
 }
 
-async function resolveLatestVersion() {
-  const url = new URL('version.json', document.baseURI);
-  url.searchParams.set('update', String(Date.now()));
-  try {
-    return await readVersion(url);
-  } catch {
-    return '';
-  }
+async function resolveWorkerVersion(worker) {
+  if (typeof MessageChannel === 'undefined') return '';
+  return new Promise(resolve => {
+    const channel = new MessageChannel();
+    const finish = version => {
+      clearTimeout(timer);
+      channel.port1.close();
+      channel.port2.close();
+      resolve(version);
+    };
+    // Older deployed workers may not support version messages yet.
+    const timer = setTimeout(() => finish(''), 1500);
+    channel.port1.onmessage = event => {
+      const version = event.data?.version;
+      finish(typeof version === 'string' ? version.trim() : '');
+    };
+    try {
+      worker.postMessage({ type: 'GET_VERSION' }, [channel.port2]);
+    } catch {
+      finish('');
+    }
+  });
 }
 
 export function createPwaController({ versionNode, updateButton, toast = () => {} }) {
@@ -44,10 +58,10 @@ export function createPwaController({ versionNode, updateButton, toast = () => {
   async function showUpdate(worker) {
     if (!worker) return;
     waitingWorker = worker;
-    const latestVersion = await resolveLatestVersion();
-    const target = latestVersion || '';
+    const target = await resolveWorkerVersion(worker);
+    if (waitingWorker !== worker || reloading) return;
     const fullText = target ? 'Update v' + target : 'Update app';
-    const shortText = target ? 'v' + target : 'Update';
+    const shortText = target ? 'Update v' + target : 'Update';
     if (fullLabel) fullLabel.textContent = fullText;
     if (shortLabel) shortLabel.textContent = shortText;
     updateButton.setAttribute('aria-label', target ? 'Update Icon Studio to version ' + target : 'Update Icon Studio');
@@ -64,7 +78,7 @@ export function createPwaController({ versionNode, updateButton, toast = () => {
 
   async function registerWorker() {
     try {
-      const registration = await navigator.serviceWorker.register('./sw.js');
+      const registration = await navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' });
 
       if (registration.waiting && navigator.serviceWorker.controller) {
         await showUpdate(registration.waiting);

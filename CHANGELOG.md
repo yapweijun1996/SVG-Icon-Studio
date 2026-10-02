@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.9.65 — 2026-10-02
+
+### Changed
+
+- Redrew the 15 ERP icons visible in the supplied catalogue screenshot: Cycle Count, Stock Adjustment, Quality Inspection, Fixed Asset, Payroll, Material Request, Serial Number, Item Master, Trial Balance, Shipment, Expense Claim, Customer Payment, Supplier Payment, Invoice Verification and Depreciation. Also redrew Supplier Invoice shown in the inspector. Artwork retains the canonical 24×24, 1.5px, root-only outline contract; existing IDs and registry metadata are unchanged.
+- PWA update labels now obtain the target version directly from the waiting service worker instead of potentially newer network metadata. Both desktop and mobile show `Update vX.Y.Z`; older workers fall back to a generic Update action after a bounded timeout. Activation remains user-triggered, with reload only after controller change.
+- Service-worker update checks bypass the browser HTTP cache. Narrow-screen topbar spacing accommodates the action and version down to 320px.
+- Ignore local agent session state, environment files, logs, coverage and editor/OS artifacts without ignoring `.env.example`.
+
+### Validation
+
+- Full `npm test`, `npm run typecheck`, `npm run build` and `git diff --check` pass; all 120 catalogue SVGs validate. Regression tests exercise waiting-worker version replies, desktop/mobile labels, first-install behavior, legacy-worker fallback and explicit update activation.
+- Chrome-rendered artwork reviewed at 24px and 48px on light/dark backgrounds. Production Chrome layout checks at 1440px, 834px, 390px and 320px show no page/topbar horizontal overflow with a simulated `Update v0.9.66` label; running version is `v0.9.65`. A separate Chrome check exercised a real service-worker update against a local release-switching server: v0.9.65 → waiting `Update v0.9.66` → user click → reload to v0.9.66. Network version metadata deliberately remained v0.9.65, confirming the label came from the waiting worker.
+- `npm audit` reports two existing development-dependency advisories (nanoid: high; postcss: moderate); dependency remediation is outside this artwork/PWA change.
+
 ## 0.9.64 — 2026-09-25
 
 ### Fixed

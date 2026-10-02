@@ -1,3 +1,19 @@
+# Dependencies and generated builds
 node_modules/
 dist/
+coverage/
+
+# Local agent/session state
+.pi-glla/
+
+# Local environment and logs (keep example configuration trackable)
+.env
+.env.*
+!.env.example
+*.log
+
+# OS and editor artifacts
 .DS_Store
+Thumbs.db
+*.swp
+*.swo

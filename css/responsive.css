@@ -52,6 +52,7 @@
   .brand-card { display: none; }
   .hero-block p { display: none; }
   .hero-block h1 { margin-bottom: 0; }
+  .topbar { gap: 8px; }
   .topbar-actions { gap: 6px; }
   .topbar-actions .button span { display: none; }
   .topbar-actions .button { width: 44px; padding: 0; }
@@ -69,6 +70,12 @@
   .control-grid, .inspector-actions { grid-template-columns: 1fr; }
   .colour-row { grid-template-columns: 1fr; }
   .dialog-preview { min-height: 300px; }
+}
+
+@media (max-width: 360px) {
+  .breadcrumb { display: none; }
+  .pwa-update-button svg { display: none; }
+  .pwa-update-button [data-update-short] { max-width: 56px; white-space: normal; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -112,6 +112,14 @@ assert.match(source, /key\.startsWith\(CACHE_PREFIX\)/, 'activation should scope
   await install(harness);
   assert.equal(harness.skipWaitingCalls, 0, 'a newly installed update should wait for explicit user activation instead of auto-reloading');
 
+  let versionReply;
+  harness.listeners.message({
+    data: { type: 'GET_VERSION' },
+    ports: [{ postMessage(value) { versionReply = value; } }]
+  });
+  assert.equal(versionReply.version, '__ICON_STUDIO_VERSION__', 'the waiting worker should report its own build version');
+  assert.equal(harness.skipWaitingCalls, 0, 'reading the update version must not activate the worker');
+
   const lifetimePromises = [];
   harness.listeners.message({
     data: { type: 'SKIP_WAITING' },

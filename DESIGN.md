@@ -1,7 +1,7 @@
 # Icon Studio — Design System
 
 **Document:** `DESIGN.md`
-**Status:** Living document — reflects the design system as actually shipped in `v0.9.64`, not an aspirational brief.
+**Status:** Living document — reflects the design system as actually shipped in `v0.9.65`, not an aspirational brief.
 **Source of truth for tokens:** [`css/tokens.css`](css/tokens.css) (design-system.json is a synced machine-readable snapshot of the same values, not an independent source)
 **Relationship to `components.md`:** `components.md` is the original pre-implementation design brief written before any code existed. It is kept for historical reference only — where the two disagree, this document and the current codebase win. See the note at the top of `components.md`.
 
@@ -90,7 +90,7 @@ Three-column desktop shell (`.app-shell`, CSS grid: `sidebar-width | 1fr | inspe
 | Component | Where | Notes |
 | --- | --- | --- |
 | Collapsible sidebar | `.sidebar` | Nav items: Icon library, Collections, Favorites, Recently viewed, Uploaded icons, Brand kit. Collapse state persists to `localStorage`. |
-| Sticky topbar | .topbar | Import SVG, live icon-count pill, running-version pill / waiting-update action, theme toggle, mobile inspector trigger |
+| Sticky topbar | .topbar | Import SVG, live icon-count pill, running-version pill / `Update vX.Y.Z` action (version reported by the waiting worker, visible on mobile too), theme toggle, mobile inspector trigger |
 | Search + filters | `.catalogue-toolbar` | Free-text search (`/` keyboard shortcut focuses it), style filter, sort filter, category chips (10, derived live from the registry — never hardcode a count, see ADR-011-adjacent history in `CHANGELOG.md` 0.4.0) |
 | Icon grid | `.icon-grid` | Responsive `auto-fill` grid; Grid/Compact density toggle; scroll-to-load pagination (24 per page) with a manual "Load more" fallback button |
 | Icon card | `.icon-card` | Lazy-loaded preview (`IntersectionObserver`, 240px lookahead), favourite star, Copy SVG action, "⋮" more-options action |
@@ -113,6 +113,7 @@ The built-in catalogue uses one visual style on an exact `0 0 24 24` viewBox. Ru
 - `fill`/`stroke` are set **only on the root `<svg>`**; child shapes carry no colour attributes of their own so they inherit correctly.
 - The only intentional drawing-style exception is `delivery-truck.svg`, which keeps sharp `butt` caps / `miter` joins to match its approved vehicle geometry. It still uses the same `1.5` outline weight and `currentColor` stroke.
 - The former filled ERP/AI icons and the old `invoice.svg` 1px exception were redrawn in `v0.9.63` so cards no longer switch visual weight/style inside one catalogue.
+- In `v0.9.65`, 16 ERP icons were simplified for legibility at 24px and 48px: inventory actions use packages, invoice actions use documents, customer/supplier payments share a banknote motif with opposite flow arrows, and trial balance uses a two-column ledger. Secondary symbols occupy their own space or deliberately interrupt the primary outline rather than drawing through it.
 
 ### 5.2 Filled compatibility
 
