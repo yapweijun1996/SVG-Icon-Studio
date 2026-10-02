@@ -2059,6 +2059,116 @@
       "status": "active",
       "featured": false,
       "sortOrder": 1200
+    },
+    {
+      "id": "manufacturing",
+      "name": "Manufacturing",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["factory", "production", "plant", "operations"],
+      "aliases": ["factory", "production-plant"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1210
+    },
+    {
+      "id": "maintenance",
+      "name": "Maintenance",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["repair", "wrench", "equipment", "service"],
+      "aliases": ["equipment-maintenance", "repair"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1220
+    },
+    {
+      "id": "pallet",
+      "name": "Pallet",
+      "category": "Logistics",
+      "style": "outline",
+      "tags": ["freight", "storage", "load", "warehouse"],
+      "aliases": ["pallet-load"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1230
+    },
+    {
+      "id": "conveyor",
+      "name": "Conveyor",
+      "category": "Logistics",
+      "style": "outline",
+      "tags": ["belt", "sorting", "package", "automation"],
+      "aliases": ["conveyor-belt"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1240
+    },
+    {
+      "id": "delivery-route",
+      "name": "Delivery Route",
+      "category": "Logistics",
+      "style": "outline",
+      "tags": ["routing", "destination", "transport", "dispatch"],
+      "aliases": ["route-planning"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1250
+    },
+    {
+      "id": "inventory-reservation",
+      "name": "Inventory Reservation",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["reserved stock", "allocation", "hold", "inventory"],
+      "aliases": ["stock-reservation", "stock-allocation"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1260
+    },
+    {
+      "id": "reorder-point",
+      "name": "Reorder Point",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["replenishment", "minimum stock", "restock", "threshold"],
+      "aliases": ["stock-replenishment", "restock"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1270
+    },
+    {
+      "id": "payment-schedule",
+      "name": "Payment Schedule",
+      "category": "Finance",
+      "style": "outline",
+      "tags": ["due date", "installment", "scheduled payment", "calendar"],
+      "aliases": ["scheduled-payment", "payment-calendar"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1280
+    },
+    {
+      "id": "currency-exchange",
+      "name": "Currency Exchange",
+      "category": "Finance",
+      "style": "outline",
+      "tags": ["foreign exchange", "conversion", "currency", "rate"],
+      "aliases": ["forex", "currency-conversion"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1290
+    },
+    {
+      "id": "cash-flow",
+      "name": "Cash Flow",
+      "category": "Finance",
+      "style": "outline",
+      "tags": ["inflow", "outflow", "liquidity", "treasury"],
+      "aliases": ["cashflow", "liquidity"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 1300
     }
   ]
 }

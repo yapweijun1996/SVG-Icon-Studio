@@ -21,6 +21,11 @@ const catalogueSource = fs.readFileSync(new URL('../js/features/catalogue.js', i
 const pwaSource = fs.readFileSync(new URL('../js/features/pwa.js', import.meta.url), 'utf8');
 const viteSource = fs.readFileSync(new URL('../vite.config.js', import.meta.url), 'utf8');
 const inspectorSource = fs.readFileSync(new URL('../js/features/inspector.js', import.meta.url), 'utf8');
+const inspectorCss = fs.readFileSync(new URL('../css/inspector.css', import.meta.url), 'utf8');
+assert.match(inspectorCss, /\.switch > span \{[^}]*position: relative;/, 'switch thumb must be positioned relative to its track, not the larger touch target');
+assert.match(inspectorCss, /\.switch \{[^}]*flex: 0 0 44px;[^}]*width: 44px; height: 44px;/, 'switch should preserve its 44px hit target without flex shrinking');
+assert.match(inspectorCss, /\.switch input:focus-visible \+ span \{[^}]*outline:/, 'keyboard switch focus should be visible on the track');
+assert.match(inspectorCss, /\.switch > span \{[^}]*pointer-events: none;/, 'decorative switch track must not intercept native input clicks');
 const utilitiesSource = fs.readFileSync(new URL('../css/utilities.css', import.meta.url), 'utf8');
 const responsiveSource = fs.readFileSync(new URL('../css/responsive.css', import.meta.url), 'utf8');
 const tabletResponsiveStart = responsiveSource.indexOf('@media (max-width: 1180px)');

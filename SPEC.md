@@ -16,9 +16,9 @@ A quick-reference dashboard so this document doesn't have to be read end-to-end 
 
 | Fact | Value |
 | --- | --- |
-| Total icons | 120 (see `data/icon-registry.json`) |
+| Total icons | 130 (see `data/icon-registry.json`) |
 | Categories | 10 — Interface, Arrows, Actions, Files, Users, Commerce, Finance, Logistics, AI, ERP |
-| Built-in icon style | `outline` (120/120); filled remains supported for uploaded/legacy compatibility — see §7.3/§7.4 |
+| Built-in icon style | `outline` (130/130); filled remains supported for uploaded/legacy compatibility — see §7.3/§7.4 |
 | Runtime dependencies | 0 (unchanged since inception) |
 | Dev tooling | Vite (`npm run dev` / `npm run build` / `npm run preview`); `npm run serve` still works with zero `node_modules` |
 | Security | SVG allowlist sanitizer (§13) + Content-Security-Policy meta tag (added v0.4.0) |
@@ -712,7 +712,7 @@ Existing desktop tap-target warnings SHOULD be resolved during the modular CSS p
 
 ## 15. Performance requirements
 
-The architecture MUST remain responsive with the current 120 icons and be suitable for at least 1,000 metadata entries.
+The architecture MUST remain responsive with the current 130 icons and be suitable for at least 1,000 metadata entries.
 
 Targets:
 
@@ -974,7 +974,7 @@ The SSOT refactor was accepted at `v0.2.0` — every item below is satisfied and
 
 ### Catalogue SSOT
 
-- [x] Every built-in icon is an independent file under `icons/catalog/` (120 files).
+- [x] Every built-in icon is an independent file under `icons/catalog/` (130 files).
 - [x] No built-in catalogue geometry exists in JavaScript or JSON.
 - [x] Every icon ID maps to exactly one SVG file.
 - [x] Every SVG file maps to exactly one metadata entry.
@@ -986,7 +986,7 @@ The SSOT refactor was accepted at `v0.2.0` — every item below is satisfied and
 - [x] `data/icon-registry.json` is the only built-in metadata registry.
 - [x] Registry schema and category references validate (`npm test`).
 - [x] Search aliases and tags are preserved.
-- [x] Icon count remains complete (120/120, `npm run validate`).
+- [x] Icon count remains complete (130/130, `npm run validate`).
 
 ### JavaScript
 

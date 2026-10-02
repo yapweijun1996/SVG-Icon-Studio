@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.9.66 — 2026-10-02
+
+### Added
+
+- Ten canonical 24×24, 1.5px outline SVGs, registered with searchable names/tags/aliases: Manufacturing, Maintenance, Pallet, Conveyor, Delivery Route, Inventory Reservation, Reorder Point, Payment Schedule, Currency Exchange and Cash Flow. The catalogue now contains 130 icons (ERP: 60; Logistics: 8; Finance: 9).
+- Registry regression checks preserve the expanded baseline and verify each addition is active, has a canonical asset and is discoverable by ID/name/aliases through category/style filtering.
+
+### Fixed
+
+- The Fill icon switch thumb is now anchored to its 38×22 track instead of the enclosing 44×44 label. This removes the floating/off-centre thumb shown in the supplied screenshot, while preserving a non-shrinking native checkbox hit target, mouse activation, Tab/Space operation and a visible keyboard focus outline.
+- Redrew Shipment, Depreciation, Supplier Payment, Customer Payment, Serial Number, Fixed Asset, Goods Issue, Approval, Ledger, Inventory and Barcode as clearer outline symbols. Payment counterparts share a larger banknote motif and opposite flow arrows; Shipment has a distinct cargo box/cab with wheels below the chassis; Goods Issue separates the outgoing arrow from the package. Canonical sources retain root `fill="none"` and inherit paint/stroke settings at export time.
+
+### Validation
+
+- `npm test`, `npm run typecheck` and `npm run build` pass; all 130 SVGs validate with zero errors and no duplicate aliases. Current catalogue totals in README/SPEC/DESIGN are updated.
+- Chrome-rendered light/dark gallery reviewed at 24px and 48px. Production Chrome searches and renders all 21 added/redrawn icons without fallback errors; the running version is v0.9.66.
+- Real Chrome at 1440px, 834px and 390px verifies the thumb remains inside its track in light/dark and off/on states, the hit target stays 44×44, click and Tab/Space activation work, keyboard focus has a visible outline, and no page horizontal overflow or runtime exceptions occur.
+
 ## 0.9.65 — 2026-10-02
 
 ### Changed
