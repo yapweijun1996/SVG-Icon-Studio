@@ -7,7 +7,11 @@
 
 ---
 
+
 ## Done
+
+### Epic 6 — General Icon Catalogue
+- [x] Add the User, Profile, Image and Document built-in icons; update registry metadata and release documentation for `v0.9.73`.
 
 ### Epic 1 — SSOT Modular Refactor
 - [x] Extract every built-in icon into `icons/catalog/<id>.svg`
