@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.9.73 — 2026-10-26
+
+### Added
+
+- Four searchable outline icons: User (single-person silhouette), Profile (person in a rounded identity card), Image (landscape picture), and Document (folded page with three text lines).
+- Catalogue total is now 224. Icons use the canonical 24×24 viewBox, root-only 1.5px/currentColor outline contract, geometry-free metadata, and appended sort orders 2210–2240.
+- Registry regression tests cover the four IDs, searchable metadata, and category/style filters.
+
+### Validation
+
+- `npm ci`, `npm run validate` (224 SVGs; zero errors or duplicate aliases), and `node tests/icon-registry.test.mjs` pass.
+- `npm run typecheck`, full `npm test`, and `npm run build` pass. The full suite validates all 224 SVGs and finds no exact artwork duplicates.
+- `npm run review-icons -- --out /tmp/icon-studio-review` passes; its v0.9.73 manifest includes User, Profile, Image and Document at 24px/48px on light/dark backgrounds.
+
 ## 0.9.72 — 2026-10-03
 
 ### Added

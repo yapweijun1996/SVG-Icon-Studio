@@ -3159,6 +3159,50 @@
       "status": "active",
       "featured": false,
       "sortOrder": 2200
+    },
+    {
+      "id": "user",
+      "name": "User",
+      "category": "Users",
+      "style": "outline",
+      "tags": ["person", "individual", "account", "profile"],
+      "aliases": ["person"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2210
+    },
+    {
+      "id": "profile",
+      "name": "Profile",
+      "category": "Users",
+      "style": "outline",
+      "tags": ["identity", "badge", "account", "personal details"],
+      "aliases": ["identity card", "user profile"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2220
+    },
+    {
+      "id": "image",
+      "name": "Image",
+      "category": "Files",
+      "style": "outline",
+      "tags": ["picture", "photo", "landscape", "media"],
+      "aliases": ["picture", "landscape image"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2230
+    },
+    {
+      "id": "document",
+      "name": "Document",
+      "category": "Files",
+      "style": "outline",
+      "tags": ["page", "text", "writing", "file"],
+      "aliases": ["text document", "paper"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2240
     }
   ]
 }
