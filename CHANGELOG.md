@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.9.81 — 2026-11-03
+
+### Added
+
+- Ten searchable outline icons spread across seven categories: Bell Off (bell interrupted by a slash rather than drawn through), Lightbulb, Thumbs Up, Trophy, Handshake (two forearms meeting in a clasp), Gantt Chart (staggered bars on a time axis), E-Signature (pen signing on a line, no document), Cargo Ship (hull with deck containers and bridge), File Spreadsheet (page with a cell grid) and Arrow Left Right (opposing arrows).
+- Catalogue total is now 260 (Interface 56, ERP 76, Users 13, Commerce 10, Logistics 20, Files 16, Arrows 11). Icons use the canonical 24×24 viewBox, root-only 1.5px/currentColor outline contract, geometry-free metadata, and appended sort orders 2510–2600.
+- Planned `flag` and `loading-dock` icons were replaced by Bell Off and Cargo Ship because Milestone already draws a flag and Warehouse already draws a dock door. `agreement`, `freight`, `export` and `transfer` stay tags only because other icons already own them as aliases.
+- Registry regression tests cover the ten IDs, searchable metadata (ID, name, aliases), and category/style filters; the published baseline is raised to 260.
+
+### Validation
+
+- `npm run validate` (260 SVGs; zero errors or duplicate aliases), `npm run typecheck`, full `npm test` (artwork uniqueness across 260 icons) and `npm run build` pass.
+- Rendered in Chrome at 48/24/16px on light and dark backgrounds next to their closest neighbours (Notification/Volume Off, AI Spark/Thermometer, Approval/Check, Fragile/Star, Team/Contract, Chart Bar/Project Board, Contract/Edit, Shipping Container/Delivery Truck, Table/Code File, Currency Exchange/Stock Transfer). The first Handshake draft was illegible at 24px and was redrawn as two forearms meeting in a clasp after comparing two candidates at 96px.
+- Real Chrome smoke test at 1440×900: the topbar shows 260 icons; every new icon is found by its aliases; selecting Handshake expands a collapsed inspector with no loading skeleton; infinite scroll reaches "Showing 260 icons"; no runtime or console errors.
+
 ## 0.9.80 — 2026-11-03
 
 ### Added
