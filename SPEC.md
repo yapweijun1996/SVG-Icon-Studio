@@ -4,13 +4,13 @@
 **Project:** Icon Studio — SVG Icon Collection Admin Panel  
 **Code-MCP Project ID:** `project_f2a74b23-33c1-4c5c-b43d-e2b5b3108428`  
 **Status:** Living specification — the SSOT refactor this document originally proposed shipped in `v0.2.0` (2026-07-23) and is now the permanent baseline architecture. Sections 1–3 and 16 are kept as the historical record of that refactor; everything else describes the **current, as-built system**.  
-**Current release:** v0.9.81 (2026-11-03) — see CHANGELOG.md for the full version history and ROADMAP.md / TASK.md for what is planned next.
+**Current release:** v0.9.82 (2026-11-03) — see CHANGELOG.md for the full version history and ROADMAP.md / TASK.md for what is planned next.
 **Runtime:** Dependency-free static HTML, CSS and browser-native JavaScript (Vite is a dev-only wrapper — see ADR-001)  
 **Primary goal (original, achieved):** Replace the monolithic icon and application architecture with a scalable Single Source of Truth (SSOT) structure while preserving existing behaviour and visual output.
 
 ---
 
-## 0. Current status snapshot (v0.9.81, 2026-11-03)
+## 0. Current status snapshot (v0.9.82, 2026-11-03)
 
 A quick-reference dashboard so this document doesn't have to be read end-to-end just to answer "what does the app actually do right now." Everything here is derived from the current codebase, not from plan.
 
@@ -20,10 +20,11 @@ A quick-reference dashboard so this document doesn't have to be read end-to-end 
 | Categories | 10 — Interface, Arrows, Actions, Files, Users, Commerce, Finance, Logistics, AI, ERP |
 | Built-in icon style | `outline` (260/260); filled remains supported for uploaded/legacy compatibility — see §7.3/§7.4 |
 | Runtime dependencies | 0 (unchanged since inception) |
+| npm publishing | `package.json` is `"private": true` (since `v0.9.82`) — the repo is the app, not a package; `npm publish` fails with `EPRIVATE` |
 | Dev tooling | Vite (`npm run dev` / `npm run build` / `npm run preview`); `npm run serve` still works with zero `node_modules` |
 | Security | SVG allowlist sanitizer (§13) + Content-Security-Policy meta tag (added v0.4.0) |
 | PWA | Manifest + versioned service worker + visible running version + user-controlled waiting-update action |
-| CI/CD | `.github/workflows/deploy.yml` — `npm ci && npm test && npm run build` → GitHub Pages on every push to `main` |
+| CI/CD | `.github/workflows/ci.yml` — every pull request: `npm ci`, `validate`, `typecheck`, `npm test`, `build`, version check. `.github/workflows/deploy.yml` — `npm ci && npm run typecheck && npm test && npm run build` → GitHub Pages on every push to `main`. Branch protection on `main` is a repo setting (not yet enabled) |
 | Test suite | `npm test` — 19 Node scripts incl. full registry/icon validation (see §19). No automated browser tests yet; browser checks are run by hand per `tests/browser-test-plan.md` |
 | Known accepted deviation | `package-lock.json`'s `version` field intentionally left behind `package.json`'s — see ADR-013 |
 | Not yet built | Agent Experience (AX) layer — WebMCP tools, programmatic JS API, URL deep links — tracked in `ROADMAP.md` |

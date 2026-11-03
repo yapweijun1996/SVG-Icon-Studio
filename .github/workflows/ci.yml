@@ -1,0 +1,37 @@
+name: CI
+
+# Pull-request gate: the same checks the deploy job runs, plus typecheck and the
+# registry verifier, so a broken change is caught before it reaches `main`
+# (pushing `main` deploys straight to GitHub Pages via deploy.yml).
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Validate icons and registry
+        run: npm run validate
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Unit and contract tests
+        run: npm test
+      - name: Build
+        run: npm run build
+      - name: Build reports the package version
+        run: |
+          node -e "const a = require('./package.json').version; const b = require('./dist/version.json').version; if (a !== b) { console.error('dist/version.json ' + b + ' != package.json ' + a); process.exit(1); } console.log('version ' + a);"

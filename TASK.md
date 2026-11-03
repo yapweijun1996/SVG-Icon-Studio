@@ -32,6 +32,7 @@
 - [x] MIT `LICENSE`, `package.json` metadata
 - [x] `delivery-truck.svg` wheel/chassis overlap fix
 - [x] `invoice.svg` redesign (folded page, table grid, currency mark)
+- [x] `v0.9.82` pull-request CI workflow (`ci.yml`), typecheck in `deploy.yml`, `package.json` marked private (Epic 7 P0)
 
 ### Epic 3 — ERP Icon Catalogue Expansion
 - [x] +12 ERP icons batch 1 (quotation → reconciliation)
@@ -162,7 +163,7 @@
 
 ## In Progress
 
-*(none — current release `v0.9.81` (260 icons) is merged and pushed to `origin/main`. Next up: Epic 7 P0, starting with the devDependency decision below.)*
+*(none — current release `v0.9.82` adds the PR CI workflow and `"private": true`. Next up: ADR-015 decision (owner), then Playwright browser tests; owner to enable branch protection on `main`.)*
 
 ---
 
@@ -174,9 +175,9 @@ Source: `review/production-readiness-v0.9.81.md` (2026-11-03). Verdict: producti
 - [ ] **Decide: allow test-only devDependencies (Playwright, axe-core)?** Conflicts with the "no devDependencies beyond Vite" convention (`ROADMAP.md` AX §"Explicitly out of scope"). Record the outcome as `SPEC.md` ADR-015 (currently *Proposed*). Blocks the next two items.
 - [ ] **Playwright browser tests in CI** at 1440 / 1024 / 390 px: select expands a collapsed inspector (v0.9.79), infinite scroll reaches the end (v0.9.77), alias search, no loading-skeleton flash on rerender, focus restoration (`tests/browser-test-plan.md` 5c–5g), zero console errors. Then retire the source-regex assertions in `tests/dom.test.mjs` they replace (80 of 251 assertions today).
 - [ ] **axe-core accessibility checks** in the same browser run (supersedes the deferred "dependency-free accessibility-audit script" below if the decision allows it).
-- [ ] **PR workflow + branch protection:** run `validate`, `typecheck`, `npm test`, browser tests and `build` on every pull request; `main` accepts PRs only. Today `.github/workflows/deploy.yml` runs only after a push to `main` and has no `typecheck` step.
+- [ ] **PR workflow + branch protection** — workflow part done in `v0.9.82` (`.github/workflows/ci.yml`: validate, typecheck, `npm test`, build, version check on every PR; `deploy.yml` now also typechecks). **Remaining (owner):** enable branch protection on `main` (require a PR and the `CI / check` status), then add browser tests to `ci.yml` once 7.4 lands.
 - [ ] **Upgrade Vite** 8.1.5 → ≥ 8.3.5 (4 dev-only advisories, 3 high) and add `npm audit --omit=dev` to CI. Regenerate the lockfile on Linux per ADR-013.
-- [ ] **Set `"private": true`** in `package.json` (or split the app from a publishable package, see P1) so the whole app cannot be published to npm by accident.
+- [x] **Set `"private": true`** in `package.json` — done in `v0.9.82`; `npm publish` now fails with `EPRIVATE`.
 
 ### P1 — make it a real icon library
 - [ ] **Publishable icons package** generated from `icons/catalog/` (raw SVGs, SVG sprite, ESM exports, React components, TypeScript types); the catalogue SVGs stay the single source of truth.
