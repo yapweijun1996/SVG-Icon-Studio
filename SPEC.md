@@ -4,13 +4,13 @@
 **Project:** Icon Studio — SVG Icon Collection Admin Panel  
 **Code-MCP Project ID:** `project_f2a74b23-33c1-4c5c-b43d-e2b5b3108428`  
 **Status:** Living specification — the SSOT refactor this document originally proposed shipped in `v0.2.0` (2026-07-23) and is now the permanent baseline architecture. Sections 1–3 and 16 are kept as the historical record of that refactor; everything else describes the **current, as-built system**.  
-**Current release:** v0.9.82 (2026-11-03) — see CHANGELOG.md for the full version history and ROADMAP.md / TASK.md for what is planned next.
+**Current release:** v0.9.83 (2026-11-03) — see CHANGELOG.md for the full version history and ROADMAP.md / TASK.md for what is planned next.
 **Runtime:** Dependency-free static HTML, CSS and browser-native JavaScript (Vite is a dev-only wrapper — see ADR-001)  
 **Primary goal (original, achieved):** Replace the monolithic icon and application architecture with a scalable Single Source of Truth (SSOT) structure while preserving existing behaviour and visual output.
 
 ---
 
-## 0. Current status snapshot (v0.9.82, 2026-11-03)
+## 0. Current status snapshot (v0.9.83, 2026-11-03)
 
 A quick-reference dashboard so this document doesn't have to be read end-to-end just to answer "what does the app actually do right now." Everything here is derived from the current codebase, not from plan.
 
@@ -25,7 +25,7 @@ A quick-reference dashboard so this document doesn't have to be read end-to-end 
 | Security | SVG allowlist sanitizer (§13) + Content-Security-Policy meta tag (added v0.4.0) |
 | PWA | Manifest + versioned service worker + visible running version + user-controlled waiting-update action |
 | CI/CD | `.github/workflows/ci.yml` — every pull request: `npm ci`, `validate`, `typecheck`, `npm test`, `build`, version check. `.github/workflows/deploy.yml` — `npm ci && npm run typecheck && npm test && npm run build` → GitHub Pages on every push to `main`. Branch protection on `main` is a repo setting (not yet enabled) |
-| Test suite | `npm test` — 19 Node scripts incl. full registry/icon validation (see §19). No automated browser tests yet; browser checks are run by hand per `tests/browser-test-plan.md` |
+| Test suite | `npm test` — 19 Node scripts incl. full registry/icon validation (see §19). `npm run test:e2e` — Playwright browser + axe-core suite against the production build (ADR-015, since `v0.9.83`), run on every PR and before every deploy |
 | Known accepted deviation | `package-lock.json`'s `version` field intentionally left behind `package.json`'s — see ADR-013 |
 | Not yet built | Agent Experience (AX) layer — WebMCP tools, programmatic JS API, URL deep links — tracked in `ROADMAP.md` |
 | Production readiness | Ready as a static browsing app; not yet as a consumable icon library — see `review/production-readiness-v0.9.81.md` and `ROADMAP.md` Epic 7 |
@@ -1135,15 +1135,17 @@ Regenerating `package-lock.json` on Windows (`npm install --package-lock-only`) 
 
 ---
 
-### ADR-015 — Test-only devDependencies for browser and accessibility tests (*Proposed*, 2026-11-03)
+### ADR-015 — Test-only devDependencies for browser and accessibility tests (accepted `v0.9.83`)
 
-**Status:** Proposed — needs an owner decision; not yet accepted.
+**Status:** Accepted (2026-11-03). Option (a) below was chosen; the alternative was not.
 
 **Context:** the project convention allows no devDependencies beyond Vite (`ROADMAP.md`). Browser behaviour is currently verified by hand, and 80 of the 251 assertions in `tests/dom.test.mjs` regex-match source text. Both the `v0.9.77` and `v0.9.79` bugs passed `npm test` and were caught only in a real browser.
 
 **Proposal:** allow Playwright and axe-core as test-only devDependencies, run in CI on every pull request. ADR-005 is unaffected: shipped runtime code stays dependency-free, and `npm run serve` keeps working with no `node_modules`.
 
 **Alternative:** keep the convention and write a minimal Chrome DevTools Protocol harness on Node built-ins (as used for the manual checks in `v0.9.77`–`v0.9.81`), accepting more maintenance and no accessibility rule engine.
+
+**Consequences:** `@playwright/test` and `@axe-core/playwright` are exact-pinned devDependencies. `tests/e2e/` runs against `dist/` via `vite preview` with service workers blocked. Both `ci.yml` and `deploy.yml` run it. Source-regex assertions in `tests/dom.test.mjs` that the browser suite now covers were removed (11 of 248). The lockfile was updated on Windows; the two Linux/WASM-only entries npm dropped (`@emnapi/core`, `@emnapi/runtime`, see ADR-013) were restored by hand, so the change only adds entries.
 
 ---
 

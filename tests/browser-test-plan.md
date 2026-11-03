@@ -1,5 +1,7 @@
 # Browser regression test plan
 
+**Automated since `v0.9.83`:** `tests/e2e/` (Playwright + axe-core, ADR-015) covers flows 5c, 5d (desktop), 5d-a, 5d-b and 5g-0, alias search for every icon added since v0.9.73, accessible names, and WCAG 2.1 A/AA scans. Run with `npm run test:e2e`. Everything else in this plan is still checked by hand.
+
 Required viewports: desktop 1440×900, tablet 834×1112 and mobile 390×844.
 
 ## Required flows

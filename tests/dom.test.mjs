@@ -128,9 +128,6 @@ assert.match(catalogueSource, /const resultSummary = formatResultsSummary\(state
 assert.match(catalogueSource, /refs\.resultsSummary\.textContent = resultSummary/, 'visible result summary should stay current even when automatic pagination is silent');
 assert.match(catalogueSource, /createResultStatusUpdater\(refs\.resultsAnnouncement\)/, 'live status updater should target the dedicated hidden announcement region');
 assert.match(catalogueSource, /loadMore\(\{ automatic: true \}\)/, 'IntersectionObserver pagination should identify itself as automatic');
-assert.match(catalogueSource, /function rearmAutoLoad\(\) \{[\s\S]*?loadMoreObserver\.unobserve\(sentinel\);[\s\S]*?loadMoreObserver\.observe\(sentinel\);/, 'auto-load must re-observe its sentinel so a batch that leaves it inside the trigger zone keeps loading instead of stalling');
-assert.match(catalogueSource, /visible\.length >= filtered\.length;\s*rearmAutoLoad\(\);/, 'every render should re-arm infinite scroll after updating the sentinel visibility');
-assert.match(catalogueSource, /if \(loadMoreObserver\) \{\s*refs\.loadMoreButton\.hidden = true;/, 'the manual Load more button should be hidden when infinite scroll is available and kept only as a no-IntersectionObserver fallback');
 assert.match(catalogueSource, /announceResultStatus: !automatic[\s\S]*?refreshPendingResultStatus: automatic/, 'automatic pagination should stay silent while refreshing only an already-pending search announcement');
 assert.match(appSource, /catalogue\.render\(\{ deferResultStatus: Boolean\(state\.query\) \}\)/, 'non-empty rapid search input should defer only the advisory result-status announcement while clear-to-empty updates immediately');
 assert.match(appSource, /addEventListener\('compositionstart',[\s\S]*?catalogue\.setResultStatusSuppressed\(true\)/, 'IME composition should suppress result-status announcements as soon as composition starts');
@@ -142,9 +139,6 @@ const selectIconHandler = appSource.match(/function selectIcon\(id, openPanel = 
 const toggleFavoriteHandler = appSource.match(/function toggleFavorite\(id\) \{[\s\S]*?\n  \}/)?.[0] || '';
 assert.match(renderAllHandler, /catalogue\.render\(renderOptions\)/, 'shared rerenders should forward catalogue announcement options');
 assert.match(selectIconHandler, /catalogue\.render\(\{ announceResultStatus: false \}\)/, 'Select/More rerenders should not repeat an unchanged catalogue result announcement');
-assert.match(selectIconHandler, /else if \(refs\.body\.classList\.contains\('inspector-collapsed'\)\) \{[\s\S]*?shell\.openInspector\(\);/, 'selecting an icon on desktop should expand a collapsed inspector instead of leaving the selection details hidden');
-assert.match(catalogueSource, /const resolved = resolvedAssets\.get\(icon\.id\);\s*if \(resolved\) paintPreview\(preview, icon, resolved\);/, 'rerendered cards should reuse resolved preview assets instead of flashing the loading skeleton');
-assert.match(catalogueSource, /loadIconAsset\(icon\.id\)\.then\(asset => \{\s*resolvedAssets\.set\(icon\.id, asset\);/, 'resolved assets should be remembered even when the render that requested them is stale');
 assert.match(toggleFavoriteHandler, /renderAll\(\{ announceResultStatus: state\.view === 'favorites' \}\)/, 'favorite rerenders should announce result changes only when Favorites membership changes the visible result set');
 
 const pageTitleTag = html.match(/<h1\b[^>]*id="pageTitle"[^>]*>/)?.[0] || '';
@@ -182,9 +176,7 @@ assert.match(catalogueSource, /replacement\?\.focus\(\)/, 'category activation s
 const categoryActivationHandler = catalogueSource.match(/refs\.categoryChips\.addEventListener\('click', event => \{[\s\S]*?\n  \}\);/)?.[0] || '';
 assert.match(categoryActivationHandler, /const nextCategory = button\.dataset\.category;[\s\S]*?if \(state\.category === nextCategory\) return;[\s\S]*?state\.category = nextCategory;/, 're-activating the selected category should be a no-op before pagination state or live results are rebuilt');
 
-assert.match(catalogueSource, /className: 'card-preview is-loading'/, 'catalogue cards should use a neutral loading state before SVG assets resolve');
 assert.doesNotMatch(catalogueSource, /preview\.append\(createFallbackSvg/, 'catalogue cards must not present the error fallback while an SVG is merely loading');
-assert.match(catalogueSource, /preview\.classList\.remove\('is-loading'\)/, 'resolved SVG previews should clear the loading state');
 assert.match(catalogueSource, /if \(observer\) observer\.observe\(preview\);[\s\S]*?else hydratePreview\(preview, icon, renderVersion\)/, 'browsers without IntersectionObserver should load real SVG previews directly instead of leaving a placeholder forever');
 
 const capturePaginationFocusHelper = catalogueSource.match(/function capturePaginationFocus\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
@@ -201,7 +193,6 @@ assert.match(loadMoreHandler, /previousVisibleCount = refs\.iconGrid\.querySelec
 assert.match(loadMoreHandler, /announceResultStatus: !automatic[\s\S]*?refreshPendingResultStatus: automatic/, 'automatic pagination should update visible results without starting a new live announcement');
 assert.match(loadMoreHandler, /restoreFocus && refs\.loadMoreButton\.parentElement\.hidden/, 'Load more should restore focus only when the focused manual control disappears');
 assert.match(loadMoreHandler, /firstNewCard\?\.querySelector\('\[data-action=\"select\"\]'\)\?\.focus\(\)/, 'Final Load more should move focus to the first newly revealed Select action');
-assert.match(catalogueSource, /'data-action': 'copy', 'aria-label': `Copy \${icon\.name} SVG`/, 'catalogue copy actions should include the icon name in their accessible label');
 
 const backgroundGroupTag = html.match(/<div\b[^>]*id="backgroundTabs"[^>]*>/)?.[0] || '';
 const backgroundRadioTags = [...html.matchAll(/<button\b[^>]*role="radio"[^>]*data-background="(light|dark|brand|transparent)"[^>]*>/g)].map(match => match[0]);
@@ -266,7 +257,6 @@ assert.match(favoriteCardAttributes, /'aria-label': `Favorite \$\{icon\.name\}`/
 assert.doesNotMatch(favoriteCardAttributes, /Remove|Add/, 'catalogue favorite toggle name should not change with pressed state');
 assert.match(catalogueSource, /const restoreFocus = document\.activeElement === action/, 'catalogue favorite activation should detect whether the replaced action owned focus');
 assert.match(catalogueSource, /const cardIndex = \[\.\.\.refs\.iconGrid\.querySelectorAll\('\.icon-card'\)\]\.indexOf\(card\)/, 'catalogue favorite activation should remember the removed card position before the rebuild');
-assert.match(catalogueSource, /restoreFocus && !focusRenderedCardAction\(icon\.id, 'favorite'\)/, 'catalogue favorite activation should prefer the same rendered action when it still exists');
 assert.match(catalogueSource, /focusFavoriteRemovalFallback\(cardIndex\)/, 'catalogue favorite activation should use a positional fallback when Favorites filtering removes the focused card');
 assert.match(catalogueSource, /function focusRenderedCardAction\(iconId, actionName\)[\s\S]*?return renderedAction/, 'catalogue focus restoration should report whether the matching rendered card action still exists');
 const favoriteRemovalFallback = catalogueSource.match(/function focusFavoriteRemovalFallback\(cardIndex\) \{[\s\S]*?\n  \}/)?.[0] || '';
@@ -348,7 +338,6 @@ assert.match(closeSidebarSource, /if \(wasOpen &&/, 'sidebar close should restor
 assert.match(closeInspectorSource, /const wasOpen = .*inspector-open/, 'inspector close should record whether its drawer was actually open');
 assert.match(closeInspectorSource, /if \(wasOpen &&/, 'inspector close should restore focus only after a real close transition');
 assert.match(sidebarCollapseSync, /const actionLabel = collapsed \? 'Expand sidebar' : 'Collapse sidebar'/, 'sidebar toggle action should derive from collapsed state');
-assert.match(sidebarCollapseSync, /setAttribute\('aria-label', actionLabel\)/, 'collapsed sidebar toggle should retain an accessible action name');
 assert.match(sidebarCollapseSync, /title = actionLabel/, 'collapsed sidebar toggle tooltip should match its action');
 
 const openInspectorSource = shellSource.match(/function openInspector\([^)]*\) \{[\s\S]*?\n  \}/)?.[0] || '';

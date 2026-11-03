@@ -154,12 +154,20 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
   function syncCollapsedState(collapsed) {
     const actionLabel = collapsed ? 'Expand sidebar' : 'Collapse sidebar';
     refs.brandToggle.setAttribute('aria-expanded', String(!collapsed));
-    refs.brandToggle.setAttribute('aria-label', actionLabel);
+    // Expanded, the brand text is visible, so the name must contain it (WCAG 2.5.3).
+    refs.brandToggle.setAttribute('aria-label', collapsed ? actionLabel : `Icon Studio, ${actionLabel.toLowerCase()}`);
     refs.brandToggle.title = actionLabel;
     $$('.nav-item').forEach(button => {
       const label = button.querySelector('span')?.textContent || '';
-      if (!button.hasAttribute('aria-label')) button.setAttribute('aria-label', label);
-      if (collapsed) button.title = label; else button.removeAttribute('title');
+      // Collapsed: the visible text is hidden, so aria-label keeps a name.
+      // Expanded: the visible label (and count) is the name (WCAG 2.5.3).
+      if (collapsed) {
+        button.setAttribute('aria-label', label);
+        button.title = label;
+      } else {
+        button.removeAttribute('aria-label');
+        button.removeAttribute('title');
+      }
     });
   }
 

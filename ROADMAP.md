@@ -102,7 +102,7 @@ Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`
 
 ---
 
-## Current state (as of `v0.9.81`)
+## Current state (as of `v0.9.83`)
 
 - 260 icons, 10 categories, one built-in style (260/260 outline; filled stays supported for uploads, ADR-014).
 - Zero runtime dependencies; Vite is dev/build tooling only.
@@ -110,6 +110,7 @@ Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`
 - Infinite scroll with no manual Load more (when `IntersectionObserver` exists); selecting an icon always shows the inspector.
 - No known open bugs.
 - **Production-readiness review (2026-11-03):** production-ready as a static icon-browsing app; not yet as an icon library others depend on. Gaps: no automated browser/a11y tests, no PR gate before production, no artwork-quality checks, no consumable distribution. See `review/production-readiness-v0.9.81.md` and Epic 7 below.
+- **Since the review:** `v0.9.82` added PR CI and `"private": true`; `v0.9.83` added automated browser + accessibility tests (ADR-015) and fixed the WCAG failures they found.
 
 ---
 
@@ -124,9 +125,9 @@ The two most recent bugs (v0.9.77 infinite-scroll stall, v0.9.79 inspector not o
 ### Priority order
 
 **P0 — before calling it production**
-1. **Decide on test-only devDependencies** (Playwright, axe-core) — *Impact: unblocks 2–3. Effort: a decision.* This reverses the axe-core note in the AX epic's "Explicitly out of scope" list below, so it needs an explicit ADR (`SPEC.md` ADR-015, *Proposed*). ADR-005 is unaffected: the runtime stays dependency-free either way.
-2. **Playwright browser tests in CI** — *Impact: high. Effort: medium.* Core flows at 1440 / 1024 / 390 px; retire the source-regex assertions they replace.
-3. **axe-core accessibility checks** in the same run — *Impact: medium. Effort: low.*
+1. ~~**Decide on test-only devDependencies**~~ — **done `v0.9.83`:** ADR-015 accepted (Playwright + axe-core, test-only).
+2. ~~**Playwright browser tests in CI**~~ — **done `v0.9.83`:** `tests/e2e/`, 1440 / 1024 / 390 px plus 1920 px; each of the v0.9.77/v0.9.79 bugs was re-introduced and caught. 11 source-regex assertions retired.
+3. ~~**axe-core accessibility checks**~~ — **done `v0.9.83`:** first run found and fixed real WCAG failures (label-in-name on card/nav buttons, primary-button and dark-theme contrast).
 4. **PR workflow + branch protection** — *Impact: high. Effort: low.* validate, typecheck, unit, browser and build on every PR; `main` accepts PRs only.
 5. **Vite ≥ 8.3.5 + `npm audit --omit=dev` in CI** — *Impact: medium (4 dev-only advisories). Effort: low.* Regenerate the lockfile on Linux (ADR-013).
 6. **`"private": true`** — *Impact: low. Effort: trivial.*
@@ -175,7 +176,7 @@ Every session working on this app so far has needed to drive the UI through simu
 ### Explicitly out of scope for this epic
 
 - Anything that would bypass the SVG sanitizer for agent-supplied input (§13 is non-negotiable regardless of caller).
-- A full accessibility-audit tooling addition (e.g. axe-core) — *being reconsidered under Epic 7 P0 item 1 (ADR-015, Proposed)*; conflicts with the zero-devDependency-beyond-Vite convention; a from-scratch minimal checker was considered and deferred, not rejected outright.
+- ~~A full accessibility-audit tooling addition (e.g. axe-core)~~ — *reversed by ADR-015 in `v0.9.83`; now part of Epic 7.*
 - Bulk/ZIP export and toast-stacking caps — real UX gaps, noted, but unrelated to the AX layer; see `TASK.md` backlog if they get picked up.
 
 ---

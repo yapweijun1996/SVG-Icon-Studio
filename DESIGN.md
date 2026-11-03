@@ -1,7 +1,7 @@
 # Icon Studio — Design System
 
 **Document:** `DESIGN.md`
-**Status:** Living document — reflects the design system as actually shipped in `v0.9.82`, not an aspirational brief.
+**Status:** Living document — reflects the design system as actually shipped in `v0.9.83`, not an aspirational brief.
 **Source of truth for tokens:** [`css/tokens.css`](css/tokens.css) (design-system.json is a synced machine-readable snapshot of the same values, not an independent source)
 **Relationship to `components.md`:** `components.md` is the original pre-implementation design brief written before any code existed. It is kept for historical reference only — where the two disagree, this document and the current codebase win. See the note at the top of `components.md`.
 
@@ -20,8 +20,10 @@
 
 | Token | Value | Use |
 | --- | --- | --- |
-| `--accent` | `#f45b0b` | Primary brand orange — active states, selected card outline, primary buttons |
+| `--accent` | `#f45b0b` | Primary brand orange — active states, selected card outline, borders and focus accents (not filled-button backgrounds: white text on it is only 3.3:1) |
 | `--accent-strong` | `#b33a00` | Darker accent for text-on-tint contexts |
+| `--accent-action` | `#c2410c` | Filled primary-button background; white text 5.2:1 (WCAG AA, added `v0.9.83`) |
+| `--accent-action-hover` | `#b33a00` | Primary-button hover; white text 6.0:1 |
 | `--accent-soft` | `#fff0e8` | Tinted background for active/hover chips |
 | `--accent-border` | `#ffc5a6` | Tinted border to match `--accent-soft` |
 | `--success` | `#22c55e` | Status dot (icon count "live" indicator) |
@@ -46,7 +48,7 @@ Font: `Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Sego
 
 ### 2.2 Dark theme (`body[data-theme="dark"]`)
 
-Only surface/text/line tokens repaint; `--accent` and its variants are **intentionally identical in both themes** — the brand orange does not shift with theme.
+Surface/text/line tokens repaint. The brand orange `--accent` and the filled-button `--accent-action` stay identical in both themes; `--accent-strong` (accent **text**) is lightened in dark mode because `#b33a00` on dark surfaces measured only 2.6–2.9:1 (axe-core, `v0.9.83`).
 
 | Token | Value |
 | --- | --- |
@@ -57,6 +59,7 @@ Only surface/text/line tokens repaint; `--accent` and its variants are **intenti
 | `--text-soft` | `#cbd5e1` |
 | `--muted` | `#94a3b8` |
 | `--line` / `--line-strong` | `#293345` / `#3a4659` |
+| `--accent-strong` | `#ff8a4c` (6.6–7.4:1 on dark surfaces) |
 | `--accent-soft` | `#3a1c0d` |
 | `--accent-border` | `#7c3312` |
 

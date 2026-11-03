@@ -83,7 +83,9 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
 
     const selectButton = createElement('button', {
       className: 'card-select',
-      attributes: { type: 'button', 'data-action': 'select', 'aria-label': `Select ${icon.name} icon` }
+      // No aria-label: the accessible name comes from the visible name and
+      // category text, so it always contains the visible label (WCAG 2.5.3).
+      attributes: { type: 'button', 'data-action': 'select' }
     });
     const preview = createElement('span', { className: 'card-preview is-loading', attributes: { 'aria-hidden': 'true' }, dataset: { iconId: icon.id } });
     const copy = createElement('span', { className: 'card-copy' });
@@ -93,7 +95,7 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     selectButton.append(preview, copy);
 
     const actions = createElement('div', { className: 'card-actions' });
-    actions.append(createElement('button', { className: 'card-action', text: 'Copy SVG', attributes: { type: 'button', 'data-action': 'copy', 'aria-label': `Copy ${icon.name} SVG` } }));
+    actions.append(createElement('button', { className: 'card-action', text: 'Copy SVG', attributes: { type: 'button', 'data-action': 'copy', 'aria-label': `Copy SVG: ${icon.name}` } }));
     actions.append(createElement('button', { className: 'card-action', text: '⋮', attributes: { type: 'button', 'data-action': 'more', 'aria-label': `More export options for ${icon.name}` } }));
     article.append(favoriteButton, selectButton, actions);
     const resolved = resolvedAssets.get(icon.id);
@@ -130,6 +132,11 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
 
   function render({ deferResultStatus = false, announceResultStatus = true, refreshPendingResultStatus = false } = {}) {
     renderVersion += 1;
+    // Rebuilding the grid and chips destroys any focused card action or chip.
+    // Restore the equivalent control afterwards for every render, not only
+    // automatic pagination: startup and other async rerenders can land while a
+    // keyboard user is already on a card (v0.9.83 regression).
+    const focusSnapshot = capturePaginationFocus();
     disconnectObserver();
     setupObserver(renderVersion);
     const filtered = getFilteredIcons(state);
@@ -159,6 +166,9 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     document.title = `${title} — Icon Studio`;
     refs.resultsTitle.textContent = state.query ? `Results for “${state.query}”` : (state.category !== 'All' ? state.category : resultTitle);
     renderCategories();
+    if (focusSnapshot && (!document.activeElement || document.activeElement === document.body)) {
+      restorePaginationFocus(focusSnapshot);
+    }
   }
 
   refs.categoryChips.addEventListener('click', event => {
