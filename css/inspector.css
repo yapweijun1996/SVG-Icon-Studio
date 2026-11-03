@@ -61,11 +61,12 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 .code-copy-button { position: absolute; right: 9px; bottom: 9px; width: 34px; height: 34px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--muted); cursor: pointer; }
 .code-copy-button:hover { color: var(--accent); border-color: var(--accent-border); }
 .code-copy-button svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.7; }
-body.inspector-collapsed .inspector-scroll,
-body.inspector-collapsed .inspector-header > div:first-child,
-body.inspector-collapsed .inspector-header-actions .icon-button:not(#collapseInspectorButton) { display: none; }
-body.inspector-collapsed .inspector-header { padding: 12px; justify-content: center; }
-body.inspector-collapsed #collapseInspectorButton svg { transform: rotate(180deg); }
+/* Desktop collapse hides the inspector completely (no empty strip); the topbar
+   inspector button -- the drawer trigger at <=1180px -- becomes the way back. */
+@media (min-width: 1181px) {
+  body.inspector-collapsed .inspector { display: none; }
+  body.inspector-collapsed .icon-button.inspector-mobile-trigger { display: inline-grid; }
+}
 
 /* Accessibility-sized interaction targets */
 .favorite-large { width: 44px; height: 44px; }

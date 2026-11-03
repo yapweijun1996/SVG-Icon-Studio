@@ -1,7 +1,7 @@
 {
   "title": "Icon Studio — SVG Icon Collection Admin Panel",
   "surface": "component_library",
-  "note": "Tokens below are synced from css/tokens.css (source of truth). This file is a machine-readable snapshot for tooling; if the two ever disagree, css/tokens.css wins. Last synced against v0.9.74 / css/tokens.css.",
+  "note": "Tokens below are synced from css/tokens.css (source of truth). This file is a machine-readable snapshot for tooling; if the two ever disagree, css/tokens.css wins. Last synced against v0.9.75 / css/tokens.css.",
   "tokens": {
     "accent": "#f45b0b",
     "accentStrong": "#b33a00",

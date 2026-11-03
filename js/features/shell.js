@@ -61,8 +61,21 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
     refs.mobileMenuButton.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
   }
   function syncMobileInspectorState(open) {
+    const actionLabel = open ? 'Close icon inspector' : 'Open icon inspector';
     refs.mobileInspectorButton.setAttribute('aria-expanded', String(open));
-    refs.mobileInspectorButton.setAttribute('aria-label', open ? 'Close icon inspector' : 'Open icon inspector');
+    refs.mobileInspectorButton.setAttribute('aria-label', actionLabel);
+    refs.mobileInspectorButton.title = actionLabel;
+  }
+  // Desktop collapse hides the inspector completely and the topbar inspector
+  // button becomes the way back (CSS shows it only while collapsed). Whichever
+  // control owned focus disappears, so focus moves to its visible counterpart.
+  function setDesktopInspectorCollapsed(collapsed) {
+    const focusOwner = collapsed ? refs.collapseInspectorButton : refs.mobileInspectorButton;
+    const hadFocus = document.activeElement === focusOwner;
+    refs.body.classList.toggle('inspector-collapsed', collapsed);
+    syncInspectorCollapsedState(collapsed);
+    setValue(STORAGE.inspector, String(collapsed));
+    if (hadFocus) (collapsed ? refs.mobileInspectorButton : refs.collapseInspectorButton).focus();
   }
   function openSidebar() {
     refs.body.classList.add('sidebar-open');
@@ -78,13 +91,15 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
     if (wasOpen && !refs.body.classList.contains('inspector-open')) restoreDrawerFocus();
   }
   function openInspector(trigger = refs.mobileInspectorButton) {
-    refs.body.classList.remove('inspector-collapsed');
-    syncInspectorCollapsedState(false);
     // inspector-open (and the dimming backdrop it triggers) is the mobile
     // slide-in drawer -- on desktop the inspector is already docked, so
     // adding it there just shows a backdrop with no panel motion behind it.
     // Mirrors the same viewport branch closeInspector() already uses.
     if (window.matchMedia('(max-width: 1180px)').matches) {
+      // Drawer mode ignores the desktop collapsed preference; clear the class
+      // without overwriting the persisted desktop choice.
+      refs.body.classList.remove('inspector-collapsed');
+      syncInspectorCollapsedState(false);
       refs.body.classList.remove('sidebar-open');
       syncMobileMenuState(false);
       refs.body.classList.add('inspector-open');
@@ -93,6 +108,7 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
       openDrawer(refs.inspector, trigger || refs.mobileInspectorButton);
       return;
     }
+    setDesktopInspectorCollapsed(false);
     updateBackdrop();
   }
   function closeInspector() {
@@ -102,9 +118,7 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
       refs.body.classList.remove('inspector-open');
       syncMobileInspectorState(false);
     } else {
-      refs.body.classList.add('inspector-collapsed');
-      syncInspectorCollapsedState(true);
-      setValue(STORAGE.inspector, 'true');
+      setDesktopInspectorCollapsed(true);
     }
     updateBackdrop();
     if (wasOpen && !refs.body.classList.contains('sidebar-open')) restoreDrawerFocus();
@@ -174,9 +188,7 @@ export function createShellController({ state, refs, toast, onViewChange, onBran
   }));
 
   refs.collapseInspectorButton.addEventListener('click', () => {
-    const collapsed = refs.body.classList.toggle('inspector-collapsed');
-    syncInspectorCollapsedState(collapsed);
-    setValue(STORAGE.inspector, String(collapsed));
+    setDesktopInspectorCollapsed(!refs.body.classList.contains('inspector-collapsed'));
   });
   refs.closeInspectorButton.addEventListener('click', closeInspector);
   refs.manageBrandButton.addEventListener('click', () => { onBrandPreview(); openInspector(); toast('Brand preview enabled'); });

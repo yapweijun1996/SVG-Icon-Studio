@@ -1,8 +1,4 @@
-.main-content { width: min(100%, 1500px); margin: 0 auto; padding: 24px 26px 48px; }
-.hero-block { display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; margin-bottom: 20px; }
-.hero-block h1 { margin: 0; font-size: clamp(26px, 2.4vw, 38px); line-height: 1.12; letter-spacing: -.035em; }
-.hero-block p { max-width: 700px; margin: 8px 0 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
-.library-badge { margin-top: 4px; padding: 7px 10px; color: var(--muted); background: var(--panel); border: 1px solid var(--line); border-radius: 999px; font-size: var(--fs-xs); white-space: nowrap; }
+.main-content { width: min(100%, 1500px); margin: 0 auto; padding: 8px 26px 48px; }
 /* Solid background: the sticky toolbar occupies normal flow space and scrolled
    cards pass cleanly underneath instead of showing through a fade. */
 .catalogue-toolbar { position: sticky; top: calc(var(--topbar-height) + var(--safe-top)); z-index: 20; padding: 12px 0; background: var(--bg); transition: box-shadow .16s ease; }

@@ -20,7 +20,7 @@ function collectRefs() {
     mobileMenuButton: $('#mobileMenuButton'), mobileInspectorButton: $('#mobileInspectorButton'),
     brandToggle: $('#brandToggle'), themeButton: $('#themeButton'), importButton: $('#importButton'),
     appVersion: $('#appVersion'), pwaUpdateButton: $('#pwaUpdateButton'),
-    svgFileInput: $('#svgFileInput'), totalIconCount: $('#totalIconCount'), visibleIconCount: $('#visibleIconCount'),
+    svgFileInput: $('#svgFileInput'), totalIconCount: $('#totalIconCount'),
     favoriteCount: $('#favoriteCount'), recentCount: $('#recentCount'), uploadCount: $('#uploadCount'),
     collectionCount: $('#collectionCount'),
     pageTitle: $('#pageTitle'), pageSubtitle: $('#pageSubtitle'), searchInput: $('#searchInput'),

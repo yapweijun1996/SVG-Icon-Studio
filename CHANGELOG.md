@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.9.75 — 2026-11-03
+
+### Changed
+
+- **Compact header.** The hero block ("Production-ready SVG icon collection" + 24 × 24 badge) and the "Components / Icons" breadcrumb are replaced by a compact topbar heading: `h1#pageTitle` now shows the active view's nav label ("Icon Library", "Favorites", …) with a one-line `#pageSubtitle` (hidden at ≤820px). The browser title follows ("Icon Library — Icon Studio"). The heading keeps `tabindex="-1"` and still receives focus after a view change. Removing the hero moves the first card row up by about 100px on desktop and 136px on mobile.
+- **Single icon count.** The topbar pill shows only the catalogue total ("224 icons"); the duplicate "· N visible" count and its `#visibleIconCount` ref are removed because the results summary already reports filtered counts.
+- **Version in the sidebar.** The running-version pill (`#appVersion`, same PWA controller behaviour) moved from the topbar to a new sidebar footer, visible in the expanded desktop sidebar and the mobile drawer and hidden while the desktop sidebar is collapsed. The `Update vX.Y.Z` action stays in the topbar so a waiting update remains prominent. Import SVG stays a secondary button.
+- **Inspector collapse without the empty strip.** On desktop, collapsing the inspector now hides it completely (`--inspector-width: 0px`) instead of leaving a 68px column; the grid gains two columns at 1440px. The existing topbar inspector button (the drawer trigger at ≤1180px) appears while collapsed, reopens the inspector and now has a tooltip that matches its action. Because each control disappears when used, focus moves from Collapse to the topbar button and back. "More" on a card still reopens the inspector. The desktop preference persists, and opening the drawer at ≤1180px no longer risks overwriting it. The collapse chevron now points right, toward where the panel goes, and the topbar button uses a right-panel glyph.
+- **Sidebar.** The active nav item uses a lighter tint (55% of `--accent-soft`); the 3px accent bar stays the primary marker. Nav item spacing is tightened (5px → 2px). The brand card hides at `max-height: 720px` so the navigation and version footer are never clipped; Brand kit remains in the navigation.
+
+### Validation
+
+- `npm run typecheck`, full `npm test` (224 SVGs, zero errors) and `npm run build` pass. `tests/dom.test.mjs` now checks the sidebar-footer version pill, the shared desktop collapse helper (label sync, persistence, focus hand-off) and the topbar inspector tooltip.
+- Real Chrome (headless, CDP), clean profile: at 1440px the heading, subtitle, browser title, "224 icons" pill and sidebar version pill render; switching to Favorites updates the heading and title and focuses the heading. Keyboard collapse hides the inspector, shows the topbar button, focuses it and persists `true`; the state survives a reload; keyboard reopen shows the inspector, focuses Collapse, persists `false` and shows no backdrop; "More" reopens a collapsed inspector. A collapsed sidebar hides the version and brand card; at 1440×700 the brand card hides and the version stays visible. At 1024px the drawer opens without overwriting the persisted desktop preference, and Escape restores focus to the topbar button. At 390px the heading shows, the subtitle hides and the drawer shows the version. No horizontal overflow at 320–1920px and no runtime or console errors.
+- The v0.9.74 layout checks still hold at 1920/1440/1180/1024/820/390px: the first row is clear of the toolbar, all toolbar controls are 44px, the toolbar is 126px, and a card under the sticky toolbar scrolls clear when focused.
+
 ## 0.9.74 — 2026-11-03
 
 ### Fixed

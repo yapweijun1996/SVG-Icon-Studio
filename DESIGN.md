@@ -1,7 +1,7 @@
 # Icon Studio — Design System
 
 **Document:** `DESIGN.md`
-**Status:** Living document — reflects the design system as actually shipped in `v0.9.74`, not an aspirational brief.
+**Status:** Living document — reflects the design system as actually shipped in `v0.9.75`, not an aspirational brief.
 **Source of truth for tokens:** [`css/tokens.css`](css/tokens.css) (design-system.json is a synced machine-readable snapshot of the same values, not an independent source)
 **Relationship to `components.md`:** `components.md` is the original pre-implementation design brief written before any code existed. It is kept for historical reference only — where the two disagree, this document and the current codebase win. See the note at the top of `components.md`.
 
@@ -35,7 +35,7 @@
 | `--focus` | `0 0 0 3px rgba(244,91,11,.22)` | Focus ring (keyboard nav) |
 | `--radius-sm` / `--radius` / `--radius-lg` | `8px` / `12px` / `16px` | Corner radii by component scale |
 | `--sidebar-width` | `224px` (collapsed: `76px`) | |
-| `--inspector-width` | `380px` (collapsed: `68px`, hidden on mobile: `0px`) | |
+| `--inspector-width` | `380px` (collapsed: `0px` — the inspector is hidden completely; drawer mode: `0px`) | |
 | `--topbar-height` | `72px` (mobile: `64px`) | |
 | `--fs-xs` / `--fs-sm` / `--fs-md` / `--fs-lg` | `11px` / `12px` / `13px` / `14px` | Type scale. `11px` is the minimum for UI text (card metadata, labels, badges, code) |
 | `--control-height` / `--control-radius` | `44px` / `10px` | Shared toolbar control metrics: search, Filters, density segmented control and category chips align to one height |
@@ -68,9 +68,9 @@ Three-column desktop shell (`.app-shell`, CSS grid: `sidebar-width | 1fr | inspe
 
 ```
 ┌─────────────┬──────────────────────────────┬────────────────────┐
-│  Sidebar     │  Topbar                       │  Inspector header  │
+│  Sidebar     │  Topbar: page title + actions │  Inspector header  │
 │  224px       │  ────────────────────────────  │  380px             │
-│  (collapses  │  Hero + toolbar + category     │  Preview           │
+│  (collapses  │  Sticky toolbar + category     │  Preview           │
 │  to 76px)    │  chips + icon grid + load-more  │  Appearance        │
 │              │                                 │  Transform         │
 │              │                                 │  Code tabs          │
@@ -83,8 +83,9 @@ Three-column desktop shell (`.app-shell`, CSS grid: `sidebar-width | 1fr | inspe
 | --- | --- |
 | `≤1450px` | Content padding reduces (the icon grid keeps its `minmax(168px,1fr)` cards) |
 | `≤1180px` | Inspector becomes a fixed slide-in drawer (`transform: translateX(101%)` closed / `translateX(0)` open) with a dimming backdrop; its drawer-only Close control appears while the desktop Collapse control hides; sidebar narrows to `208px` |
-| `≤820px` | Sidebar becomes a fixed slide-in drawer too; topbar/toolbar padding shrinks; search, Filters and the density control share one row (Filters and density become icon-only, keeping accessible names); category chips hide their scrollbar and gain an edge fade |
-| `≤560px` | Icon grid drops to 2 columns; brand card and hero subtitle hide; topbar action labels hide (icon-only) |
+| `≤820px` | Sidebar becomes a fixed slide-in drawer too; topbar/toolbar padding shrinks; the page subtitle hides; search, Filters and the density control share one row (Filters and density become icon-only, keeping accessible names); category chips hide their scrollbar and gain an edge fade |
+| `≤560px` | Icon grid drops to 2 columns; brand card hides; page title shrinks to 16px; topbar action labels hide (icon-only) |
+| `max-height: 720px` | Sidebar brand card hides so the navigation and version footer are never clipped (Brand kit stays in the navigation) |
 | `prefers-reduced-motion: reduce` | All transitions/animations collapse to `.01ms` |
 
 **Design rule (learned the hard way, `v0.7.1`):** any code that shows the mobile drawer + backdrop (`inspector-open` class) MUST gate on `matchMedia('(max-width: 1180px)')`. Above that width the inspector is already docked and doesn't slide — adding the class anyway shows a dimming overlay with nothing visibly happening behind it. See `shell.js`'s `openInspector()`/`closeInspector()` for the canonical pattern.
@@ -93,8 +94,9 @@ Three-column desktop shell (`.app-shell`, CSS grid: `sidebar-width | 1fr | inspe
 
 | Component | Where | Notes |
 | --- | --- | --- |
-| Collapsible sidebar | `.sidebar` | Nav items: Icon library, Collections, Favorites, Recently viewed, Uploaded icons, Brand kit. Collapse state persists to `localStorage`. |
-| Sticky topbar | .topbar | Import SVG, live icon-count pill, running-version pill / `Update vX.Y.Z` action (version reported by the waiting worker, visible on mobile too), theme toggle, mobile inspector trigger |
+| Collapsible sidebar | `.sidebar` | Nav items: Icon library, Collections, Favorites, Recently viewed, Uploaded icons, Brand kit. The active item uses a light accent tint (55% of `--accent-soft`) with the 3px accent bar as the primary marker. Footer (`.sidebar-footer`) shows the running-version pill (`#appVersion`); it hides with the brand card while the desktop sidebar is collapsed and is visible in the mobile drawer. Collapse state persists to `localStorage`. |
+| Sticky topbar | .topbar | Compact page heading (`h1#pageTitle` = the active view's nav label, e.g. "Icon Library", plus a one-line `#pageSubtitle`; replaces the former hero block and breadcrumb), Import SVG (secondary), total icon-count pill (the duplicate "N visible" count was removed — the results summary owns filtered counts), `Update vX.Y.Z` action when a waiting worker exists (version reported by that worker), theme toggle, and the inspector button: the drawer trigger at ≤1180px and, on desktop, the way back after the inspector is collapsed |
+| Inspector collapse (desktop) | `body.inspector-collapsed` | Collapsing hides the inspector completely (`display: none`, `--inspector-width: 0px`) instead of leaving a 68px strip; the topbar inspector button appears and reopens it. Focus moves between the Collapse control and the topbar button because each disappears when used. The desktop preference persists; opening the drawer at ≤1180px does not overwrite it |
 | Search + filters | `.catalogue-toolbar` | Sticky, solid-background toolbar that occupies normal flow space (`.is-stuck` adds a divider while content scrolls beneath). Always two rows: search + labelled **Filters** button + Grid/Compact segmented control, then one horizontally-scrollable chip row at every width. Free-text search (`/` keyboard shortcut focuses it), style filter, sort filter, category chips (10, derived live from the registry — never hardcode a count, see ADR-011-adjacent history in `CHANGELOG.md` 0.4.0) |
 | Icon grid | `.icon-grid` | Responsive `auto-fill` grid; Grid/Compact density toggle; scroll-to-load pagination (24 per page) with a manual "Load more" fallback button |
 | Icon card | `.icon-card` | `minmax(168px,1fr)` grid track, fixed 72px preview area, one-line name (13px) with a full-name tooltip, 11px category · style metadata. Lazy-loaded preview (`IntersectionObserver`, 240px lookahead), favourite star, always-visible Copy SVG and "⋮" actions styled as quiet filled buttons (one card border, no nested action borders — actions stay visible because touch and keyboard users have no hover) |

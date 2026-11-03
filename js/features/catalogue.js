@@ -5,12 +5,13 @@ import { loadIconAsset } from '../services/icon-repository.js';
 import { createCanonicalPreview, createFallbackSvg } from '../services/svg-renderer.js';
 
 const VIEW_COPY = {
-  library: ['Production-ready SVG icon collection', 'Browse, customise and export consistent SVG icons for your products and interfaces.', 'All icons'],
-  collections: ['Curated icon collections', 'Browse icon groups for ERP, finance, logistics, commerce and common interfaces.', 'Collections'],
-  favorites: ['Favorite icons', 'Your saved icons are stored locally in this browser.', 'Favorites'],
-  recent: ['Recently viewed icons', 'Continue working with icons you inspected recently.', 'Recently viewed'],
-  uploaded: ['Uploaded SVG icons', 'Safe, validated custom icons stored in this browser.', 'Uploaded icons'],
-  brand: ['Brand-ready icon system', 'Preview the icon library with your product accent and consistent SVG settings.', 'Brand kit']
+  // [compact topbar heading (matches the nav label), one-line subtitle, results heading]
+  library: ['Icon Library', 'Browse, customise and export 24 × 24 SVG icons.', 'All icons'],
+  collections: ['Collections', 'Icon groups for ERP, finance, logistics, commerce and interfaces.', 'Collections'],
+  favorites: ['Favorites', 'Your saved icons are stored locally in this browser.', 'Favorites'],
+  recent: ['Recently viewed', 'Continue working with icons you inspected recently.', 'Recently viewed'],
+  uploaded: ['Uploaded icons', 'Safe, validated custom icons stored in this browser.', 'Uploaded icons'],
+  brand: ['Brand kit', 'Preview the library with your product accent and SVG settings.', 'Brand kit']
 };
 
 function starIcon() {
@@ -133,7 +134,6 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     if (resultStatusSuppressed) resultStatusUpdater.cancel();
     else if (announceResultStatus) resultStatusUpdater.update(resultSummary, { defer: deferResultStatus });
     else if (refreshPendingResultStatus) resultStatusUpdater.refreshPending(resultSummary);
-    refs.visibleIconCount.textContent = String(filtered.length);
     refs.totalIconCount.textContent = String(state.icons.length);
     refs.favoriteCount.textContent = String(state.favorites.size);
     refs.recentCount.textContent = String(state.recent.length);

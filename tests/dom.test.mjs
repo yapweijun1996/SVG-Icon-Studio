@@ -90,9 +90,9 @@ assert.match(importCompletionHandler, /shell\.setView\('uploaded'\)/, 'import co
 assert.match(shellSource, /if \(button\.dataset\.view === state\.view\) return closeSidebar\(\)/, 're-activating the current navigation item should preserve catalogue state while still closing a mobile drawer');
 assert.match(shellSource, /if \(button\.dataset\.view === state\.view\) return closeSidebar\(\)[\s\S]*?setView\(button\.dataset\.view\)/, 'only changed navigation destinations should invoke the resetting view transition');
 
-const appVersionTag = html.match(/<span\b[^>]*id="appVersion"[^>]*>/)?.[0] || '';
+const appVersionTag = html.match(/<footer class="sidebar-footer">\s*<span\b[^>]*id="appVersion"[^>]*>/)?.[0] || '';
 const pwaUpdateButtonTag = html.match(/<button\b[^>]*id="pwaUpdateButton"[^>]*>/)?.[0] || '';
-assert.match(appVersionTag, /class="pwa-version-pill"/, 'topbar should expose a visible app-version pill');
+assert.match(appVersionTag, /class="pwa-version-pill"/, 'sidebar footer should expose a visible app-version pill');
 assert.match(pwaUpdateButtonTag, /hidden/, 'PWA update action should stay hidden until a waiting worker exists');
 assert.match(html, /data-update-full>Update app/, 'PWA update action should have a full desktop label');
 assert.match(html, /data-update-short aria-hidden="true">Update/, 'PWA update action should retain a compact mobile label');
@@ -288,7 +288,12 @@ assert.match(collapseInspectorButtonTag, /title="Collapse inspector"/, 'desktop 
 assert.match(inspectorCollapseSync, /collapsed \? 'Expand inspector' : 'Collapse inspector'/, 'desktop inspector toggle action label should reflect collapsed state');
 assert.match(inspectorCollapseSync, /setAttribute\('aria-label', actionLabel\)/, 'desktop inspector toggle should synchronize its accessible action label');
 assert.match(inspectorCollapseSync, /title = actionLabel/, 'desktop inspector toggle should synchronize its tooltip action label');
-assert.match(inspectorCollapseClick, /syncInspectorCollapsedState\(collapsed\)/, 'desktop inspector toggle click should refresh its action label');
+const desktopInspectorCollapse = shellSource.match(/function setDesktopInspectorCollapsed\(collapsed\) \{[\s\S]*?\n  \}/)?.[0] || '';
+assert.match(inspectorCollapseClick, /setDesktopInspectorCollapsed\(/, 'desktop inspector toggle click should route through the shared desktop collapse helper');
+assert.match(desktopInspectorCollapse, /syncInspectorCollapsedState\(collapsed\)/, 'desktop inspector collapse should refresh its action label');
+assert.match(desktopInspectorCollapse, /setValue\(STORAGE\.inspector, String\(collapsed\)\)/, 'desktop inspector collapse should persist the visible state');
+assert.match(desktopInspectorCollapse, /refs\.mobileInspectorButton : refs\.collapseInspectorButton\)\.focus\(\)/, 'desktop inspector collapse should move focus from a control that disappears to its visible counterpart');
+assert.match(shellSource.match(/function syncMobileInspectorState\(open\) \{[\s\S]*?\n  \}/)?.[0] || '', /title = actionLabel/, 'topbar inspector button tooltip should match its current action');
 
 const closeInspectorButtonTag = html.match(/<button\b[^>]*id="closeInspectorButton"[^>]*>/)?.[0] || '';
 assert.match(closeInspectorButtonTag, /class="[^"]*inspector-close-button[^"]*"/, 'inspector drawer close control should keep its responsive hook');
