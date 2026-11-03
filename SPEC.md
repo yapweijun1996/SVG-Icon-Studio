@@ -24,9 +24,10 @@ A quick-reference dashboard so this document doesn't have to be read end-to-end 
 | Security | SVG allowlist sanitizer (§13) + Content-Security-Policy meta tag (added v0.4.0) |
 | PWA | Manifest + versioned service worker + visible running version + user-controlled waiting-update action |
 | CI/CD | `.github/workflows/deploy.yml` — `npm ci && npm test && npm run build` → GitHub Pages on every push to `main` |
-| Test suite | `npm test` — 12 checks incl. full registry/icon validation (see §19) |
+| Test suite | `npm test` — 19 Node scripts incl. full registry/icon validation (see §19). No automated browser tests yet; browser checks are run by hand per `tests/browser-test-plan.md` |
 | Known accepted deviation | `package-lock.json`'s `version` field intentionally left behind `package.json`'s — see ADR-013 |
 | Not yet built | Agent Experience (AX) layer — WebMCP tools, programmatic JS API, URL deep links — tracked in `ROADMAP.md` |
+| Production readiness | Ready as a static browsing app; not yet as a consumable icon library — see `review/production-readiness-v0.9.81.md` and `ROADMAP.md` Epic 7 |
 
 ---
 
@@ -1125,9 +1126,23 @@ Earlier releases coloured filled-style icons with the brand accent while outline
 
 An `IntersectionObserver` on the existing "Load more" control extends the visible set automatically as it nears the viewport, calling the same `loadMore()` the button already used. The button itself is kept (not removed) as a manual/keyboard-accessible fallback.
 
+**Amended `v0.9.77`:** the observer now watches the button's wrapper and is re-armed on every render, because an `IntersectionObserver` only reports changes and a batch that left the sentinel inside the trigger zone stalled loading. When `IntersectionObserver` exists the button is hidden; it is shown only as the fallback for browsers without it.
+
 ### ADR-013 — `package-lock.json`'s version field is intentionally left behind `package.json`'s (added `v0.4.0`)
 
 Regenerating `package-lock.json` on Windows (`npm install --package-lock-only`) has been observed to drop optional platform-specific peer dependency entries (e.g. `@emnapi/core`) that Linux CI (`npm ci` on `ubuntu-latest` in `.github/workflows/deploy.yml`) may need. The version-field mismatch between `package.json` and `package-lock.json` is a known, accepted deviation, not a bug to fix reflexively — regenerate the lockfile on Linux/CI if it ever needs to move forward.
+
+---
+
+### ADR-015 — Test-only devDependencies for browser and accessibility tests (*Proposed*, 2026-11-03)
+
+**Status:** Proposed — needs an owner decision; not yet accepted.
+
+**Context:** the project convention allows no devDependencies beyond Vite (`ROADMAP.md`). Browser behaviour is currently verified by hand, and 80 of the 251 assertions in `tests/dom.test.mjs` regex-match source text. Both the `v0.9.77` and `v0.9.79` bugs passed `npm test` and were caught only in a real browser.
+
+**Proposal:** allow Playwright and axe-core as test-only devDependencies, run in CI on every pull request. ADR-005 is unaffected: shipped runtime code stays dependency-free, and `npm run serve` keeps working with no `node_modules`.
+
+**Alternative:** keep the convention and write a minimal Chrome DevTools Protocol harness on Node built-ins (as used for the manual checks in `v0.9.77`–`v0.9.81`), accepting more maintenance and no accessibility rule engine.
 
 ---
 

@@ -47,6 +47,8 @@
 
 **Status:** Complete for the current scope. Adding more icons later is a normal, low-risk extension of this same pattern (see `SPEC.md` §17.1) — not a new epic unless the taxonomy itself needs to change.
 
+**Continued (general icons, same pattern):** `v0.9.73` (+4, 220 → 224), `v0.9.76` (+6), `v0.9.78` (+10), `v0.9.80` (+10), `v0.9.81` (+10) — catalogue 224 → 260, all outline, spread across Interface, Finance, Actions, Users, Commerce, Logistics, Files, Arrows and ERP (ERP now 76). Each batch was collision-checked against existing IDs/aliases/artwork and reviewed from rendered 16/24/48 px contact sheets; artwork for v0.9.76–v0.9.81 was AI-authored and still needs human designer sign-off (Epic 7 P1).
+
 ---
 
 ## Epic 4 — Bug Fixes & UX Consistency ✅ DONE
@@ -129,6 +131,8 @@
 
 **Status:** Complete for the current scope through `v0.9.34`; see each release's Validation section in `CHANGELOG.md` for browser and automated evidence.
 
+**Later fixes in the same spirit:** `v0.9.74`–`v0.9.75` catalogue layout pass; `v0.9.77` infinite scroll no longer stalls when a batch leaves the sentinel inside the trigger zone, and the manual Load more button is hidden when `IntersectionObserver` exists (amends ADR-012); `v0.9.79` selecting an icon expands a collapsed desktop inspector, and rebuilt cards reuse resolved previews instead of flashing the loading skeleton. Both v0.9.77 and v0.9.79 bugs passed the full `npm test` suite and were only caught in a real browser, which is the main motivation for Epic 7's browser tests.
+
 ---
 
 ## Epic 5 — Documentation Governance ✅ DONE (this pass)
@@ -158,3 +162,20 @@ Planned scope, in dependency order:
 5. Stretch: command palette (Cmd+K), search relevance ranking — UX-motivated but reuses the same API from item 1.
 
 **Status:** Backlog. Nothing in this epic blocks any other epic; it can be picked up whenever prioritized.
+
+---
+
+## Epic 7 — Production Readiness 🔜 PLANNED, NOT STARTED
+
+**Goal:** turn a well-built static demo into something teams can depend on: automated browser and accessibility tests, a review gate before production, automated icon-quality checks, and a consumable icon distribution.
+**Source:** `review/production-readiness-v0.9.81.md` (2026-11-03).
+**Verdict at v0.9.81:** production-ready as a static icon-browsing app; not yet as a production icon library.
+**Depends on:** an explicit decision on test-only devDependencies (`SPEC.md` ADR-015, *Proposed*).
+**Full detail:** `ROADMAP.md` §"Planned: Production readiness"; tasks in `TASK.md` §"Backlog (Epic 7)".
+
+Planned scope, in priority order:
+1. **P0:** devDependency decision → Playwright browser tests in CI → axe-core checks → PR workflow + branch protection → Vite security upgrade → `"private": true`.
+2. **P1:** publishable icons package (SVGs, sprite, ESM, React, types) → artwork checks in the validator → per-PR contact sheet with designer sign-off → generated doc counts.
+3. **P2:** scaling past ~1,000 icons, repo hygiene, 1.0 definition and icon semver.
+
+**Relation to Epic 6:** independent, but Epic 7's browser tests become simpler once Epic 6's `window.IconStudio` API exists. Recommended order: Epic 7 P0 first (it protects everything after it).

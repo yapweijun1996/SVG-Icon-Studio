@@ -10,8 +10,12 @@
 
 ## Done
 
-### Epic 6 — General Icon Catalogue
+### Epic 3 (continued) — General Icon Catalogue
 - [x] Add the User, Profile, Image and Document built-in icons; update registry metadata and release documentation for `v0.9.73`.
+- [x] `v0.9.76` six new outline icons: Trending Down, Chart Pie, Logout, Sort, More Horizontal, Credit Limit (catalogue 224 → 230)
+- [x] `v0.9.78` ten new outline icons: Chart Line, Login, More Vertical, Grid View, List View, Sun, Moon, Org Chart, Warranty, Overdue Invoice (catalogue 230 → 240)
+- [x] `v0.9.80` ten new outline icons: Target, Commission, Petty Cash, Calendar X, Table, Pushpin, Hourglass, History, Unlink, Barcode Scanner (catalogue 240 → 250)
+- [x] `v0.9.81` ten new outline icons: Bell Off, Lightbulb, Thumbs Up, Trophy, Handshake, Gantt Chart, E-Signature, Cargo Ship, File Spreadsheet, Arrow Left Right (catalogue 250 → 260)
 
 ### Epic 1 — SSOT Modular Refactor
 - [x] Extract every built-in icon into `icons/catalog/<id>.svg`
@@ -142,12 +146,8 @@
 - [x] IndexedDB orphan cleanup is best-effort so cleanup write failures cannot hide otherwise valid uploaded icons
 - [x] `v0.9.74` catalogue layout pass (Phases 1–4): sticky toolbar no longer shows scrolled cards through a fade and keyboard focus no longer lands under it (WCAG 2.4.11); toolbar controls share one 44px height with a labelled Filters button; chips are one scrollable row at every width; 11px minimum type scale across catalogue/shell/inspector; quieter single-border icon cards with full-name tooltips; Bin Location and Budget icons redrawn
 - [x] `v0.9.75` catalogue layout pass (Phases 5–6): compact topbar heading ("Icon Library" + one-line subtitle) replaces the hero block and breadcrumb; duplicate "N visible" count removed; version pill moved to the sidebar footer; quieter active nav item; brand card hides on short viewports; desktop inspector collapse hides the panel completely with the topbar inspector button as the way back
-- [x] `v0.9.76` six new outline icons: Trending Down, Chart Pie, Logout, Sort, More Horizontal, Credit Limit (catalogue 224 → 230)
 - [x] `v0.9.77` infinite scroll: sentinel re-armed on every render so auto-load no longer stalls; manual Load more button hidden when IntersectionObserver is available
-- [x] `v0.9.78` ten new outline icons: Chart Line, Login, More Vertical, Grid View, List View, Sun, Moon, Org Chart, Warranty, Overdue Invoice (catalogue 230 → 240)
 - [x] `v0.9.79` selecting an icon expands a collapsed desktop inspector; rebuilt cards reuse resolved previews so clicks no longer flash every icon back to the loading skeleton
-- [x] `v0.9.80` ten new outline icons: Target, Commission, Petty Cash, Calendar X, Table, Pushpin, Hourglass, History, Unlink, Barcode Scanner (catalogue 240 → 250)
-- [x] `v0.9.81` ten new outline icons: Bell Off, Lightbulb, Thumbs Up, Trophy, Handshake, Gantt Chart, E-Signature, Cargo Ship, File Spreadsheet, Arrow Left Right (catalogue 250 → 260)
 
 ### Epic 5 — Documentation Governance
 - [x] `SPEC.md` rewritten as current-state spec (status snapshot, current file tree, ADR-009–013, historical markers on completed sections)
@@ -162,9 +162,32 @@
 
 ## In Progress
 
-*(none — current local release v0.9.64 passed typecheck, full tests, build, diff check and production Chrome checks at 1440×900 / 834×1112 / 390×844, including a simulated waiting-update state. Local commits remain unpushed by policy.)*
+*(none — current release `v0.9.81` (260 icons) is merged and pushed to `origin/main`. Next up: Epic 7 P0, starting with the devDependency decision below.)*
 
 ---
+
+## Backlog (Epic 7 — Production Readiness, priority order)
+
+Source: `review/production-readiness-v0.9.81.md` (2026-11-03). Verdict: production-ready as a static browsing app; not yet as an icon library others depend on.
+
+### P0 — before calling it production
+- [ ] **Decide: allow test-only devDependencies (Playwright, axe-core)?** Conflicts with the "no devDependencies beyond Vite" convention (`ROADMAP.md` AX §"Explicitly out of scope"). Record the outcome as `SPEC.md` ADR-015 (currently *Proposed*). Blocks the next two items.
+- [ ] **Playwright browser tests in CI** at 1440 / 1024 / 390 px: select expands a collapsed inspector (v0.9.79), infinite scroll reaches the end (v0.9.77), alias search, no loading-skeleton flash on rerender, focus restoration (`tests/browser-test-plan.md` 5c–5g), zero console errors. Then retire the source-regex assertions in `tests/dom.test.mjs` they replace (80 of 251 assertions today).
+- [ ] **axe-core accessibility checks** in the same browser run (supersedes the deferred "dependency-free accessibility-audit script" below if the decision allows it).
+- [ ] **PR workflow + branch protection:** run `validate`, `typecheck`, `npm test`, browser tests and `build` on every pull request; `main` accepts PRs only. Today `.github/workflows/deploy.yml` runs only after a push to `main` and has no `typecheck` step.
+- [ ] **Upgrade Vite** 8.1.5 → ≥ 8.3.5 (4 dev-only advisories, 3 high) and add `npm audit --omit=dev` to CI. Regenerate the lockfile on Linux per ADR-013.
+- [ ] **Set `"private": true`** in `package.json` (or split the app from a publishable package, see P1) so the whole app cannot be published to npm by accident.
+
+### P1 — make it a real icon library
+- [ ] **Publishable icons package** generated from `icons/catalog/` (raw SVGs, SVG sprite, ESM exports, React components, TypeScript types); the catalogue SVGs stay the single source of truth.
+- [ ] **Artwork checks in `tools/validate-icons.mjs`:** safe-area bounds (2–22, headless-computed like `review/svg-v0.9.67/after/bounds.json`), ≤ 2 decimal places, no child `fill`/`stroke`, near-duplicate warning.
+- [ ] **Per-PR contact sheet + designer sign-off:** render new/changed icons at 16/24/48 px, light/dark, beside nearest neighbours; human approval before merge. First candidates for redraw review: Commission and Handshake at 16 px (v0.9.80/v0.9.81).
+- [ ] **Generate doc counts/versions** (README, SPEC, DESIGN icon totals and release numbers) from the registry and `package.json` instead of editing 5 files per release.
+
+### P2 — polish and scale
+- [ ] **Scale past ~1,000 icons:** incremental grid updates instead of a full rebuild per render; sprite delivery instead of one request per icon.
+- [ ] **Repo hygiene:** move bulky `review/` artifacts (1.7 MB) to CI artifacts or releases; add `* text=auto eol=lf` to `.gitattributes` to stop LF/CRLF churn; slim `CHANGELOG.md` to user-facing notes.
+- [ ] **Define 1.0 and icon semver:** 1.0 = Epic 7 P0 done + package published; new icon = minor, icon rename/removal = major.
 
 ## Backlog (Epic 6 — Agent Experience layer, priority order)
 
@@ -178,12 +201,12 @@
 - [ ] Command palette (Cmd+K) — stretch, depends on the `window.IconStudio` API above.
 - [ ] Search match highlighting (relevance ranking shipped in `v0.9.60`; highlighting the matched portion in the catalogue card name/tag remains).
 - [ ] Bulk multi-select export (currently one icon at a time).
-- [ ] Minimal dependency-free accessibility-audit script (considered, deferred — see `ROADMAP.md`).
+- [ ] Minimal dependency-free accessibility-audit script (considered, deferred — see `ROADMAP.md`). Superseded by the Epic 7 axe-core item if test-only devDependencies are approved.
 - [ ] Align the topbar and the 1500px-capped catalogue content to one shared container on ultra-wide screens (layout review item #16).
 
 ## Blocked
 
-*(none)*
+- Epic 7 browser tests and axe-core checks wait on the test-only devDependency decision (ADR-015, *Proposed*).
 
 ## Accepted, will-not-fix
 

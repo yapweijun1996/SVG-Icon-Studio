@@ -90,18 +90,57 @@
 | `v0.9.32` | 2026-09-22 | Make empty-state recovery effective and focus-safe across scoped views | 4 |
 | `v0.9.33` | 2026-09-22 | Preserve keyboard focus when Clear search hides itself | 4 |
 | `v0.9.34` | 2026-09-22 | Preserve focus when the final Load more control disappears | 4 |
+| `v0.9.35`–`v0.9.75` | 2026-09-22 – 2026-11-03 | Focus/a11y and storage hardening, ranked search (`v0.9.60`), single outline style (`v0.9.63`, ADR-014), PWA waiting-update labels (`v0.9.65`–`v0.9.66`), +104 icons (120 → 224, `v0.9.67`–`v0.9.73`), catalogue layout pass (`v0.9.74`–`v0.9.75`) — not itemised here, see `CHANGELOG.md` | 3–4 |
+| `v0.9.76` | 2026-11-03 | +6 outline icons (224 → 230) | 3 |
+| `v0.9.77` | 2026-11-03 | Infinite scroll no longer stalls; manual Load more hidden when auto-load works | 4 |
+| `v0.9.78` | 2026-11-03 | +10 outline icons (230 → 240) | 3 |
+| `v0.9.79` | 2026-11-03 | Select expands a collapsed inspector; no loading-skeleton flash on rerender | 4 |
+| `v0.9.80` | 2026-11-03 | +10 outline icons (240 → 250) | 3 |
+| `v0.9.81` | 2026-11-03 | +10 outline icons (250 → 260) | 3 |
 
 Full detail for every entry: `CHANGELOG.md`. Epic groupings and goals: `EPIC.md`.
 
 ---
 
-## Current state (as of `v0.9.34`)
+## Current state (as of `v0.9.81`)
 
-- 120 icons, 10 categories, 2 styles (111 outline / 9 filled).
+- 260 icons, 10 categories, one built-in style (260/260 outline; filled stays supported for uploads, ADR-014).
 - Zero runtime dependencies; Vite is dev/build tooling only.
-- CSP + SVG allowlist sanitizer; PWA manifest + service worker; CI/CD to GitHub Pages.
-- Full documentation set (`SPEC.md`, `DESIGN.md`, `EPIC.md`, `ROADMAP.md`, `TASK.md`) established and current.
-- No known open bugs. No blockers on any planned work below.
+- CSP + SVG allowlist sanitizer; PWA manifest + service worker with user-approved updates; CI/CD to GitHub Pages on push to `main`.
+- Infinite scroll with no manual Load more (when `IntersectionObserver` exists); selecting an icon always shows the inspector.
+- No known open bugs.
+- **Production-readiness review (2026-11-03):** production-ready as a static icon-browsing app; not yet as an icon library others depend on. Gaps: no automated browser/a11y tests, no PR gate before production, no artwork-quality checks, no consumable distribution. See `review/production-readiness-v0.9.81.md` and Epic 7 below.
+
+---
+
+## Planned: Production readiness (Epic 7) — recommended next
+
+Source: `review/production-readiness-v0.9.81.md`. Do this before Epic 6: it protects every change that follows. **None of this is built yet.**
+
+### Why
+
+The two most recent bugs (v0.9.77 infinite-scroll stall, v0.9.79 inspector not opening / loading-skeleton flash) both passed the full `npm test` suite and were only caught by driving a real browser. 80 of the 251 assertions in `tests/dom.test.mjs` regex-match source text rather than exercising behaviour, and pushing `main` deploys straight to production with CI running only afterwards.
+
+### Priority order
+
+**P0 — before calling it production**
+1. **Decide on test-only devDependencies** (Playwright, axe-core) — *Impact: unblocks 2–3. Effort: a decision.* This reverses the axe-core note in the AX epic's "Explicitly out of scope" list below, so it needs an explicit ADR (`SPEC.md` ADR-015, *Proposed*). ADR-005 is unaffected: the runtime stays dependency-free either way.
+2. **Playwright browser tests in CI** — *Impact: high. Effort: medium.* Core flows at 1440 / 1024 / 390 px; retire the source-regex assertions they replace.
+3. **axe-core accessibility checks** in the same run — *Impact: medium. Effort: low.*
+4. **PR workflow + branch protection** — *Impact: high. Effort: low.* validate, typecheck, unit, browser and build on every PR; `main` accepts PRs only.
+5. **Vite ≥ 8.3.5 + `npm audit --omit=dev` in CI** — *Impact: medium (4 dev-only advisories). Effort: low.* Regenerate the lockfile on Linux (ADR-013).
+6. **`"private": true`** — *Impact: low. Effort: trivial.*
+
+**P1 — make it a real icon library**
+7. **Publishable icons package** generated from `icons/catalog/` (SVGs, sprite, ESM, React components, types) — *Impact: high. Effort: medium-high.* Compatible with the "Explicitly decided against" item below: the app itself keeps fetching SVGs at runtime; the package is a separate generated artifact.
+8. **Artwork checks in the validator** (safe-area bounds, precision, child paint, near-duplicates) — *Impact: medium. Effort: medium.*
+9. **Per-PR contact sheet + designer sign-off** — *Impact: medium-high. Effort: low-medium.* The 36 icons added in v0.9.76–v0.9.81 were AI-authored; Commission and Handshake are weak at 16 px.
+10. **Generated doc counts/versions** — *Impact: low-medium. Effort: low.*
+
+**P2 — polish and scale**
+11. Scale past ~1,000 icons (incremental grid updates, sprite delivery).
+12. Repo hygiene (`review/` artifacts out of git, `.gitattributes` `eol=lf`, slimmer `CHANGELOG.md`).
+13. Define 1.0 (P0 done + package published) and icon semver (new icon = minor; rename/removal = major).
 
 ---
 
@@ -131,12 +170,12 @@ Every session working on this app so far has needed to drive the UI through simu
    Search/switch-view/toggle-theme in one keyboard-driven UI, built on top of item 1's API — proof that the programmatic layer pays for itself in human-facing UX too, not just agent access.
 
 6. **Stretch — Search relevance ranking** — *Impact: medium. Effort: low-medium.*
-   Current search (`js/features/filters.js`) is plain substring `.includes()` with no ranking or match highlighting. Becomes more noticeable as the catalogue grows past 100 icons.
+   **Ranking shipped in `v0.9.60`** (word-boundary token scoring in `js/features/filters.js`). Remaining: highlighting the matched portion in card names/tags (`TASK.md` UX backlog).
 
 ### Explicitly out of scope for this epic
 
 - Anything that would bypass the SVG sanitizer for agent-supplied input (§13 is non-negotiable regardless of caller).
-- A full accessibility-audit tooling addition (e.g. axe-core) — conflicts with the zero-devDependency-beyond-Vite convention; a from-scratch minimal checker was considered and deferred, not rejected outright.
+- A full accessibility-audit tooling addition (e.g. axe-core) — *being reconsidered under Epic 7 P0 item 1 (ADR-015, Proposed)*; conflicts with the zero-devDependency-beyond-Vite convention; a from-scratch minimal checker was considered and deferred, not rejected outright.
 - Bulk/ZIP export and toast-stacking caps — real UX gaps, noted, but unrelated to the AX layer; see `TASK.md` backlog if they get picked up.
 
 ---
