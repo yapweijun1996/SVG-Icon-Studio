@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.9.77 — 2026-11-03
+
+### Fixed
+
+- **Infinite scroll stalled.** Auto-loading stopped once a batch left the load-more sentinel inside its 600px trigger zone, because an IntersectionObserver only fires on intersection *changes*; scrolling to the bottom then did nothing and users had to click **Load more icons** (measured: stuck at 96 of 230 at 1920×1080). Every render now re-observes the sentinel (`rearmAutoLoad()`), forcing a fresh callback with current geometry, so batches keep loading until the zone is filled or all results are shown.
+
+### Changed
+
+- **No manual Load more.** When IntersectionObserver is available, the **Load more icons** button is hidden and its wrapper acts as the infinite-scroll sentinel. The button remains only as the fallback for browsers without IntersectionObserver.
+
+### Validation
+
+- `npm run typecheck`, full `npm test` and `npm run build` pass; `tests/dom.test.mjs` checks the sentinel re-arm on every render and the hidden manual button.
+- Real Chrome (headless, CDP): scrolling to the bottom loads 48 → 120 → 168 → 192 → 230 at 1920×1080 grid, 120 → 192 → 230 in compact, and 24-icon steps to 230 at 390×844. Without scrolling, loading stops once the viewport is filled (no extra loads after 2s idle). Category changes reset to the first batch and refill correctly.
+
 ## 0.9.76 — 2026-11-03
 
 ### Added
