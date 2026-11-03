@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.9.79 — 2026-11-03
+
+### Fixed
+
+- **Selecting an icon did not show the inspector.** Since v0.9.75 a collapsed desktop inspector is hidden completely, but selecting a card only opened the panel in drawer mode (≤1180px), so on desktop the selection details stayed hidden until the topbar inspector button was clicked. Selecting an icon now expands a collapsed desktop inspector, like the card's More action; the drawer behaviour at ≤1180px is unchanged and still leaves the persisted desktop preference alone.
+- **Every card flashed the loading skeleton on each click.** Selecting, favoriting, loading more or switching density rebuilds the cards, and each rebuilt preview started as `is-loading` and re-hydrated asynchronously even though its SVG was already cached, so all visible icons briefly turned into placeholders (measured: 48 of 48 cards). The catalogue now remembers resolved preview assets and paints rebuilt cards synchronously; only cards whose SVG has not loaded yet show the skeleton.
+
+### Validation
+
+- `npm run typecheck`, full `npm test` and `npm run build` pass; `tests/dom.test.mjs` covers the desktop expand-on-select branch and the resolved-preview reuse.
+- Real Chrome (headless, CDP) at 1440×900 with the inspector collapsed: selecting a card expands it to 380px and stores the expanded preference; Collapse then selecting again re-expands. Loading placeholders immediately after a click dropped from 48 to 18 (only never-scrolled-into-view cards); favorite and Compact density cause no skeleton flash and previews repaint at 36px. At 1024×768 selecting opens the drawer and leaves the stored desktop preference unchanged. No runtime or console errors.
+
 ## 0.9.78 — 2026-11-03
 
 ### Added

@@ -25,6 +25,11 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
   let observer;
   let resultStatusSuppressed = false;
   let loadMoreObserver = null;
+  // Resolved preview assets by icon ID. Every rerender (select, favorite,
+  // load-more, filters) rebuilds the cards; reusing an already resolved asset
+  // paints the preview synchronously instead of flashing the loading skeleton
+  // on every card while the async hydration runs again.
+  const resolvedAssets = new Map();
   const resultStatusUpdater = createResultStatusUpdater(refs.resultsAnnouncement);
 
   function disconnectObserver() {
@@ -34,11 +39,16 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
 
   function hydratePreview(preview, icon, version) {
     loadIconAsset(icon.id).then(asset => {
+      resolvedAssets.set(icon.id, asset);
       if (version !== renderVersion || !preview.isConnected) return;
-      preview.replaceChildren(asset.ok ? createCanonicalPreview(icon, asset, state.density === 'compact' ? 36 : 48) : createFallbackSvg(icon.name, 42));
-      preview.classList.remove('is-loading');
-      preview.classList.toggle('has-error', !asset.ok);
+      paintPreview(preview, icon, asset);
     });
+  }
+
+  function paintPreview(preview, icon, asset) {
+    preview.replaceChildren(asset.ok ? createCanonicalPreview(icon, asset, state.density === 'compact' ? 36 : 48) : createFallbackSvg(icon.name, 42));
+    preview.classList.remove('is-loading');
+    preview.classList.toggle('has-error', !asset.ok);
   }
 
   function setupObserver(version) {
@@ -86,7 +96,9 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     actions.append(createElement('button', { className: 'card-action', text: 'Copy SVG', attributes: { type: 'button', 'data-action': 'copy', 'aria-label': `Copy ${icon.name} SVG` } }));
     actions.append(createElement('button', { className: 'card-action', text: '⋮', attributes: { type: 'button', 'data-action': 'more', 'aria-label': `More export options for ${icon.name}` } }));
     article.append(favoriteButton, selectButton, actions);
-    if (observer) observer.observe(preview);
+    const resolved = resolvedAssets.get(icon.id);
+    if (resolved) paintPreview(preview, icon, resolved);
+    else if (observer) observer.observe(preview);
     else hydratePreview(preview, icon, renderVersion);
     return article;
   }

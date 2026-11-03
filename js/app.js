@@ -96,8 +96,13 @@ async function start() {
     // filter context, so avoid repeating the unchanged catalogue live status.
     catalogue.render({ announceResultStatus: false });
     inspector.update();
-    if (openPanel && window.matchMedia('(max-width: 1180px)').matches) {
+    if (!openPanel) return;
+    if (window.matchMedia('(max-width: 1180px)').matches) {
       shell.openInspector(restoreAction ? findRenderedCardAction(icon.id, restoreAction) : undefined);
+    } else if (refs.body.classList.contains('inspector-collapsed')) {
+      // Desktop: a collapsed inspector hides the selection details entirely,
+      // so selecting an icon expands it (the same as the card's More action).
+      shell.openInspector();
     }
   }
 
