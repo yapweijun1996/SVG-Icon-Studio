@@ -5,7 +5,7 @@
 An SVG catalogue, customisation and export workspace built with static HTML, modular CSS and browser-native ES modules. The runtime itself still has zero third-party dependencies — [Vite](https://vitejs.dev) is only a dev-server/bundler wrapper on top, used for local development and the GitHub Pages build.
 
 - Project ID: `project_f2a74b23-33c1-4c5c-b43d-e2b5b3108428`
-- Release: `v0.9.81`
+- Release: `v0.9.82`
 - Entry: `index.html`
 - Live demo: https://yapweijun1996.github.io/SVG-Icon-Studio/ (built and deployed automatically from `main` by [.github/workflows/deploy.yml](.github/workflows/deploy.yml))
 - License: [MIT](LICENSE)
@@ -168,7 +168,9 @@ npm run preview   # serve the dist/ build locally to sanity-check it
 
 The production service worker caches only canonical app resources under assets/, data/, icons/, icons-pwa/, plus the manifest. Requests with query strings and unrelated same-origin paths stay network-managed instead of becoming persistent CacheStorage keys. Runtime assets are capped at 256 insertion-ordered entries. The topbar shows the running app version; when a newer worker is waiting it becomes an explicit Update vX.Y.Z control. Updates are user-activated rather than auto-reloading, and each production build embeds its package version into the worker/cache generation so every release is detectable.
 
-Pushing to `main` runs [.github/workflows/deploy.yml](.github/workflows/deploy.yml): install → `npm test` → `npm run build` → publish `dist/` to GitHub Pages. To enable it on a fork, turn on **Settings → Pages → Source: GitHub Actions** once.
+Every pull request runs [.github/workflows/ci.yml](.github/workflows/ci.yml): install → `npm run validate` → `npm run typecheck` → `npm test` → `npm run build` → check that `dist/version.json` matches `package.json`. Pushing to `main` runs [.github/workflows/deploy.yml](.github/workflows/deploy.yml): install → `npm run typecheck` → `npm test` → `npm run build` → publish `dist/` to GitHub Pages. To enable it on a fork, turn on **Settings → Pages → Source: GitHub Actions** once. To make the PR check a real gate, protect `main` in **Settings → Branches** (require a pull request and the `CI / check` status).
+
+`package.json` is `"private": true`: this repository is the app, not an npm package, so `npm publish` refuses to run. A separate publishable icons package is planned (`ROADMAP.md`, Epic 7).
 
 ## Quality gates
 
@@ -176,8 +178,8 @@ Pushing to `main` runs [.github/workflows/deploy.yml](.github/workflows/deploy.y
 - Duplicate IDs, unknown categories, orphan files and geometry-in-registry checks.
 - SVG size, namespace, viewBox, currentColor and security policy checks.
 - JavaScript syntax checking.
-- Desktop, tablet and mobile browser regression.
-- Accessibility audit and horizontal-overflow checks.
+- Desktop, tablet and mobile browser regression (manual, per `tests/browser-test-plan.md`; automation planned in Epic 7).
+- Accessibility audit and horizontal-overflow checks (manual; automation planned in Epic 7).
 - Search and generated-code controls expose explicit accessible names/states rather than relying on visual-only hints.
 
 ## Recovery

@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.9.82 — 2026-11-03
+
+### Added
+
+- **Pull-request CI (`.github/workflows/ci.yml`).** Every pull request now runs `npm ci`, `npm run validate` (icons + registry verifier), `npm run typecheck`, `npm test`, `npm run build`, and checks that `dist/version.json` matches `package.json`. Previously checks ran only after a push to `main`, which also deploys to production. Making it a hard gate still needs branch protection on `main` (a repository setting).
+
+### Changed
+
+- `.github/workflows/deploy.yml` now runs `npm run typecheck` before tests.
+- `package.json` is now `"private": true`. The repository is the app, not an npm package, so an accidental `npm publish` can no longer upload the whole app (2.1 MB, 371 files). A separate publishable icons package is planned under Epic 7.
+- README and SPEC describe the CI gates accurately, including that browser and accessibility regression checks are still manual.
+
+### Validation
+
+- Ran the exact `ci.yml` step sequence locally: `npm ci`, `validate` (260 SVGs, zero errors or duplicate aliases), `typecheck`, full `npm test`, `build`, and the version check (`0.9.82`) all pass. Both workflow files parse as valid YAML.
+- `npm publish` against an unreachable registry with a dummy token now fails with `EPRIVATE` before any network call; the same command on a `"private": false` copy proceeds to the network (control). `npm publish --dry-run` does not enforce `private` on npm 11.6.2, so it is not a valid check.
+
 ## 0.9.81 — 2026-11-03
 
 ### Added
