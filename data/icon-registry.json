@@ -3269,6 +3269,116 @@
       "status": "active",
       "featured": false,
       "sortOrder": 2300
+    },
+    {
+      "id": "chart-line",
+      "name": "Chart Line",
+      "category": "Finance",
+      "style": "outline",
+      "tags": ["analytics", "report", "statistics", "time series"],
+      "aliases": ["line chart", "line graph"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2310
+    },
+    {
+      "id": "login",
+      "name": "Login",
+      "category": "Actions",
+      "style": "outline",
+      "tags": ["sign in", "enter", "session", "access"],
+      "aliases": ["sign in", "log in"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2320
+    },
+    {
+      "id": "more-vertical",
+      "name": "More Vertical",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["menu", "overflow", "options", "actions"],
+      "aliases": ["vertical ellipsis", "kebab menu"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2330
+    },
+    {
+      "id": "grid-view",
+      "name": "Grid View",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["layout", "tiles", "gallery", "view mode"],
+      "aliases": ["grid layout", "tile view"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2340
+    },
+    {
+      "id": "list-view",
+      "name": "List View",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["layout", "rows", "table", "view mode"],
+      "aliases": ["list layout", "row view"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2350
+    },
+    {
+      "id": "sun",
+      "name": "Sun",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["light mode", "theme", "brightness", "day"],
+      "aliases": ["light mode", "light theme"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2360
+    },
+    {
+      "id": "moon",
+      "name": "Moon",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["dark mode", "theme", "night", "appearance"],
+      "aliases": ["dark mode", "dark theme"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2370
+    },
+    {
+      "id": "org-chart",
+      "name": "Org Chart",
+      "category": "Users",
+      "style": "outline",
+      "tags": ["organization", "hierarchy", "reporting line", "structure"],
+      "aliases": ["organization chart", "org structure"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2380
+    },
+    {
+      "id": "warranty",
+      "name": "Warranty",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["guarantee", "after-sales", "service", "protection"],
+      "aliases": ["guarantee", "warranty claim"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2390
+    },
+    {
+      "id": "overdue-invoice",
+      "name": "Overdue Invoice",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["late payment", "collections", "due date", "reminder"],
+      "aliases": ["overdue", "dunning"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2400
     }
   ]
 }

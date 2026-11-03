@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.9.78 — 2026-11-03
+
+### Added
+
+- Ten searchable outline icons: Chart Line (axes with a line series), Login (entry arrow into a door frame, the mirror of Logout), More Vertical (vertical three-dot menu), Grid View (four equal tiles), List View (bulleted rows), Sun and Moon (light/dark theme), Org Chart (three linked person nodes), Warranty (shield with a check) and Overdue Invoice (invoice with a clock badge).
+- Catalogue total is now 240 (Interface 49, ERP 74, Actions 32, Finance 18, Users 12). Icons use the canonical 24×24 viewBox, root-only 1.5px/currentColor outline contract, geometry-free metadata, and appended sort orders 2310–2400.
+- Registry regression tests cover the ten IDs, searchable metadata (ID, name, aliases), and category/style filters; the published baseline is raised to 240.
+
+### Validation
+
+- `npm run validate` (240 SVGs; zero errors or duplicate aliases), `npm run typecheck`, full `npm test` (artwork uniqueness across 240 icons) and `npm run build` pass.
+- Rendered in Chrome at 48/24/16px on light and dark backgrounds next to their closest neighbours: Chart Line vs Trending Up/Chart Bar, Login vs Logout, More Vertical vs More Horizontal/Menu, Grid View vs Dashboard/Collection, List View vs Menu/Pick List, Sun vs Settings/AI Spark, Org Chart vs Workflow/Bill of Materials, Warranty vs User Shield/Approval, Overdue Invoice vs Invoice/Timesheet. All read distinctly.
+
 ## 0.9.77 — 2026-11-03
 
 ### Fixed

@@ -144,6 +144,7 @@
 - [x] `v0.9.75` catalogue layout pass (Phases 5–6): compact topbar heading ("Icon Library" + one-line subtitle) replaces the hero block and breadcrumb; duplicate "N visible" count removed; version pill moved to the sidebar footer; quieter active nav item; brand card hides on short viewports; desktop inspector collapse hides the panel completely with the topbar inspector button as the way back
 - [x] `v0.9.76` six new outline icons: Trending Down, Chart Pie, Logout, Sort, More Horizontal, Credit Limit (catalogue 224 → 230)
 - [x] `v0.9.77` infinite scroll: sentinel re-armed on every render so auto-load no longer stalls; manual Load more button hidden when IntersectionObserver is available
+- [x] `v0.9.78` ten new outline icons: Chart Line, Login, More Vertical, Grid View, List View, Sun, Moon, Org Chart, Warranty, Overdue Invoice (catalogue 230 → 240)
 
 ### Epic 5 — Documentation Governance
 - [x] `SPEC.md` rewritten as current-state spec (status snapshot, current file tree, ADR-009–013, historical markers on completed sections)
