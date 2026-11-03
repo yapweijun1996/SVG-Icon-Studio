@@ -4,7 +4,7 @@ import { getFilteredIcons } from '../js/features/filters.js';
 import { createState } from '../js/core/state.js';
 const registry = JSON.parse(await fs.readFile('data/icon-registry.json', 'utf8'));
 assert.equal(registry.schemaVersion, 1);
-assert.ok(registry.icons.length >= 250, 'Icon count must preserve the published baseline.');
+assert.ok(registry.icons.length >= 260, 'Icon count must preserve the published baseline.');
 assert.equal(new Set(registry.icons.map(icon => icon.id)).size, registry.icons.length, 'Icon IDs must be unique.');
 assert.equal(registry.icons.filter(icon => icon.style === 'outline').length, registry.icons.length, 'Built-in catalogue should use one consistent outline style.');
 for (const id of ['invoice', 'purchase-order', 'delivery-order']) {
@@ -40,7 +40,9 @@ const addedIds = [
   'chart-line', 'login', 'more-vertical', 'grid-view', 'list-view',
   'sun', 'moon', 'org-chart', 'warranty', 'overdue-invoice',
   'target', 'commission', 'petty-cash', 'calendar-x', 'table',
-  'pushpin', 'hourglass', 'history', 'unlink', 'barcode-scanner'
+  'pushpin', 'hourglass', 'history', 'unlink', 'barcode-scanner',
+  'bell-off', 'lightbulb', 'thumbs-up', 'trophy', 'handshake',
+  'gantt-chart', 'e-signature', 'cargo-ship', 'file-spreadsheet', 'arrow-left-right'
 ];
 for (const id of addedIds) {
   const icon = registry.icons.find(candidate => candidate.id === id);

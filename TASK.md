@@ -147,6 +147,7 @@
 - [x] `v0.9.78` ten new outline icons: Chart Line, Login, More Vertical, Grid View, List View, Sun, Moon, Org Chart, Warranty, Overdue Invoice (catalogue 230 → 240)
 - [x] `v0.9.79` selecting an icon expands a collapsed desktop inspector; rebuilt cards reuse resolved previews so clicks no longer flash every icon back to the loading skeleton
 - [x] `v0.9.80` ten new outline icons: Target, Commission, Petty Cash, Calendar X, Table, Pushpin, Hourglass, History, Unlink, Barcode Scanner (catalogue 240 → 250)
+- [x] `v0.9.81` ten new outline icons: Bell Off, Lightbulb, Thumbs Up, Trophy, Handshake, Gantt Chart, E-Signature, Cargo Ship, File Spreadsheet, Arrow Left Right (catalogue 250 → 260)
 
 ### Epic 5 — Documentation Governance
 - [x] `SPEC.md` rewritten as current-state spec (status snapshot, current file tree, ADR-009–013, historical markers on completed sections)

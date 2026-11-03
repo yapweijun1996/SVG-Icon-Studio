@@ -3489,6 +3489,116 @@
       "status": "active",
       "featured": false,
       "sortOrder": 2500
+    },
+    {
+      "id": "bell-off",
+      "name": "Bell Off",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["notification", "mute", "alerts", "silence"],
+      "aliases": ["notifications off", "mute alerts"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2510
+    },
+    {
+      "id": "lightbulb",
+      "name": "Lightbulb",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["idea", "tip", "hint", "innovation"],
+      "aliases": ["idea", "tip"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2520
+    },
+    {
+      "id": "thumbs-up",
+      "name": "Thumbs Up",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["like", "approve", "feedback", "positive"],
+      "aliases": ["like", "thumbs up"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2530
+    },
+    {
+      "id": "trophy",
+      "name": "Trophy",
+      "category": "Users",
+      "style": "outline",
+      "tags": ["award", "achievement", "winner", "top performer"],
+      "aliases": ["award", "winner"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2540
+    },
+    {
+      "id": "handshake",
+      "name": "Handshake",
+      "category": "Commerce",
+      "style": "outline",
+      "tags": ["deal", "partnership", "agreement", "onboarding"],
+      "aliases": ["deal", "partnership"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2550
+    },
+    {
+      "id": "gantt-chart",
+      "name": "Gantt Chart",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["timeline", "schedule", "project plan", "planning"],
+      "aliases": ["gantt", "project timeline"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2560
+    },
+    {
+      "id": "e-signature",
+      "name": "E-Signature",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["signature", "sign", "digital", "document"],
+      "aliases": ["digital signature", "sign document"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2570
+    },
+    {
+      "id": "cargo-ship",
+      "name": "Cargo Ship",
+      "category": "Logistics",
+      "style": "outline",
+      "tags": ["sea freight", "vessel", "shipping", "port"],
+      "aliases": ["sea freight", "container ship"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2580
+    },
+    {
+      "id": "file-spreadsheet",
+      "name": "File Spreadsheet",
+      "category": "Files",
+      "style": "outline",
+      "tags": ["excel", "csv", "xlsx", "data export"],
+      "aliases": ["excel file", "csv file"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2590
+    },
+    {
+      "id": "arrow-left-right",
+      "name": "Arrow Left Right",
+      "category": "Arrows",
+      "style": "outline",
+      "tags": ["swap", "bidirectional", "exchange", "two-way"],
+      "aliases": ["swap arrows", "two-way arrow"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2600
     }
   ]
 }
