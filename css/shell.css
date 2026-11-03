@@ -5,19 +5,19 @@
 .brand-mark svg { width: 22px; height: 22px; fill: currentColor; }
 .brand-label { white-space: nowrap; font-size: 17px; font-weight: 800; letter-spacing: -.02em; }
 .sidebar-nav { flex: 1 1 auto; min-height: 0; margin-top: 22px; display: grid; gap: 5px; align-content: start; overflow-y: auto; overflow-x: hidden; }
-.nav-heading { margin: 0 10px 7px; color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.nav-heading { margin: 0 10px 7px; color: var(--muted); font-size: var(--fs-xs); font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
 .nav-item { position: relative; min-height: 44px; width: 100%; display: flex; align-items: center; gap: 12px; padding: 9px 11px; border: 1px solid transparent; border-radius: 10px; background: transparent; color: var(--text-soft); cursor: pointer; text-align: left; white-space: nowrap; }
 .nav-item:hover { background: var(--panel-subtle); color: var(--text); }
 .nav-item.is-active { background: var(--accent-soft); color: var(--accent-strong); border-color: transparent; font-weight: 700; }
 .nav-item.is-active::before { content: ""; position: absolute; left: -14px; top: 50%; width: 3px; height: 22px; transform: translateY(-50%); border-radius: 0 3px 3px 0; background: var(--accent); }
 .nav-item svg { flex: 0 0 19px; width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.nav-count { margin-left: auto; min-width: 24px; padding: 2px 6px; border-radius: 999px; background: var(--panel-subtle); color: var(--muted); font-size: 10px; text-align: center; }
+.nav-count { margin-left: auto; min-width: 24px; padding: 2px 6px; border-radius: 999px; background: var(--panel-subtle); color: var(--muted); font-size: var(--fs-xs); text-align: center; }
 .nav-item.is-active .nav-count { background: rgba(244, 91, 11, .12); color: var(--accent-strong); }
 .brand-card { margin-top: auto; display: grid; grid-template-columns: 28px 1fr; gap: 10px; padding: 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel-subtle); }
 .brand-card-icon { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 8px; color: var(--accent); background: var(--accent-soft); }
 .brand-card-icon svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .brand-card h2 { margin: 1px 0 5px; font-size: 12px; }
-.brand-card p { grid-column: 1 / -1; margin: 0; color: var(--muted); font-size: 11px; line-height: 1.55; }
+.brand-card p { grid-column: 1 / -1; margin: 0; color: var(--muted); font-size: var(--fs-xs); line-height: 1.55; }
 .brand-card .button { grid-column: 1 / -1; }
 /* Collapsed rules apply on desktop only; at <=820px the sidebar becomes a
    full-width drawer and must ignore the persisted collapsed state. display:none
@@ -36,12 +36,12 @@
 .topbar-left, .topbar-actions { display: flex; align-items: center; gap: 10px; }
 .breadcrumb { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: 12px; white-space: nowrap; }
 .breadcrumb strong { color: var(--text); }
-.stats-pill { min-height: 38px; display: inline-flex; align-items: center; gap: 6px; padding: 0 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); color: var(--muted); font-size: 11px; white-space: nowrap; box-shadow: var(--shadow-xs); }
+.stats-pill { min-height: 38px; display: inline-flex; align-items: center; gap: 6px; padding: 0 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); color: var(--muted); font-size: var(--fs-sm); white-space: nowrap; box-shadow: var(--shadow-xs); }
 .stats-pill strong { color: var(--text-soft); }
 .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 0 4px color-mix(in srgb, var(--success) 13%, transparent); }
 .pwa-version-pill, .pwa-update-button { min-height: 38px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); white-space: nowrap; box-shadow: var(--shadow-xs); }
-.pwa-version-pill { min-width: 66px; padding: 0 10px; color: var(--muted); font-size: 10px; font-weight: 700; font-variant-numeric: tabular-nums; }
-.pwa-update-button { gap: 6px; padding: 0 11px; color: var(--accent-strong); border-color: var(--accent-border); background: var(--accent-soft); font-size: 10px; font-weight: 800; cursor: pointer; }
+.pwa-version-pill { min-width: 66px; padding: 0 10px; color: var(--muted); font-size: var(--fs-xs); font-weight: 700; font-variant-numeric: tabular-nums; }
+.pwa-update-button { gap: 6px; padding: 0 11px; color: var(--accent-strong); border-color: var(--accent-border); background: var(--accent-soft); font-size: var(--fs-xs); font-weight: 800; cursor: pointer; }
 .pwa-update-button:hover { border-color: var(--accent); color: var(--accent); }
 .pwa-update-button:disabled { opacity: .7; cursor: progress; }
 .pwa-update-button svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
@@ -61,7 +61,7 @@
 .icon-button.mobile-only, .icon-button.inspector-mobile-trigger { display: none; }
 .icon-button:hover, .icon-button.is-active { color: var(--accent); border-color: var(--accent-border); background: var(--accent-soft); }
 .icon-button svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.text-button { padding: 4px 0; color: var(--accent-strong); font-size: 11px; font-weight: 700; }
+.text-button { padding: 4px 0; color: var(--accent-strong); font-size: var(--fs-sm); font-weight: 700; }
 
 
 .mobile-backdrop { position: fixed; inset: 0; z-index: 60; background: rgba(15, 23, 42, .46); backdrop-filter: blur(2px); }

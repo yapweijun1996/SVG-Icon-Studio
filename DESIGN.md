@@ -1,7 +1,7 @@
 # Icon Studio — Design System
 
 **Document:** `DESIGN.md`
-**Status:** Living document — reflects the design system as actually shipped in `v0.9.73`, not an aspirational brief.
+**Status:** Living document — reflects the design system as actually shipped in `v0.9.74`, not an aspirational brief.
 **Source of truth for tokens:** [`css/tokens.css`](css/tokens.css) (design-system.json is a synced machine-readable snapshot of the same values, not an independent source)
 **Relationship to `components.md`:** `components.md` is the original pre-implementation design brief written before any code existed. It is kept for historical reference only — where the two disagree, this document and the current codebase win. See the note at the top of `components.md`.
 
@@ -37,6 +37,10 @@
 | `--sidebar-width` | `224px` (collapsed: `76px`) | |
 | `--inspector-width` | `380px` (collapsed: `68px`, hidden on mobile: `0px`) | |
 | `--topbar-height` | `72px` (mobile: `64px`) | |
+| `--fs-xs` / `--fs-sm` / `--fs-md` / `--fs-lg` | `11px` / `12px` / `13px` / `14px` | Type scale. `11px` is the minimum for UI text (card metadata, labels, badges, code) |
+| `--control-height` / `--control-radius` | `44px` / `10px` | Shared toolbar control metrics: search, Filters, density segmented control and category chips align to one height |
+| `--toolbar-height` | Measured at runtime | Live height of the sticky catalogue toolbar, published by `js/features/sticky-toolbar.js` |
+| `--sticky-offset` | `topbar + safe-top + toolbar + 12px` | `scroll-margin-top` for catalogue content so keyboard focus never lands under the sticky chrome |
 
 Font: `Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`.
 
@@ -77,9 +81,9 @@ Three-column desktop shell (`.app-shell`, CSS grid: `sidebar-width | 1fr | inspe
 
 | Breakpoint | Behaviour |
 | --- | --- |
-| `≤1450px` | Icon grid column width narrows (`minmax(145px,1fr)`), content padding reduces |
+| `≤1450px` | Content padding reduces (the icon grid keeps its `minmax(168px,1fr)` cards) |
 | `≤1180px` | Inspector becomes a fixed slide-in drawer (`transform: translateX(101%)` closed / `translateX(0)` open) with a dimming backdrop; its drawer-only Close control appears while the desktop Collapse control hides; sidebar narrows to `208px` |
-| `≤820px` | Sidebar becomes a fixed slide-in drawer too; topbar/toolbar padding shrinks; category chips become a single horizontally-scrollable row |
+| `≤820px` | Sidebar becomes a fixed slide-in drawer too; topbar/toolbar padding shrinks; search, Filters and the density control share one row (Filters and density become icon-only, keeping accessible names); category chips hide their scrollbar and gain an edge fade |
 | `≤560px` | Icon grid drops to 2 columns; brand card and hero subtitle hide; topbar action labels hide (icon-only) |
 | `prefers-reduced-motion: reduce` | All transitions/animations collapse to `.01ms` |
 
@@ -91,9 +95,9 @@ Three-column desktop shell (`.app-shell`, CSS grid: `sidebar-width | 1fr | inspe
 | --- | --- | --- |
 | Collapsible sidebar | `.sidebar` | Nav items: Icon library, Collections, Favorites, Recently viewed, Uploaded icons, Brand kit. Collapse state persists to `localStorage`. |
 | Sticky topbar | .topbar | Import SVG, live icon-count pill, running-version pill / `Update vX.Y.Z` action (version reported by the waiting worker, visible on mobile too), theme toggle, mobile inspector trigger |
-| Search + filters | `.catalogue-toolbar` | Free-text search (`/` keyboard shortcut focuses it), style filter, sort filter, category chips (10, derived live from the registry — never hardcode a count, see ADR-011-adjacent history in `CHANGELOG.md` 0.4.0) |
+| Search + filters | `.catalogue-toolbar` | Sticky, solid-background toolbar that occupies normal flow space (`.is-stuck` adds a divider while content scrolls beneath). Always two rows: search + labelled **Filters** button + Grid/Compact segmented control, then one horizontally-scrollable chip row at every width. Free-text search (`/` keyboard shortcut focuses it), style filter, sort filter, category chips (10, derived live from the registry — never hardcode a count, see ADR-011-adjacent history in `CHANGELOG.md` 0.4.0) |
 | Icon grid | `.icon-grid` | Responsive `auto-fill` grid; Grid/Compact density toggle; scroll-to-load pagination (24 per page) with a manual "Load more" fallback button |
-| Icon card | `.icon-card` | Lazy-loaded preview (`IntersectionObserver`, 240px lookahead), favourite star, Copy SVG action, "⋮" more-options action |
+| Icon card | `.icon-card` | `minmax(168px,1fr)` grid track, fixed 72px preview area, one-line name (13px) with a full-name tooltip, 11px category · style metadata. Lazy-loaded preview (`IntersectionObserver`, 240px lookahead), favourite star, always-visible Copy SVG and "⋮" actions styled as quiet filled buttons (one card border, no nested action borders — actions stay visible because touch and keyboard users have no hover) |
 | Inspector | `.inspector` | Selected icon summary, live preview (Light/Dark/Brand/Transparent background tabs), Appearance controls (size/stroke width/stroke colour/fill toggle+colour/currentColor/include-title), Transform controls (rotate/flip), code tabs (SVG/JSX/CSS) |
 | Full preview dialog | `<dialog class="preview-dialog">` | Native `<dialog>` element — free focus trap and Escape handling; explicit `aria-labelledby` / `aria-describedby` bind the visible icon name and resize guidance as its accessible name/description |
 | Toast | `.toast-region` | `aria-live="polite"`, non-atomic additions-only announcements, auto-dismiss after 2.8s, maximum three concurrent visible messages with oldest-first eviction; on mobile the stack is offset below the sticky topbar + safe area |
@@ -132,6 +136,8 @@ Before drawing a new icon, check existing geometry for visual collision (documen
 ## 6. Accessibility
 
 - Interactive targets are ≥44px (`--control-height` equivalent throughout).
+- UI text is never smaller than `--fs-xs` (11px).
+- Focus not obscured (WCAG 2.4.11): catalogue content (cards, results heading, empty state, Load more) uses `scroll-margin-top: var(--sticky-offset)` so focus moved under the sticky topbar + toolbar scrolls clear of it. Controls inside the sticky toolbar deliberately get no scroll margin — on sticky elements it would make the page jump when they receive focus.
 - `aria-live="polite"` regions: the dedicated result-status announcer and toast region. Result status is atomic because each message is one complete summary; toast feedback is explicitly non-atomic/additions-only so a new toast does not replay earlier visible messages.
 - Catalogue search uses a visually-hidden text label for its accessible name; the visible `/` shortcut hint is `aria-hidden` so it is not mistaken for the label.
 - `aria-pressed`/`aria-expanded`/`aria-current` used correctly for toggle/disclosure/nav-active state.

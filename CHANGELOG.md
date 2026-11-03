@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.9.74 — 2026-11-03
+
+### Fixed
+
+- **Keyboard focus hidden under the sticky chrome (WCAG 2.4.11).** A card focused while sitting under the sticky topbar + catalogue toolbar stayed hidden (measured: card top at 85–92px, toolbar bottom at 198–251px, at 390px and 1440px). Catalogue content now uses `scroll-margin-top: var(--sticky-offset)`, fed by the toolbar's live height (`--toolbar-height`, published by the new `js/features/sticky-toolbar.js`). Toolbar controls are intentionally excluded so focusing search, Filters or a chip never makes the page jump.
+- **Scrolled cards looked cut off.** The sticky toolbar's `82% → transparent` gradient let card tops show through its lower edge. The toolbar now has a solid background and gains a divider (`.is-stuck`) only while content scrolls beneath it. At `scrollY = 0` the first row was already clear of the toolbar at every width (measured); the reported overlap was the scrolled state, not a layout-flow bug.
+- The search hint `<kbd>` used an invalid `font: 10px/1.4 inherit` shorthand that browsers dropped; it now declares a valid size and monospace stack.
+
+### Changed
+
+- **Toolbar:** search, Filters, the Grid/Compact segmented control and category chips share one `--control-height` (44px; previously search/density rendered at 52px beside a 44px filter button). The filter icon button is now a labelled **Filters** button (same `id`, `aria-expanded`, `aria-controls`, accessible name and Escape/focus behaviour). Category chips are one horizontally scrollable row at every width (tablet no longer wraps). At ≤820px search, Filters and density share one row with icon-only Filters/density (accessible names kept), cutting the mobile sticky toolbar from 186px to 126px.
+- **Type scale:** new `--fs-xs/sm/md/lg` tokens (11/12/13/14px). No UI text is smaller than 11px any more — card metadata 9.5→11px, card names 12→13px, search text 12→13px, inspector labels/tabs 9–10→11–12px, code panel 9.5→11px, sidebar counts/version pill 10→11px.
+- **Icon cards:** grid track `minmax(154px)` → `minmax(168px)` (the `≤1450px` 145px override is removed, so a 1440px desktop shows 4 × 190px cards instead of 5 × 151px); fixed 72px preview area; Copy SVG / ⋮ stay visible but are quiet filled buttons without their own borders or a bordered action strip (one border per card instead of three); card names carry a full-name tooltip.
+- **Icons:** `bin-location.svg` simplified to a two-level shelf with one box per level; `budget.svg` redrawn as an allocation pie instead of the three-spoke wheel. Both keep the root-only 1.5px `currentColor` outline contract.
+
+### Validation
+
+- `npm run typecheck` and full `npm test` pass (224 SVGs validated with zero errors).
+- Real Chrome (headless, CDP) at 1920/1440/1180/1024/820/390px: first card row clear of the toolbar at `scrollY = 0`; all toolbar controls 44px; toolbar 126px; card name/metadata 13/11px; a card placed under the sticky toolbar scrolls clear when focused (e.g. 92→209px vs toolbar bottom 198px) where the previous build left it obscured; no horizontal overflow, including 320px.
+- Interaction regressions in Chrome at 1440px while scrolled: `/` focuses search without moving the page, Tab to Filters and chip clicks do not move the page, Enter on Filters opens the panel, focuses Style and grows `--toolbar-height` 126→226px, Escape closes it and restores focus to Filters; `.is-stuck` is absent at the top of the page; Compact density, dark theme and full-name tooltips work; no runtime exceptions or console errors.
+- `npm ci` and `npm run build` pass; `dist/version.json` reports `0.9.74`. `npm audit --omit=dev` reports 0 vulnerabilities (the runtime has no dependencies); the 4 dev-toolchain advisories (vite/postcss/nanoid/source-map-js) are pre-existing and left for a separate dependency update.
+- `npm run review-icons -- --out <tmp>` passes; Bin Location and Budget inspected at 24px/48px on light/dark backgrounds next to the rest of the ERP set (Budget reads distinctly from Cost Center and Dashboard).
+
 ## 0.9.73 — 2026-10-26
 
 ### Added

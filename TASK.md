@@ -140,6 +140,7 @@
 - [x] Direct v1→v3 upgrades remove successfully migrated legacy rows while preserving incomplete rows for recovery
 - [x] IndexedDB startup reconciliation removes metadata-only upload orphans while preserving asset-only SVG payloads for possible recovery
 - [x] IndexedDB orphan cleanup is best-effort so cleanup write failures cannot hide otherwise valid uploaded icons
+- [x] `v0.9.74` catalogue layout pass (Phases 1–4): sticky toolbar no longer shows scrolled cards through a fade and keyboard focus no longer lands under it (WCAG 2.4.11); toolbar controls share one 44px height with a labelled Filters button; chips are one scrollable row at every width; 11px minimum type scale across catalogue/shell/inspector; quieter single-border icon cards with full-name tooltips; Bin Location and Budget icons redrawn
 
 ### Epic 5 — Documentation Governance
 - [x] `SPEC.md` rewritten as current-state spec (status snapshot, current file tree, ADR-009–013, historical markers on completed sections)
@@ -171,6 +172,8 @@
 - [ ] Search match highlighting (relevance ranking shipped in `v0.9.60`; highlighting the matched portion in the catalogue card name/tag remains).
 - [ ] Bulk multi-select export (currently one icon at a time).
 - [ ] Minimal dependency-free accessibility-audit script (considered, deferred — see `ROADMAP.md`).
+- [ ] Catalogue layout pass Phase 5 — compact header: merge hero into topbar ("Icon Library"), drop the duplicate "N visible" count, move the version pill into the sidebar, decide Import SVG CTA weight. Needs product decision; updates `tests/dom.test.mjs` stats-pill/appVersion/pageTitle assertions.
+- [ ] Catalogue layout pass Phase 6 — sidebar density/active-state, brand card on short viewports, and the 68px collapsed-inspector strip (hide fully + toolbar toggle, or keep strip with a mini preview). Needs product decision.
 
 ## Blocked
 

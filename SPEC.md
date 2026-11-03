@@ -4,13 +4,13 @@
 **Project:** Icon Studio — SVG Icon Collection Admin Panel  
 **Code-MCP Project ID:** `project_f2a74b23-33c1-4c5c-b43d-e2b5b3108428`  
 **Status:** Living specification — the SSOT refactor this document originally proposed shipped in `v0.2.0` (2026-07-23) and is now the permanent baseline architecture. Sections 1–3 and 16 are kept as the historical record of that refactor; everything else describes the **current, as-built system**.  
-**Current release:** v0.9.73 (2026-10-26) — see CHANGELOG.md for the full version history and ROADMAP.md / TASK.md for what is planned next.
+**Current release:** v0.9.74 (2026-11-03) — see CHANGELOG.md for the full version history and ROADMAP.md / TASK.md for what is planned next.
 **Runtime:** Dependency-free static HTML, CSS and browser-native JavaScript (Vite is a dev-only wrapper — see ADR-001)  
 **Primary goal (original, achieved):** Replace the monolithic icon and application architecture with a scalable Single Source of Truth (SSOT) structure while preserving existing behaviour and visual output.
 
 ---
 
-## 0. Current status snapshot (v0.9.73, 2026-10-26)
+## 0. Current status snapshot (v0.9.74, 2026-11-03)
 
 A quick-reference dashboard so this document doesn't have to be read end-to-end just to answer "what does the app actually do right now." Everything here is derived from the current codebase, not from plan.
 
@@ -231,6 +231,7 @@ SVG-Icon-Studio/
 │   │   ├── inspector.js             # preview, appearance controls, code tabs
 │   │   ├── importer.js              # validated browser upload
 │   │   ├── shell.js                 # sidebar/inspector drawers, overlays, responsive state
+│   │   ├── sticky-toolbar.js        # sticky catalogue toolbar height + stuck state
 │   │   └── theme.js                 # light/dark persistence
 │   └── ui/
 │       └── toast.js                 # toast notifications + clipboard copy helper
@@ -543,6 +544,7 @@ Each feature module MUST own only its related state bindings and user interactio
 - `inspector.js`: controls, preview, code tabs and selected icon details.
 - `importer.js`: upload validation and user-uploaded asset persistence.
 - `shell.js`: sidebar, inspector drawer, overlays and responsive shell state.
+- `sticky-toolbar.js`: publishes the sticky catalogue toolbar height as `--toolbar-height` (used by `--sticky-offset` so focused catalogue content scrolls clear of the sticky chrome) and toggles `.is-stuck` while the toolbar overlaps scrolled content.
 - `theme.js`: light/dark resolution, explicit override persistence, and live follow-system colour-scheme state.
 
 A feature module MUST NOT directly fetch catalogue SVG files. It MUST use `icon-repository.js`.

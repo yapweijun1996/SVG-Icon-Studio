@@ -1,7 +1,7 @@
 {
   "title": "Icon Studio — SVG Icon Collection Admin Panel",
   "surface": "component_library",
-  "note": "Tokens below are synced from css/tokens.css (source of truth). This file is a machine-readable snapshot for tooling; if the two ever disagree, css/tokens.css wins. Last synced against v0.7.1 / css/tokens.css.",
+  "note": "Tokens below are synced from css/tokens.css (source of truth). This file is a machine-readable snapshot for tooling; if the two ever disagree, css/tokens.css wins. Last synced against v0.9.74 / css/tokens.css.",
   "tokens": {
     "accent": "#f45b0b",
     "accentStrong": "#b33a00",
@@ -23,7 +23,12 @@
     "inspectorWidth": 380,
     "topbarHeight": 72,
     "spacing": 12,
-    "controlHeight": 44
+    "controlHeight": 44,
+    "controlRadius": 10,
+    "fontSizeXs": 11,
+    "fontSizeSm": 12,
+    "fontSizeMd": 13,
+    "fontSizeLg": 14
   },
   "darkTheme": {
     "background": "#0f141b",

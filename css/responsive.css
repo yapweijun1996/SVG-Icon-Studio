@@ -1,5 +1,4 @@
 @media (max-width: 1450px) {
-  .icon-grid { grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); }
   .main-content { padding-inline: 20px; }
   .topbar { padding-inline: 20px; }
 }
@@ -9,7 +8,6 @@
   body.sidebar-collapsed { --sidebar-width: 76px; }
   .inspector { position: fixed; right: 0; top: 0; z-index: 70; width: min(390px, calc(100vw - 32px)); transform: translateX(101%); visibility: hidden; pointer-events: none; box-shadow: var(--shadow-md); transition: transform .2s ease, visibility 0s linear .2s; }
   body.inspector-open .inspector { transform: translateX(0); visibility: visible; pointer-events: auto; transition-delay: 0s; }
-  .category-row { flex-wrap: wrap; overflow: visible; }
   .icon-button.inspector-mobile-trigger { display: inline-grid; }
   .inspector-close-button { display: inline-grid; }
   .topbar-actions .stats-pill { display: none; }
@@ -34,14 +32,21 @@
   .hero-block { display: block; }
   .library-badge { display: inline-flex; margin-top: 13px; }
   .search-field input { font-size: 16px; }
-  /* Single scrollable chip row: reverts the tablet flex-wrap so the sticky
-     toolbar stays one line tall; edge fade hints at more chips off-screen. */
+  /* Single scrollable chip row (same as desktop) without a visible scrollbar;
+     the edge fade hints at more chips off-screen. */
   .category-row { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; mask-image: linear-gradient(to right, transparent, #000 14px, #000 calc(100% - 14px), transparent); -webkit-mask-image: linear-gradient(to right, transparent, #000 14px, #000 calc(100% - 14px), transparent); }
   .category-row::-webkit-scrollbar { display: none; }
-  .category-chip { flex: 0 0 auto; scroll-snap-align: center; }
-  .search-row { grid-template-columns: minmax(0, 1fr) 44px; }
+  .category-chip { scroll-snap-align: center; }
+  /* Search, Filters and density share one row so the sticky toolbar stays two
+     rows tall. Filters keeps its aria-label; density labels stay readable by
+     assistive technology while only the icons are shown. */
+  .search-row { grid-template-columns: minmax(0, 1fr) auto auto; gap: 8px; }
+  .search-field kbd { display: none; }
+  .filter-button { width: var(--control-height); padding: 0; }
+  .filter-button-label { display: none; }
+  .density-switch button { padding: 0; }
+  .density-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
   .toast-region { right: 50%; bottom: auto; top: calc(var(--topbar-height) + var(--safe-top) + 10px); transform: translateX(50%); justify-items: center; }
-  .density-switch { grid-column: 1 / -1; justify-self: start; }
   .advanced-filter { align-items: stretch; flex-direction: column; }
   .advanced-filter label { min-width: 0; }
   .icon-grid { grid-template-columns: repeat(auto-fill, minmax(138px, 1fr)); }
@@ -63,8 +68,7 @@
   .breadcrumb span:first-child, .breadcrumb span:nth-child(2) { display: none; }
   .hero-block h1 { font-size: 27px; }
   .icon-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-  .icon-card { min-height: 174px; }
-  .card-select { min-height: 112px; }
+  .card-preview { height: 64px; }
   .card-preview svg { width: 42px; height: 42px; }
   .background-tabs { grid-template-columns: repeat(2, 1fr); }
   .control-grid, .inspector-actions { grid-template-columns: 1fr; }

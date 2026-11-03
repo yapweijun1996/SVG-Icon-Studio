@@ -75,7 +75,8 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     });
     const preview = createElement('span', { className: 'card-preview is-loading', attributes: { 'aria-hidden': 'true' }, dataset: { iconId: icon.id } });
     const copy = createElement('span', { className: 'card-copy' });
-    copy.append(createElement('strong', { text: icon.name }));
+    // Names are truncated to one line for even card heights; the tooltip keeps the full name readable.
+    copy.append(createElement('strong', { text: icon.name, attributes: { title: icon.name } }));
     copy.append(createElement('span', { text: `${icon.category} · ${icon.style[0].toUpperCase()}${icon.style.slice(1)}` }));
     selectButton.append(preview, copy);
 

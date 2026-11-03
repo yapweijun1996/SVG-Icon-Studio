@@ -9,6 +9,7 @@ import { hasIconsInView } from './features/filters.js';
 import { createInspectorController } from './features/inspector.js';
 import { createImporterController } from './features/importer.js';
 import { createShellController } from './features/shell.js';
+import { createStickyToolbarController } from './features/sticky-toolbar.js';
 import { createThemeController } from './features/theme.js';
 import { createPwaController } from './features/pwa.js';
 import { createToastController, copyText } from './ui/toast.js';
@@ -25,6 +26,7 @@ function collectRefs() {
     pageTitle: $('#pageTitle'), pageSubtitle: $('#pageSubtitle'), searchInput: $('#searchInput'),
     filterButton: $('#filterButton'), advancedFilter: $('#advancedFilter'), styleFilter: $('#styleFilter'),
     sortFilter: $('#sortFilter'), clearFiltersButton: $('#clearFiltersButton'), categoryChips: $('#categoryChips'),
+    catalogueToolbar: $('.catalogue-toolbar'),
     resultsTitle: $('#resultsTitle'), resultsSummary: $('#resultsSummary'), resultsAnnouncement: $('#resultsAnnouncement'),
     clearSearchButton: $('#clearSearchButton'),
     iconGrid: $('#iconGrid'), emptyState: $('#emptyState'), emptyResetButton: $('#emptyResetButton'),
@@ -142,6 +144,7 @@ async function start() {
   });
 
   createThemeController({ body: refs.body, button: refs.themeButton });
+  createStickyToolbarController({ toolbar: refs.catalogueToolbar });
   createImporterController({
     state, refs, toast,
     onImported: record => {
