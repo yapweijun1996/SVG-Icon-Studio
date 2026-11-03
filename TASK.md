@@ -145,6 +145,7 @@
 - [x] `v0.9.76` six new outline icons: Trending Down, Chart Pie, Logout, Sort, More Horizontal, Credit Limit (catalogue 224 → 230)
 - [x] `v0.9.77` infinite scroll: sentinel re-armed on every render so auto-load no longer stalls; manual Load more button hidden when IntersectionObserver is available
 - [x] `v0.9.78` ten new outline icons: Chart Line, Login, More Vertical, Grid View, List View, Sun, Moon, Org Chart, Warranty, Overdue Invoice (catalogue 230 → 240)
+- [x] `v0.9.79` selecting an icon expands a collapsed desktop inspector; rebuilt cards reuse resolved previews so clicks no longer flash every icon back to the loading skeleton
 
 ### Epic 5 — Documentation Governance
 - [x] `SPEC.md` rewritten as current-state spec (status snapshot, current file tree, ADR-009–013, historical markers on completed sections)

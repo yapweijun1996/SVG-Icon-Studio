@@ -142,6 +142,9 @@ const selectIconHandler = appSource.match(/function selectIcon\(id, openPanel = 
 const toggleFavoriteHandler = appSource.match(/function toggleFavorite\(id\) \{[\s\S]*?\n  \}/)?.[0] || '';
 assert.match(renderAllHandler, /catalogue\.render\(renderOptions\)/, 'shared rerenders should forward catalogue announcement options');
 assert.match(selectIconHandler, /catalogue\.render\(\{ announceResultStatus: false \}\)/, 'Select/More rerenders should not repeat an unchanged catalogue result announcement');
+assert.match(selectIconHandler, /else if \(refs\.body\.classList\.contains\('inspector-collapsed'\)\) \{[\s\S]*?shell\.openInspector\(\);/, 'selecting an icon on desktop should expand a collapsed inspector instead of leaving the selection details hidden');
+assert.match(catalogueSource, /const resolved = resolvedAssets\.get\(icon\.id\);\s*if \(resolved\) paintPreview\(preview, icon, resolved\);/, 'rerendered cards should reuse resolved preview assets instead of flashing the loading skeleton');
+assert.match(catalogueSource, /loadIconAsset\(icon\.id\)\.then\(asset => \{\s*resolvedAssets\.set\(icon\.id, asset\);/, 'resolved assets should be remembered even when the render that requested them is stale');
 assert.match(toggleFavoriteHandler, /renderAll\(\{ announceResultStatus: state\.view === 'favorites' \}\)/, 'favorite rerenders should announce result changes only when Favorites membership changes the visible result set');
 
 const pageTitleTag = html.match(/<h1\b[^>]*id="pageTitle"[^>]*>/)?.[0] || '';
