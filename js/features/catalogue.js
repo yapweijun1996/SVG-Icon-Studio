@@ -24,6 +24,7 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
   let renderVersion = 0;
   let observer;
   let resultStatusSuppressed = false;
+  let loadMoreObserver = null;
   const resultStatusUpdater = createResultStatusUpdater(refs.resultsAnnouncement);
 
   function disconnectObserver() {
@@ -129,6 +130,7 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     refs.iconGrid.hidden = filtered.length === 0;
     refs.emptyResetButton.textContent = hasIconsInView(state) ? 'Reset filters' : 'Browse all icons';
     refs.loadMoreButton.parentElement.hidden = filtered.length === 0 || visible.length >= filtered.length;
+    rearmAutoLoad();
     const resultSummary = formatResultsSummary(state, visible.length, filtered.length);
     refs.resultsSummary.textContent = resultSummary;
     if (resultStatusSuppressed) resultStatusUpdater.cancel();
@@ -266,14 +268,27 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
   }
   refs.loadMoreButton.addEventListener('click', () => loadMore());
 
-  // Auto-load once the (still visible, non-hidden) load-more control nears the
-  // viewport, so scrolling to the bottom of the grid keeps extending it. The
-  // button itself stays as a manual fallback -- for keyboard use, and for the
-  // rare case IntersectionObserver isn't available.
-  const loadMoreObserver = createIntersectionObserver(entries => {
-    if (entries.some(entry => entry.isIntersecting)) loadMore({ automatic: true });
+  // Infinite scroll: auto-load once the load-more sentinel (the button's
+  // wrapper) nears the viewport. The manual button is only shown when
+  // IntersectionObserver isn't available.
+  function rearmAutoLoad() {
+    // An IntersectionObserver only reports *changes*. If a batch leaves the
+    // sentinel inside the trigger zone (wide screens, compact density, or the
+    // user already at the bottom) no new callback would fire and loading
+    // stalls. Re-observing forces a fresh initial callback with the current
+    // geometry, so batches keep loading until the zone is filled.
+    if (!loadMoreObserver) return;
+    const sentinel = refs.loadMoreButton.parentElement;
+    loadMoreObserver.unobserve(sentinel);
+    loadMoreObserver.observe(sentinel);
+  }
+  loadMoreObserver = createIntersectionObserver(entries => {
+    if (entries.some(entry => entry.isIntersecting && !entry.target.hidden)) loadMore({ automatic: true });
   }, { rootMargin: '600px 0px' });
-  loadMoreObserver?.observe(refs.loadMoreButton);
+  if (loadMoreObserver) {
+    refs.loadMoreButton.hidden = true;
+    rearmAutoLoad();
+  }
 
   return {
     render,

@@ -128,6 +128,9 @@ assert.match(catalogueSource, /const resultSummary = formatResultsSummary\(state
 assert.match(catalogueSource, /refs\.resultsSummary\.textContent = resultSummary/, 'visible result summary should stay current even when automatic pagination is silent');
 assert.match(catalogueSource, /createResultStatusUpdater\(refs\.resultsAnnouncement\)/, 'live status updater should target the dedicated hidden announcement region');
 assert.match(catalogueSource, /loadMore\(\{ automatic: true \}\)/, 'IntersectionObserver pagination should identify itself as automatic');
+assert.match(catalogueSource, /function rearmAutoLoad\(\) \{[\s\S]*?loadMoreObserver\.unobserve\(sentinel\);[\s\S]*?loadMoreObserver\.observe\(sentinel\);/, 'auto-load must re-observe its sentinel so a batch that leaves it inside the trigger zone keeps loading instead of stalling');
+assert.match(catalogueSource, /visible\.length >= filtered\.length;\s*rearmAutoLoad\(\);/, 'every render should re-arm infinite scroll after updating the sentinel visibility');
+assert.match(catalogueSource, /if \(loadMoreObserver\) \{\s*refs\.loadMoreButton\.hidden = true;/, 'the manual Load more button should be hidden when infinite scroll is available and kept only as a no-IntersectionObserver fallback');
 assert.match(catalogueSource, /announceResultStatus: !automatic[\s\S]*?refreshPendingResultStatus: automatic/, 'automatic pagination should stay silent while refreshing only an already-pending search announcement');
 assert.match(appSource, /catalogue\.render\(\{ deferResultStatus: Boolean\(state\.query\) \}\)/, 'non-empty rapid search input should defer only the advisory result-status announcement while clear-to-empty updates immediately');
 assert.match(appSource, /addEventListener\('compositionstart',[\s\S]*?catalogue\.setResultStatusSuppressed\(true\)/, 'IME composition should suppress result-status announcements as soon as composition starts');
