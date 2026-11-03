@@ -3203,6 +3203,72 @@
       "status": "active",
       "featured": false,
       "sortOrder": 2240
+    },
+    {
+      "id": "trending-down",
+      "name": "Trending Down",
+      "category": "Finance",
+      "style": "outline",
+      "tags": ["decline", "loss", "decrease", "chart"],
+      "aliases": ["decline", "downtrend"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2250
+    },
+    {
+      "id": "chart-pie",
+      "name": "Chart Pie",
+      "category": "Finance",
+      "style": "outline",
+      "tags": ["analytics", "share", "breakdown", "report"],
+      "aliases": ["pie chart", "donut chart"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2260
+    },
+    {
+      "id": "logout",
+      "name": "Logout",
+      "category": "Actions",
+      "style": "outline",
+      "tags": ["sign out", "exit", "session", "leave"],
+      "aliases": ["sign out", "log out"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2270
+    },
+    {
+      "id": "sort",
+      "name": "Sort",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["order", "ascending", "descending", "column"],
+      "aliases": ["sort order", "reorder list"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2280
+    },
+    {
+      "id": "more-horizontal",
+      "name": "More Horizontal",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["menu", "overflow", "options", "actions"],
+      "aliases": ["ellipsis", "more options"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2290
+    },
+    {
+      "id": "credit-limit",
+      "name": "Credit Limit",
+      "category": "ERP",
+      "style": "outline",
+      "tags": ["credit control", "customer", "exposure", "gauge"],
+      "aliases": ["credit cap", "credit ceiling"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2300
     }
   ]
 }

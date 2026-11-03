@@ -142,6 +142,7 @@
 - [x] IndexedDB orphan cleanup is best-effort so cleanup write failures cannot hide otherwise valid uploaded icons
 - [x] `v0.9.74` catalogue layout pass (Phases 1–4): sticky toolbar no longer shows scrolled cards through a fade and keyboard focus no longer lands under it (WCAG 2.4.11); toolbar controls share one 44px height with a labelled Filters button; chips are one scrollable row at every width; 11px minimum type scale across catalogue/shell/inspector; quieter single-border icon cards with full-name tooltips; Bin Location and Budget icons redrawn
 - [x] `v0.9.75` catalogue layout pass (Phases 5–6): compact topbar heading ("Icon Library" + one-line subtitle) replaces the hero block and breadcrumb; duplicate "N visible" count removed; version pill moved to the sidebar footer; quieter active nav item; brand card hides on short viewports; desktop inspector collapse hides the panel completely with the topbar inspector button as the way back
+- [x] `v0.9.76` six new outline icons: Trending Down, Chart Pie, Logout, Sort, More Horizontal, Credit Limit (catalogue 224 → 230)
 
 ### Epic 5 — Documentation Governance
 - [x] `SPEC.md` rewritten as current-state spec (status snapshot, current file tree, ADR-009–013, historical markers on completed sections)

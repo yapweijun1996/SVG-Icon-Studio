@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.9.76 — 2026-11-03
+
+### Added
+
+- Six searchable outline icons: Trending Down (mirror of Trending Up), Chart Pie (pie with an offset slice), Logout (door frame with an exit arrow), Sort (opposing up/down arrows), More Horizontal (three-dot overflow menu) and Credit Limit (card with a limit gauge).
+- Catalogue total is now 230 (Finance 17, Actions 31, Interface 44, ERP 72). Icons use the canonical 24×24 viewBox, root-only 1.5px/currentColor outline contract, geometry-free metadata, and appended sort orders 2250–2300.
+- Registry regression tests cover the six IDs, searchable metadata (ID, name, aliases), and category/style filters; the published baseline is raised to 230.
+
+### Validation
+
+- `npm run validate` (230 SVGs; zero errors or duplicate aliases), `npm run typecheck`, full `npm test` and `npm run build` pass.
+- `npm run review-icons` passes; the new icons were inspected next to Trending Up, Budget, Chart Bar, Credit Card, Menu and Filter.
+
 ## 0.9.75 — 2026-11-03
 
 ### Changed
