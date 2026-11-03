@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.9.80 — 2026-11-03
+
+### Added
+
+- Ten searchable outline icons: Target (rings with an arrow), Commission (percent coin with a payee), Petty Cash (lockable cash box), Calendar X (cancelled date, completing the Calendar/Calendar Check set), Table (data grid with a header row), Pushpin (pin to top), Hourglass (pending/waiting), History (counter-clockwise clock), Unlink (separated chain halves with break marks) and Barcode Scanner (handheld scan gun).
+- Catalogue total is now 250 (Interface 53, Finance 21, Actions 34, Logistics 19). Icons use the canonical 24×24 viewBox, root-only 1.5px/currentColor outline contract, geometry-free metadata, and appended sort orders 2410–2500.
+- To keep search unambiguous, `pin` (already an alias of Map Pin) is used only as a tag and the new icon is named Pushpin.
+- Registry regression tests cover the ten IDs, searchable metadata (ID, name, aliases), and category/style filters; the published baseline is raised to 250.
+
+### Validation
+
+- `npm run validate` (250 SVGs; zero errors or duplicate aliases), `npm run typecheck`, full `npm test` (artwork uniqueness across 250 icons) and `npm run build` pass.
+- Rendered in Chrome at 48/24/16px on light and dark backgrounds next to their closest neighbours: Target vs Budget/Interest Rate, Commission vs Percent/Customer Payment, Petty Cash vs Wallet/Archive, Calendar X vs Calendar Check, Table vs Timesheet/Grid View, Pushpin vs Map Pin/Attachment, Hourglass vs Thermometer/Fragile, History vs Clock/Refresh, Unlink vs Link, Barcode Scanner vs Barcode/RFID. All read distinctly; Unlink's chain halves were lengthened after the first review.
+
 ## 0.9.79 — 2026-11-03
 
 ### Fixed
