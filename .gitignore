@@ -17,3 +17,7 @@ coverage/
 Thumbs.db
 *.swp
 *.swo
+
+# Playwright output
+test-results/
+playwright-report/

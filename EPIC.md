@@ -170,7 +170,8 @@ Planned scope, in dependency order:
 **Goal:** turn a well-built static demo into something teams can depend on: automated browser and accessibility tests, a review gate before production, automated icon-quality checks, and a consumable icon distribution.
 **Source:** `review/production-readiness-v0.9.81.md` (2026-11-03).
 **Verdict at v0.9.81:** production-ready as a static icon-browsing app; not yet as a production icon library.
-**Depends on:** an explicit decision on test-only devDependencies (`SPEC.md` ADR-015, *Proposed*).
+**Progress:** `v0.9.82` PR workflow + `"private": true`; `v0.9.83` Playwright browser suite + axe-core in CI, with the WCAG failures it found fixed. Remaining P0: branch protection (owner) and the Vite upgrade.
+**Depends on:** ~~an explicit decision on test-only devDependencies~~ — resolved: ADR-015 accepted in `v0.9.83`.
 **Full detail:** `ROADMAP.md` §"Planned: Production readiness"; tasks in `TASK.md` §"Backlog (Epic 7)".
 
 Planned scope, in priority order:

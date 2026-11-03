@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.9.83 — 2026-11-03
+
+### Added
+
+- **Automated browser and accessibility tests (ADR-015 accepted).** `npm run test:e2e` builds the app and runs Playwright against the production build at 1440, 1024 and 390 px, plus 1920 px where the v0.9.77 scroll stall reproduces. Covered: icon count and version, infinite scroll to the end (grid and compact), loading stops when the viewport is filled, search by ID/name/alias for all 40 icons added since v0.9.73, category reset, selecting an icon shows the inspector, no loading-skeleton flash on select/favorite/density, keyboard focus, accessible names, and axe-core WCAG 2.1 A/AA scans (library, inspector, empty state, dark theme). Any console error fails a test.
+- `ci.yml` and `deploy.yml` install Chromium and run the suite; failures upload the Playwright report and traces as an artifact.
+
+### Fixed
+
+- **Label in Name (WCAG 2.5.3).** Card Select buttons were named "Select Invoice icon" while showing "Invoice ERP · Outline"; their name now comes from the visible text. Copy buttons are now "Copy SVG: Invoice" (was "Copy Invoice SVG", which split the visible "Copy SVG"). Expanded nav items no longer override their visible label and count with a shorter aria-label (it is kept only while the sidebar is collapsed and the text is hidden), and the brand toggle is "Icon Studio, collapse sidebar".
+- **Colour contrast (WCAG 1.4.3).** Filled primary buttons used white on `#f45b0b` (3.3:1); they now use the new `--accent-action` `#c2410c` (5.2:1), hover `#b33a00` (6.0:1). In the dark theme, accent text (`--accent-strong`, active nav item, active chip, active segmented controls, Reset link) was `#b33a00` on dark surfaces (2.6–2.9:1); it is now `#ff8a4c` (6.6–7.4:1). The brand orange `--accent` is unchanged.
+- **Startup rerender stole keyboard focus.** Startup renders the grid, waits for the default inspector SVG, then rerenders every card. A card focused during that wait was destroyed and focus fell to `<body>` (found as an intermittent browser-test failure under load; reproduced every time by delaying `invoice.svg` 1.5 s). `render()` now restores the focused card action or category chip after every rebuild, not only during automatic pagination.
+
+### Changed
+
+- Retired 11 source-regex assertions from `tests/dom.test.mjs` (248 → 237) whose behaviour the browser suite now verifies (infinite-scroll re-arm, hidden Load more, select-expands-inspector, preview reuse, loading state, copy/sidebar labels, favorite focus).
+- `@playwright/test` 1.64.1 and `@axe-core/playwright` 4.14.0 added as exact-pinned devDependencies; runtime stays dependency-free (ADR-005). The lockfile change only adds entries: npm on Windows dropped `@emnapi/core`/`@emnapi/runtime` (ADR-013) and both were restored.
+
+### Validation
+
+- `npm run test:e2e`: 48 passed, 18 skipped by design (66 tests; viewport-specific tests run on one project). Full suite run 3× with no failures after the focus fix; the two keyboard-focus tests passed 30/30 at 10 parallel workers. `npm ci`, `validate` (260 SVGs), `typecheck`, full `npm test` and `build` pass.
+- Each fixed bug was re-introduced in turn and caught: removing the infinite-scroll re-arm fails both 1920 px scroll tests (it did **not** fail at 1440 px, which is why the 1920 px tests exist); disabling select-expands-inspector fails 2 tests; disabling preview reuse fails all 3 no-flash tests. The new slow-startup focus test fails on the pre-fix code and passes after it.
+- axe-core reported 53 violations (light) and 58 (dark) before the fixes and 0 after, at all three widths.
+
 ## 0.9.82 — 2026-11-03
 
 ### Added

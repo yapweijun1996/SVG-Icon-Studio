@@ -2,6 +2,9 @@
   color-scheme: light;
   --accent: #f45b0b;
   --accent-strong: #b33a00;
+  /* Filled primary buttons: white text needs >= 4.5:1 (WCAG 1.4.3); #f45b0b gives 3.3:1. */
+  --accent-action: #c2410c;
+  --accent-action-hover: #b33a00;
   --accent-soft: #fff0e8;
   --accent-border: #ffc5a6;
   --success: #22c55e;
@@ -54,6 +57,8 @@ body[data-theme="dark"] {
   --muted: #94a3b8;
   --line: #293345;
   --line-strong: #3a4659;
+  /* Accent text on dark surfaces: #b33a00 measured 2.6-2.9:1; #ff8a4c gives 6.6-7.4:1. */
+  --accent-strong: #ff8a4c;
   --accent-soft: #3a1c0d;
   --accent-border: #7c3312;
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, .25);

@@ -27,6 +27,11 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+      # Until branch protection forces every change through ci.yml, run the
+      # browser and accessibility suite here too so a direct push cannot deploy a
+      # regression.
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e:ci
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

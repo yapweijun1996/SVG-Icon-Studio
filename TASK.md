@@ -33,6 +33,7 @@
 - [x] `delivery-truck.svg` wheel/chassis overlap fix
 - [x] `invoice.svg` redesign (folded page, table grid, currency mark)
 - [x] `v0.9.82` pull-request CI workflow (`ci.yml`), typecheck in `deploy.yml`, `package.json` marked private (Epic 7 P0)
+- [x] `v0.9.83` Playwright + axe-core browser suite (`tests/e2e/`) in `ci.yml` and `deploy.yml`; WCAG label-in-name and contrast fixes it surfaced (Epic 7 P0)
 
 ### Epic 3 — ERP Icon Catalogue Expansion
 - [x] +12 ERP icons batch 1 (quotation → reconciliation)
@@ -163,7 +164,7 @@
 
 ## In Progress
 
-*(none — current release `v0.9.82` adds the PR CI workflow and `"private": true`. Next up: ADR-015 decision (owner), then Playwright browser tests; owner to enable branch protection on `main`.)*
+*(none — current release `v0.9.83` adds automated browser + accessibility tests. Next: owner enables branch protection on `main`; then the Vite upgrade (7.2).)*
 
 ---
 
@@ -172,10 +173,10 @@
 Source: `review/production-readiness-v0.9.81.md` (2026-11-03). Verdict: production-ready as a static browsing app; not yet as an icon library others depend on.
 
 ### P0 — before calling it production
-- [ ] **Decide: allow test-only devDependencies (Playwright, axe-core)?** Conflicts with the "no devDependencies beyond Vite" convention (`ROADMAP.md` AX §"Explicitly out of scope"). Record the outcome as `SPEC.md` ADR-015 (currently *Proposed*). Blocks the next two items.
-- [ ] **Playwright browser tests in CI** at 1440 / 1024 / 390 px: select expands a collapsed inspector (v0.9.79), infinite scroll reaches the end (v0.9.77), alias search, no loading-skeleton flash on rerender, focus restoration (`tests/browser-test-plan.md` 5c–5g), zero console errors. Then retire the source-regex assertions in `tests/dom.test.mjs` they replace (80 of 251 assertions today).
-- [ ] **axe-core accessibility checks** in the same browser run (supersedes the deferred "dependency-free accessibility-audit script" below if the decision allows it).
-- [ ] **PR workflow + branch protection** — workflow part done in `v0.9.82` (`.github/workflows/ci.yml`: validate, typecheck, `npm test`, build, version check on every PR; `deploy.yml` now also typechecks). **Remaining (owner):** enable branch protection on `main` (require a PR and the `CI / check` status), then add browser tests to `ci.yml` once 7.4 lands.
+- [x] **Decide: allow test-only devDependencies** — ADR-015 accepted in `v0.9.83` (Playwright + axe-core, exact-pinned, test-only; runtime unaffected).
+- [x] **Playwright browser tests in CI** — `v0.9.83`: `tests/e2e/catalogue.spec.mjs` at 1440 / 1024 / 390 px (+1920 px for the scroll stall): full count and version, infinite scroll to the end (grid + compact), viewport-filled stop, ID/name/alias search for all 40 icons added since v0.9.73, category reset, select-opens-inspector (desktop expand / drawer without overwriting preference), no skeleton flash on select/favorite/density, keyboard focus (5c/5d), accessible names. Re-introducing each v0.9.77/v0.9.79 bug fails its test. 11 source-regex assertions retired from `tests/dom.test.mjs` (248 → 237). It also exposed a real bug: a slow startup rerender stole keyboard focus from a card (fixed in `render()`).
+- [x] **axe-core accessibility checks** — `v0.9.83`: `tests/e2e/a11y.spec.mjs`, WCAG 2.1 A/AA, library / inspector / empty state / dark theme at 3 widths. First run found and fixed: label-in-name on 48 card buttons, nav items and the brand toggle (2.5.3); primary-button contrast 3.3:1 → 5.2:1 and dark-theme accent text 2.6:1 → 6.6:1 (1.4.3).
+- [ ] **PR workflow + branch protection** — workflow part done in `v0.9.82` (`.github/workflows/ci.yml`: validate, typecheck, `npm test`, build, version check on every PR; `deploy.yml` now also typechecks). **Remaining (owner):** enable branch protection on `main` (require a PR and the `CI / check` status), browser tests are already in `ci.yml` and `deploy.yml` (`v0.9.83`).
 - [ ] **Upgrade Vite** 8.1.5 → ≥ 8.3.5 (4 dev-only advisories, 3 high) and add `npm audit --omit=dev` to CI. Regenerate the lockfile on Linux per ADR-013.
 - [x] **Set `"private": true`** in `package.json` — done in `v0.9.82`; `npm publish` now fails with `EPRIVATE`.
 
@@ -202,12 +203,12 @@ Source: `review/production-readiness-v0.9.81.md` (2026-11-03). Verdict: producti
 - [ ] Command palette (Cmd+K) — stretch, depends on the `window.IconStudio` API above.
 - [ ] Search match highlighting (relevance ranking shipped in `v0.9.60`; highlighting the matched portion in the catalogue card name/tag remains).
 - [ ] Bulk multi-select export (currently one icon at a time).
-- [ ] Minimal dependency-free accessibility-audit script (considered, deferred — see `ROADMAP.md`). Superseded by the Epic 7 axe-core item if test-only devDependencies are approved.
+- [x] ~~Minimal dependency-free accessibility-audit script~~ — superseded by axe-core (ADR-015, `v0.9.83`).
 - [ ] Align the topbar and the 1500px-capped catalogue content to one shared container on ultra-wide screens (layout review item #16).
 
 ## Blocked
 
-- Epic 7 browser tests and axe-core checks wait on the test-only devDependency decision (ADR-015, *Proposed*).
+*(none — ADR-015 accepted in `v0.9.83`.)*
 
 ## Accepted, will-not-fix
 

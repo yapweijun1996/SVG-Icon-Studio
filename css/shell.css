@@ -62,8 +62,8 @@
 .button, .icon-button, .text-button, .density-switch button, .background-tabs button, .category-chip, .segmented-control button, .code-tabs button { border: 1px solid transparent; background: transparent; cursor: pointer; }
 .button { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 8px 14px; border-radius: 9px; font-size: 12px; font-weight: 700; white-space: nowrap; }
 .button svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.button-primary { color: white; background: var(--accent); border-color: var(--accent); box-shadow: 0 7px 16px rgba(244, 91, 11, .18); }
-.button-primary:hover { background: var(--accent-strong); border-color: var(--accent-strong); }
+.button-primary { color: white; background: var(--accent-action); border-color: var(--accent-action); box-shadow: 0 7px 16px rgba(244, 91, 11, .18); }
+.button-primary:hover { background: var(--accent-action-hover); border-color: var(--accent-action-hover); }
 .button-secondary { color: var(--text-soft); background: var(--panel); border-color: var(--line); box-shadow: var(--shadow-xs); }
 .button-secondary:hover { border-color: var(--line-strong); color: var(--text); background: var(--panel-subtle); }
 .button-ghost { min-height: 34px; color: var(--muted); }
