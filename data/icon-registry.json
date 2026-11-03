@@ -3379,6 +3379,116 @@
       "status": "active",
       "featured": false,
       "sortOrder": 2400
+    },
+    {
+      "id": "target",
+      "name": "Target",
+      "category": "Finance",
+      "style": "outline",
+      "tags": ["goal", "kpi", "objective", "performance"],
+      "aliases": ["sales target", "goal target"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2410
+    },
+    {
+      "id": "commission",
+      "name": "Commission",
+      "category": "Finance",
+      "style": "outline",
+      "tags": ["sales", "incentive", "percentage", "payout"],
+      "aliases": ["sales commission", "incentive pay"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2420
+    },
+    {
+      "id": "petty-cash",
+      "name": "Petty Cash",
+      "category": "Finance",
+      "style": "outline",
+      "tags": ["cash", "expense", "cash box", "float"],
+      "aliases": ["cash box", "cash float"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2430
+    },
+    {
+      "id": "calendar-x",
+      "name": "Calendar X",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["cancelled", "closed", "unavailable", "date"],
+      "aliases": ["cancelled date", "calendar cancel"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2440
+    },
+    {
+      "id": "table",
+      "name": "Table",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["data", "rows", "columns", "spreadsheet"],
+      "aliases": ["data table", "spreadsheet view"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2450
+    },
+    {
+      "id": "pushpin",
+      "name": "Pushpin",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["pin", "keep on top", "sticky", "priority"],
+      "aliases": ["pin to top", "pinned item"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2460
+    },
+    {
+      "id": "hourglass",
+      "name": "Hourglass",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["pending", "waiting", "timer", "in progress"],
+      "aliases": ["pending status", "waiting"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2470
+    },
+    {
+      "id": "history",
+      "name": "History",
+      "category": "Actions",
+      "style": "outline",
+      "tags": ["revisions", "versions", "past", "log"],
+      "aliases": ["version history", "revision history"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2480
+    },
+    {
+      "id": "unlink",
+      "name": "Unlink",
+      "category": "Actions",
+      "style": "outline",
+      "tags": ["detach", "disconnect", "remove link"],
+      "aliases": ["remove link", "break link"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2490
+    },
+    {
+      "id": "barcode-scanner",
+      "name": "Barcode Scanner",
+      "category": "Logistics",
+      "style": "outline",
+      "tags": ["scan", "warehouse", "handheld", "inventory"],
+      "aliases": ["handheld scanner", "scan gun"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2500
     }
   ]
 }
