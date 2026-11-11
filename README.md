@@ -75,7 +75,7 @@ The browser suite (`tests/e2e/`, ADR-015) runs against the production build at 1
 
 The built-in catalogue uses one consistent **`outline`** style — see [DESIGN.md](DESIGN.md#5-icon-design-system) for the full contract:
 
-- All 260 built-in icons use `fill="none" stroke="currentColor" stroke-width="1.5"` at the root.
+- All 261 built-in icons use `fill="none" stroke="currentColor" stroke-width="1.5"` at the root.
 - The importer/runtime still understands legacy or uploaded **`filled`** SVGs for backwards compatibility, but new built-in icons should follow the outline contract.
 
 ## Reviewing individual artwork

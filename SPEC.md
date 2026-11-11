@@ -16,9 +16,9 @@ A quick-reference dashboard so this document doesn't have to be read end-to-end 
 
 | Fact | Value |
 | --- | --- |
-| Total icons | 260 (see `data/icon-registry.json`) |
+| Total icons | 261 (see `data/icon-registry.json`) |
 | Categories | 10 — Interface, Arrows, Actions, Files, Users, Commerce, Finance, Logistics, AI, ERP |
-| Built-in icon style | `outline` (260/260); filled remains supported for uploaded/legacy compatibility — see §7.3/§7.4 |
+| Built-in icon style | `outline` (261/261); filled remains supported for uploaded/legacy compatibility — see §7.3/§7.4 |
 | Runtime dependencies | 0 (unchanged since inception) |
 | npm publishing | `package.json` is `"private": true` (since `v0.9.82`) — the repo is the app, not a package; `npm publish` fails with `EPRIVATE` |
 | Dev tooling | Vite (`npm run dev` / `npm run build` / `npm run preview`); `npm run serve` still works with zero `node_modules` |

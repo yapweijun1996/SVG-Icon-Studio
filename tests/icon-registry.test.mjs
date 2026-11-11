@@ -42,7 +42,7 @@ const addedIds = [
   'target', 'commission', 'petty-cash', 'calendar-x', 'table',
   'pushpin', 'hourglass', 'history', 'unlink', 'barcode-scanner',
   'bell-off', 'lightbulb', 'thumbs-up', 'trophy', 'handshake',
-  'gantt-chart', 'e-signature', 'cargo-ship', 'file-spreadsheet', 'arrow-left-right'
+  'gantt-chart', 'e-signature', 'cargo-ship', 'file-spreadsheet', 'arrow-left-right', 'arrow-down-right'
 ];
 for (const id of addedIds) {
   const icon = registry.icons.find(candidate => candidate.id === id);
