@@ -3599,6 +3599,17 @@
       "status": "active",
       "featured": false,
       "sortOrder": 2600
+    },
+    {
+      "id": "arrow-down-right",
+      "name": "Arrow Down Right",
+      "category": "Arrows",
+      "style": "outline",
+      "tags": ["diagonal", "down", "right", "southeast"],
+      "aliases": ["southeast-arrow", "diagonal-down-right"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2610
     }
   ]
 }

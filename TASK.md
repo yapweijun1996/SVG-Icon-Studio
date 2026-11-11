@@ -16,6 +16,7 @@
 - [x] `v0.9.78` ten new outline icons: Chart Line, Login, More Vertical, Grid View, List View, Sun, Moon, Org Chart, Warranty, Overdue Invoice (catalogue 230 → 240)
 - [x] `v0.9.80` ten new outline icons: Target, Commission, Petty Cash, Calendar X, Table, Pushpin, Hourglass, History, Unlink, Barcode Scanner (catalogue 240 → 250)
 - [x] `v0.9.81` ten new outline icons: Bell Off, Lightbulb, Thumbs Up, Trophy, Handshake, Gantt Chart, E-Signature, Cargo Ship, File Spreadsheet, Arrow Left Right (catalogue 250 → 260)
+- [x] `v0.9.84` Arrow Down Right outline icon (catalogue 260 → 261)
 
 ### Epic 1 — SSOT Modular Refactor
 - [x] Extract every built-in icon into `icons/catalog/<id>.svg`

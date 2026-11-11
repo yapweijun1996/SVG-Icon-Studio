@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.84 — 2026-11-11
+
+### Added
+
+- Added Arrow Down Right as a searchable canonical outline icon; catalogue total is now 261. The SVG uses the 24×24 viewBox, root-only 1.5px/currentColor stroke contract, and geometry-free registry metadata.
+
+### Validation
+
+- `npm ci`, `npm run validate` (261 SVGs, zero errors or duplicate aliases), `npm run typecheck`, full `npm test`, and `npm run build` pass.
+
 ## 0.9.83 — 2026-11-03
 
 ### Added
