@@ -3610,6 +3610,72 @@
       "status": "active",
       "featured": false,
       "sortOrder": 2610
+    },
+    {
+      "id": "run",
+      "name": "Run",
+      "category": "Actions",
+      "style": "outline",
+      "tags": ["running", "motion", "exercise", "person"],
+      "aliases": ["running person"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2620
+    },
+    {
+      "id": "sit",
+      "name": "Sit",
+      "category": "Actions",
+      "style": "outline",
+      "tags": ["sitting", "seated", "chair", "person"],
+      "aliases": ["seated person"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2630
+    },
+    {
+      "id": "pick-up",
+      "name": "Pick Up",
+      "category": "Actions",
+      "style": "outline",
+      "tags": ["pickup", "collect", "hand", "package"],
+      "aliases": ["package pickup"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2640
+    },
+    {
+      "id": "door",
+      "name": "Door",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["entrance", "exit", "entry", "room"],
+      "aliases": ["doorway"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2650
+    },
+    {
+      "id": "lift",
+      "name": "Lift",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["elevator", "floor", "building", "accessibility"],
+      "aliases": ["building elevator"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2660
+    },
+    {
+      "id": "theme",
+      "name": "Theme",
+      "category": "Interface",
+      "style": "outline",
+      "tags": ["appearance", "light", "dark", "display"],
+      "aliases": ["appearance mode"],
+      "status": "active",
+      "featured": false,
+      "sortOrder": 2670
     }
   ]
 }
