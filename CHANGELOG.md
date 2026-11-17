@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Added searchable Run, Sit, Pick Up, Door, Lift and Theme outline icons to the built-in catalogue.
+
 ## 0.9.84 — 2026-11-11
 
 ### Added
