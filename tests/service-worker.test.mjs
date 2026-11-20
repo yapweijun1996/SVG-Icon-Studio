@@ -146,6 +146,8 @@ assert.match(source, /key\.startsWith\(CACHE_PREFIX\)/, 'activation should scope
 
 {
   const runtimeUrls = Array.from({ length: 260 }, (_, index) =>
+    `https://example.test/app/icons/catalog/icon-${String(index + 1).padStart(3, '0')}.svg`);
+  const staticUrls = Array.from({ length: 34 }, (_, index) =>
     `https://example.test/app/assets/index-${String(index + 1).padStart(8, '0')}.js`);
   const harness = createHarness(async () => new Response('ok'), {
     cacheNames: ['icon-studio-__ICON_STUDIO_VERSION__'],
@@ -153,13 +155,13 @@ assert.match(source, /key\.startsWith\(CACHE_PREFIX\)/, 'activation should scope
       'https://example.test/app/',
       'https://example.test/app/index.html',
       'https://example.test/app/manifest.webmanifest',
+      ...staticUrls,
       ...runtimeUrls
     ]
   });
   await activate(harness);
-  assert.equal(harness.cacheUrls.length, 259, 'activation should preserve 3 app-shell entries plus 256 runtime entries');
-  assert.equal(harness.deletedEntries.length, 4, 'activation should trim only the runtime overflow');
-  assert.deepEqual(harness.deletedEntries, runtimeUrls.slice(0, 4), 'oldest runtime entries should be evicted first');
+  assert.equal(harness.cacheUrls.length, 3 + 32 + 256, 'activation should enforce separate limits for static and catalogue assets');
+  assert.deepEqual(harness.deletedEntries, [...runtimeUrls.slice(0, 4), ...staticUrls.slice(0, 2)], 'oldest entries in each pool should be evicted first');
   assert.ok(harness.cacheUrls.includes('https://example.test/app/'), 'offline root shell must never be trimmed');
   assert.ok(harness.cacheUrls.includes('https://example.test/app/index.html'), 'offline index shell must never be trimmed');
   assert.ok(harness.cacheUrls.includes('https://example.test/app/manifest.webmanifest'), 'manifest precache must never be trimmed');
@@ -246,17 +248,23 @@ assert.match(source, /key\.startsWith\(CACHE_PREFIX\)/, 'activation should scope
 
 
 {
+  const bootstrapUrls = [
+    'https://example.test/app/assets/index-app.js',
+    'https://example.test/app/assets/index-app.css',
+    'https://example.test/app/data/icon-registry.json'
+  ];
   const runtimeUrls = Array.from({ length: 256 }, (_, index) =>
     `https://example.test/app/icons/catalog/icon-${String(index + 1).padStart(3, '0')}.svg`);
   const harness = createHarness(async () => new Response('fresh', { status: 200 }), {
-    initialCacheUrls: runtimeUrls
+    initialCacheUrls: [...bootstrapUrls, ...runtimeUrls]
   });
-  const newestUrl = 'https://example.test/app/assets/index-newdeploy.js';
+  const newestUrl = 'https://example.test/app/icons/catalog/icon-257.svg';
   const { responsePromise, lifetimePromises } = await fetchAsset(harness, newestUrl);
   await responsePromise;
   await Promise.all(lifetimePromises);
-  assert.equal(harness.cacheUrls.length, 256, 'runtime cache should stay bounded after a new asset is stored');
-  assert.equal(harness.deletedEntries[0], runtimeUrls[0], 'oldest runtime asset should make room for the new entry');
+  assert.equal(harness.cacheUrls.length, bootstrapUrls.length + 256, 'catalogue SVGs should stay bounded after a new icon is stored');
+  assert.deepEqual(harness.deletedEntries, runtimeUrls.slice(0, 1), 'only the oldest icon asset should make room for the new entry');
+  assert.ok(bootstrapUrls.every(url => harness.cacheUrls.includes(url)), 'browsing icons must preserve the app bootstrap assets');
   assert.ok(harness.cacheUrls.includes(newestUrl), 'new runtime asset should remain cached after trimming');
 }
 

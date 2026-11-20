@@ -4,21 +4,21 @@
 **Project:** Icon Studio — SVG Icon Collection Admin Panel  
 **Code-MCP Project ID:** `project_f2a74b23-33c1-4c5c-b43d-e2b5b3108428`  
 **Status:** Living specification — the SSOT refactor this document originally proposed shipped in `v0.2.0` (2026-07-23) and is now the permanent baseline architecture. Sections 1–3 and 16 are kept as the historical record of that refactor; everything else describes the **current, as-built system**.  
-**Current release:** v0.9.83 (2026-11-03) — see CHANGELOG.md for the full version history and ROADMAP.md / TASK.md for what is planned next.
+**Current release:** v0.10.0 (2026-11-20) — see CHANGELOG.md for the full version history and ROADMAP.md / TASK.md for what is planned next.
 **Runtime:** Dependency-free static HTML, CSS and browser-native JavaScript (Vite is a dev-only wrapper — see ADR-001)  
 **Primary goal (original, achieved):** Replace the monolithic icon and application architecture with a scalable Single Source of Truth (SSOT) structure while preserving existing behaviour and visual output.
 
 ---
 
-## 0. Current status snapshot (v0.9.83, 2026-11-03)
+## 0. Current status snapshot (v0.10.0, 2026-11-20)
 
 A quick-reference dashboard so this document doesn't have to be read end-to-end just to answer "what does the app actually do right now." Everything here is derived from the current codebase, not from plan.
 
 | Fact | Value |
 | --- | --- |
-| Total icons | 261 (see `data/icon-registry.json`) |
-| Categories | 10 — Interface, Arrows, Actions, Files, Users, Commerce, Finance, Logistics, AI, ERP |
-| Built-in icon style | `outline` (261/261); filled remains supported for uploaded/legacy compatibility — see §7.3/§7.4 |
+| Total icons | 1,000 (see `data/icon-registry.json`) |
+| Categories | 19 (see the category order in `data/icon-registry.json`) |
+| Built-in icon style | `outline` (1,000/1,000); filled remains supported for uploaded/legacy compatibility — see §7.3/§7.4 |
 | Runtime dependencies | 0 (unchanged since inception) |
 | npm publishing | `package.json` is `"private": true` (since `v0.9.82`) — the repo is the app, not a package; `npm publish` fails with `EPRIVATE` |
 | Dev tooling | Vite (`npm run dev` / `npm run build` / `npm run preview`); `npm run serve` still works with zero `node_modules` |
@@ -716,7 +716,7 @@ Existing desktop tap-target warnings SHOULD be resolved during the modular CSS p
 
 ## 15. Performance requirements
 
-The architecture MUST remain responsive with the current 260 icons and be suitable for at least 1,000 metadata entries.
+The architecture MUST remain responsive with 1,000 built-in icon metadata entries.
 
 Targets:
 

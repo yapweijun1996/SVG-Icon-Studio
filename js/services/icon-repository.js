@@ -5,6 +5,9 @@ import { sanitizeSvgText } from './svg-sanitizer.js';
 const REGISTRY_URL = new URL('data/icon-registry.json', document.baseURI);
 const assetCache = new Map();
 const metadataById = new Map();
+const MAX_CONCURRENT_ASSET_FETCHES = 8;
+const waitingAssetFetches = [];
+let activeAssetFetches = 0;
 let registryData;
 
 function validateRegistry(registry) {
@@ -19,7 +22,12 @@ function validateRegistry(registry) {
     ids.add(icon.id);
     if (!categories.has(icon.category)) throw new Error(`Unknown category for ${icon.id}.`);
     if (!['outline', 'filled'].includes(icon.style)) throw new Error(`Unsupported icon style for ${icon.id}.`);
-    if (!Array.isArray(icon.tags) || !Array.isArray(icon.aliases)) throw new Error(`Invalid search metadata for ${icon.id}.`);
+    for (const field of ['tags', 'aliases']) {
+      const values = icon[field];
+      if (!Array.isArray(values) || values.some(value => typeof value !== 'string' || !value || value !== value.trim())) {
+        throw new Error(`Invalid ${field} for ${icon.id}: expected nonempty, trimmed strings.`);
+      }
+    }
     for (const key of ['body', 'svg', 'markup', 'pathData']) {
       if (Object.hasOwn(icon, key)) throw new Error(`Registry geometry is forbidden: ${icon.id}.`);
     }
@@ -64,6 +72,25 @@ function assetUrl(id) {
   return url;
 }
 
+async function fetchIconSource(id) {
+  if (activeAssetFetches < MAX_CONCURRENT_ASSET_FETCHES) {
+    activeAssetFetches += 1;
+  } else {
+    await new Promise(resolve => waitingAssetFetches.push(resolve));
+  }
+  try {
+    const response = await fetch(assetUrl(id), { credentials: 'same-origin' });
+    if (!response.ok) throw new Error(`SVG asset failed to load (${response.status}).`);
+    return await response.text();
+  } finally {
+    // Rapid scrolling can queue previews from several viewports. Give the
+    // most recently requested previews and inspector actions the next slot.
+    const next = waitingAssetFetches.pop();
+    if (next) next();
+    else activeAssetFetches -= 1;
+  }
+}
+
 export function loadIconAsset(id) {
   if (assetCache.has(id)) return assetCache.get(id);
   const metadata = metadataById.get(id);
@@ -75,9 +102,7 @@ export function loadIconAsset(id) {
         if (!checked.ok) throw new Error(checked.error);
         return { ok: true, ...checked };
       }
-      const response = await fetch(assetUrl(id), { credentials: 'same-origin' });
-      if (!response.ok) throw new Error(`SVG asset failed to load (${response.status}).`);
-      const checked = sanitizeSvgText(await response.text());
+      const checked = sanitizeSvgText(await fetchIconSource(id));
       if (!checked.ok) throw new Error(checked.error);
       return { ok: true, ...checked };
     } catch (error) {
@@ -89,7 +114,7 @@ export function loadIconAsset(id) {
   return pending;
 }
 
-export async function preloadIconAssets(ids, concurrency = 8) {
+export async function preloadIconAssets(ids, concurrency = MAX_CONCURRENT_ASSET_FETCHES) {
   const queue = [...new Set(ids)].filter(id => metadataById.has(id));
   const workers = Array.from({ length: Math.min(Math.max(1, concurrency), queue.length || 1) }, async () => {
     while (queue.length) await loadIconAsset(queue.shift());

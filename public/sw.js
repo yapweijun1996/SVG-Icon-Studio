@@ -6,8 +6,10 @@ const CACHE_PREFIX = 'icon-studio-';
 const APP_VERSION = '__ICON_STUDIO_VERSION__';
 const CACHE_VERSION = CACHE_PREFIX + APP_VERSION;
 const APP_SHELL = ['./', './index.html', './manifest.webmanifest'];
-const CACHEABLE_ASSET_PREFIXES = ['assets/', 'data/', 'icons/', 'icons-pwa/'];
-const MAX_RUNTIME_ENTRIES = 256;
+const STATIC_ASSET_PREFIXES = ['assets/', 'data/', 'icons-pwa/'];
+const ICON_ASSET_PREFIX = 'icons/';
+const MAX_ICON_ENTRIES = 256;
+const MAX_STATIC_ENTRIES = 32;
 
 function getScopePath() {
   const scopeUrl = new URL(self.registration.scope);
@@ -23,25 +25,33 @@ function getScopedRelativePath(request) {
   return requestUrl.pathname.slice(scopePath.length);
 }
 
-function isRuntimeAssetRequest(request) {
-  const relativePath = getScopedRelativePath(request);
-  return relativePath !== null
-    && CACHEABLE_ASSET_PREFIXES.some(prefix => relativePath.startsWith(prefix));
+function isStaticAssetPath(relativePath) {
+  return STATIC_ASSET_PREFIXES.some(prefix => relativePath.startsWith(prefix));
 }
 
 function isCacheableAssetRequest(request) {
   const relativePath = getScopedRelativePath(request);
-  return relativePath === 'manifest.webmanifest' || isRuntimeAssetRequest(request);
+  return relativePath !== null && (relativePath === 'manifest.webmanifest'
+    || relativePath.startsWith(ICON_ASSET_PREFIX) || isStaticAssetPath(relativePath));
 }
 
 async function trimRuntimeCache(cache) {
-  const runtimeEntries = (await cache.keys()).filter(isRuntimeAssetRequest);
-  const overflow = runtimeEntries.length - MAX_RUNTIME_ENTRIES;
-  if (overflow <= 0) return;
+  const iconEntries = [];
+  const staticEntries = [];
+  for (const request of await cache.keys()) {
+    const relativePath = getScopedRelativePath(request);
+    if (relativePath === null) continue;
+    if (relativePath.startsWith(ICON_ASSET_PREFIX)) iconEntries.push(request);
+    else if (isStaticAssetPath(relativePath)) staticEntries.push(request);
+  }
 
-  // Cache.keys() is insertion ordered. Keep the newest bounded working set and
-  // evict the oldest runtime assets; fixed app-shell entries are never candidates.
-  await Promise.all(runtimeEntries.slice(0, overflow).map(request => cache.delete(request)));
+  // Keep independent working sets so browsing the catalogue does not evict
+  // the bundle, styles or registry required to start the app offline.
+  const overflow = [
+    ...iconEntries.slice(0, Math.max(0, iconEntries.length - MAX_ICON_ENTRIES)),
+    ...staticEntries.slice(0, Math.max(0, staticEntries.length - MAX_STATIC_ENTRIES))
+  ];
+  await Promise.all(overflow.map(request => cache.delete(request)));
 }
 
 self.addEventListener('install', event => {

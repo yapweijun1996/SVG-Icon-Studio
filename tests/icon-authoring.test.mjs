@@ -28,7 +28,7 @@ try {
   const outDir = path.join(temporary, 'catalogue');
   const manifest = await generateReviewGallery({ outDir });
   assert.equal(manifest.total, registry.icons.length);
-  assert.deepEqual(manifest.sizes, [48, 24]);
+  assert.deepEqual(manifest.sizes, [48, 24, 16]);
   assert.deepEqual(manifest.backgrounds, ['light', 'dark']);
   const entries = manifest.pages.flatMap(page => page.icons);
   assert.equal(entries.length, registry.icons.length);
@@ -37,8 +37,9 @@ try {
   for (const page of manifest.pages) {
     assert.ok(page.icons.length <= 20, 'review pages should remain visually bounded');
     const html = await fs.readFile(path.join(outDir, page.file), 'utf8');
-    assert.equal((html.match(/class="large"/g) || []).length, page.icons.length * 2);
-    assert.equal((html.match(/class="small"/g) || []).length, page.icons.length * 2);
+    for (const size of manifest.sizes) {
+      assert.equal((html.match(new RegExp(`class="size-${size}"`, 'g')) || []).length, page.icons.length * 2);
+    }
     for (const entry of page.icons) {
       const source = await fs.readFile(`icons/catalog/${entry.id}.svg`, 'utf8');
       assert.equal(entry.sha256, createHash('sha256').update(source).digest('hex'));
@@ -63,8 +64,8 @@ try {
   const html = await fs.readFile(path.join(fixtureOutput, result.pages[0].file), 'utf8');
   assert.match(html, /Future &amp; &lt;Tools&gt;/);
   assert.match(html, /test-&lt;preview&gt;/);
-  assert.match(html, /<svg class="large"\n/);
-  assert.match(html, /<svg class="small"\n/);
+  assert.match(html, /<svg class="size-48"\n/);
+  assert.match(html, /<svg class="size-24"\n/);
   await writeRegistry('../escape');
   await assert.rejects(generateReviewGallery({ root: fixture, outDir: fixtureOutput }), /Invalid canonical ID/);
   await writeRegistry('example');

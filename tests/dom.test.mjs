@@ -124,7 +124,7 @@ assert.match(toastRegionTag, /aria-relevant="additions"/, 'toast eviction should
 assert.match(responsiveSource, /\.toast-region\s*\{[^}]*top:\s*calc\(var\(--topbar-height\) \+ var\(--safe-top\) \+ 10px\)/s, 'mobile toast stack should start below the sticky topbar and safe-area inset');
 const clearFiltersButtonTag = html.match(/<button\b[^>]*id="clearSearchButton"[^>]*>[\s\S]*?<\/button>/)?.[0] || '';
 assert.match(clearFiltersButtonTag, />Clear filters<\/button>/, 'results reset control should be named for the query/category/style filters it actually clears');
-assert.match(catalogueSource, /const resultSummary = formatResultsSummary\(state, visible\.length, filtered\.length\)/, 'catalogue should calculate one contextual result summary for visible and assistive output');
+assert.match(catalogueSource, /const resultSummary = formatResultsSummary\(state, visibleCount, filtered\.length\)/, 'catalogue should calculate one contextual result summary for visible and assistive output');
 assert.match(catalogueSource, /refs\.resultsSummary\.textContent = resultSummary/, 'visible result summary should stay current even when automatic pagination is silent');
 assert.match(catalogueSource, /createResultStatusUpdater\(refs\.resultsAnnouncement\)/, 'live status updater should target the dedicated hidden announcement region');
 assert.match(catalogueSource, /loadMore\(\{ automatic: true \}\)/, 'IntersectionObserver pagination should identify itself as automatic');
@@ -181,15 +181,14 @@ assert.match(catalogueSource, /if \(observer\) observer\.observe\(preview\);[\s\
 
 const capturePaginationFocusHelper = catalogueSource.match(/function capturePaginationFocus\(\) \{[\s\S]*?\n  \}/)?.[0] || '';
 const restorePaginationFocusHelper = catalogueSource.match(/function restorePaginationFocus\(snapshot\) \{[\s\S]*?\n  \}/)?.[0] || '';
-assert.match(capturePaginationFocusHelper, /refs\.categoryChips\.contains\(category\)/, 'automatic pagination should detect focus inside the category controls that render replaces');
-assert.match(capturePaginationFocusHelper, /refs\.iconGrid\.contains\(card\)/, 'automatic pagination should detect focus inside a rendered icon card that render replaces');
-assert.match(restorePaginationFocusHelper, /chip => chip\.dataset\.category === snapshot\.category/, 'automatic pagination should restore the equivalent category chip after rebuilding category controls');
-assert.match(restorePaginationFocusHelper, /focusRenderedCardAction\(snapshot\.iconId, snapshot\.actionName\)/, 'automatic pagination should restore the equivalent card action after rebuilding the icon grid');
+assert.match(capturePaginationFocusHelper, /refs\.categoryChips\.contains\(category\)/, 'full renders should detect focus inside the category controls they replace');
+assert.match(capturePaginationFocusHelper, /refs\.iconGrid\.contains\(card\)/, 'full renders should detect focus inside a rendered icon card they replace');
+assert.match(restorePaginationFocusHelper, /chip => chip\.dataset\.category === snapshot\.category/, 'full renders should restore the equivalent category chip after rebuilding category controls');
+assert.match(restorePaginationFocusHelper, /focusRenderedCardAction\(snapshot\.iconId, snapshot\.actionName\)/, 'full renders should restore the equivalent card action after rebuilding the icon grid');
 const loadMoreHandler = catalogueSource.match(/function loadMore\(\{ automatic = false \} = \{\}\) \{[\s\S]*?\n  \}/)?.[0] || '';
 assert.match(loadMoreHandler, /document\.activeElement === refs\.loadMoreButton/, 'Load more should detect when the manual pagination control owns focus');
-assert.match(loadMoreHandler, /const paginationFocus = automatic \? capturePaginationFocus\(\) : null/, 'only automatic pagination should snapshot focus that its asynchronous rerender can replace');
-assert.match(loadMoreHandler, /if \(automatic\) restorePaginationFocus\(paginationFocus\)/, 'automatic pagination should restore replaced catalogue focus immediately after rendering');
-assert.match(loadMoreHandler, /previousVisibleCount = refs\.iconGrid\.querySelectorAll\('\.icon-card'\)\.length/, 'Load more should remember the first newly revealed card position before re-rendering');
+assert.match(loadMoreHandler, /refs\.iconGrid\.append\(fragment\)/, 'pagination should preserve the existing cards and their focus');
+assert.doesNotMatch(loadMoreHandler, /\brender\(/, 'pagination should leave the existing catalogue controls in place');
 assert.match(loadMoreHandler, /announceResultStatus: !automatic[\s\S]*?refreshPendingResultStatus: automatic/, 'automatic pagination should update visible results without starting a new live announcement');
 assert.match(loadMoreHandler, /restoreFocus && refs\.loadMoreButton\.parentElement\.hidden/, 'Load more should restore focus only when the focused manual control disappears');
 assert.match(loadMoreHandler, /firstNewCard\?\.querySelector\('\[data-action=\"select\"\]'\)\?\.focus\(\)/, 'Final Load more should move focus to the first newly revealed Select action');

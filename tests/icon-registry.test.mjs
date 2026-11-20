@@ -3,8 +3,9 @@ import fs from 'node:fs/promises';
 import { getFilteredIcons } from '../js/features/filters.js';
 import { createState } from '../js/core/state.js';
 const registry = JSON.parse(await fs.readFile('data/icon-registry.json', 'utf8'));
+const activeIcons = registry.icons.filter(icon => icon.status === 'active');
 assert.equal(registry.schemaVersion, 1);
-assert.ok(registry.icons.length >= 260, 'Icon count must preserve the published baseline.');
+assert.ok(activeIcons.length >= 1000, 'The catalogue must contain at least 1,000 active icons.');
 assert.equal(new Set(registry.icons.map(icon => icon.id)).size, registry.icons.length, 'Icon IDs must be unique.');
 assert.equal(registry.icons.filter(icon => icon.style === 'outline').length, registry.icons.length, 'Built-in catalogue should use one consistent outline style.');
 for (const id of ['invoice', 'purchase-order', 'delivery-order']) {
@@ -52,10 +53,23 @@ for (const id of addedIds) {
   assert.equal(icon.style, 'outline');
   assert.ok(icon.sortOrder > 1200, `New icon should append to the existing sort order: ${id}`);
   assert.ok((await fs.stat(`icons/catalog/${id}.svg`)).isFile(), `Missing canonical asset: ${id}`);
-  for (const query of [id, icon.name, ...icon.aliases]) {
-    const state = createState({ icons: registry.icons });
-    Object.assign(state, { query, category: icon.category, style: 'outline' });
-    assert.ok(getFilteredIcons(state).some(result => result.id === id), `Added icon should be searchable by ${query}`);
+}
+
+// Exercise the same ranking and matching logic as the full browser catalogue.
+const expectedByQuery = new Map();
+for (const icon of activeIcons) {
+  for (const query of new Set([icon.id, icon.name, ...icon.aliases])) {
+    const expectedIds = expectedByQuery.get(query) ?? [];
+    expectedIds.push(icon.id);
+    expectedByQuery.set(query, expectedIds);
   }
 }
-console.log('Registry integrity and added-icon search tests passed.');
+const searchState = createState({ icons: activeIcons });
+for (const [query, expectedIds] of expectedByQuery) {
+  searchState.query = query;
+  const resultIds = new Set(getFilteredIcons(searchState).map(icon => icon.id));
+  for (const id of expectedIds) {
+    assert.ok(resultIds.has(id), `${id} should be searchable by ${JSON.stringify(query)}`);
+  }
+}
+console.log(`Registry integrity and ${expectedByQuery.size} catalogue search queries passed.`);

@@ -29,7 +29,8 @@ select { min-height: 44px; padding: 0 34px 0 10px; border: 1px solid var(--line)
 .category-chip:hover { border-color: var(--line-strong); color: var(--text); }
 .category-chip.is-active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-strong); }
 .results-header { min-height: 42px; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 4px 0 8px; }
-.results-header > div { display: flex; align-items: baseline; gap: 8px; }
+.results-header > div { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; min-width: 0; overflow-wrap: anywhere; }
+.results-header > button { flex-shrink: 0; }
 .results-header h2 { margin: 0; font-size: var(--fs-lg); }
 .results-header span { color: var(--muted); font-size: var(--fs-sm); }
 /* Keyboard focus moving into catalogue content must not land under the sticky

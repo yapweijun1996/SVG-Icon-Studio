@@ -1,7 +1,7 @@
 # Icon Studio — Design System
 
 **Document:** `DESIGN.md`
-**Status:** Living document — reflects the design system as actually shipped in `v0.9.83`, not an aspirational brief.
+**Status** · Living document for `v0.10.0`.
 **Source of truth for tokens:** [`css/tokens.css`](css/tokens.css) (design-system.json is a synced machine-readable snapshot of the same values, not an independent source)
 **Relationship to `components.md`:** `components.md` is the original pre-implementation design brief written before any code existed. It is kept for historical reference only — where the two disagree, this document and the current codebase win. See the note at the top of `components.md`.
 
@@ -10,7 +10,7 @@
 ## 1. Product identity
 
 - **Name:** Icon Studio — SVG Icon Collection
-- **Positioning:** a browse/customise/export workspace for production-ready SVG icons, aimed at ERP/back-office and general product UI use cases (see the `ERP` category, 76 of the 261 icons).
+- The workspace supports browsing, customising and exporting 1,000 production-ready SVG icons for ERP, back-office and general product interfaces.
 - **Feel:** professional SaaS asset-management workspace — compact, enterprise-friendly density, restrained shadows, not a marketing landing page.
 - **Brand mark:** a four-point sparkle/compass path (`M12 2c.7 4.7 3.3 7.3 8 8-4.7.7-7.3 3.3-8 8-.7-4.7-3.3-7.3-8-8 4.7-.7 7.3-3.3 8-8Z`), used in the sidebar brand button and the "Brand kit" nav icon.
 
@@ -100,7 +100,7 @@ Three-column desktop shell (`.app-shell`, CSS grid: `sidebar-width | 1fr | inspe
 | Collapsible sidebar | `.sidebar` | Nav items: Icon library, Collections, Favorites, Recently viewed, Uploaded icons, Brand kit. The active item uses a light accent tint (55% of `--accent-soft`) with the 3px accent bar as the primary marker. Footer (`.sidebar-footer`) shows the running-version pill (`#appVersion`); it hides with the brand card while the desktop sidebar is collapsed and is visible in the mobile drawer. Collapse state persists to `localStorage`. |
 | Sticky topbar | .topbar | Compact page heading (`h1#pageTitle` = the active view's nav label, e.g. "Icon Library", plus a one-line `#pageSubtitle`; replaces the former hero block and breadcrumb), Import SVG (secondary), total icon-count pill (the duplicate "N visible" count was removed — the results summary owns filtered counts), `Update vX.Y.Z` action when a waiting worker exists (version reported by that worker), theme toggle, and the inspector button: the drawer trigger at ≤1180px and, on desktop, the way back after the inspector is collapsed |
 | Inspector collapse (desktop) | `body.inspector-collapsed` | Collapsing hides the inspector completely (`display: none`, `--inspector-width: 0px`) instead of leaving a 68px strip; the topbar inspector button appears and reopens it. Focus moves between the Collapse control and the topbar button because each disappears when used. The desktop preference persists; opening the drawer at ≤1180px does not overwrite it |
-| Search + filters | `.catalogue-toolbar` | Sticky, solid-background toolbar that occupies normal flow space (`.is-stuck` adds a divider while content scrolls beneath). Always two rows: search + labelled **Filters** button + Grid/Compact segmented control, then one horizontally-scrollable chip row at every width. Free-text search (`/` keyboard shortcut focuses it), style filter, sort filter, category chips (10, derived live from the registry — never hardcode a count, see ADR-011-adjacent history in `CHANGELOG.md` 0.4.0) |
+| Search + filters | `.catalogue-toolbar` | Sticky, solid-background toolbar that occupies normal flow space (`.is-stuck` adds a divider while content scrolls beneath). Always two rows: search + labelled **Filters** button + Grid/Compact segmented control, then one horizontally-scrollable chip row at every width. Free-text search (`/` keyboard shortcut focuses it), style filter, sort filter, category chips (derived live from the registry — never hardcode a count, see ADR-011-adjacent history in `CHANGELOG.md` 0.4.0) |
 | Icon grid | `.icon-grid` | Responsive `auto-fill` grid; Grid/Compact density toggle; scroll-to-load pagination (24 per page) with a manual "Load more" fallback button |
 | Icon card | `.icon-card` | `minmax(168px,1fr)` grid track, fixed 72px preview area, one-line name (13px) with a full-name tooltip, 11px category · style metadata. Lazy-loaded preview (`IntersectionObserver`, 240px lookahead), favourite star, always-visible Copy SVG and "⋮" actions styled as quiet filled buttons (one card border, no nested action borders — actions stay visible because touch and keyboard users have no hover) |
 | Inspector | `.inspector` | Selected icon summary, live preview (Light/Dark/Brand/Transparent background tabs), Appearance controls (size/stroke width/stroke colour/fill toggle+colour/currentColor/include-title), Transform controls (rotate/flip), code tabs (SVG/JSX/CSS) |
@@ -111,7 +111,7 @@ Three-column desktop shell (`.app-shell`, CSS grid: `sidebar-width | 1fr | inspe
 
 The built-in catalogue uses one visual style on an exact `0 0 24 24` viewBox. Runtime/import code still recognises filled uploaded SVGs for compatibility, but filled artwork is no longer part of the built-in library.
 
-### 5.1 Built-in outline contract (261 of 261 icons)
+### 5.1 Built-in outline contract (1,000 icons)
 
 ```svg
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -130,9 +130,9 @@ The built-in catalogue uses one visual style on an exact `0 0 24 24` viewBox. Ru
 
 The SVG sanitizer, importer and renderer still support `fill="currentColor" stroke="none"` assets. This exists for uploaded/legacy SVG compatibility, not as a second built-in catalogue style. Historical filled authoring notes and the generator remain documented in `SPEC.md` and release history for maintenance of older assets.
 
-### 5.3 Category taxonomy (10 categories, `order` controls display sequence)
+### 5.3 Category taxonomy (19 categories, `order` controls display sequence)
 
-`Interface`(10) · `Arrows`(20) · `Actions`(30) · `Files`(40) · `Users`(50) · `Commerce`(60) · `Finance`(70) · `Logistics`(80) · `AI`(90) · `ERP`(100, 76 icons — the largest category, spanning procurement/inventory/finance/HR/controlling)
+`Interface`(10) · `Arrows`(20) · `Actions`(30) · `Files`(40) · `Users`(50) · `Commerce`(60) · `Finance`(70) · `Logistics`(80) · `AI`(90) · `ERP`(100) · `Devices`(110) · `Development`(120) · `Communication`(130) · `Media`(140) · `Maps & Travel`(150) · `Health & Safety`(160) · `Design`(170) · `Nature`(180) · `Education`(190)
 
 ### 5.4 Naming/collision discipline
 
@@ -170,4 +170,4 @@ These aren't visual, but they constrain what any new UI feature is allowed to do
 See `ROADMAP.md` for full detail — the two items with direct design implications:
 
 - **Command palette** (Cmd+K): would reuse the same underlying action-dispatch logic as any future WebMCP tool layer, so the two should be designed together, not separately.
-- **Search relevance/highlighting**: current search is plain substring match with no ranking or highlighted match term — noted as a design gap now that the catalogue has grown to 261 icons.
+- Featured sort ranks icon search matches by word-boundary token relevance. Explicit sorts retain their selected order. Highlighting matched text on cards remains planned.

@@ -25,10 +25,9 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
   let observer;
   let resultStatusSuppressed = false;
   let loadMoreObserver = null;
-  // Resolved preview assets by icon ID. Every rerender (select, favorite,
-  // load-more, filters) rebuilds the cards; reusing an already resolved asset
-  // paints the preview synchronously instead of flashing the loading skeleton
-  // on every card while the async hydration runs again.
+  let filtered = [];
+  // Reuse resolved previews to avoid flashing loading skeletons when a
+  // full render rebuilds the cards.
   const resolvedAssets = new Map();
   const resultStatusUpdater = createResultStatusUpdater(refs.resultsAnnouncement);
 
@@ -52,12 +51,14 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
   }
 
   function setupObserver(version) {
-    observer = createIntersectionObserver(entries => {
+    const iconsById = new Map(state.icons.map(icon => [icon.id, icon]));
+    observer = createIntersectionObserver((entries, previewObserver) => {
+      if (version !== renderVersion || previewObserver !== observer) return;
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
-        observer.unobserve(entry.target);
+        previewObserver.unobserve(entry.target);
         const preview = entry.target;
-        const icon = state.icons.find(item => item.id === preview.dataset.iconId);
+        const icon = iconsById.get(preview.dataset.iconId);
         if (!icon) continue;
         hydratePreview(preview, icon, version);
       }
@@ -130,16 +131,25 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     }
   }
 
+  function updatePagination(visibleCount, { deferResultStatus, announceResultStatus, refreshPendingResultStatus }) {
+    refs.loadMoreButton.parentElement.hidden = visibleCount >= filtered.length;
+    rearmAutoLoad();
+    const resultSummary = formatResultsSummary(state, visibleCount, filtered.length);
+    refs.resultsSummary.textContent = resultSummary;
+    if (resultStatusSuppressed) resultStatusUpdater.cancel();
+    else if (announceResultStatus) resultStatusUpdater.update(resultSummary, { defer: deferResultStatus });
+    else if (refreshPendingResultStatus) resultStatusUpdater.refreshPending(resultSummary);
+  }
+
   function render({ deferResultStatus = false, announceResultStatus = true, refreshPendingResultStatus = false } = {}) {
     renderVersion += 1;
     // Rebuilding the grid and chips destroys any focused card action or chip.
-    // Restore the equivalent control afterwards for every render, not only
-    // automatic pagination: startup and other async rerenders can land while a
-    // keyboard user is already on a card (v0.9.83 regression).
+    // Startup and other async renders can land while a keyboard user is
+    // already on a card, so restore its control after a full render.
     const focusSnapshot = capturePaginationFocus();
     disconnectObserver();
     setupObserver(renderVersion);
-    const filtered = getFilteredIcons(state);
+    filtered = getFilteredIcons(state);
     const visible = filtered.slice(0, state.visibleLimit);
     refs.iconGrid.classList.toggle('is-compact', state.density === 'compact');
     const fragment = document.createDocumentFragment();
@@ -148,13 +158,7 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
     refs.emptyState.hidden = filtered.length > 0;
     refs.iconGrid.hidden = filtered.length === 0;
     refs.emptyResetButton.textContent = hasIconsInView(state) ? 'Reset filters' : 'Browse all icons';
-    refs.loadMoreButton.parentElement.hidden = filtered.length === 0 || visible.length >= filtered.length;
-    rearmAutoLoad();
-    const resultSummary = formatResultsSummary(state, visible.length, filtered.length);
-    refs.resultsSummary.textContent = resultSummary;
-    if (resultStatusSuppressed) resultStatusUpdater.cancel();
-    else if (announceResultStatus) resultStatusUpdater.update(resultSummary, { defer: deferResultStatus });
-    else if (refreshPendingResultStatus) resultStatusUpdater.refreshPending(resultSummary);
+    updatePagination(visible.length, { deferResultStatus, announceResultStatus, refreshPendingResultStatus });
     refs.totalIconCount.textContent = String(state.icons.length);
     refs.favoriteCount.textContent = String(state.favorites.size);
     refs.recentCount.textContent = String(state.recent.length);
@@ -275,16 +279,19 @@ export function createCatalogueController({ state, refs, categoryOrder, onSelect
 
   function loadMore({ automatic = false } = {}) {
     const restoreFocus = document.activeElement === refs.loadMoreButton;
-    const paginationFocus = automatic ? capturePaginationFocus() : null;
-    const previousVisibleCount = refs.iconGrid.querySelectorAll('.icon-card').length;
+    const previousVisibleCount = refs.iconGrid.childElementCount;
+    if (previousVisibleCount >= filtered.length) return;
     state.visibleLimit += 24;
-    render({
+    const nextIcons = filtered.slice(previousVisibleCount, state.visibleLimit);
+    const fragment = document.createDocumentFragment();
+    nextIcons.forEach(icon => fragment.append(createCard(icon)));
+    const firstNewCard = fragment.firstElementChild;
+    refs.iconGrid.append(fragment);
+    updatePagination(previousVisibleCount + nextIcons.length, {
       announceResultStatus: !automatic,
       refreshPendingResultStatus: automatic
     });
-    if (automatic) restorePaginationFocus(paginationFocus);
     if (restoreFocus && refs.loadMoreButton.parentElement.hidden) {
-      const firstNewCard = refs.iconGrid.querySelectorAll('.icon-card')[previousVisibleCount];
       firstNewCard?.querySelector('[data-action="select"]')?.focus();
     }
   }

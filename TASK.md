@@ -11,6 +11,7 @@
 ## Done
 
 ### Epic 3 (continued) — General Icon Catalogue
+- [x] **v0.10.0**. Reached 1,000 active outlines by adapting 733 Lucide icons, preserving all 267 existing entries. Verified registry/file parity, search, full-catalogue scroll, and accessibility across supported viewports.
 - [x] Add the User, Profile, Image and Document built-in icons; update registry metadata and release documentation for `v0.9.73`.
 - [x] `v0.9.76` six new outline icons: Trending Down, Chart Pie, Logout, Sort, More Horizontal, Credit Limit (catalogue 224 → 230)
 - [x] `v0.9.78` ten new outline icons: Chart Line, Login, More Vertical, Grid View, List View, Sun, Moon, Org Chart, Warranty, Overdue Invoice (catalogue 230 → 240)
@@ -188,7 +189,8 @@ Source: `review/production-readiness-v0.9.81.md` (2026-11-03). Verdict: producti
 - [ ] **Generate doc counts/versions** (README, SPEC, DESIGN icon totals and release numbers) from the registry and `package.json` instead of editing 5 files per release.
 
 ### P2 — polish and scale
-- [ ] **Scale past ~1,000 icons:** incremental grid updates instead of a full rebuild per render; sprite delivery instead of one request per icon.
+- [x] **Scale to 1,000 icons** with incremental pagination, preserved keyboard focus and bounded SVG requests.
+- [ ] **Evaluate sprite delivery** when profiling shows a remaining delivery bottleneck.
 - [ ] **Repo hygiene:** move bulky `review/` artifacts (1.7 MB) to CI artifacts or releases; add `* text=auto eol=lf` to `.gitattributes` to stop LF/CRLF churn; slim `CHANGELOG.md` to user-facing notes.
 - [ ] **Define 1.0 and icon semver:** 1.0 = Epic 7 P0 done + package published; new icon = minor, icon rename/removal = major.
 

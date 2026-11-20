@@ -16,6 +16,8 @@ const GROUPS = [
   ['erp', ['ERP']]
 ];
 
+const PREVIEW_SIZES = [48, 24, 16];
+
 const CSS = `
 * { box-sizing: border-box; }
 body { margin: 20px; background: #e9edf2; font: 13px system-ui, sans-serif; }
@@ -24,8 +26,7 @@ section { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 
 section.dark { background: #151b24; color: #f8fafc; }
 article { min-height: 104px; display: grid; place-content: center; text-align: center; }
 .shapes { display: flex; align-items: center; justify-content: center; gap: 26px; }
-.large { width: 48px; height: 48px; }
-.small { width: 24px; height: 24px; }
+${PREVIEW_SIZES.map(size => `.size-${size} { width: ${size}px; height: ${size}px; }`).join('\n')}
 p { margin: 10px 0 0; }
 small { color: #667085; }
 .dark small { color: #94a3b8; }
@@ -51,20 +52,21 @@ export async function generateReviewGallery({ root = process.cwd(), outDir = pat
         const checked = inspectSvgText(source);
         if (!checked.ok) throw new Error(`Invalid canonical SVG ${icon.id}: ${checked.errors.join('; ')}`);
         const label = escapeHtml(icon.id);
+        const previews = PREVIEW_SIZES.map(size => source.replace(/<svg(?=\s)/, `<svg class="size-${size}"`)).join('');
         return {
           id: icon.id,
           sha256: createHash('sha256').update(source).digest('hex'),
-          card: `<article data-icon-id="${label}"><div class="shapes">${source.replace(/<svg(?=\s)/, '<svg class="large"')}${source.replace(/<svg(?=\s)/, '<svg class="small"')}</div><p>${label}</p><small>${escapeHtml(icon.category)}</small></article>`
+          card: `<article data-icon-id="${label}"><div class="shapes">${previews}</div><p>${label}</p><small>${escapeHtml(icon.category)}</small></article>`
         };
       }));
       const filename = `${group}-${Math.floor(start / 20) + 1}.html`;
       const title = `${group} · ${batch[0].id} → ${batch.at(-1).id}`;
       const cards = entries.map(entry => entry.card).join('\n');
-      await fs.writeFile(path.join(outDir, filename), `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>${escapeHtml(title)}</title><style>${CSS}</style></head><body><h1>${escapeHtml(title)} · v${escapeHtml(packageJson.version)} · 48px / 24px</h1><section aria-label="Light background">${cards}</section><section class="dark" aria-label="Dark background">${cards}</section></body></html>\n`);
+      await fs.writeFile(path.join(outDir, filename), `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>${escapeHtml(title)}</title><style>${CSS}</style></head><body><h1>${escapeHtml(title)} · v${escapeHtml(packageJson.version)} · ${PREVIEW_SIZES.map(size => `${size}px`).join(' / ')}</h1><section aria-label="Light background">${cards}</section><section class="dark" aria-label="Dark background">${cards}</section></body></html>\n`);
       pages.push({ file: filename, icons: entries.map(({ id, sha256 }) => ({ id, sha256 })) });
     }
   }
-  const manifest = { version: packageJson.version, total: registry.icons.length, sizes: [48, 24], backgrounds: ['light', 'dark'], pages };
+  const manifest = { version: packageJson.version, total: registry.icons.length, sizes: PREVIEW_SIZES, backgrounds: ['light', 'dark'], pages };
   await fs.writeFile(path.join(outDir, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
   return manifest;
 }

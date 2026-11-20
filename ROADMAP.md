@@ -139,7 +139,7 @@ The two most recent bugs (v0.9.77 infinite-scroll stall, v0.9.79 inspector not o
 10. **Generated doc counts/versions** — *Impact: low-medium. Effort: low.*
 
 **P2 — polish and scale**
-11. Scale past ~1,000 icons (incremental grid updates, sprite delivery).
+11. The v0.10.0 catalogue reaches 1,000 icons, appends pagination batches incrementally and caps live SVG requests at eight. Evaluate sprite delivery if future profiling shows a need.
 12. Repo hygiene (`review/` artifacts out of git, `.gitattributes` `eol=lf`, slimmer `CHANGELOG.md`).
 13. Define 1.0 (P0 done + package published) and icon semver (new icon = minor; rename/removal = major).
 

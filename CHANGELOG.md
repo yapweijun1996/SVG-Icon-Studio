@@ -1,10 +1,26 @@
 # Changelog
 
-## Unreleased
+## 0.10.0 — 2026-11-20
 
 ### Added
 
-- Added searchable Run, Sit, Pick Up, Door, Lift and Theme outline icons to the built-in catalogue.
+- The catalogue now contains 1,000 active outline SVGs across 19 categories. The expansion adds 733 icons adapted from Lucide 1.77.0 with ISC and MIT notices in `public/licenses/lucide.txt`. The existing 267 icons, including Run, Sit, Pick Up, Door, Lift and Theme, retain their original SVGs and registry metadata.
+- Artwork review pages show icons at 16, 24 and 48 pixels on light and dark backgrounds.
+
+### Changed
+
+- Pagination appends each new batch while retaining existing cards and keyboard focus. SVG requests are limited to eight at a time. Duplicate requests share a promise, and newer requests take priority during fast scrolling.
+- Narrow layouts wrap long search summaries and keep Clear filters reachable.
+
+### Fixed
+
+- Registry validators reject malformed tags and aliases before they reach search.
+- Browsing more than 256 icons no longer evicts the cached scripts, styles or registry needed for offline startup.
+
+### Validation
+
+- Registry validation, JavaScript syntax checks, Node tests and the production build passed. The tests exercise 2,505 ID, name and alias queries.
+- Chromium fetched and sanitized all 1,000 SVGs. Playwright and axe passed 48 tests, with 18 viewport-specific skips, and confirmed full scrolling at 390, 1024 and 1440 pixels plus both densities at 1920 pixels.
 
 ## 0.9.84 — 2026-11-11
 

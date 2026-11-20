@@ -19,9 +19,15 @@ test.describe('catalogue', () => {
   test('infinite scroll loads every icon without a Load more click', async ({ page }) => {
     await openCatalogue(page);
     await expect(page.locator('#loadMoreButton')).toBeHidden();
+    const cards = page.locator('.icon-card');
+    const firstAction = await cards.first().locator('[data-action="select"]').elementHandle();
+    await firstAction.focus();
     await scrollToEnd(page);
     await expect(page.locator('#resultsSummary')).toHaveText(`Showing ${ICON_TOTAL} icons`);
-    await expect(page.locator('.icon-card')).toHaveCount(ICON_TOTAL);
+    await expect(cards).toHaveCount(ICON_TOTAL);
+    expect(await firstAction.evaluate(element => element === document.activeElement)).toBe(true);
+    await cards.last().scrollIntoViewIfNeeded();
+    await expect(cards.last().locator('.card-preview svg')).toBeVisible();
   });
 
   // The v0.9.77 stall only reproduces when one 24-icon batch is shorter than the
@@ -45,17 +51,19 @@ test.describe('catalogue', () => {
     expect(settled).toBeLessThan(ICON_TOTAL);
   });
 
-  test('every icon added since v0.9.73 is found by its ID, name and aliases', async ({ page }, testInfo) => {
+  test('finds catalogue icons by ID, name and alias', async ({ page }, testInfo) => {
     test.skip(!isDesktop(testInfo), 'search behaviour is viewport-independent; run once');
-    test.setTimeout(120_000); // ~160 searches; the default 30 s is too tight under full parallel load
     await openCatalogue(page);
-    const recent = registry.icons.filter(icon => icon.sortOrder >= 2210);
-    expect(recent.length).toBeGreaterThanOrEqual(40);
-    for (const icon of recent) {
-      for (const query of [icon.id, icon.name, ...icon.aliases]) {
-        await search(page, query);
-        await expect(page.locator(`.icon-card[data-icon-id="${icon.id}"]`), `"${query}" should find ${icon.id}`).toHaveCount(1);
-      }
+    // The registry test exhaustively checks matching. These queries exercise the browser wiring.
+    const cases = [
+      { query: 'barcode-scanner', id: 'barcode-scanner' },
+      { query: 'File Spreadsheet', id: 'file-spreadsheet' },
+      { query: 'appearance mode', id: 'theme' },
+      { query: 'alarm check', id: 'alarm-clock-check' }
+    ];
+    for (const { query, id } of cases) {
+      await search(page, query);
+      await expect(page.locator(`.icon-card[data-icon-id="${id}"]`), `"${query}" should find ${id}`).toBeVisible();
     }
   });
 

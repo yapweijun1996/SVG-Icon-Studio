@@ -41,11 +41,11 @@ export async function search(page, query) {
 
 // Scroll until the catalogue reports every result as shown (infinite scroll).
 export async function scrollToEnd(page) {
-  await expect.poll(async () => {
-    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-    const summary = await page.locator('#resultsSummary').textContent();
-    return /^Showing \d+ icons?(\s|$)/.test(summary.trim()) && !/ of /.test(summary);
-  }, { timeout: 20_000, intervals: [200] }).toBe(true);
+  await page.waitForFunction(() => {
+    window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' });
+    const summary = document.querySelector('#resultsSummary')?.textContent.trim() ?? '';
+    return /^Showing \d+ icons?(\s|$)/.test(summary) && !/ of /.test(summary);
+  }, undefined, { timeout: 20_000 });
 }
 
 // Wait until the first `count` cards have painted real SVG previews.

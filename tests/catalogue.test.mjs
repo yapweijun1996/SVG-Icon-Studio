@@ -73,3 +73,55 @@ assert.equal(
 );
 
 console.log('Catalogue observer compatibility and result-summary tests passed.');
+
+const baseURI = 'https://example.test/';
+const originalFetch = globalThis.fetch;
+const originalWarn = console.warn;
+globalThis.document = { baseURI };
+globalThis.window = { location: new URL(baseURI) };
+try {
+  const icons = Array.from({ length: 10 }, (_, index) => ({
+    id: `icon-${index}`, category: 'Test', style: 'outline', tags: [], aliases: [], status: 'active'
+  }));
+  const responseBodies = [];
+  const started = [];
+  let inFlight = 0;
+  let peakInFlight = 0;
+  const warnings = [];
+  console.warn = message => warnings.push(message);
+  globalThis.fetch = async url => {
+    if (url.pathname.endsWith('/icon-registry.json')) {
+      return { ok: true, json: async () => ({ schemaVersion: 1, categories: [{ id: 'Test' }], icons }) };
+    }
+    started.push(url.pathname.split('/').at(-1));
+    peakInFlight = Math.max(peakInFlight, ++inFlight);
+    return {
+      ok: true,
+      text: () => new Promise(resolve => responseBodies.push(() => {
+        inFlight -= 1;
+        resolve('');
+      }))
+    };
+  };
+  const { loadRegistry, loadIconAsset } = await import('../js/services/icon-repository.js');
+  await loadRegistry();
+  const pending = icons.map(icon => loadIconAsset(icon.id));
+  assert.equal(loadIconAsset(icons.at(-1).id), pending.at(-1), 'queued requests should reuse the same promise');
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(responseBodies.length, 8, 'eight requests should start, with the other two waiting for response bodies');
+  responseBodies.splice(0).forEach(finish => finish());
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(responseBodies.length, 2, 'waiting requests should start as slots become available');
+  assert.deepEqual(started.slice(-2), ['icon-9.svg', 'icon-8.svg'], 'newly requested previews should take priority');
+  responseBodies.forEach(finish => finish());
+  const assets = await Promise.all(pending);
+  assert.equal(peakInFlight, 8);
+  assert.ok(assets.every(asset => !asset.ok), 'malformed assets should fail independently');
+  assert.equal(warnings.length, icons.length);
+} finally {
+  globalThis.fetch = originalFetch;
+  console.warn = originalWarn;
+  delete globalThis.document;
+  delete globalThis.window;
+}
+console.log('Catalogue asset request concurrency and deduplication tests passed.');

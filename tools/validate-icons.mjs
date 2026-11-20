@@ -18,7 +18,12 @@ for (const icon of registry.icons || []) {
   ids.add(icon.id);
   if (!categoryIds.has(icon.category)) errors.push(`Unknown category for ${icon.id}: ${icon.category}`);
   if (!['outline', 'filled'].includes(icon.style)) errors.push(`Invalid style for ${icon.id}: ${icon.style}`);
-  if (!Array.isArray(icon.tags) || !Array.isArray(icon.aliases)) errors.push(`Invalid tags/aliases for ${icon.id}`);
+  for (const field of ['tags', 'aliases']) {
+    const values = icon[field];
+    if (!Array.isArray(values) || values.some(value => typeof value !== 'string' || !value || value !== value.trim())) {
+      errors.push(`Invalid ${field} for ${icon.id}: expected nonempty, trimmed strings.`);
+    }
+  }
   for (const key of ['body', 'svg', 'markup', 'pathData']) if (Object.hasOwn(icon, key)) errors.push(`Geometry found in registry: ${icon.id}`);
   const assetPath = path.join(directory, `${icon.id}.svg`);
   try {
